@@ -53,54 +53,26 @@ function renderMap() {
 
   list.innerHTML = "";
 
-  if (view === "books") {
-    title.innerText = "📚 Lektury";
-
-    // 🔥 DODAJ TO TUTAJ (FILTR EPOK)
-    renderEpochFilter();
-
-    data.books
-      .filter(b => activeEpochs.has(b.epoch)) // 🔥 FILTR
-      .forEach(b => {
-        const div = document.createElement("div");
-
-        div.innerHTML = `
-          <div style="
-            padding:10px;
-            margin:5px;
-            border:1px solid #ccc;
-            cursor:pointer;
-          " onclick="openBook('${b.id}')">
-            📚 ${b.title} <small>(${b.epoch})</small>
-          </div>
-        `;
-
-        list.appendChild(div);
-      });
-  }
-
   if (view === "motifs") {
-    title.innerText = "🎯 Motywy";
+  title.innerText = "🎯 Motywy";
 
-    data.motifs.forEach(m => {
-      const div = document.createElement("div");
+  data.motifs.forEach(m => {
+    const div = document.createElement("div");
 
-      div.innerHTML = `
-        <div style="
-          padding:10px;
-          margin:5px;
-          border:1px solid #ccc;
-          cursor:pointer;
-        " onclick="openMotif('${m.id}')">
-          🎯 ${m.name}
-        </div>
-      `;
+    div.innerHTML = `
+      <div style="
+        padding:10px;
+        margin:5px;
+        border:1px solid #ccc;
+        cursor:pointer;
+      " onclick="openMotif('${m.id}')">
+        🎯 ${m.name}
+      </div>
+    `;
 
-      list.appendChild(div);
-    });
-  }
+    list.appendChild(div);
+  });
 }
-
 
 function renderEpochFilter() {
   const container = document.getElementById("epochFilter");
