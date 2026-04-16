@@ -1,3 +1,6 @@
+let selectedMode = null;
+let currentView = "menu";
+
 const data = {
   books: [
     {
@@ -37,18 +40,26 @@ function goBack() {
     document.getElementById("quiz").style.display = "none";
 }
 
-function renderLearning() {
-    const container = document.getElementById("learning-content");
-    container.innerHTML = "";
 
-    data.forEach(item => {
+function renderBooks() {
+    const container = document.getElementById("learning-content");
+    container.innerHTML = "<h3>Lektury</h3>";
+
+    data.books.forEach(book => {
         const div = document.createElement("div");
-        div.innerHTML = `<b>${item.title}</b> → ${item.motifs.join(", ")}`;
+
+        div.innerHTML = `
+            <b onclick="openBook('${book.id}')" style="cursor:pointer;">
+                ${book.title}
+            </b>
+        `;
+
         container.appendChild(div);
     });
+
+    document.getElementById("learning").style.display = "block";
 }
 
-let currentQuestion = null;
 
 function generateQuestion() {
     const random = data[Math.floor(Math.random() * data.length)];
@@ -74,4 +85,58 @@ function checkAnswer() {
             "❌ Spróbuj jeszcze raz. Poprawne: " +
             currentQuestion.motifs.join(", ");
     }
+}
+function showLearning() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("modeSelect").style.display = "block";
+}
+function selectMode(mode) {
+    selectedMode = mode;
+}
+function startMode() {
+    document.getElementById("modeSelect").style.display = "none";
+
+    if (selectedMode === "books") {
+        renderBooks();
+    }
+
+    if (selectedMode === "motifs") {
+        renderMotifs();
+    }
+}
+
+function openBook(id) {
+    const book = data.books.find(b => b.id === id);
+
+    const container = document.getElementById("learning-content");
+
+    container.innerHTML = `
+        <h2>${book.title}</h2>
+        <p>${book.description}</p>
+
+        <h3>Motywy:</h3>
+        ${book.motifs.map(m =>
+            `<span onclick="openMotif('${m}')" style="cursor:pointer;color:blue;">
+                ${m}
+            </span>`
+        ).join(", ")}
+    `;
+}
+
+function openMotif(id) {
+    const motif = data.motifs.find(m => m.id === id);
+
+    const container = document.getElementById("learning-content");
+
+    container.innerHTML = `
+        <h2>${motif.name}</h2>
+        <p>${motif.description}</p>
+
+        <h3>Lektury:</h3>
+        ${motif.books.map(b =>
+            `<span onclick="openBook('${b}')" style="cursor:pointer;color:blue;">
+                ${b}
+            </span>`
+        ).join(", ")}
+    `;
 }
