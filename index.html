@@ -8,41 +8,45 @@
 
 <h1>📚 Matura Polski</h1>
 
-<!-- 🔵 MENU -->
+<!-- 🟢 MENU -->
 <div id="menu">
 
-  <h3>Tryb:</h3>
+  <h3>Tryb</h3>
   <button onclick="setMode('learning')">Nauka</button>
-  <button onclick="setMode('quiz')">Ćwiczenie</button>
+  <button onclick="setMode('quiz')">Ćwiczenia</button>
 
-  <h3>Widok nauki:</h3>
+  <h3>Zakres</h3>
   <button onclick="setView('books')">Lektury</button>
   <button onclick="setView('motifs')">Motywy</button>
 
   <br><br>
 
   <button onclick="startApp()">START</button>
-
 </div>
 
-<!-- 🟢 MAPA -->
+<!-- 🟡 MAPA -->
 <div id="map" style="display:none;">
   <h2 id="map-title"></h2>
 
   <div id="epochFilter"></div>
-
   <div id="list"></div>
 
   <br>
   <button onclick="goMenu()">Powrót do menu</button>
 </div>
 
-
 <!-- 🟣 PROFIL -->
 <div id="profile" style="display:none;">
   <div id="profile-content"></div>
   <br>
   <button onclick="goMap()">Powrót do mapy</button>
+</div>
+
+<!-- 🔴 QUIZ (pusty na teraz) -->
+<div id="quiz" style="display:none;">
+  <h2>Ćwiczenia</h2>
+  <div id="quiz-content"></div>
+  <button onclick="goMenu()">Koniec</button>
 </div>
 
 <script src="script.js"></script>
