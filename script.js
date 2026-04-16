@@ -1,3 +1,5 @@
+console.log("JS działa");
+
 let selectedMode = null;
 let currentView = "menu";
 
@@ -24,9 +26,9 @@ const data = {
 
 function showLearning() {
     document.getElementById("menu").style.display = "none";
-    document.getElementById("learning").style.display = "block";
-    renderLearning();
+    document.getElementById("modeSelect").style.display = "block";
 }
+
 
 function showQuiz() {
     document.getElementById("menu").style.display = "none";
@@ -62,7 +64,7 @@ function renderBooks() {
 
 
 function generateQuestion() {
-    const random = data[Math.floor(Math.random() * data.length)];
+    const random = data.books[Math.floor(Math.random() * data.books.length)];
     currentQuestion = random;
 
     document.getElementById("question").innerText =
@@ -86,15 +88,13 @@ function checkAnswer() {
             currentQuestion.motifs.join(", ");
     }
 }
-function showLearning() {
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("modeSelect").style.display = "block";
-}
+
 function selectMode(mode) {
     selectedMode = mode;
 }
 function startMode() {
     document.getElementById("modeSelect").style.display = "none";
+    document.getElementById("learning").style.display = "none";
 
     if (selectedMode === "books") {
         renderBooks();
@@ -104,6 +104,7 @@ function startMode() {
         renderMotifs();
     }
 }
+
 
 function openBook(id) {
     const book = data.books.find(b => b.id === id);
@@ -139,4 +140,23 @@ function openMotif(id) {
             </span>`
         ).join(", ")}
     `;
+}
+
+function renderMotifs() {
+    const container = document.getElementById("learning-content");
+    container.innerHTML = "<h3>Motywy</h3>";
+
+    data.motifs.forEach(motif => {
+        const div = document.createElement("div");
+
+        div.innerHTML = `
+            <b onclick="openMotif('${motif.id}')" style="cursor:pointer;">
+                ${motif.name}
+            </b>
+        `;
+
+        container.appendChild(div);
+    });
+
+    document.getElementById("learning").style.display = "block";
 }
