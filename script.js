@@ -26,6 +26,9 @@ const data = {
   ]
 };
 
+const epochs = ["romantyzm", "pozytywizm"];
+
+
 // 🔵 MENU USTAWIENIA
 function setMode(m) {
   mode = m;
@@ -53,11 +56,27 @@ function renderMap() {
   if (view === "books") {
     title.innerText = "📚 Lektury";
 
-    data.books.forEach(b => {
-      const div = document.createElement("div");
-      div.innerHTML = `<b onclick="openBook('${b.id}')" style="cursor:pointer">${b.title}</b>`;
-      list.appendChild(div);
-    });
+    // 🔥 DODAJ TO TUTAJ (FILTR EPOK)
+    renderEpochFilter();
+
+    data.books
+      .filter(b => activeEpochs.has(b.epoch)) // 🔥 FILTR
+      .forEach(b => {
+        const div = document.createElement("div");
+
+        div.innerHTML = `
+          <div style="
+            padding:10px;
+            margin:5px;
+            border:1px solid #ccc;
+            cursor:pointer;
+          " onclick="openBook('${b.id}')">
+            📚 ${b.title} <small>(${b.epoch})</small>
+          </div>
+        `;
+
+        list.appendChild(div);
+      });
   }
 
   if (view === "motifs") {
@@ -65,11 +84,51 @@ function renderMap() {
 
     data.motifs.forEach(m => {
       const div = document.createElement("div");
-      div.innerHTML = `<b onclick="openMotif('${m.id}')" style="cursor:pointer">${m.name}</b>`;
+
+      div.innerHTML = `
+        <div style="
+          padding:10px;
+          margin:5px;
+          border:1px solid #ccc;
+          cursor:pointer;
+        " onclick="openMotif('${m.id}')">
+          🎯 ${m.name}
+        </div>
+      `;
+
       list.appendChild(div);
     });
   }
 }
+
+
+function renderEpochFilter() {
+  const container = document.getElementById("epochFilter");
+  container.innerHTML = "";
+
+  epochs.forEach(e => {
+    const checked = activeEpochs.has(e);
+
+    container.innerHTML += `
+      <label style="margin-right:10px;">
+        <input type="checkbox"
+          ${checked ? "checked" : ""}
+          onchange="toggleEpoch('${e}')">
+        ${e}
+      </label>
+    `;
+  });
+}
+function toggleEpoch(epoch) {
+  if (activeEpochs.has(epoch)) {
+    activeEpochs.delete(epoch);
+  } else {
+    activeEpochs.add(epoch);
+  }
+
+  renderMap(); // odśwież listę
+}
+
 
 // 📚 PROFIL LEKTURY
 function openBook(id) {
