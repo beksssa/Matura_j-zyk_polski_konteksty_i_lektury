@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Matura Polski - Motywy i Lektury</title>
+</head>
+<body>
+
+    <h1>📚 Matura Polski</h1>
+
+    <!-- MENU -->
+    <div id="menu">
+        <button onclick="showLearning()">Tryb nauki</button>
+        <button onclick="showQuiz()">Tryb sprawdzania</button>
+    </div>
+
+    <!-- TRYB NAUKI -->
+    <div id="learning" style="display:none;">
+        <h2>Tryb nauki</h2>
+        <div id="learning-content"></div>
+        <button onclick="goBack()">Powrót</button>
+    </div>
+
+    <!-- TRYB QUIZ -->
+    <div id="quiz" style="display:none;">
+        <h2>Tryb sprawdzania</h2>
+        <div id="question"></div>
+        <input type="text" id="answer" placeholder="Twoja odpowiedź">
+        <button onclick="checkAnswer()">Sprawdź</button>
+        <div id="result"></div>
+        <button onclick="goBack()">Powrót</button>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
