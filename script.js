@@ -74,11 +74,13 @@ function renderMap() {
       });
   }
 
-  // 🎯 MOTYWY
+  // 🎯 MOTYWY (🔴 NOWA LOGIKA)
   if (view === "motifs") {
     title.innerText = "🎯 Motywy";
 
-    data.motifs.forEach(m => {
+    const motifs = getMotifsByEpoch();
+
+    motifs.forEach(m => {
       const div = document.createElement("div");
 
       div.innerHTML = `
@@ -120,6 +122,26 @@ function toggleEpoch(epoch) {
   }
 
   renderMap();
+}
+
+// 🧠 🔥 NOWA FUNKCJA: MOTYWY Z EPOKI
+function getMotifsByEpoch() {
+  const booksInEpoch = data.books.filter(b =>
+    activeEpochs.has(b.epoch)
+  );
+
+  const motifSet = new Map();
+
+  booksInEpoch.forEach(book => {
+    book.motifs.forEach(mId => {
+      const motif = data.motifs.find(m => m.id === mId);
+      if (motif) {
+        motifSet.set(motif.id, motif);
+      }
+    });
+  });
+
+  return Array.from(motifSet.values());
 }
 
 // 📚 PROFIL LEKTURY
