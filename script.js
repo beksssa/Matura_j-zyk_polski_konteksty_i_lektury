@@ -1,13 +1,23 @@
-const data = [
+const data = {
+  books: [
     {
-        title: "Lalka",
-        motifs: ["miłość", "społeczeństwo", "samotność"]
-    },
-    {
-        title: "Dziady cz. III",
-        motifs: ["wolność", "cierpienie", "mesjanizm"]
+      id: "lalka",
+      title: "Lalka",
+      description: "Powieść o społeczeństwie warszawskim",
+      motifs: ["milosc", "spoleczenstwo"]
     }
-];
+  ],
+
+  motifs: [
+    {
+      id: "milosc",
+      name: "Miłość",
+      description: "Motyw miłości romantycznej i niespełnionej",
+      books: ["lalka"]
+    }
+  ]
+};
+
 
 function showLearning() {
     document.getElementById("menu").style.display = "none";
