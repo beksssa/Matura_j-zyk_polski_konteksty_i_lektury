@@ -10,6 +10,7 @@ const data = {
       id: "lalka",
       title: "Lalka",
       description: "Powieść o społeczeństwie",
+      epoch: "pozytywizm",
       motifs: ["milosc", "spoleczenstwo"]
     }
   ],
