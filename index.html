@@ -1,51 +1,49 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>Matura Polski - Motywy i Lektury</title>
+  <meta charset="UTF-8">
+  <title>Matura Polski</title>
 </head>
 <body>
 
-    <h1>📚 Matura Polski</h1>
+<h1>📚 Matura Polski</h1>
 
-    <!-- MENU -->
-    <div id="menu">
-        <button onclick="showLearning()">Tryb nauki</button>
-        <button onclick="showQuiz()">Tryb sprawdzania</button>
-    </div>
+<!-- 🔵 MENU -->
+<div id="menu">
 
-    <!-- WYBÓR TRYBU NAUKI -->
-<div id="modeSelect" style="display:none;">
-    <h2>Wybierz tryb nauki</h2>
+  <h3>Tryb:</h3>
+  <button onclick="setMode('learning')">Nauka</button>
+  <button onclick="setMode('quiz')">Sprawdzanie</button>
 
-    <button onclick="selectMode('books')">Lektury</button>
-    <button onclick="selectMode('motifs')">Motywy</button>
+  <h3>Widok nauki:</h3>
+  <button onclick="setView('books')">Lektury</button>
+  <button onclick="setView('motifs')">Motywy</button>
 
-    <br><br>
+  <br><br>
 
-    <button onclick="startMode()">START</button>
-    <button onclick="goBack()">Powrót</button>
+  <button onclick="startApp()">START</button>
+
 </div>
 
+<!-- 🟢 MAPA -->
+<div id="map" style="display:none;">
+  <h2 id="map-title"></h2>
+  <div id="list"></div>
+  <br>
+  <button onclick="goMenu()">Powrót do menu</button>
+</div>
 
-    <!-- TRYB NAUKI -->
-    <div id="learning" style="display:none;">
-        <h2>Tryb nauki</h2>
-        <div id="learning-content"></div>
-        <button onclick="goBack()">Powrót</button>
-    </div>
+<!-- 🟣 PROFIL -->
+<div id="profile" style="display:none;">
+  <div id="profile-content"></div>
+  <br>
+  <button onclick="goMap()">Powrót do mapy</button>
+</div>
 
-    <!-- TRYB QUIZ -->
-    <div id="quiz" style="display:none;">
-        <h2>Tryb sprawdzania</h2>
-        <div id="question"></div>
-        <input type="text" id="answer" placeholder="Twoja odpowiedź">
-        <button onclick="checkAnswer()">Sprawdź</button>
-        <div id="result"></div>
-        <button onclick="goBack()">Powrót</button>
-    </div>
+<script src="script.js"></script>
 
-    <script src="script.js"></script>
+</body>
+</html>
 
 </body>
 </html>
