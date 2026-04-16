@@ -1,8 +1,8 @@
-// 🔵 STAN APLIKACJI
-let mode = "learning"; // tylko learning teraz
+// 🧠 STAN APLIKACJI
+let mode = "learning";
 let view = "books";
 let activeEpochs = new Set(["romantyzm", "pozytywizm"]);
-let currentMapData = null;
+let currentItem = null;
 
 // 📚 DANE
 const data = {
@@ -10,7 +10,7 @@ const data = {
     {
       id: "lalka",
       title: "Lalka",
-      description: "Powieść o społeczeństwie",
+      description: "Powieść o społeczeństwie warszawskim",
       epoch: "pozytywizm",
       motifs: ["milosc", "spoleczenstwo"]
     }
@@ -28,8 +28,7 @@ const data = {
 
 const epochs = ["romantyzm", "pozytywizm"];
 
-
-// 🔵 MENU USTAWIENIA
+// 🟢 USTAWIENIA
 function setMode(m) {
   mode = m;
 }
@@ -46,34 +45,55 @@ function startApp() {
   renderMap();
 }
 
-// 🗺️ MAPA (LISTA)
+// 🗺️ MAPA
 function renderMap() {
   const list = document.getElementById("list");
   const title = document.getElementById("map-title");
 
   list.innerHTML = "";
 
+  // 📚 LEKTURY
+  if (view === "books") {
+    title.innerText = "📚 Lektury";
+
+    renderEpochFilter();
+
+    data.books
+      .filter(b => activeEpochs.has(b.epoch))
+      .forEach(b => {
+        const div = document.createElement("div");
+
+        div.innerHTML = `
+          <div style="padding:10px;margin:5px;border:1px solid #ccc;cursor:pointer"
+               onclick="openBook('${b.id}')">
+            📚 ${b.title}
+          </div>
+        `;
+
+        list.appendChild(div);
+      });
+  }
+
+  // 🎯 MOTYWY
   if (view === "motifs") {
-  title.innerText = "🎯 Motywy";
+    title.innerText = "🎯 Motywy";
 
-  data.motifs.forEach(m => {
-    const div = document.createElement("div");
+    data.motifs.forEach(m => {
+      const div = document.createElement("div");
 
-    div.innerHTML = `
-      <div style="
-        padding:10px;
-        margin:5px;
-        border:1px solid #ccc;
-        cursor:pointer;
-      " onclick="openMotif('${m.id}')">
-        🎯 ${m.name}
-      </div>
-    `;
+      div.innerHTML = `
+        <div style="padding:10px;margin:5px;border:1px solid #ccc;cursor:pointer"
+             onclick="openMotif('${m.id}')">
+          🎯 ${m.name}
+        </div>
+      `;
 
-    list.appendChild(div);
-  });
+      list.appendChild(div);
+    });
+  }
 }
 
+// 🌍 FILTR EPOK
 function renderEpochFilter() {
   const container = document.getElementById("epochFilter");
   container.innerHTML = "";
@@ -91,6 +111,7 @@ function renderEpochFilter() {
     `;
   });
 }
+
 function toggleEpoch(epoch) {
   if (activeEpochs.has(epoch)) {
     activeEpochs.delete(epoch);
@@ -98,9 +119,8 @@ function toggleEpoch(epoch) {
     activeEpochs.add(epoch);
   }
 
-  renderMap(); // odśwież listę
+  renderMap();
 }
-
 
 // 📚 PROFIL LEKTURY
 function openBook(id) {
@@ -109,9 +129,7 @@ function openBook(id) {
   document.getElementById("map").style.display = "none";
   document.getElementById("profile").style.display = "block";
 
-  const el = document.getElementById("profile-content");
-
-  el.innerHTML = `
+  document.getElementById("profile-content").innerHTML = `
     <h2>${book.title}</h2>
     <p>${book.description}</p>
 
@@ -130,9 +148,7 @@ function openMotif(id) {
   document.getElementById("map").style.display = "none";
   document.getElementById("profile").style.display = "block";
 
-  const el = document.getElementById("profile-content");
-
-  el.innerHTML = `
+  document.getElementById("profile-content").innerHTML = `
     <h2>${motif.name}</h2>
     <p>${motif.description}</p>
 
@@ -144,10 +160,11 @@ function openMotif(id) {
   `;
 }
 
-// 🔙 POWRÓT
+// 🔙 NAWIGACJA
 function goMenu() {
   document.getElementById("map").style.display = "none";
   document.getElementById("profile").style.display = "none";
+  document.getElementById("quiz").style.display = "none";
   document.getElementById("menu").style.display = "block";
 }
 
