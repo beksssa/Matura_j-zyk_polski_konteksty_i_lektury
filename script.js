@@ -1,6 +1,7 @@
 // 🔵 STAN APLIKACJI
 let mode = "learning"; // tylko learning teraz
 let view = "books";
+let activeEpochs = new Set(["romantyzm", "pozytywizm"]);
 let currentMapData = null;
 
 // 📚 DANE
