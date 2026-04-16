@@ -8,48 +8,55 @@
 
 <h1>📚 Matura Polski</h1>
 
-<!-- 🟢 MENU -->
-<div id="menu">
-
-  <h3>Tryb</h3>
+<!-- 🟢 EKRAN 1 -->
+<div id="screen-start">
+  <h2>Wybierz tryb</h2>
   <button onclick="setMode('learning')">Nauka</button>
   <button onclick="setMode('quiz')">Ćwiczenia</button>
-
-  <h3>Zakres</h3>
-  <button onclick="setView('books')">Lektury</button>
-  <button onclick="setView('motifs')">Motywy</button>
-
   <br><br>
-
-  <button onclick="startApp()">START</button>
+  <button onclick="goScreen(2)">Dalej</button>
 </div>
 
-<!-- 🟡 MAPA -->
+<!-- 🟡 EKRAN 2 -->
+<div id="screen-mode" style="display:none;">
+  <h2>Zakres</h2>
+  <button onclick="setView('books')">Lektury</button>
+  <button onclick="setView('motifs')">Motywy</button>
+  <br><br>
+  <button onclick="goScreen(3)">Dalej</button>
+  <button onclick="goScreen(1)">Wstecz</button>
+</div>
+
+<!-- 🔵 EKRAN 3 -->
+<div id="screen-epoch" style="display:none;">
+  <h2>Filtr epok</h2>
+  <div id="epochFilter"></div>
+  <br>
+  <button onclick="startApp()">START</button>
+  <button onclick="goScreen(2)">Wstecz</button>
+</div>
+
+<!-- 🔴 EKRAN 4 — MAPA -->
 <div id="map" style="display:none;">
   <h2 id="map-title"></h2>
-
-  <div id="epochFilter"></div>
   <div id="list"></div>
+  <button onclick="goScreen(1)">Menu</button>
+</div>
 
-  <br>
-  <button onclick="goMenu()">Powrót do menu</button>
+<!-- 🔴 QUIZ -->
+<div id="quiz" style="display:none;">
+  <h2>Ćwiczenia</h2>
+  <div id="quiz-content"></div>
+  <button onclick="goScreen(1)">Koniec</button>
 </div>
 
 <!-- 🟣 PROFIL -->
 <div id="profile" style="display:none;">
   <div id="profile-content"></div>
-  <br>
-  <button onclick="goMap()">Powrót do mapy</button>
-</div>
-
-<!-- 🔴 QUIZ (pusty na teraz) -->
-<div id="quiz" style="display:none;">
-  <h2>Ćwiczenia</h2>
-  <div id="quiz-content"></div>
-  <button onclick="goMenu()">Koniec</button>
+  <button onclick="goMap()">Powrót</button>
 </div>
 
 <script src="script.js"></script>
-  
+
 </body>
 </html>
