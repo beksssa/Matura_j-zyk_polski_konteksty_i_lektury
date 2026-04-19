@@ -123,15 +123,15 @@ function startApp() {
 // =========================
 
 function startQuiz() {
-  // 🔥 RESET ZA KAŻDYM WEJŚCIEM (KLUCZOWE)
   score = 0;
   selectedBook = null;
   selectedMotif = null;
   solvedPairs = new Set();
 
   renderScore();
-  ();
+  renderQuiz();
 }
+
 
 
 // =========================
@@ -179,7 +179,7 @@ function renderQuiz() {
     </div>
   `;
 });
-
+}
 
   el.innerHTML += `<hr>`;
 
