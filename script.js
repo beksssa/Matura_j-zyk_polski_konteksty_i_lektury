@@ -11,6 +11,11 @@ let scoredPairs = new Set();
 let masteredPairs = new Set();
 let quizSnapshot = null;
 
+let taskQueue = [];
+let currentTask = null;
+const taskTypes = ["X", "Y", "Z"];
+
+
 
 // 📚 DATA
 const data = {
@@ -406,4 +411,23 @@ function goMap() {
   hideAll();
   document.getElementById("map").style.display = "block";
   renderMap();
+}
+
+function generateTaskQueue() {
+  taskQueue = shuffle([...taskTypes]); // np. X,Y,Z w losowej kolejności
+}
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+function nextTask() {
+  currentTask = taskQueue.shift();
+
+  if (!currentTask) {
+    generateTaskQueue(); // restart pętli
+    currentTask = taskQueue.shift();
+  }
+
+  renderTask();
 }
