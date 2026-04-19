@@ -309,35 +309,58 @@ function toggleEpoch(epoch) {
 // MAPA + PROFILE (OK)
 // =========================
 
-function renderMap() {
-  const list = document.getElementById("list");
-  const title = document.getElementById("map-title");
+function renderQuiz() {
+  const el = document.getElementById("quiz-content");
+  el.innerHTML = "";
 
-  list.innerHTML = "";
+  const books = getFilteredBooks();
+  const motifs = getFilteredMotifs();
 
-  if (view === "books") {
-    title.innerText = "📚 Lektury";
+  // =========================
+  // 📚 LEKTURY
+  // =========================
+  books.forEach(b => {
 
-    getFilteredBooks().forEach(b => {
-      list.innerHTML += `
-        <div onclick="openBook('${b.id}')" style="padding:10px;border:1px solid #ccc;cursor:pointer">
+    el.innerHTML += `
+      <div style="padding:8px;border:1px solid black;margin:5px;display:flex;justify-content:space-between;align-items:center">
+
+        <span onclick="selectBook('${b.id}')">
           📚 ${b.title}
-        </div>
-      `;
-    });
-  }
+        </span>
 
-  if (view === "motifs") {
-    title.innerText = "🎯 Motywy";
+        <span title="Dowiedz się więcej"
+              style="cursor:pointer"
+              onclick="openBook('${b.id}')">
+          📖
+        </span>
 
-    getFilteredMotifs().forEach(m => {
-      list.innerHTML += `
-        <div onclick="openMotif('${m.id}')" style="padding:10px;border:1px solid #ccc;cursor:pointer">
+      </div>
+    `;
+  });
+
+  el.innerHTML += `<hr>`;
+
+  // =========================
+  // 🎯 MOTYWY
+  // =========================
+  motifs.forEach(m => {
+
+    el.innerHTML += `
+      <div style="padding:8px;border:1px solid blue;margin:5px;display:flex;justify-content:space-between;align-items:center">
+
+        <span onclick="selectMotif('${m.id}')">
           🎯 ${m.name}
-        </div>
-      `;
-    });
-  }
+        </span>
+
+        <span title="Dowiedz się więcej"
+              style="cursor:pointer"
+              onclick="openMotif('${m.id}')">
+          📖
+        </span>
+
+      </div>
+    `;
+  });
 }
 
 
