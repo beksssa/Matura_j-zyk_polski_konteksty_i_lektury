@@ -2,6 +2,12 @@
 let mode = "learning";
 let view = "books";
 let activeEpochs = new Set(["romantyzm", "pozytywizm", "młoda polska"]);
+let score = 0;
+let solvedPairs = new Set(); // zapis poprawnych połączeń "bookId|motifId"
+let selectedBook = null;
+let selectedMotif = null;
+let quizStarted = false; // żeby diagnoza była tylko raz
+
 
 // 📚 DATA
 const data = {
@@ -107,10 +113,17 @@ function startApp() {
   }
 
   if (mode === "quiz") {
-    document.getElementById("quiz").style.display = "block";
-    document.getElementById("quiz-content").innerHTML = "QUIZ START (następny krok)";
+  hideAll();
+  document.getElementById("quiz").style.display = "block";
+
+  if (!quizStarted) {
+    renderDiagnosisTask();
+    quizStarted = true;
+  } else {
+    document.getElementById("quiz-content").innerHTML = "Kolejne zadania (następny krok)";
   }
 }
+
 
 // =========================
 // 🗺️ MAPA
@@ -253,5 +266,129 @@ function goMap() {
   hideAll();
   document.getElementById("map").style.display = "block";
   renderMap();
+}
+function renderDiagnosisTask() {
+  const el = document.getElementById("quiz-content");
+
+  const books = getFilteredBooks();
+  const motifs = getFilteredMotifs();
+
+  el.innerHTML = `
+    <h3>🧠 Zadanie diagnozujące</h3>
+    <p>Połącz lektury z motywami</p>
+
+    <div><strong>Score: <span id="score">${score}</span></strong></div>
+
+    <div style="display:flex; gap:40px; margin-top:20px;">
+      <div id="quiz-books"></div>
+      <div id="quiz-motifs"></div>
+    </div>
+
+    <br>
+    <button onclick="goScreen(1)">Kończymy na dziś</button>
+  `;
+
+  const booksEl = document.getElementById("quiz-books");
+  const motifsEl = document.getElementById("quiz-motifs");
+
+  // 📚 LEKTURY
+  books.forEach(b => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div style="padding:10px;border:1px solid #ccc;cursor:pointer"
+           onclick="selectBook('${b.id}')">
+        📚 ${b.title}
+        <br>
+        <button onclick="event.stopPropagation(); openBookFromQuiz('${b.id}')">
+          Dowiedz się więcej
+        </button>
+      </div>
+    `;
+    booksEl.appendChild(div);
+  });
+
+  // 🎯 MOTYWY
+  motifs.forEach(m => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div style="padding:10px;border:1px solid #ccc;cursor:pointer"
+           onclick="selectMotif('${m.id}')">
+        🎯 ${m.name}
+        <br>
+        <button onclick="event.stopPropagation(); openMotifFromQuiz('${m.id}')">
+          Dowiedz się więcej
+        </button>
+      </div>
+    `;
+    motifsEl.appendChild(div);
+  });
+}
+function selectBook(id) {
+  selectedBook = id;
+  tryMatch();
+}
+
+function selectMotif(id) {
+  selectedMotif = id;
+  tryMatch();
+}
+function tryMatch() {
+  if (!selectedBook || !selectedMotif) return;
+
+  const book = data.books.find(b => b.id === selectedBook);
+
+  const isCorrect = book.motifs.includes(selectedMotif);
+  const key = `${selectedBook}|${selectedMotif}`;
+
+  if (isCorrect && !solvedPairs.has(key)) {
+    score += 100;
+    solvedPairs.add(key);
+    alert("✅ Dobrze!");
+  } else {
+    score -= 50;
+    alert("❌ Źle!");
+  }
+
+  document.getElementById("score").innerText = score;
+
+  selectedBook = null;
+  selectedMotif = null;
+}
+function openBookFromQuiz(id) {
+  openBook(id);
+
+  document.getElementById("profile-content").innerHTML += `
+    <br><button onclick="backToQuiz()">Powrót do ćwiczenia</button>
+  `;
+}
+
+function openMotifFromQuiz(id) {
+  openMotif(id);
+
+  document.getElementById("profile-content").innerHTML += `
+    <br><button onclick="backToQuiz()">Powrót do ćwiczenia</button>
+  `;
+}
+
+function backToQuiz() {
+  hideAll();
+  document.getElementById("quiz").style.display = "block";
+}
+function getFilteredMotifs() {
+  const books = getFilteredBooks();
+  const map = new Map();
+
+  books.forEach(book => {
+    book.motifs.forEach(id => {
+      const key = `${book.id}|${id}`;
+
+      if (solvedPairs.has(key)) return; // ❗ usuwa rozwiązane
+
+      const m = data.motifs.find(x => x.id === id);
+      if (m) map.set(m.id, m);
+    });
+  });
+
+  return [...map.values()];
 }
 
