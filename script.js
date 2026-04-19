@@ -92,6 +92,11 @@ const epochs = ["młoda polska", "pozytywizm", "romantyzm"];
 // HELPERS
 // =========================
 
+function showCurrentTaskProfile() {
+  if (!currentTask) return;
+  currentTask.openProfile();
+}
+
 function clone(value) {
   return value === null || value === undefined
     ? value
@@ -419,7 +424,7 @@ function createTaskX(presetData = null) {
         </div>
 
         <div>
-          <span onclick="currentTask.openProfile()" style="cursor:pointer">
+          <span onclick="showCurrentTaskProfile()" style="cursor:pointer">
             📖 dowiedz się więcej
           </span>
         </div>
