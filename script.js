@@ -17,7 +17,7 @@ const data = {
       title: "Wesele",
       description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
       epoch: "młoda polska",
-      motifs: ["motywspołeczny", "symbolizm", "ludomania"]
+      motifs: ["motywnarodowy", "symbolizm", "ludomania"]
     },
     {
       id: "chłopi",
@@ -174,20 +174,6 @@ function renderMap() {
 
 function getFilteredBooks() {
   return data.books.filter(b => activeEpochs.has(b.epoch));
-}
-
-function getFilteredMotifs() {
-  const books = getFilteredBooks();
-  const map = new Map();
-
-  books.forEach(book => {
-    book.motifs.forEach(id => {
-      const m = data.motifs.find(x => x.id === id);
-      if (m) map.set(m.id, m);
-    });
-  });
-
-  return [...map.values()];
 }
 
 // =========================
