@@ -1,85 +1,71 @@
+// =========================
 // 🧠 STATE
+// =========================
+
 let mode = "learning";
 let view = "books";
 let activeEpochs = new Set(["młoda polska"]);
 
 let score = 0;
-let selectedBook = null;
-let selectedMotif = null;
-let solvedPairs = new Set();
-let scoredPairs = new Set();
-let masteredPairs = new Set();
+
 let quizSnapshot = null;
 
+// task system
 let taskQueue = [];
 let currentTask = null;
-const taskTypes = ["X", "Y", "Z"];
-
 let answered = false;
 
+const taskTypes = ["X", "Y", "Z"];
+
+// swipe state
+let swipeIndex = 0;
+let swipeOptions = [];
+let swipeCorrectSide = null;
 
 
+// =========================
 // 📚 DATA
+// =========================
+
 const data = {
   books: [
     {
       id: "wesele",
       title: "Wesele",
-      description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
+      description: "Diagnoza społeczeństwa...",
       epoch: "młoda polska",
       motifs: ["motywnarodowy", "symbolizm", "ludomania"]
     },
     {
       id: "chłopi",
       title: "Chłopi",
-      description: "realistyczna powieść ukazująca życie wiejskiej społeczności podporządkowane rytmowi natury, pracy i tradycji.",
+      description: "realistyczna powieść...",
       epoch: "młoda polska",
       motifs: ["naturalizm", "motywmiłości"]
     }
   ],
 
   motifs: [
-    {
-      id: "motywnarodowy",
-      name: "Motyw Narodowy",
-      description: "Promlematyka kondycji narodu",
-      books: ["wesele"]
-    },
-    {
-      id: "symbolizm",
-      name: "Symbolizm",
-      description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost",
-      books: ["wesele"]
-    },
-    {
-      id: "ludomania",
-      name: "Ludomania",
-      description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii",
-      books: ["wesele"]
-    },
-    {
-      id: "naturalizm",
-      name: "Naturalizm",
-      description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt",
-      books: ["chłopi"]
-    },
-    {
-      id: "motywmiłości",
-      name: "Motyw Miłości",
-      description: "przestawienie relacji miłosnej",
-      books: ["chłopi"]
-    }
+    { id: "motywnarodowy", name: "Motyw Narodowy", description: "..." },
+    { id: "symbolizm", name: "Symbolizm", description: "..." },
+    { id: "ludomania", name: "Ludomania", description: "..." },
+    { id: "naturalizm", name: "Naturalizm", description: "..." },
+    { id: "motywmiłości", name: "Motyw Miłości", description: "..." }
   ]
 };
 
 const epochs = ["młoda polska", "pozytywizm", "romantyzm"];
+
+
+// =========================
+// SCREEN CONTROL
+// =========================
 
 function goScreen(n) {
   hideAll();
 
   if (n === 1) document.getElementById("screen-start").style.display = "block";
   if (n === 2) document.getElementById("screen-mode").style.display = "block";
-
   if (n === 3) {
     document.getElementById("screen-epoch").style.display = "block";
     renderEpochFilter();
@@ -87,7 +73,7 @@ function goScreen(n) {
 }
 
 function hideAll() {
-  ["screen-start", "screen-mode", "screen-epoch", "map", "quiz", "profile"]
+  ["screen-start","screen-mode","screen-epoch","map","quiz","profile"]
     .forEach(id => document.getElementById(id).style.display = "none");
 }
 
@@ -130,14 +116,123 @@ function startApp() {
 
 function startQuiz() {
   score = 0;
-  selectedBook = null;
-  selectedMotif = null;
-  solvedPairs = new Set();
-  scoredPairs = new Set();
+  answered = false;
+
+  generateTaskQueue();
+  nextTask();
 
   renderScore();
-  renderQuiz();
 }
+
+
+// =========================
+// TASK SYSTEM
+// =========================
+
+function generateTaskQueue() {
+  taskQueue = shuffle([...taskTypes]);
+}
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+function nextTask() {
+  answered = false;
+  document.getElementById("nextBtn").style.display = "none";
+
+  currentTask = taskQueue.shift();
+
+  if (!currentTask) {
+    generateTaskQueue();
+    currentTask = taskQueue.shift();
+  }
+
+  renderTask();
+}
+
+
+// =========================
+// TASK RENDER (SWIPE UI)
+// =========================
+
+function renderTask() {
+  const el = document.getElementById("quiz-content");
+
+  const books = getFilteredBooks();
+  const motifs = getFilteredMotifs();
+
+  const book = books[Math.floor(Math.random() * books.length)];
+  const motifCorrect = motifs[Math.floor(Math.random() * motifs.length)];
+  const motifWrong = motifs.find(m => m.id !== motifCorrect.id);
+
+  swipeOptions = Math.random() > 0.5
+    ? [motifCorrect, motifWrong]
+    : [motifWrong, motifCorrect];
+
+  swipeCorrectSide = swipeOptions.indexOf(motifCorrect);
+
+  el.innerHTML = `
+    <div style="text-align:center; font-size:20px;">
+      ←  →
+    </div>
+
+    <h2 style="text-align:center">${book.title}</h2>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+
+      <div onclick="chooseSwipe(0)" style="cursor:pointer">
+        ${swipeOptions[0].name}
+      </div>
+
+      <div>
+        📖
+      </div>
+
+      <div onclick="chooseSwipe(1)" style="cursor:pointer">
+        ${swipeOptions[1].name}
+      </div>
+
+    </div>
+  `;
+}
+
+
+// =========================
+// SWIPE LOGIC
+// =========================
+
+function chooseSwipe(index) {
+  if (answered) return;
+
+  answered = true;
+
+  const correct = index === swipeCorrectSide;
+
+  if (correct) {
+    score += 100;
+  }
+
+  renderScore();
+
+  document.getElementById("nextBtn").style.display = "block";
+
+  const context = swipeOptions[swipeCorrectSide];
+  showProfileIcon(context);
+}
+
+
+// =========================
+// KEYBOARD SWIPE
+// =========================
+
+document.addEventListener("keydown", (e) => {
+  if (answered === false) return;
+
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    nextTask();
+  }
+});
 
 
 // =========================
@@ -150,99 +245,20 @@ function renderScore() {
 
 
 // =========================
-// QUIZ RENDER
+// NEXT BUTTON
 // =========================
 
-function renderQuiz() {
-  const el = document.getElementById("quiz-content");
-  el.innerHTML = "";
-
-  const books = getFilteredBooks();
-  const motifs = getFilteredMotifs();
-
-  // 📚 BOOKS
-  books.forEach(b => {
-    el.innerHTML += `
-      <div style="padding:8px;border:1px solid black;margin:5px;display:flex;justify-content:space-between;align-items:center">
-
-        <span onclick="selectBook('${b.id}')">
-          📚 ${b.title}
-        </span>
-
-        <span title="Dowiedz się więcej"
-              style="cursor:pointer"
-              onclick="openBook('${b.id}')">
-          📖
-        </span>
-
-      </div>
-    `;
-  });
-
-  el.innerHTML += `<hr>`;
-
-  // 🎯 MOTIFS
-  motifs.forEach(m => {
-    el.innerHTML += `
-      <div style="padding:8px;border:1px solid blue;margin:5px;display:flex;justify-content:space-between;align-items:center">
-
-        <span onclick="selectMotif('${m.id}')">
-          🎯 ${m.name}
-        </span>
-
-        <span title="Dowiedz się więcej"
-              style="cursor:pointer"
-              onclick="openMotif('${m.id}')">
-          📖
-        </span>
-
-      </div>
-    `;
-  });
+function nextTaskHandler() {
+  nextTask();
 }
 
 
 // =========================
-// MATCH LOGIC
+// PROFILE ICON (stub)
 // =========================
 
-function selectBook(id) {
-  selectedBook = id;
-  tryMatch();
-}
-
-function selectMotif(id) {
-  selectedMotif = id;
-  tryMatch();
-}
-
-function tryMatch() {
-  if (!selectedBook || !selectedMotif) return;
-
-  const pairKey = `${selectedBook}-${selectedMotif}`;
-  const reverseKey = `${selectedMotif}-${selectedBook}`;
-
-  const book = data.books.find(b => b.id === selectedBook);
-  const isCorrect = book.motifs.includes(selectedMotif);
-
-  if (!scoredPairs.has(pairKey) && !scoredPairs.has(reverseKey)) {
-
-    if (isCorrect) {
-      score += 100;
-      masteredPairs.add(pairKey);
-    } else {
-      score -= 50;
-    }
-
-    scoredPairs.add(pairKey);
-    scoredPairs.add(reverseKey);
-  }
-
-  selectedBook = null;
-  selectedMotif = null;
-
-  renderScore();
-  renderQuiz();
+function showProfileIcon(context) {
+  console.log("📖 open profile:", context);
 }
 
 
@@ -255,10 +271,9 @@ function getFilteredBooks() {
 }
 
 function getFilteredMotifs() {
-  const books = getFilteredBooks();
   const map = new Map();
 
-  books.forEach(book => {
+  getFilteredBooks().forEach(book => {
     book.motifs.forEach(id => {
       const m = data.motifs.find(x => x.id === id);
       if (m) map.set(m.id, m);
@@ -284,167 +299,36 @@ function renderEpochFilter() {
           ${activeEpochs.has(e) ? "checked" : ""}
           onchange="toggleEpoch('${e}')">
         ${e}
-      </label>
-      <br>
+      </label><br>
     `;
   });
 }
 
-function toggleEpoch(epoch) {
-  activeEpochs.has(epoch)
-    ? activeEpochs.delete(epoch)
-    : activeEpochs.add(epoch);
+function toggleEpoch(e) {
+  activeEpochs.has(e)
+    ? activeEpochs.delete(e)
+    : activeEpochs.add(e);
 }
 
 
 // =========================
-// MAP (optional learning mode)
+// MAP (optional)
 // =========================
 
 function renderMap() {
   const list = document.getElementById("list");
-  const title = document.getElementById("map-title");
-
   list.innerHTML = "";
 
   if (view === "books") {
-    title.innerText = "📚 Lektury";
-
     getFilteredBooks().forEach(b => {
       list.innerHTML += `<div>${b.title}</div>`;
     });
   }
-
-  if (view === "motifs") {
-    title.innerText = "🎯 Motywy";
-
-    getFilteredMotifs().forEach(m => {
-      list.innerHTML += `<div>${m.name}</div>`;
-    });
-  }
 }
 
 
 // =========================
-// PROFILE
+// HTML BUTTON HOOK FIX
 // =========================
 
-function openBook(id) {
-  quizSnapshot = saveQuizState();
-
-  const book = data.books.find(b => b.id === id);
-
-  hideAll();
-  document.getElementById("profile").style.display = "block";
-
-  document.getElementById("profile-content").innerHTML = `
-    <h2>${book.title}</h2>
-    <p>${book.description}</p>
-    <button onclick="returnToQuiz()">⬅ Powrót do ćwiczeń</button>
-  `;
-}
-
-function openMotif(id) {
-  quizSnapshot = saveQuizState();
-
-  const motif = data.motifs.find(m => m.id === id);
-
-  hideAll();
-  document.getElementById("profile").style.display = "block";
-
-  document.getElementById("profile-content").innerHTML = `
-    <h2>${motif.name}</h2>
-    <p>${motif.description}</p>
-    <button onclick="returnToQuiz()">⬅ Powrót do ćwiczeń</button>
-  `;
-}
-
-function returnToQuiz() {
-  hideAll();
-  document.getElementById("quiz").style.display = "block";
-  restoreQuizState();
-}
-
-
-// =========================
-// STATE SAVE/RESTORE
-// =========================
-
-function saveQuizState() {
-  return {
-    score,
-    selectedBook,
-    selectedMotif,
-    solvedPairs: new Set([...solvedPairs]),
-    scoredPairs: new Set([...scoredPairs]),
-    masteredPairs: new Set([...masteredPairs])
-  };
-}
-
-function restoreQuizState() {
-  if (!quizSnapshot) return;
-
-  score = quizSnapshot.score;
-  selectedBook = quizSnapshot.selectedBook;
-  selectedMotif = quizSnapshot.selectedMotif;
-  solvedPairs = new Set(quizSnapshot.solvedPairs);
-  scoredPairs = new Set(quizSnapshot.scoredPairs);
-  masteredPairs = new Set(quizSnapshot.masteredPairs);
-
-  renderScore();
-  renderQuiz();
-}
-
-
-// =========================
-// BLOCK CHECK
-// =========================
-
-function isBlockedPair(bookId, motifId) {
-  return masteredPairs.has(`${bookId}-${motifId}`);
-}
-
-
-// =========================
-// MAP RETURN
-// =========================
-
-function goMap() {
-  hideAll();
-  document.getElementById("map").style.display = "block";
-  renderMap();
-}
-
-function generateTaskQueue() {
-  taskQueue = shuffle([...taskTypes]); // np. X,Y,Z w losowej kolejności
-}
-
-function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
-}
-
-function nextTask() {
-  currentTask = taskQueue.shift();
-
-  if (!currentTask) {
-    generateTaskQueue(); // restart pętli
-    currentTask = taskQueue.shift();
-  }
-
-  renderTask();
-}
-
-function submitAnswer(isCorrect, context) {
-  if (answered) return;
-
-  answered = true;
-
-  if (isCorrect) {
-    score += 100;
-  }
-
-  renderScore();
-
-  showProfileIcon(context); // 🔥 „dowiedz się więcej”
-  document.getElementById("nextBtn").style.display = "block";
-}
+window.nextTask = nextTaskHandler;
