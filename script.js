@@ -715,14 +715,19 @@ function attachTaskXSwipeHandlers() {
 }
 
 function openCurrentTaskProfile() {
-  if (!currentTaskData || quizMode !== "engine") return;
+  if (!currentTask) return;
 
-  if (currentTaskData.promptType === "book") {
-    openBook(currentTaskData.promptId);
-  } else {
-    openMotif(currentTaskData.promptId);
+  const d = currentTask.data;
+
+  if (d.promptType === "book") {
+    openBook(d.promptId);
+  }
+
+  if (d.promptType === "motif") {
+    openMotif(d.promptId);
   }
 }
+
 
 // =========================
 // KEYBOARD
@@ -827,6 +832,17 @@ function renderMap() {
 // =========================
 // PROFILE
 // =========================
+function openFromProfile(type, id) {
+  quizSnapshot = captureQuizState();
+
+  hideAll();
+  document.getElementById("profile").style.display = "block";
+
+  if (type === "book") openBook(id, true);
+  if (type === "motif") openMotif(id, true);
+}
+
+
 
 function openBook(id) {
   quizSnapshot = saveQuizState();
