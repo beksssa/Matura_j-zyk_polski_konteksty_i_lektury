@@ -7,8 +7,7 @@
 <body>
 
 <h1>📚 Matura Polski</h1>
- 
-<!-- 🟢 EKRAN 1 -->
+
 <div id="screen-start">
   <h2>Wybierz tryb</h2>
   <button onclick="setMode('learning')">Nauka</button>
@@ -17,7 +16,6 @@
   <button onclick="goScreen(2)">Dalej</button>
 </div>
 
-<!-- 🟡 EKRAN 2 -->
 <div id="screen-mode" style="display:none;">
   <h2>Zakres</h2>
   <button onclick="setView('books')">Lektury</button>
@@ -27,36 +25,4 @@
   <button onclick="goScreen(1)">Wstecz</button>
 </div>
 
-<!-- 🔵 EKRAN 3 -->
-<div id="screen-epoch" style="display:none;">
-  <h2>Filtr epok</h2>
-  <div id="epochFilter"></div>
-  <br>
-  <button onclick="startApp()">START</button>
-  <button onclick="goScreen(2)">Wstecz</button>
-</div>
-
-<!-- 🔴 EKRAN 4 — MAPA -->
-<div id="map" style="display:none;">
-  <h2 id="map-title"></h2>
-  <div id="list"></div>
-  <button onclick="goScreen(1)">Menu</button>
-</div>
-
-<!-- 🔴 QUIZ -->
-<div id="quiz" style="display:none;">
-  <h2>Ćwiczenia</h2>
-  <div id="quiz-content"></div>
-  <button onclick="goScreen(1)">Koniec</button>
-</div>
-
-<!-- 🟣 PROFIL -->
-<div id="profile" style="display:none;">
-  <div id="profile-content"></div>
-  <button onclick="goMap()">Powrót</button>
-</div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
+<div id="screen-epoch" style="
