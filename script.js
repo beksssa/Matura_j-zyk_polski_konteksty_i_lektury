@@ -15,6 +15,8 @@ let taskQueue = [];
 let currentTask = null;
 const taskTypes = ["X", "Y", "Z"];
 
+let answered = false;
+
 
 
 // 📚 DATA
@@ -430,4 +432,19 @@ function nextTask() {
   }
 
   renderTask();
+}
+
+function submitAnswer(isCorrect, context) {
+  if (answered) return;
+
+  answered = true;
+
+  if (isCorrect) {
+    score += 100;
+  }
+
+  renderScore();
+
+  showProfileIcon(context); // 🔥 „dowiedz się więcej”
+  document.getElementById("nextBtn").style.display = "block";
 }
