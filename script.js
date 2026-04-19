@@ -130,7 +130,7 @@ function startQuiz() {
   solvedPairs = new Set();
 
   renderScore();
-  renderQuiz();
+  ();
 }
 
 
@@ -204,7 +204,7 @@ function renderQuiz() {
     </div>
   `;
 });
-
+}
 
 
 // =========================
