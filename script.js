@@ -7,10 +7,9 @@ let score = 0;
 let selectedBook = null;
 let selectedMotif = null;
 let solvedPairs = new Set();
-let scoredPairs = new Set(); 
-let masteredPairs = new Set(); 
+let scoredPairs = new Set();
+let masteredPairs = new Set();
 let quizSnapshot = null;
-
 
 
 // 📚 DATA
@@ -73,6 +72,7 @@ function goScreen(n) {
 
   if (n === 1) document.getElementById("screen-start").style.display = "block";
   if (n === 2) document.getElementById("screen-mode").style.display = "block";
+
   if (n === 3) {
     document.getElementById("screen-epoch").style.display = "block";
     renderEpochFilter();
@@ -80,7 +80,7 @@ function goScreen(n) {
 }
 
 function hideAll() {
-  ["screen-start","screen-mode","screen-epoch","map","quiz","profile"]
+  ["screen-start", "screen-mode", "screen-epoch", "map", "quiz", "profile"]
     .forEach(id => document.getElementById(id).style.display = "none");
 }
 
@@ -112,14 +112,13 @@ function startApp() {
 
   if (mode === "quiz") {
     document.getElementById("quiz").style.display = "block";
-
-    startQuiz(); // 🔥 WAŻNE: zawsze reset + start
+    startQuiz();
   }
 }
 
 
 // =========================
-// 🧠 QUIZ START (TEST DIAGNOSTYCZNY)
+// QUIZ START
 // =========================
 
 function startQuiz() {
@@ -127,11 +126,11 @@ function startQuiz() {
   selectedBook = null;
   selectedMotif = null;
   solvedPairs = new Set();
+  scoredPairs = new Set();
 
   renderScore();
   renderQuiz();
 }
-
 
 
 // =========================
@@ -144,7 +143,7 @@ function renderScore() {
 
 
 // =========================
-// QUIZ RENDER (TEST DIAGNOSTYCZNY UI)
+// QUIZ RENDER
 // =========================
 
 function renderQuiz() {
@@ -154,56 +153,45 @@ function renderQuiz() {
   const books = getFilteredBooks();
   const motifs = getFilteredMotifs();
 
-  // =========================
-  // 📚 LEKTURY
-  // =========================
+  // 📚 BOOKS
   books.forEach(b => {
+    el.innerHTML += `
+      <div style="padding:8px;border:1px solid black;margin:5px;display:flex;justify-content:space-between;align-items:center">
 
-  const isFullyBlocked = motifs.every(m =>
-    isBlockedPair(b.id, m.id)
-  );
+        <span onclick="selectBook('${b.id}')">
+          📚 ${b.title}
+        </span>
 
-  el.innerHTML += `
-    <div style="padding:8px;border:1px solid black;margin:5px;display:flex;justify-content:space-between;align-items:center">
+        <span title="Dowiedz się więcej"
+              style="cursor:pointer"
+              onclick="openBook('${b.id}')">
+          📖
+        </span>
 
-      <span onclick="selectBook('${b.id}')">
-        📚 ${b.title}
-      </span>
-
-      <span title="Dowiedz się więcej"
-            style="cursor:pointer"
-            onclick="openBook('${b.id}')">
-        📖
-      </span>
-
-    </div>
-  `;
-});
-}
+      </div>
+    `;
+  });
 
   el.innerHTML += `<hr>`;
 
-  // =========================
-  // 🎯 MOTYWY
-  // =========================
+  // 🎯 MOTIFS
   motifs.forEach(m => {
+    el.innerHTML += `
+      <div style="padding:8px;border:1px solid blue;margin:5px;display:flex;justify-content:space-between;align-items:center">
 
-  el.innerHTML += `
-    <div style="padding:8px;border:1px solid blue;margin:5px;display:flex;justify-content:space-between;align-items:center">
+        <span onclick="selectMotif('${m.id}')">
+          🎯 ${m.name}
+        </span>
 
-      <span onclick="selectMotif('${m.id}')">
-        🎯 ${m.name}
-      </span>
+        <span title="Dowiedz się więcej"
+              style="cursor:pointer"
+              onclick="openMotif('${m.id}')">
+          📖
+        </span>
 
-      <span title="Dowiedz się więcej"
-            style="cursor:pointer"
-            onclick="openMotif('${m.id}')">
-        📖
-      </span>
-
-    </div>
-  `;
-});
+      </div>
+    `;
+  });
 }
 
 
@@ -228,15 +216,13 @@ function tryMatch() {
   const reverseKey = `${selectedMotif}-${selectedBook}`;
 
   const book = data.books.find(b => b.id === selectedBook);
-
   const isCorrect = book.motifs.includes(selectedMotif);
 
-  // 🔥 BRAMKA 1: czy już ocenione
   if (!scoredPairs.has(pairKey) && !scoredPairs.has(reverseKey)) {
 
     if (isCorrect) {
       score += 100;
-      masteredPairs.add(pairKey); // 🔥 zapamiętujemy relację
+      masteredPairs.add(pairKey);
     } else {
       score -= 50;
     }
@@ -251,7 +237,6 @@ function tryMatch() {
   renderScore();
   renderQuiz();
 }
-
 
 
 // =========================
@@ -306,70 +291,39 @@ function toggleEpoch(epoch) {
 
 
 // =========================
-// MAPA + PROFILE (OK)
+// MAP (optional learning mode)
 // =========================
 
-function renderQuiz() {
-  const el = document.getElementById("quiz-content");
-  el.innerHTML = "";
+function renderMap() {
+  const list = document.getElementById("list");
+  const title = document.getElementById("map-title");
 
-  const books = getFilteredBooks();
-  const motifs = getFilteredMotifs();
+  list.innerHTML = "";
 
-  // =========================
-  // 📚 LEKTURY
-  // =========================
-  books.forEach(b => {
+  if (view === "books") {
+    title.innerText = "📚 Lektury";
 
-    el.innerHTML += `
-      <div style="padding:8px;border:1px solid black;margin:5px;display:flex;justify-content:space-between;align-items:center">
+    getFilteredBooks().forEach(b => {
+      list.innerHTML += `<div>${b.title}</div>`;
+    });
+  }
 
-        <span onclick="selectBook('${b.id}')">
-          📚 ${b.title}
-        </span>
+  if (view === "motifs") {
+    title.innerText = "🎯 Motywy";
 
-        <span title="Dowiedz się więcej"
-              style="cursor:pointer"
-              onclick="openBook('${b.id}')">
-          📖
-        </span>
-
-      </div>
-    `;
-  });
-
-  el.innerHTML += `<hr>`;
-
-  // =========================
-  // 🎯 MOTYWY
-  // =========================
-  motifs.forEach(m => {
-
-    el.innerHTML += `
-      <div style="padding:8px;border:1px solid blue;margin:5px;display:flex;justify-content:space-between;align-items:center">
-
-        <span onclick="selectMotif('${m.id}')">
-          🎯 ${m.name}
-        </span>
-
-        <span title="Dowiedz się więcej"
-              style="cursor:pointer"
-              onclick="openMotif('${m.id}')">
-          📖
-        </span>
-
-      </div>
-    `;
-  });
+    getFilteredMotifs().forEach(m => {
+      list.innerHTML += `<div>${m.name}</div>`;
+    });
+  }
 }
 
 
 // =========================
-// PROFILES
+// PROFILE
 // =========================
 
 function openBook(id) {
-  quizSnapshot = saveQuizState(); // 🔥 NOWE
+  quizSnapshot = saveQuizState();
 
   const book = data.books.find(b => b.id === id);
 
@@ -379,14 +333,12 @@ function openBook(id) {
   document.getElementById("profile-content").innerHTML = `
     <h2>${book.title}</h2>
     <p>${book.description}</p>
-
     <button onclick="returnToQuiz()">⬅ Powrót do ćwiczeń</button>
   `;
 }
 
-
 function openMotif(id) {
-  quizSnapshot = saveQuizState(); // 🔥 NOWE
+  quizSnapshot = saveQuizState();
 
   const motif = data.motifs.find(m => m.id === id);
 
@@ -396,29 +348,20 @@ function openMotif(id) {
   document.getElementById("profile-content").innerHTML = `
     <h2>${motif.name}</h2>
     <p>${motif.description}</p>
-
     <button onclick="returnToQuiz()">⬅ Powrót do ćwiczeń</button>
   `;
-}
-
-
-
-function goMap() {
-  hideAll();
-  document.getElementById("map").style.display = "block";
-  renderMap();
-}
-
-function isBlockedPair(bookId, motifId) {
-  return masteredPairs.has(`${bookId}-${motifId}`);
 }
 
 function returnToQuiz() {
   hideAll();
   document.getElementById("quiz").style.display = "block";
-
-  restoreQuizState(); // 🔥 WAŻNE
+  restoreQuizState();
 }
+
+
+// =========================
+// STATE SAVE/RESTORE
+// =========================
 
 function saveQuizState() {
   return {
@@ -445,3 +388,22 @@ function restoreQuizState() {
   renderQuiz();
 }
 
+
+// =========================
+// BLOCK CHECK
+// =========================
+
+function isBlockedPair(bookId, motifId) {
+  return masteredPairs.has(`${bookId}-${motifId}`);
+}
+
+
+// =========================
+// MAP RETURN
+// =========================
+
+function goMap() {
+  hideAll();
+  document.getElementById("map").style.display = "block";
+  renderMap();
+}
