@@ -1,7 +1,7 @@
 // 🧠 STATE
 let mode = "learning";
 let view = "books";
-let activeEpochs = new Set(["romantyzm", "pozytywizm"]);
+let activeEpochs = new Set(["romantyzm", "pozytywizm", "młoda polska"]);
 
 // 📚 DATA
 const data = {
