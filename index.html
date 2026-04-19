@@ -1,28 +1,110 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Matura Polski</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Matura Polski — Motywy Literackie</title>
 </head>
 <body>
-
-<h1>📚 Matura Polski</h1>
-
-<div id="screen-start">
-  <h2>Wybierz tryb</h2>
-  <button onclick="setMode('learning')">Nauka</button>
-  <button onclick="setMode('quiz')">Ćwiczenia</button>
-  <br><br>
-  <button onclick="goScreen(2)">Dalej</button>
-</div>
-
-<div id="screen-mode" style="display:none;">
-  <h2>Zakres</h2>
-  <button onclick="setView('books')">Lektury</button>
-  <button onclick="setView('motifs')">Motywy</button>
-  <br><br>
-  <button onclick="goScreen(3)">Dalej</button>
-  <button onclick="goScreen(1)">Wstecz</button>
-</div>
-
-<div id="screen-epoch" style="
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 1: WYBÓR TRYBU (Nauka / Ćwiczenia) -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-1-mode" class="screen">
+        <h1>📚 Matura Polski</h1>
+        <h2>Wybierz tryb</h2>
+        <button id="btn-mode-learning">📖 Nauka</button>
+        <button id="btn-mode-quiz">✏️ Ćwiczenia</button>
+    </div>
+ 
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 2: WYBÓR ZAKRESU (tylko dla Nauki) -->
+    <!-- Lektury vs Motywy -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-2-scope" class="screen hidden">
+        <h1>📚 Matura Polski</h1>
+        <h2>Co chcesz robić?</h2>
+        <button id="btn-scope-books">📚 Przeglądaj lektury</button>
+        <button id="btn-scope-motifs">🎯 Przeglądaj motywy</button>
+        <button id="btn-back-to-mode">← Wstecz</button>
+    </div>
+ 
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 3: FILTR EPOK -->
+    <!-- Pojawia się zarówno dla Nauki (po wyborze scope) jak i dla Ćwiczeń -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-3-epochs" class="screen hidden">
+        <h1>📚 Matura Polski</h1>
+        <h2>Wybierz epoki</h2>
+        <div id="epoch-filter" class="epoch-checkboxes">
+            <!-- Wypełniane JS -->
+        </div>
+        <button id="btn-apply-epochs">🚀 Dalej</button>
+        <button id="btn-back-from-epochs">← Wstecz</button>
+    </div>
+ 
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 4A: LISTA (Tryb Nauka) -->
+    <!-- Wyświetla listę lektur lub motywów w zależności od view -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-4a-list" class="screen hidden">
+        <h1 id="list-title">📚 Lektury</h1>
+        <div id="list-container" class="list">
+            <!-- Wypełniane JS -->
+        </div>
+        <button id="btn-back-to-epochs-from-list">← Wstecz</button>
+        <button id="btn-home-from-list">🏠 Menu główne</button>
+    </div>
+ 
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 5: PROFIL (Tryb Nauka) -->
+    <!-- Szczegóły lektury lub motywu + powiązane elementy -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-5-profile" class="screen hidden">
+        <div id="profile-content">
+            <!-- Wypełniane JS -->
+        </div>
+        <button id="btn-back-to-list-from-profile">← Wstecz do listy</button>
+        <button id="btn-home-from-profile">🏠 Menu główne</button>
+    </div>
+ 
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 6: QUIZ (Tryb Ćwiczenia) -->
+    <!-- Test diagnostyczny (zawsze) + inne zadania -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-6-quiz" class="screen hidden">
+        <h1>✏️ Ćwiczenia</h1>
+        
+        <!-- Score i progress -->
+        <div id="quiz-info">
+            <div id="score-display">Punkty: <span id="score">0</span></div>
+            <div id="progress-display">
+                Rozwiązano: <span id="solved-count">0</span> / <span id="total-count">0</span>
+            </div>
+        </div>
+ 
+        <!-- Nagłówek zadania -->
+        <h2 id="task-title">Test Diagnostyczny</h2>
+ 
+        <!-- Treść zadania -->
+        <div id="quiz-task">
+            <!-- Wypełniane JS zależnie od zadania -->
+        </div>
+ 
+        <!-- Kontrolki -->
+        <div id="quiz-controls">
+            <button id="btn-match">🔗 Połącz zaznaczone</button>
+            <button id="btn-next-task" style="display:none;">➡️ Następne zadanie</button>
+            <button id="btn-end-quiz">🏠 Koniec na dziś</button>
+        </div>
+    </div>
+ 
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- EKRAN 7: PROFIL Z QUIZ-A -->
+    <!-- Szczegóły lektury/motywu wyświetlone z quiz-a -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <div id="screen-7-profile-from-quiz" class="screen hidden">
+        <div id="profile-quiz-content">
+            <!-- Wypełniane JS -->
+        </div>
+        <button id="btn-back-to-quiz-from-profile">← Powrót do ćwiczenia</button>
+    </div>
