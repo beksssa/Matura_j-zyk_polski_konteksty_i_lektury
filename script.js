@@ -23,38 +23,61 @@ let swipeOptions = [];
 let swipeCorrectSide = null;
 
 
-// =========================
 // 📚 DATA
-// =========================
-
 const data = {
   books: [
     {
       id: "wesele",
       title: "Wesele",
-      description: "Diagnoza społeczeństwa...",
+      description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
       epoch: "młoda polska",
       motifs: ["motywnarodowy", "symbolizm", "ludomania"]
     },
     {
       id: "chłopi",
       title: "Chłopi",
-      description: "realistyczna powieść...",
+      description: "realistyczna powieść ukazująca życie wiejskiej społeczności podporządkowane rytmowi natury, pracy i tradycji.",
       epoch: "młoda polska",
       motifs: ["naturalizm", "motywmiłości"]
     }
   ],
 
   motifs: [
-    { id: "motywnarodowy", name: "Motyw Narodowy", description: "..." },
-    { id: "symbolizm", name: "Symbolizm", description: "..." },
-    { id: "ludomania", name: "Ludomania", description: "..." },
-    { id: "naturalizm", name: "Naturalizm", description: "..." },
-    { id: "motywmiłości", name: "Motyw Miłości", description: "..." }
+    {
+      id: "motywnarodowy",
+      name: "Motyw Narodowy",
+      description: "Promlematyka kondycji narodu",
+      books: ["wesele"]
+    },
+    {
+      id: "symbolizm",
+      name: "Symbolizm",
+      description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost",
+      books: ["wesele"]
+    },
+    {
+      id: "ludomania",
+      name: "Ludomania",
+      description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii",
+      books: ["wesele"]
+    },
+    {
+      id: "naturalizm",
+      name: "Naturalizm",
+      description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt",
+      books: ["chłopi"]
+    },
+    {
+      id: "motywmiłości",
+      name: "Motyw Miłości",
+      description: "przestawienie relacji miłosnej",
+      books: ["chłopi"]
+    }
   ]
 };
 
 const epochs = ["młoda polska", "pozytywizm", "romantyzm"];
+
 
 
 // =========================
