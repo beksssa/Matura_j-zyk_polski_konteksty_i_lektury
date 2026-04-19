@@ -22,6 +22,9 @@ let swipeIndex = 0;
 let swipeOptions = [];
 let swipeCorrectSide = null;
 
+let currentTaskData = null;
+let currentTaskType = null;
+
 
 // 📚 DATA
 const data = {
@@ -348,6 +351,22 @@ function renderMap() {
     });
   }
 }
+
+function getNextTaskType() {
+  return taskTypes[Math.floor(Math.random() * taskTypes.length)];
+}
+
+function nextTask() {
+  answered = false;
+  document.getElementById("nextBtn").style.display = "none";
+
+  const type = getNextTaskType();
+
+  if (type === "X") generateTaskX();
+  if (type === "Y") generateTaskY();
+  if (type === "Z") generateTaskZ();
+}
+
 
 
 // =========================
