@@ -7,6 +7,9 @@ let score = 0;
 let selectedBook = null;
 let selectedMotif = null;
 let solvedPairs = new Set();
+let scoredPairs = new Set(); 
+let masteredPairs = new Set(); 
+
 
 // 📚 DATA
 const data = {
@@ -149,8 +152,16 @@ function renderQuiz() {
   const books = getFilteredBooks();
   const motifs = getFilteredMotifs();
 
+  // =========================
   // 📚 LEKTURY
+  // =========================
   books.forEach(b => {
+
+    // 🔥 NIE UKRYWAMY CAŁKOWICIE, tylko filtr przyszłych zadań
+    const isFullyBlocked = motifs.every(m =>
+      isBlockedPair(b.id, m.id)
+    );
+
     if (solvedPairs.has(b.id)) return;
 
     el.innerHTML += `
@@ -161,10 +172,17 @@ function renderQuiz() {
     `;
   });
 
-  el.innerHTML += `<hr>`; // 🔥 separator testu diagnostycznego
+  el.innerHTML += `<hr>`;
 
+  // =========================
   // 🎯 MOTYWY
+  // =========================
   motifs.forEach(m => {
+
+    const isFullyBlocked = books.every(b =>
+      isBlockedPair(b.id, m.id)
+    );
+
     if (solvedPairs.has(m.id)) return;
 
     el.innerHTML += `
@@ -194,14 +212,25 @@ function selectMotif(id) {
 function tryMatch() {
   if (!selectedBook || !selectedMotif) return;
 
+  const pairKey = `${selectedBook}-${selectedMotif}`;
+  const reverseKey = `${selectedMotif}-${selectedBook}`;
+
   const book = data.books.find(b => b.id === selectedBook);
 
-  if (book.motifs.includes(selectedMotif)) {
-    score += 100;
-    solvedPairs.add(selectedBook);
-    solvedPairs.add(selectedMotif);
-  } else {
-    score -= 50;
+  const isCorrect = book.motifs.includes(selectedMotif);
+
+  // 🔥 BRAMKA 1: czy już ocenione
+  if (!scoredPairs.has(pairKey) && !scoredPairs.has(reverseKey)) {
+
+    if (isCorrect) {
+      score += 100;
+      masteredPairs.add(pairKey); // 🔥 zapamiętujemy relację
+    } else {
+      score -= 50;
+    }
+
+    scoredPairs.add(pairKey);
+    scoredPairs.add(reverseKey);
   }
 
   selectedBook = null;
@@ -210,6 +239,7 @@ function tryMatch() {
   renderScore();
   renderQuiz();
 }
+
 
 
 // =========================
@@ -332,4 +362,8 @@ function goMap() {
   hideAll();
   document.getElementById("map").style.display = "block";
   renderMap();
+}
+
+function isBlockedPair(bookId, motifId) {
+  return masteredPairs.has(`${bookId}-${motifId}`);
 }
