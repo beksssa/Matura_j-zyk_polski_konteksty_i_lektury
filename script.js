@@ -113,14 +113,14 @@ function startApp() {
   }
 
   if (mode === "quiz") {
-  hideAll();
-  document.getElementById("quiz").style.display = "block";
+    document.getElementById("quiz").style.display = "block";
 
-  if (!quizStarted) {
-    renderDiagnosisTask();
-    quizStarted = true;
-  } else {
-    document.getElementById("quiz-content").innerHTML = "Kolejne zadania (następny krok)";
+    if (!quizStarted) {
+      renderDiagnosisTask();
+      quizStarted = true;
+    } else {
+      document.getElementById("quiz-content").innerHTML = "Kolejne zadania (następny krok)";
+    }
   }
 }
 
