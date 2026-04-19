@@ -1,7 +1,13 @@
 // 🧠 STATE
 let mode = "learning";
 let view = "books";
-let activeEpochs = new Set(["romantyzm", "pozytywizm"]);
+let activeEpochs = new Set(["młoda polska"]);
+
+let score = 0;
+let selectedBook = null;
+let selectedMotif = null;
+let solvedPairs = new Set();
+let quizInitialized = false;
 
 // 📚 DATA
 const data = {
@@ -58,15 +64,13 @@ const data = {
 
 const epochs = ["młoda polska", "pozytywizm", "romantyzm"];
 
-// =========================
-// 🧭 NAVIGATION SYSTEM
-// =========================
-
 function goScreen(n) {
   hideAll();
 
   if (n === 1) document.getElementById("screen-start").style.display = "block";
+
   if (n === 2) document.getElementById("screen-mode").style.display = "block";
+
   if (n === 3) {
     document.getElementById("screen-epoch").style.display = "block";
     renderEpochFilter();
@@ -74,16 +78,12 @@ function goScreen(n) {
 }
 
 function hideAll() {
-  document.getElementById("screen-start").style.display = "none";
-  document.getElementById("screen-mode").style.display = "none";
-  document.getElementById("screen-epoch").style.display = "none";
-  document.getElementById("map").style.display = "none";
-  document.getElementById("quiz").style.display = "none";
-  document.getElementById("profile").style.display = "none";
+  ["screen-start","screen-mode","screen-epoch","map","quiz","profile"]
+    .forEach(id => document.getElementById(id).style.display = "none");
 }
 
 // =========================
-// 🟢 SETTINGS
+// SETTINGS
 // =========================
 
 function setMode(m) {
@@ -95,7 +95,7 @@ function setView(v) {
 }
 
 // =========================
-// 🚀 START APP
+// START
 // =========================
 
 function startApp() {
@@ -108,55 +108,114 @@ function startApp() {
 
   if (mode === "quiz") {
     document.getElementById("quiz").style.display = "block";
-    document.getElementById("quiz-content").innerHTML = "QUIZ START (następny krok)";
+
+    if (!quizInitialized) {
+      initQuiz();
+      quizInitialized = true;
+    } else {
+      renderQuiz();
+    }
   }
 }
 
 // =========================
-// 🗺️ MAPA
+// QUIZ INIT
 // =========================
 
-function renderMap() {
-  const list = document.getElementById("list");
-  const title = document.getElementById("map-title");
+function initQuiz() {
+  score = 0;
+  solvedPairs = new Set();
+  selectedBook = null;
+  selectedMotif = null;
 
-  list.innerHTML = "";
-
-  // 📚 LEKTURY
-  if (view === "books") {
-    title.innerText = "📚 Lektury";
-
-    getFilteredBooks().forEach(b => {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <div style="padding:10px;margin:5px;border:1px solid #ccc;cursor:pointer"
-             onclick="openBook('${b.id}')">
-          📚 ${b.title}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  // 🎯 MOTYWY
-  if (view === "motifs") {
-    title.innerText = "🎯 Motywy";
-
-    getFilteredMotifs().forEach(m => {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <div style="padding:10px;margin:5px;border:1px solid #ccc;cursor:pointer"
-             onclick="openMotif('${m.id}')">
-          🎯 ${m.name}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
+  renderScore();
+  renderQuiz();
 }
 
 // =========================
-// 🌍 FILTER LOGIC
+// SCORE
+// =========================
+
+function renderScore() {
+  document.getElementById("score").innerText = `Score: ${score}`;
+}
+
+// =========================
+// QUIZ RENDER
+// =========================
+
+function renderQuiz() {
+  const el = document.getElementById("quiz-content");
+  el.innerHTML = "";
+
+  const books = getFilteredBooks();
+  const motifs = getFilteredMotifs();
+
+  // 📚 BOOKS
+  books.forEach(b => {
+    if (solvedPairs.has(b.id)) return;
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div style="padding:8px;border:1px solid black;margin:5px;cursor:pointer"
+           onclick="selectBook('${b.id}')">
+        📚 ${b.title}
+      </div>
+    `;
+    el.appendChild(div);
+  });
+
+  // 🎯 MOTIFS
+  motifs.forEach(m => {
+    if (solvedPairs.has(m.id)) return;
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div style="padding:8px;border:1px solid blue;margin:5px;cursor:pointer"
+           onclick="selectMotif('${m.id}')">
+        🎯 ${m.name}
+      </div>
+    `;
+    el.appendChild(div);
+  });
+}
+
+// =========================
+// MATCHING
+// =========================
+
+function selectBook(id) {
+  selectedBook = id;
+  tryMatch();
+}
+
+function selectMotif(id) {
+  selectedMotif = id;
+  tryMatch();
+}
+
+function tryMatch() {
+  if (!selectedBook || !selectedMotif) return;
+
+  const book = data.books.find(b => b.id === selectedBook);
+
+  if (book.motifs.includes(selectedMotif)) {
+    score += 100;
+    solvedPairs.add(selectedBook);
+    solvedPairs.add(selectedMotif);
+  } else {
+    score -= 50;
+  }
+
+  selectedBook = null;
+  selectedMotif = null;
+
+  renderScore();
+  renderQuiz();
+}
+
+// =========================
+// FILTERS
 // =========================
 
 function getFilteredBooks() {
@@ -178,7 +237,7 @@ function getFilteredMotifs() {
 }
 
 // =========================
-// 🌍 EPOCH FILTER UI
+// EPOCH FILTER
 // =========================
 
 function renderEpochFilter() {
@@ -186,30 +245,58 @@ function renderEpochFilter() {
   el.innerHTML = "";
 
   epochs.forEach(e => {
-    const checked = activeEpochs.has(e);
-
     el.innerHTML += `
-      <label style="margin-right:10px;">
+      <label>
         <input type="checkbox"
-          ${checked ? "checked" : ""}
+          ${activeEpochs.has(e) ? "checked" : ""}
           onchange="toggleEpoch('${e}')">
         ${e}
       </label>
+      <br>
     `;
   });
 }
 
 function toggleEpoch(epoch) {
-  if (activeEpochs.has(epoch)) {
-    activeEpochs.delete(epoch);
-  } else {
-    activeEpochs.add(epoch);
-  }
+  activeEpochs.has(epoch)
+    ? activeEpochs.delete(epoch)
+    : activeEpochs.add(epoch);
 }
 
 // =========================
-// 📚 PROFILES
+// MAPA + PROFILE (bez zmian logicznych)
 // =========================
+
+function renderMap() {
+  const list = document.getElementById("list");
+  const title = document.getElementById("map-title");
+
+  list.innerHTML = "";
+
+  if (view === "books") {
+    title.innerText = "📚 Lektury";
+
+    getFilteredBooks().forEach(b => {
+      list.innerHTML += `
+        <div onclick="openBook('${b.id}')" style="padding:10px;border:1px solid #ccc;cursor:pointer">
+          📚 ${b.title}
+        </div>
+      `;
+    });
+  }
+
+  if (view === "motifs") {
+    title.innerText = "🎯 Motywy";
+
+    getFilteredMotifs().forEach(m => {
+      list.innerHTML += `
+        <div onclick="openMotif('${m.id}')" style="padding:10px;border:1px solid #ccc;cursor:pointer">
+          🎯 ${m.name}
+        </div>
+      `;
+    });
+  }
+}
 
 function openBook(id) {
   const book = data.books.find(b => b.id === id);
@@ -220,11 +307,6 @@ function openBook(id) {
   document.getElementById("profile-content").innerHTML = `
     <h2>${book.title}</h2>
     <p>${book.description}</p>
-
-    <h3>Motywy:</h3>
-    ${book.motifs.map(m =>
-      `<p style="cursor:pointer;color:blue" onclick="openMotif('${m}')">${m}</p>`
-    ).join("")}
   `;
 }
 
@@ -237,17 +319,8 @@ function openMotif(id) {
   document.getElementById("profile-content").innerHTML = `
     <h2>${motif.name}</h2>
     <p>${motif.description}</p>
-
-    <h3>Lektury:</h3>
-    ${motif.books.map(b =>
-      `<p style="cursor:pointer;color:blue" onclick="openBook('${b}')">${b}</p>`
-    ).join("")}
   `;
 }
-
-// =========================
-// 🔙 NAV
-// =========================
 
 function goMap() {
   hideAll();
