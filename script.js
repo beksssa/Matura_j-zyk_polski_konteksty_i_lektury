@@ -25,7 +25,7 @@ const data = {
   motifs: [
     {
       id: "motywnarodowy",
-      name: "Motyw Narodowy"
+      name: "Motyw Narodowy",
       description: "Promlematyka kondycji narodu",
       books: ["wesele"]
     },
