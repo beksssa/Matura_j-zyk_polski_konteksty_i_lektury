@@ -4,7 +4,7 @@
 
 let mode = "learning";
 let view = "books";
-let activeEpochs = new Set(["młoda polska"]);
+let activeEpochs = new Set(["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"]);
 
 let score = 0;
 
@@ -49,7 +49,49 @@ const data = {
       description: "Realistyczna powieść ukazująca życie wiejskiej społeczności podporządkowane rytmowi natury, pracy i tradycji.",
       epoch: "młoda polska",
       motifs: ["naturalizm", "motywmiłości"]
-    }
+    },
+    {
+      id: "antygona",
+      title: "Antygona",
+      description: "Nierozwiązywalny konflikt między prawem boskim a prawem państwowym, prowadząca do nieuchronnej katastrofy bohatera.",
+      epoch: "antyk",
+      motifs: ["motywbuntu", "fatum"]
+    },
+    {
+      id: "tango",
+      title: "Tango",
+      description: "analiza upadku tradycyjnych wartości, w której próba przywrócenia porządku przez młodego intelektualistę kończy się zwycięstwem brutalnej, prymitywnej siły.",
+      epoch: "współczesność",
+      motifs: ["motywbuntu", "groteska", "motywrodziny"]
+    },
+    {
+      id: "magbet",
+      title: "Magbet",
+      description: "Studium destrukcyjnej siły ambicji i mechanizmu władzy, który popycha człowieka do zbrodni, skutkując całkowitym rozpadem jego psychiki.",
+      epoch: "renesans",
+      motifs: ["motywmiłości", "motywsumienia", "motywszalenstwa","fatum"]
+    },
+    {
+      id: "zbrodniaikara",
+      title: "Zbrdnia i Kara",
+      description: "Psychologiczna opowieść o upadku i odkupieniu człowieka, który morderstwo uzasadnia ideologią, by ostatecznie ulec miażdżącej sile własnego sumienia",
+      epoch: "pozytywizmu",
+      motifs: ["motywmiłości", "motywsumienia"]
+    },
+    {
+      id: "innyswiat",
+      title: "Inny Świat",
+      description: "Świadectwo nieludzkiego systemu sowieckich łagrów, testującego granice człowieczeństwa w warunkach głodu, pracy ponad siły i wszechobecnego terroru.",
+      epoch: "współczesność",
+      motifs: ["totalitaryzm"]
+    },
+    {
+      id: "1984",
+      title: "Rok 1984",
+      description: "Przerażająca wizja państwa totalitarnego, w którym Partia sprawuje absolutną kontrolę nad czynami, przeszłością, a nawet myślami i uczuciami jednostki.",
+      epoch: "współczesność",
+      motifs: ["totalitaryzm", "motywmiłości"]
+    },
   ],
 
   motifs: [
@@ -82,11 +124,53 @@ const data = {
       name: "Motyw Miłości",
       description: "Przedstawienie relacji miłosnej",
       books: ["chłopi"]
-    }
+    },
+     {
+      id: "motywbuntu",
+      name: "Motyw Buntu",
+      description: "sprzeciw wobec zastanego porządku, losu lub władzy",
+      books: ["wesele", "antygona", "tango"]
+    },
+    {
+      id: "fatum",
+      name: "Fatum",
+      description: "Personifikacja nieuchronnego, nieodwracalnego losu, nieodwołalnej woli bogów, na którą nikt nie ma wpływu. Fatum, które ciąży nad człowiekiem ogranicza ramy jego wolnej woli i prowadzi jego działania do ostatecznej klęski.",
+      books: ["antygona"]
+    },
+    {
+      id: "groteska",
+      name: "Groteska",
+      description: "połączeniem w jednym dziele jednocześnie występujących pierwiastków przeciwstawnych",
+      books: ["tango"]
+    },
+    {
+      id: "motywrodziny",
+      name: "Motyw Rodziny",
+      description: "przestawienie i problematyka relacji rodzinnych",
+      books: ["tango"]
+    },
+    {
+      id: "motywsumienia",
+      name: "Motyw Sumienia",
+      description: "Wewnętrzny głos moralny, który staje się głównym sędzią i katem bohatera po dokonaniu zła",
+      books: ["magbet","zbrodniaikara"]
+    },
+    {
+      id: "motywszalenstwa",
+      name: "Motyw Szaleństwa",
+      description: "sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy, co często służy do ukazania głębszej prawdy o świecie lub ukrytych lęków ludzkiej natury.",
+      books: ["magbet", "antygona"]
+    },
+    {
+      id: "totalitaryzm",
+      name: "Totalitaryzm",
+      description: "system polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu",
+      books: ["magbet","innyswiat"]
+    },
   ]
 };
 
-const epochs = ["młoda polska", "pozytywizm", "romantyzm"];
+const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"];
 
 // =========================
 // HELPERS
