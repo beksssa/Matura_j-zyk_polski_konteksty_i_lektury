@@ -11,7 +11,7 @@ const data = {
       title: "Wesele",
       description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
       epoch: "młoda polska",
-      motifs: ["motywspołeczny", "symbolizm", "ludomania"]
+      motifs: ["motywnarodowy", "symbolizm", "ludomania"]
     },
     {
       id: "chłopi",
@@ -25,7 +25,7 @@ const data = {
   motifs: [
     {
       id: "motywnarodowy",
-      name: "Motyw Narodowy"
+      name: "Motyw Narodowy",
       description: "Promlematyka kondycji narodu",
       books: ["wesele"]
     },
