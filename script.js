@@ -176,6 +176,25 @@ function getFilteredBooks() {
   return data.books.filter(b => activeEpochs.has(b.epoch));
 }
 
+function getFilteredMotifs() {
+  const books = getFilteredBooks();
+  const map = new Map();
+
+  books.forEach(book => {
+    book.motifs.forEach(id => {
+      const key = `${book.id}|${id}`;
+
+      if (solvedPairs.has(key)) return;
+
+      const m = data.motifs.find(x => x.id === id);
+      if (m) map.set(m.id, m);
+    });
+  });
+
+  return [...map.values()];
+}
+
+
 // =========================
 // 🌍 EPOCH FILTER UI
 // =========================
@@ -309,14 +328,31 @@ function renderDiagnosisTask() {
     motifsEl.appendChild(div);
   });
 }
-function selectBook(id) {
-  selectedBook = id;
-  tryMatch();
+
+function tryMatch() {
+  if (!selectedBook || !selectedMotif) return;
+
+  const book = data.books.find(b => b.id === selectedBook);
+  if (!book) return;
+
+  const isCorrect = book.motifs.includes(selectedMotif);
+  const key = `${selectedBook}|${selectedMotif}`;
+
+  if (isCorrect && !solvedPairs.has(key)) {
+    score += 100;
+    solvedPairs.add(key);
+    alert("✅ Dobrze!");
+  } else {
+    score -= 50;
+    alert("❌ Źle!");
+  }
+
+  document.getElementById("score").innerText = score;
+
+  selectedBook = null;
+  selectedMotif = null;
 }
 
-function selectMotif(id) {
-  selectedMotif = id;
-  tryMatch();
 }
 function tryMatch() {
   if (!selectedBook || !selectedMotif) return;
@@ -340,6 +376,7 @@ function tryMatch() {
   selectedBook = null;
   selectedMotif = null;
 }
+
 function openBookFromQuiz(id) {
   openBook(id);
 
@@ -378,3 +415,18 @@ function getFilteredMotifs() {
   return [...map.values()];
 }
 
+function openBookFromQuiz(id) {
+  openBook(id);
+
+  document.getElementById("profile-content").innerHTML += `
+    <br><button onclick="backToQuiz()">Powrót do ćwiczenia</button>
+  `;
+}
+
+function openMotifFromQuiz(id) {
+  openMotif(id);
+
+  document.getElementById("profile-content").innerHTML += `
+    <br><button onclick="backToQuiz()">Powrót do ćwiczenia</button>
+  `;
+}
