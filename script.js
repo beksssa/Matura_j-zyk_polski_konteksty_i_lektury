@@ -7,7 +7,6 @@ let score = 0;
 let selectedBook = null;
 let selectedMotif = null;
 let solvedPairs = new Set();
-let quizInitialized = false;
 
 // 📚 DATA
 const data = {
@@ -68,9 +67,7 @@ function goScreen(n) {
   hideAll();
 
   if (n === 1) document.getElementById("screen-start").style.display = "block";
-
   if (n === 2) document.getElementById("screen-mode").style.display = "block";
-
   if (n === 3) {
     document.getElementById("screen-epoch").style.display = "block";
     renderEpochFilter();
@@ -81,6 +78,7 @@ function hideAll() {
   ["screen-start","screen-mode","screen-epoch","map","quiz","profile"]
     .forEach(id => document.getElementById(id).style.display = "none");
 }
+
 
 // =========================
 // SETTINGS
@@ -94,8 +92,9 @@ function setView(v) {
   view = v;
 }
 
+
 // =========================
-// START
+// START APP
 // =========================
 
 function startApp() {
@@ -109,28 +108,26 @@ function startApp() {
   if (mode === "quiz") {
     document.getElementById("quiz").style.display = "block";
 
-    if (!quizInitialized) {
-      initQuiz();
-      quizInitialized = true;
-    } else {
-      renderQuiz();
-    }
+    startQuiz(); // 🔥 WAŻNE: zawsze reset + start
   }
 }
 
+
 // =========================
-// QUIZ INIT
+// 🧠 QUIZ START (TEST DIAGNOSTYCZNY)
 // =========================
 
-function initQuiz() {
+function startQuiz() {
+  // 🔥 RESET ZA KAŻDYM WEJŚCIEM (KLUCZOWE)
   score = 0;
-  solvedPairs = new Set();
   selectedBook = null;
   selectedMotif = null;
+  solvedPairs = new Set();
 
   renderScore();
   renderQuiz();
 }
+
 
 // =========================
 // SCORE
@@ -140,8 +137,9 @@ function renderScore() {
   document.getElementById("score").innerText = `Score: ${score}`;
 }
 
+
 // =========================
-// QUIZ RENDER
+// QUIZ RENDER (TEST DIAGNOSTYCZNY UI)
 // =========================
 
 function renderQuiz() {
@@ -151,37 +149,36 @@ function renderQuiz() {
   const books = getFilteredBooks();
   const motifs = getFilteredMotifs();
 
-  // 📚 BOOKS
+  // 📚 LEKTURY
   books.forEach(b => {
     if (solvedPairs.has(b.id)) return;
 
-    const div = document.createElement("div");
-    div.innerHTML = `
+    el.innerHTML += `
       <div style="padding:8px;border:1px solid black;margin:5px;cursor:pointer"
            onclick="selectBook('${b.id}')">
         📚 ${b.title}
       </div>
     `;
-    el.appendChild(div);
   });
 
-  // 🎯 MOTIFS
+  el.innerHTML += `<hr>`; // 🔥 separator testu diagnostycznego
+
+  // 🎯 MOTYWY
   motifs.forEach(m => {
     if (solvedPairs.has(m.id)) return;
 
-    const div = document.createElement("div");
-    div.innerHTML = `
+    el.innerHTML += `
       <div style="padding:8px;border:1px solid blue;margin:5px;cursor:pointer"
            onclick="selectMotif('${m.id}')">
         🎯 ${m.name}
       </div>
     `;
-    el.appendChild(div);
   });
 }
 
+
 // =========================
-// MATCHING
+// MATCH LOGIC
 // =========================
 
 function selectBook(id) {
@@ -214,6 +211,7 @@ function tryMatch() {
   renderQuiz();
 }
 
+
 // =========================
 // FILTERS
 // =========================
@@ -235,6 +233,7 @@ function getFilteredMotifs() {
 
   return [...map.values()];
 }
+
 
 // =========================
 // EPOCH FILTER
@@ -263,8 +262,9 @@ function toggleEpoch(epoch) {
     : activeEpochs.add(epoch);
 }
 
+
 // =========================
-// MAPA + PROFILE (bez zmian logicznych)
+// MAPA + PROFILE (OK)
 // =========================
 
 function renderMap() {
@@ -298,6 +298,11 @@ function renderMap() {
   }
 }
 
+
+// =========================
+// PROFILES
+// =========================
+
 function openBook(id) {
   const book = data.books.find(b => b.id === id);
 
@@ -321,6 +326,7 @@ function openMotif(id) {
     <p>${motif.description}</p>
   `;
 }
+
 
 function goMap() {
   hideAll();
