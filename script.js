@@ -8,22 +8,10 @@ let activeEpochs = new Set(["młoda polska"]);
 
 let score = 0;
 
-let quizSnapshot = null;
-
-// task system
-let taskQueue = [];
 let currentTask = null;
 let answered = false;
 
-const taskTypes = ["X", "Y", "Z"];
-
-// swipe state
-let swipeIndex = 0;
-let swipeOptions = [];
-let swipeCorrectSide = null;
-
-let currentTaskData = null;
-let currentTaskType = null;
+const taskTypes = ["X"]; // 🔥 na razie tylko X
 
 
 // 📚 DATA
@@ -82,7 +70,6 @@ const data = {
 const epochs = ["młoda polska", "pozytywizm", "romantyzm"];
 
 
-
 // =========================
 // SCREEN CONTROL
 // =========================
@@ -108,13 +95,8 @@ function hideAll() {
 // SETTINGS
 // =========================
 
-function setMode(m) {
-  mode = m;
-}
-
-function setView(v) {
-  view = v;
-}
+function setMode(m) { mode = m; }
+function setView(v) { view = v; }
 
 
 // =========================
@@ -144,120 +126,125 @@ function startQuiz() {
   score = 0;
   answered = false;
 
-  generateTaskQueue();
-  nextTask();
-
   renderScore();
+  nextTask();
 }
 
 
 // =========================
-// TASK SYSTEM
+// 🧠 ENGINE
 // =========================
 
-function generateTaskQueue() {
-  taskQueue = shuffle([...taskTypes]);
-}
-
-function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
+function getNextTaskType() {
+  return taskTypes[Math.floor(Math.random() * taskTypes.length)];
 }
 
 function nextTask() {
   answered = false;
   document.getElementById("nextBtn").style.display = "none";
 
-  currentTask = taskQueue.shift();
+  const type = getNextTaskType();
 
-  if (!currentTask) {
-    generateTaskQueue();
-    currentTask = taskQueue.shift();
+  if (type === "X") {
+    currentTask = createTaskX();
   }
 
-  renderTask();
+  currentTask.render();
 }
 
 
 // =========================
-// TASK RENDER (SWIPE UI)
+// 🟦 TASK X (SWIPE)
 // =========================
 
-function renderTask() {
-  const el = document.getElementById("quiz-content");
+function createTaskX() {
 
   const books = getFilteredBooks();
   const motifs = getFilteredMotifs();
 
   const book = books[Math.floor(Math.random() * books.length)];
-  const motifCorrect = motifs[Math.floor(Math.random() * motifs.length)];
-  const motifWrong = motifs.find(m => m.id !== motifCorrect.id);
 
-  swipeOptions = Math.random() > 0.5
-    ? [motifCorrect, motifWrong]
-    : [motifWrong, motifCorrect];
+  const correctMotif = data.motifs.find(m => book.motifs.includes(m.id));
 
-  swipeCorrectSide = swipeOptions.indexOf(motifCorrect);
+  const wrongMotifs = motifs.filter(m => !book.motifs.includes(m.id));
+  const wrongMotif = wrongMotifs[Math.floor(Math.random() * wrongMotifs.length)];
 
-  el.innerHTML = `
-    <div style="text-align:center; font-size:20px;">
-      ←  →
-    </div>
+  const correctLeft = Math.random() < 0.5;
 
-    <h2 style="text-align:center">${book.title}</h2>
+  const left = correctLeft ? correctMotif : wrongMotif;
+  const right = correctLeft ? wrongMotif : correctMotif;
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+  return {
+    type: "X",
 
-      <div onclick="chooseSwipe(0)" style="cursor:pointer">
-        ${swipeOptions[0].name}
-      </div>
+    data: {
+      book,
+      left,
+      right,
+      correctSide: correctLeft ? "left" : "right"
+    },
 
-      <div>
-        📖
-      </div>
+    render() {
+      const el = document.getElementById("quiz-content");
 
-      <div onclick="chooseSwipe(1)" style="cursor:pointer">
-        ${swipeOptions[1].name}
-      </div>
+      el.innerHTML = `
+        <div style="text-align:center;font-size:20px;">
+          ← →
+        </div>
 
-    </div>
-  `;
+        <h2 style="text-align:center">${book.title}</h2>
+
+        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+          <div onclick="handleAnswer('left')" style="cursor:pointer">
+            ${left.name}
+          </div>
+
+          <div>📖</div>
+
+          <div onclick="handleAnswer('right')" style="cursor:pointer">
+            ${right.name}
+          </div>
+        </div>
+      `;
+    },
+
+    submit(side) {
+      const correct = side === this.data.correctSide;
+
+      if (correct) score += 25; // 🔥 zmienione
+
+      renderScore();
+
+      showProfileIcon(this.data.book);
+
+      document.getElementById("nextBtn").style.display = "block";
+    }
+  };
 }
 
 
 // =========================
-// SWIPE LOGIC
+// ANSWER HANDLER
 // =========================
 
-function chooseSwipe(index) {
+function handleAnswer(side) {
   if (answered) return;
 
   answered = true;
 
-  const correct = index === swipeCorrectSide;
-
-  if (correct) {
-    score += 100;
-  }
-
-  renderScore();
-
-  document.getElementById("nextBtn").style.display = "block";
-
-  const context = swipeOptions[swipeCorrectSide];
-  showProfileIcon(context);
+  currentTask.submit(side);
 }
 
 
 // =========================
-// KEYBOARD SWIPE
+// KEYBOARD
 // =========================
 
 document.addEventListener("keydown", (e) => {
-  if (answered === false) return;
+  if (!currentTask || answered) return;
 
-  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-    nextTask();
-  }
+  if (e.key === "ArrowLeft") handleAnswer("left");
+  if (e.key === "ArrowRight") handleAnswer("right");
 });
 
 
@@ -271,20 +258,11 @@ function renderScore() {
 
 
 // =========================
-// NEXT BUTTON
-// =========================
-
-function nextTaskHandler() {
-  nextTask();
-}
-
-
-// =========================
-// PROFILE ICON (stub)
+// PROFILE (stub)
 // =========================
 
 function showProfileIcon(context) {
-  console.log("📖 open profile:", context);
+  console.log("📖 profile:", context);
 }
 
 
@@ -338,39 +316,15 @@ function toggleEpoch(e) {
 
 
 // =========================
-// MAP (optional)
+// MAP
 // =========================
 
 function renderMap() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  if (view === "books") {
-    getFilteredBooks().forEach(b => {
-      list.innerHTML += `<div>${b.title}</div>`;
-    });
-  }
+  getFilteredBooks().forEach(b => {
+    list.innerHTML += `<div>${b.title}</div>`;
+  });
 }
-
-function getNextTaskType() {
-  return taskTypes[Math.floor(Math.random() * taskTypes.length)];
-}
-
-function nextTask() {
-  answered = false;
-  document.getElementById("nextBtn").style.display = "none";
-
-  const type = getNextTaskType();
-
-  if (type === "X") generateTaskX();
-  if (type === "Y") generateTaskY();
-  if (type === "Z") generateTaskZ();
-}
-
-
-
-// =========================
-// HTML BUTTON HOOK FIX
-// =========================
-
 window.nextTask = nextTaskHandler;
