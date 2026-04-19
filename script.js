@@ -389,30 +389,72 @@ function getTaskXPromptCandidates() {
 function createTaskX(presetData = null) {
   const dataObj = presetData || buildTaskXData();
   return {
-    type: "X",
-    data: dataObj,
-    render() {
-      renderTaskX(this.data);
-      attachTaskXSwipeHandlers();
-    },
-    submit(side) {
-      const correct = side === this.data.correctSide;
+  type: "X",
 
-      if (correct) {
-        score += 25;
-        if (this.data.promptType === "book" && this.data.correctMotifId) {
-          masteredPairs.add(makePairKey(this.data.promptId, this.data.correctMotifId));
-        }
-        if (this.data.promptType === "motif" && this.data.correctBookId) {
-          masteredPairs.add(makePairKey(this.data.correctBookId, this.data.promptId));
-        }
-      }
+  data: {
+    book,
+    left,
+    right,
+    correctSide: correctLeft ? "left" : "right",
 
-      renderScore();
-      document.getElementById("nextBtn").style.display = "inline-block";
-      renderTaskX(this.data, true);
+    // 🔥 KLUCZOWE: co jest pytaniem
+    questionType: view, // "books" albo "motifs"
+    questionId: book.id  // bo pytanie dotyczy lektury
+  },
+
+  render() {
+    const el = document.getElementById("quiz-content");
+
+    el.innerHTML = `
+      <div style="text-align:center;font-size:20px;">
+        ← →
+      </div>
+
+      <h2 style="text-align:center">${book.title}</h2>
+
+      <div style="display:flex;justify-content:space-between;margin-top:20px;">
+
+        <div onclick="handleAnswer('left')" style="cursor:pointer">
+          ${left.name}
+        </div>
+
+        <div>
+          <span onclick="currentTask.openProfile()" style="cursor:pointer">
+            📖 dowiedz się więcej
+          </span>
+        </div>
+
+        <div onclick="handleAnswer('right')" style="cursor:pointer">
+          ${right.name}
+        </div>
+
+      </div>
+    `;
+  },
+
+  openProfile() {
+    // 🔥 KLUCZ: zależne od typu pytania
+    if (this.data.questionType === "books") {
+      openBook(this.data.questionId);
     }
-  };
+
+    if (this.data.questionType === "motifs") {
+      // jeśli kiedyś robisz odwrotny X
+      openMotif(this.data.questionId);
+    }
+  },
+
+  submit(side) {
+    const correct = side === this.data.correctSide;
+
+    if (correct) score += 25;
+
+    renderScore();
+
+    document.getElementById("nextBtn").style.display = "block";
+  }
+};
+
 }
 
 function buildTaskXData() {
@@ -782,48 +824,64 @@ function renderMap() {
 // =========================
 
 function openBook(id) {
-  profileReturnTarget = mode === "quiz" ? "quiz" : "map";
+  quizSnapshot = saveQuizState();
 
-  if (mode === "quiz") {
-    quizSnapshot = captureQuizState();
-  }
-
-  const book = getBookById(id);
-  if (!book) return;
+  const book = data.books.find(b => b.id === id);
 
   hideAll();
   document.getElementById("profile").style.display = "block";
 
+  const motifs = book.motifs
+    .map(mid => data.motifs.find(m => m.id === mid))
+    .filter(Boolean);
+
   document.getElementById("profile-content").innerHTML = `
-    <h2>${book.title}</h2>
+    <h2>📚 ${book.title}</h2>
     <p>${book.description}</p>
-    <button onclick="returnFromProfile()">
-      ${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}
-    </button>
+
+    <h3>🎯 Motywy w tej lekturze:</h3>
+    <ul>
+      ${motifs.map(m => `
+        <li style="cursor:pointer;color:blue"
+            onclick="openMotif('${m.id}')">
+          ${m.name}
+        </li>
+      `).join("")}
+    </ul>
+
+    <button onclick="returnToQuiz()">⬅ Powrót do ćwiczeń</button>
   `;
 }
+
 
 function openMotif(id) {
-  profileReturnTarget = mode === "quiz" ? "quiz" : "map";
+  quizSnapshot = saveQuizState();
 
-  if (mode === "quiz") {
-    quizSnapshot = captureQuizState();
-  }
-
-  const motif = getMotifById(id);
-  if (!motif) return;
+  const motif = data.motifs.find(m => m.id === id);
 
   hideAll();
   document.getElementById("profile").style.display = "block";
 
+  const books = data.books.filter(b => b.motifs.includes(motif.id));
+
   document.getElementById("profile-content").innerHTML = `
-    <h2>${motif.name}</h2>
+    <h2>🎯 ${motif.name}</h2>
     <p>${motif.description}</p>
-    <button onclick="returnFromProfile()">
-      ${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}
-    </button>
+
+    <h3>📚 Lektury z tym motywem:</h3>
+    <ul>
+      ${books.map(b => `
+        <li style="cursor:pointer;color:blue"
+            onclick="openBook('${b.id}')">
+          ${b.title}
+        </li>
+      `).join("")}
+    </ul>
+
+    <button onclick="returnToQuiz()">⬅ Powrót do ćwiczeń</button>
   `;
 }
+
 
 function returnFromProfile() {
   hideAll();
