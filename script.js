@@ -2,6 +2,7 @@
 // 🧠 STATE
 // =========================
 
+
 let mode = "learning";
 let view = "books";
 let activeEpochs = new Set(["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"]);
@@ -33,7 +34,7 @@ const ENGINE_TASK_ENABLED = {
   Y1: true,
   Y2: true,
 };
-
+const bgItems = [];
 // =========================
 // 📚 DATA
 // =========================
@@ -339,6 +340,55 @@ function formatCoverVisual(book) {
 // =========================
 // PROFILE EXTRAS (z klikalnymi chipami)
 // =========================
+function initBackgroundWorld() {
+  const layer = document.getElementById("bg-layer");
+
+  const items = [
+    ...data.books.map(b => ({ text: b.title, type: "book" })),
+    ...data.motifs.map(m => ({ text: m.name, type: "motif" }))
+  ];
+
+  items.forEach((item, i) => {
+    const el = document.createElement("div");
+    el.className = "bg-item";
+    el.innerText = item.text;
+
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+
+    const vx = (Math.random() - 0.5) * 0.4;
+    const vy = (Math.random() - 0.5) * 0.4;
+
+    bgItems.push({
+      el,
+      x,
+      y,
+      vx,
+      vy,
+      text: item.text
+    });
+
+    el.style.transform = `translate(${x}px, ${y}px)`;
+    layer.appendChild(el);
+  });
+
+  animateBackground();
+}
+function animateBackground() {
+  bgItems.forEach(item => {
+
+    item.x += item.vx;
+    item.y += item.vy;
+
+    // odbicia od krawędzi
+    if (item.x < 0 || item.x > window.innerWidth) item.vx *= -1;
+    if (item.y < 0 || item.y > window.innerHeight) item.vy *= -1;
+
+    item.el.style.transform = `translate(${item.x}px, ${item.y}px)`;
+  });
+
+  requestAnimationFrame(animateBackground);
+}
 
 function renderBookExtras(book) {
   const aliases = uniqueStrings(book?.aliases || []);
@@ -1382,3 +1432,6 @@ function restoreQuizState() {
     }
   }
 }
+window.onload = () => {
+  initBackgroundWorld();
+};
