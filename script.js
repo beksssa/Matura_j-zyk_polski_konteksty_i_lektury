@@ -38,7 +38,7 @@ const data = {
       epoch: "młoda polska", motifs: ["motywnarodowy", "symbolizm", "ludomania"],
       coverEmoji: "🎭", aliases: ["Wesele Wyspiańskiego"],
       characters: ["Chochoł", "Gospodarz", "Pan Młody", "Rachel", "Stańczyk"],
-      quotes: [], images: [{ label: "Chocholi taniec", alt: "Symbol marazmu i bezwładu" }]
+      quotes: [], images: [{ src: "images/lektury/wesele/wesele_okładka.png" }]
     },
     {
       id: "chłopi", title: "Chłopi",
@@ -283,6 +283,15 @@ function tryDiagnosticMatch() {
 // =========================
 // ENGINE
 // =========================
+function getTaskImage(taskData) {
+  if (taskData.promptType === "book") {
+    const book = getBookById(taskData.promptId);
+    return book?.images?.[0] || null;
+  } else {
+    const motif = getMotifById(taskData.promptId);
+    return motif?.images?.[0] || null;
+  }
+}
 
 function availableTaskTypes() {
   return ENGINE_TASK_TYPES.filter(t => {
@@ -392,7 +401,11 @@ function renderTaskX(taskData, answeredState = false) {
     <div class="task-card ${answeredState ? "answered" : ""}">
       <div class="task-swipe-instruction">← →</div>
       <div class="task-head">${taskData.promptType === "book" ? "📚" : "🎯"} ${escapeHtml(taskData.promptTitle)} ${profileBtn}</div>
-      <div class="task-image"><span>📷</span><span>miejsce na obraz</span></div>
+      const img = getTaskImage(taskData);
+      
+      const imageHTML = img
+        ? `<img src="${img.src}" alt="${escapeHtml(img.alt || "")}">`
+        : `<span>📷</span><span>brak obrazu</span>`;
       <div class="task-row">
         <div class="task-choice" onclick="handleAnswer('left')">${escapeHtml(leftLabel)}</div>
         <div class="task-choice" onclick="handleAnswer('right')">${escapeHtml(rightLabel)}</div>
