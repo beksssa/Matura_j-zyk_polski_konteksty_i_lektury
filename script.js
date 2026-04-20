@@ -5,11 +5,10 @@
 let mode = "learning";
 let view = "books";
 let activeEpochs = new Set(["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"]);
-
 let score = 0;
 
 // diagnostic state
-let quizMode = "diagnostic"; // "diagnostic" or "engine"
+let quizMode = "diagnostic";
 let selectedBook = null;
 let selectedMotif = null;
 let scoredPairs = new Set();
@@ -24,6 +23,7 @@ let currentTask = null;
 // profile / snapshot state
 let quizSnapshot = null;
 let profileReturnTarget = "map";
+let taskBag = [];
 
 // engine task registry
 const ENGINE_TASK_TYPES = ["X", "Y1", "Y2"];
@@ -33,209 +33,196 @@ const ENGINE_TASK_ENABLED = {
   Y2: true,
 };
 
+// =========================
 // 📚 DATA
+// =========================
+
 const data = {
   books: [
-  {
-    id: "wesele",
-    title: "Wesele",
-    description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
-    epoch: "młoda polska",
-    motifs: ["motywnarodowy", "symbolizm", "ludomania"],
-    coverEmoji: "🎭",
-    aliases: ["Wesele Wyspiańskiego"],
-    characters: ["Chochoł", "Gospodarz", "Pan Młody", "Rachel", "Stańczyk"],
-    quotes: [],
-    images: [
-      { label: "Chocholi taniec", alt: "Symbol marazmu i bezwładu" }
-    ]
-  },
-  {
-    id: "chłopi",
-    title: "Chłopi",
-    description: "Realistyczna powieść ukazująca życie wiejskiej społeczności podporządkowane rytmowi natury, pracy i tradycji.",
-    epoch: "młoda polska",
-    motifs: ["naturalizm", "motywmiłości"],
-    coverEmoji: "🌾",
-    aliases: ["Chłopi Reymonta"],
-    characters: ["Maciej Boryna", "Jagna", "Antek", "Hanka", "Kuba"],
-    quotes: [],
-    images: [
-      { label: "Wiejska społeczność", alt: "Rytm natury i pracy" }
-    ]
-  },
-  {
-    id: "antygona",
-    title: "Antygona",
-    description: "Nierozwiązywalny konflikt między prawem boskim a prawem państwowym, prowadząca do nieuchronnej katastrofy bohatera.",
-    epoch: "antyk",
-    motifs: ["motywbuntu", "fatum"],
-    coverEmoji: "🏛️",
-    aliases: ["Antygona Sofoklesa"],
-    characters: ["Antygona", "Kreon", "Ismena", "Hajmon", "Tejrezjasz"],
-    quotes: [],
-    images: [
-      { label: "Grób Polinejkesa", alt: "Konflikt prawa boskiego i państwowego" }
-    ]
-  },
-  {
-    id: "tango",
-    title: "Tango",
-    description: "Analiza upadku tradycyjnych wartości, w której próba przywrócenia porządku przez młodego intelektualistę kończy się zwycięstwem brutalnej, prymitywnej siły.",
-    epoch: "współczesność",
-    motifs: ["motywbuntu", "groteska", "motywrodziny"],
-    coverEmoji: "🪑",
-    aliases: ["Tango Mrożka"],
-    characters: ["Artur", "Ala", "Edek", "Stomil", "Eleonora"],
-    quotes: [],
-    images: [
-      { label: "Dom pełen chaosu", alt: "Rozpad porządku rodzinnego" }
-    ]
-  },
-  {
-    id: "magbet",
-    title: "Makbet",
-    description: "Studium destrukcyjnej siły ambicji i mechanizmu władzy, który popycha człowieka do zbrodni, skutkując całkowitym rozpadem jego psychiki.",
-    epoch: "renesans",
-    motifs: ["motywmiłości", "motywsumienia", "motywszalenstwa", "fatum"],
-    coverEmoji: "👑",
-    aliases: ["Macbeth", "Makbet Szekspira"],
-    characters: ["Makbet", "Lady Makbet", "Banko", "Duncan", "Makduf", "Wiedźmy"],
-    quotes: [],
-    images: [
-      { label: "Krwawa korona", alt: "Ambicja i władza" }
-    ]
-  },
-  {
-    id: "zbrodniaikara",
-    title: "Zbrodnia i kara",
-    description: "Psychologiczna opowieść o upadku i odkupieniu człowieka, który morderstwo uzasadnia ideologią, by ostatecznie ulec miażdżącej sile własnego sumienia.",
-    epoch: "pozytywizm",
-    motifs: ["motywmiłości", "motywsumienia"],
-    coverEmoji: "🕯️",
-    aliases: ["Zbrodnia i Kara", "Zbrodnia i kara Dostojewskiego"],
-    characters: ["Raskolnikow", "Sonia", "Porfiry", "Dunia", "Swidrygajłow"],
-    quotes: [],
-    images: [
-      { label: "Mroczne ulice Petersburga", alt: "Poczucie winy i rozpad psychiki" }
-    ]
-  },
-  {
-    id: "innyswiat",
-    title: "Inny świat",
-    description: "Świadectwo nieludzkiego systemu sowieckich łagrów, testującego granice człowieczeństwa w warunkach głodu, pracy ponad siły i wszechobecnego terroru.",
-    epoch: "współczesność",
-    motifs: ["totalitaryzm"],
-    coverEmoji: "⛓️",
-    aliases: ["Inny Świat Herlinga-Grudzińskiego"],
-    characters: ["Narrator", "więźniowie łagru"],
-    quotes: [],
-    images: [
-      { label: "Łagier", alt: "System odczłowieczający" }
-    ]
-  },
-  {
-    id: "1984",
-    title: "Rok 1984",
-    description: "Przerażająca wizja państwa totalitarnego, w którym Partia sprawuje absolutną kontrolę nad czynami, przeszłością, a nawet myślami i uczuciami jednostki.",
-    epoch: "współczesność",
-    motifs: ["totalitaryzm", "motywmiłości"],
-    coverEmoji: "📕",
-    aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
-    characters: ["Winston", "Julia", "O'Brien", "Wielki Brat", "Parsons"],
-    quotes: [],
-    images: [
-      { label: "Wielki Brat", alt: "Totalitarna kontrola" }
-    ]
-  },
-],
-motifs: [
-  {
-    id: "motywnarodowy",
-    name: "Motyw Narodowy",
-    description: "Problematyka kondycji narodu",
-    books: ["wesele"],
-    aliases: ["naród", "motyw narodu"]
-  },
-  {
-    id: "symbolizm",
-    name: "Symbolizm",
-    description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost",
-    books: ["wesele"],
-    aliases: ["symboliczność"]
-  },
-  {
-    id: "ludomania",
-    name: "Ludomania",
-    description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii",
-    books: ["wesele"],
-    aliases: ["ludofilia"]
-  },
-  {
-    id: "naturalizm",
-    name: "Naturalizm",
-    description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt",
-    books: ["chłopi"],
-    aliases: ["naturalistyczny obraz świata"]
-  },
-  {
-    id: "motywmiłości",
-    name: "Motyw Miłości",
-    description: "Przedstawienie relacji miłosnej",
-    books: ["chłopi", "magbet", "zbrodniaikara", "1984"],
-    aliases: ["miłość", "motyw miłości"]
-  },
-  {
-    id: "motywbuntu",
-    name: "Motyw Buntu",
-    description: "Sprzeciw wobec zastanego porządku, losu lub władzy",
-    books: ["wesele", "antygona", "tango"],
-    aliases: ["bunt", "motyw buntu"]
-  },
-  {
-    id: "fatum",
-    name: "Fatum",
-    description: "Personifikacja nieuchronnego, nieodwracalnego losu, nieodwołalnej woli bogów, na którą nikt nie ma wpływu.",
-    books: ["antygona", "magbet"],
-    aliases: ["los", "przeznaczenie"]
-  },
-  {
-    id: "groteska",
-    name: "Groteska",
-    description: "Połączenie w jednym dziele jednocześnie występujących pierwiastków przeciwstawnych",
-    books: ["tango"],
-    aliases: ["groteskowość"]
-  },
-  {
-    id: "motywrodziny",
-    name: "Motyw Rodziny",
-    description: "Przedstawienie i problematyka relacji rodzinnych",
-    books: ["tango"],
-    aliases: ["rodzina", "motyw rodziny"]
-  },
-  {
-    id: "motywsumienia",
-    name: "Motyw Sumienia",
-    description: "Wewnętrzny głos moralny, który staje się głównym sędzią i katem bohatera po dokonaniu zła",
-    books: ["magbet", "zbrodniaikara"],
-    aliases: ["sumienie", "wyrzuty sumienia"]
-  },
-  {
-    id: "motywszalenstwa",
-    name: "Motyw Szaleństwa",
-    description: "Sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy",
-    books: ["magbet", "antygona"],
-    aliases: ["szaleństwo", "obłęd"]
-  },
-  {
-    id: "totalitaryzm",
-    name: "Totalitaryzm",
-    description: "System polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu",
-    books: ["magbet", "innyswiat", "1984"],
-    aliases: ["motyw totalitaryzmu", "system totalitarny"]
-  },
-]
-
+    {
+      id: "wesele",
+      title: "Wesele",
+      description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
+      epoch: "młoda polska",
+      motifs: ["motywnarodowy", "symbolizm", "ludomania"],
+      coverEmoji: "🎭",
+      aliases: ["Wesele Wyspiańskiego"],
+      characters: ["Chochoł", "Gospodarz", "Pan Młody", "Rachel", "Stańczyk"],
+      quotes: [],
+      images: [{ label: "Chocholi taniec", alt: "Symbol marazmu i bezwładu" }]
+    },
+    {
+      id: "chłopi",
+      title: "Chłopi",
+      description: "Realistyczna powieść ukazująca życie wiejskiej społeczności podporządkowane rytmowi natury, pracy i tradycji.",
+      epoch: "młoda polska",
+      motifs: ["naturalizm", "motywmiłości"],
+      coverEmoji: "🌾",
+      aliases: ["Chłopi Reymonta"],
+      characters: ["Maciej Boryna", "Jagna", "Antek", "Hanka", "Kuba"],
+      quotes: [],
+      images: [{ label: "Wiejska społeczność", alt: "Rytm natury i pracy" }]
+    },
+    {
+      id: "antygona",
+      title: "Antygona",
+      description: "Nierozwiązywalny konflikt między prawem boskim a prawem państwowym, prowadząca do nieuchronnej katastrofy bohatera.",
+      epoch: "antyk",
+      motifs: ["motywbuntu", "fatum"],
+      coverEmoji: "🏛️",
+      aliases: ["Antygona Sofoklesa"],
+      characters: ["Antygona", "Kreon", "Ismena", "Hajmon", "Tejrezjasz"],
+      quotes: [],
+      images: [{ label: "Grób Polinejkesa", alt: "Konflikt prawa boskiego i państwowego" }]
+    },
+    {
+      id: "tango",
+      title: "Tango",
+      description: "Analiza upadku tradycyjnych wartości, w której próba przywrócenia porządku przez młodego intelektualistę kończy się zwycięstwem brutalnej, prymitywnej siły.",
+      epoch: "współczesność",
+      motifs: ["motywbuntu", "groteska", "motywrodziny"],
+      coverEmoji: "🪑",
+      aliases: ["Tango Mrożka"],
+      characters: ["Artur", "Ala", "Edek", "Stomil", "Eleonora"],
+      quotes: [],
+      images: [{ label: "Dom pełen chaosu", alt: "Rozpad porządku rodzinnego" }]
+    },
+    {
+      id: "magbet",
+      title: "Makbet",
+      description: "Studium destrukcyjnej siły ambicji i mechanizmu władzy, który popycha człowieka do zbrodni, skutkując całkowitym rozpadem jego psychiki.",
+      epoch: "renesans",
+      motifs: ["motywmiłości", "motywsumienia", "motywszalenstwa", "fatum"],
+      coverEmoji: "👑",
+      aliases: ["Macbeth", "Makbet Szekspira"],
+      characters: ["Makbet", "Lady Makbet", "Banko", "Duncan", "Makduf", "Wiedźmy"],
+      quotes: [],
+      images: [{ label: "Krwawa korona", alt: "Ambicja i władza" }]
+    },
+    {
+      id: "zbrodniaikara",
+      title: "Zbrodnia i kara",
+      description: "Psychologiczna opowieść o upadku i odkupieniu człowieka, który morderstwo uzasadnia ideologią, by ostatecznie ulec miażdżącej sile własnego sumienia.",
+      epoch: "pozytywizm",
+      motifs: ["motywmiłości", "motywsumienia"],
+      coverEmoji: "🕯️",
+      aliases: ["Zbrodnia i Kara", "Zbrodnia i kara Dostojewskiego"],
+      characters: ["Raskolnikow", "Sonia", "Porfiry", "Dunia", "Swidrygajłow"],
+      quotes: [],
+      images: [{ label: "Mroczne ulice Petersburga", alt: "Poczucie winy i rozpad psychiki" }]
+    },
+    {
+      id: "innyswiat",
+      title: "Inny świat",
+      description: "Świadectwo nieludzkiego systemu sowieckich łagrów, testującego granice człowieczeństwa w warunkach głodu, pracy ponad siły i wszechobecnego terroru.",
+      epoch: "współczesność",
+      motifs: ["totalitaryzm"],
+      coverEmoji: "⛓️",
+      aliases: ["Inny Świat Herlinga-Grudzińskiego"],
+      characters: ["Narrator", "więźniowie łagru"],
+      quotes: [],
+      images: [{ label: "Łagier", alt: "System odczłowieczający" }]
+    },
+    {
+      id: "1984",
+      title: "Rok 1984",
+      description: "Przerażająca wizja państwa totalitarnego, w którym Partia sprawuje absolutną kontrolę nad czynami, przeszłością, a nawet myślami i uczuciami jednostki.",
+      epoch: "współczesność",
+      motifs: ["totalitaryzm", "motywmiłości"],
+      coverEmoji: "📕",
+      aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
+      characters: ["Winston", "Julia", "O'Brien", "Wielki Brat", "Parsons"],
+      quotes: [],
+      images: [{ label: "Wielki Brat", alt: "Totalitarna kontrola" }]
+    },
+  ],
+  motifs: [
+    {
+      id: "motywnarodowy",
+      name: "Motyw Narodowy",
+      description: "Problematyka kondycji narodu",
+      books: ["wesele"],
+      aliases: ["naród", "motyw narodu"]
+    },
+    {
+      id: "symbolizm",
+      name: "Symbolizm",
+      description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost",
+      books: ["wesele"],
+      aliases: ["symboliczność"]
+    },
+    {
+      id: "ludomania",
+      name: "Ludomania",
+      description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii",
+      books: ["wesele"],
+      aliases: ["ludofilia"]
+    },
+    {
+      id: "naturalizm",
+      name: "Naturalizm",
+      description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt",
+      books: ["chłopi"],
+      aliases: ["naturalistyczny obraz świata"]
+    },
+    {
+      id: "motywmiłości",
+      name: "Motyw Miłości",
+      description: "Przedstawienie relacji miłosnej",
+      books: ["chłopi", "magbet", "zbrodniaikara", "1984"],
+      aliases: ["miłość", "motyw miłości"]
+    },
+    {
+      id: "motywbuntu",
+      name: "Motyw Buntu",
+      description: "Sprzeciw wobec zastanego porządku, losu lub władzy",
+      books: ["wesele", "antygona", "tango"],
+      aliases: ["bunt", "motyw buntu"]
+    },
+    {
+      id: "fatum",
+      name: "Fatum",
+      description: "Personifikacja nieuchronnego, nieodwracalnego losu, nieodwołalnej woli bogów, na którą nikt nie ma wpływu.",
+      books: ["antygona", "magbet"],
+      aliases: ["los", "przeznaczenie"]
+    },
+    {
+      id: "groteska",
+      name: "Groteska",
+      description: "Połączenie w jednym dziele jednocześnie występujących pierwiastków przeciwstawnych",
+      books: ["tango"],
+      aliases: ["groteskowość"]
+    },
+    {
+      id: "motywrodziny",
+      name: "Motyw Rodziny",
+      description: "Przedstawienie i problematyka relacji rodzinnych",
+      books: ["tango"],
+      aliases: ["rodzina", "motyw rodziny"]
+    },
+    {
+      id: "motywsumienia",
+      name: "Motyw Sumienia",
+      description: "Wewnętrzny głos moralny, który staje się głównym sędzią i katem bohatera po dokonaniu zła",
+      books: ["magbet", "zbrodniaikara"],
+      aliases: ["sumienie", "wyrzuty sumienia"]
+    },
+    {
+      id: "motywszalenstwa",
+      name: "Motyw Szaleństwa",
+      description: "Sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy",
+      books: ["magbet", "antygona"],
+      aliases: ["szaleństwo", "obłęd"]
+    },
+    {
+      id: "totalitaryzm",
+      name: "Totalitaryzm",
+      description: "System polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu",
+      books: ["magbet", "innyswiat", "1984"],
+      aliases: ["motyw totalitaryzmu", "system totalitarny"]
+    },
+  ]
+};
 
 const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"];
 
@@ -243,27 +230,25 @@ const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współcze
 // HELPERS
 // =========================
 
-function clone(value) {
-  return value === null || value === undefined
-    ? value
-    : JSON.parse(JSON.stringify(value));
+function clone(v) {
+  return v === null || v === undefined ? v : JSON.parse(JSON.stringify(v));
 }
 
 function pickRandom(items) {
-  if (!items || items.length === 0) return null;
+  if (!items || !items.length) return null;
   return items[Math.floor(Math.random() * items.length)];
 }
 
-function makePairKey(bookId, motifId) {
-  return [`book:${bookId}`, `motif:${motifId}`].sort().join("|");
+function makePairKey(bId, mId) {
+  return [`book:${bId}`, `motif:${mId}`].sort().join("|");
 }
 
-function isMasteredPair(bookId, motifId) {
-  return masteredPairs.has(makePairKey(bookId, motifId));
+function isMasteredPair(bId, mId) {
+  return masteredPairs.has(makePairKey(bId, mId));
 }
 
-function isScoredPair(bookId, motifId) {
-  return scoredPairs.has(makePairKey(bookId, motifId));
+function isScoredPair(bId, mId) {
+  return scoredPairs.has(makePairKey(bId, mId));
 }
 
 function getBookById(id) {
@@ -274,25 +259,21 @@ function getMotifById(id) {
   return data.motifs.find(m => m.id === id) || null;
 }
 
-
-
-let taskBag = [];
-
 function shuffle(items) {
-  const arr = [...items];
-  for (let i = arr.length - 1; i > 0; i--) {
+  const a = [...items];
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  return arr;
+  return a;
 }
 
 function uniqueStrings(items) {
   return [...new Set((items || []).map(v => String(v || "").trim()).filter(Boolean))];
 }
 
-function normalizeText(value) {
-  return String(value ?? "")
+function normalizeText(v) {
+  return String(v ?? "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -301,8 +282,8 @@ function normalizeText(value) {
     .trim();
 }
 
-function escapeHtml(str) {
-  return String(str ?? "")
+function escapeHtml(s) {
+  return String(s ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -310,65 +291,48 @@ function escapeHtml(str) {
     .replace(/'/g, "&#039;");
 }
 
-function truncateText(str, max = 140) {
-  const text = String(str ?? "");
-  return text.length > max ? `${text.slice(0, max).trim()}…` : text;
+function truncateText(s, max = 140) {
+  const t = String(s ?? "");
+  return t.length > max ? `${t.slice(0, max).trim()}…` : t;
 }
 
-function setNextButtonVisible(visible) {
-  document.getElementById("nextBtn").style.display = visible ? "inline-block" : "none";
+function setNextButtonVisible(v) {
+  document.getElementById("nextBtn").style.display = v ? "inline-block" : "none";
 }
 
 function syncCurrentTaskData() {
-  if (currentTask && currentTask.data) {
-    currentTaskData = clone(currentTask.data);
-  }
+  if (currentTask && currentTask.data) currentTaskData = clone(currentTask.data);
 }
 
-function pointsForHints(revealedCount) {
-  if (revealedCount <= 0) return 80;
-  if (revealedCount === 1) return 60;
+function pointsForHints(n) {
+  if (n <= 0) return 80;
+  if (n === 1) return 60;
   return 40;
 }
 
 function getBookAnswerVariants(book) {
-  return uniqueStrings([
-    book?.title,
-    ...(book?.aliases || []),
-  ]);
+  return uniqueStrings([book?.title, ...(book?.aliases || [])]);
 }
 
 function getMotifAnswerVariants(motif) {
-  return uniqueStrings([
-    motif?.name,
-    ...(motif?.aliases || []),
-  ]);
+  return uniqueStrings([motif?.name, ...(motif?.aliases || [])]);
 }
 
 function bookMatchesAnswer(book, answer) {
-  const normalized = normalizeText(answer);
-  return getBookAnswerVariants(book).some(variant => normalizeText(variant) === normalized);
+  const n = normalizeText(answer);
+  return getBookAnswerVariants(book).some(v => normalizeText(v) === n);
 }
 
 function motifMatchesAnswer(motif, answer) {
-  const normalized = normalizeText(answer);
-  return getMotifAnswerVariants(motif).some(variant => normalizeText(variant) === normalized);
+  const n = normalizeText(answer);
+  return getMotifAnswerVariants(motif).some(v => normalizeText(v) === n);
 }
 
 function formatCoverVisual(book) {
   if (book?.coverImage) {
-    return `
-      <div class="cover-visual">
-        <img src="${escapeHtml(book.coverImage)}" alt="${escapeHtml(book.title)}">
-      </div>
-    `;
+    return `<div class="cover-visual"><img src="${escapeHtml(book.coverImage)}" alt="${escapeHtml(book.title)}"></div>`;
   }
-
-  return `
-    <div class="cover-visual">
-      <div class="cover-emoji">${escapeHtml(book?.coverEmoji || "📘")}</div>
-    </div>
-  `;
+  return `<div class="cover-visual"><div class="cover-emoji">${escapeHtml(book?.coverEmoji || "📘")}</div></div>`;
 }
 
 function renderBookExtras(book) {
@@ -376,73 +340,20 @@ function renderBookExtras(book) {
   const characters = uniqueStrings(book?.characters || []);
   const quotes = uniqueStrings(book?.quotes || []);
   const images = book?.images || [];
-
   return `
-    ${aliases.length ? `
-      <div class="profile-section">
-        <h3>Akceptowane warianty tytułu</h3>
-        <div class="profile-chip-list">
-          ${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}
-        </div>
-      </div>
-    ` : ""}
-
-    ${characters.length ? `
-      <div class="profile-section">
-        <h3>Bohaterowie</h3>
-        <div class="profile-chip-list">
-          ${characters.map(c => `<span class="profile-chip">${escapeHtml(c)}</span>`).join("")}
-        </div>
-      </div>
-    ` : ""}
-
-    ${quotes.length ? `
-      <div class="profile-section">
-        <h3>Fragmenty / cytaty</h3>
-        <div class="profile-media-list">
-          ${quotes.map(q => `<div class="profile-media-item">„${escapeHtml(q)}”</div>`).join("")}
-        </div>
-      </div>
-    ` : ""}
-
-    ${images.length ? `
-      <div class="profile-section">
-        <h3>Obrazy / symbole</h3>
-        <div class="profile-media-list">
-          ${images.map(img => {
-            const label = typeof img === "string"
-              ? img
-              : (img.label || img.alt || img.caption || "");
-            return `<div class="profile-media-item">${escapeHtml(label)}</div>`;
-          }).join("")}
-        </div>
-      </div>
-    ` : ""}
+    ${aliases.length ? `<div class="profile-section"><h3>Akceptowane warianty tytułu</h3><div class="profile-chip-list">${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}</div></div>` : ""}
+    ${characters.length ? `<div class="profile-section"><h3>Bohaterowie</h3><div class="profile-chip-list">${characters.map(c => `<span class="profile-chip">${escapeHtml(c)}</span>`).join("")}</div></div>` : ""}
+    ${quotes.length ? `<div class="profile-section"><h3>Fragmenty / cytaty</h3><div class="profile-media-list">${quotes.map(q => `<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join("")}</div></div>` : ""}
+    ${images.length ? `<div class="profile-section"><h3>Obrazy / symbole</h3><div class="profile-media-list">${images.map(img => { const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || ""); return `<div class="profile-media-item">${escapeHtml(label)}</div>`; }).join("")}</div></div>` : ""}
   `;
 }
 
 function renderMotifExtras(motif) {
   const aliases = uniqueStrings(motif?.aliases || []);
   const books = uniqueStrings((motif?.books || []).map(id => getBookById(id)?.title).filter(Boolean));
-
   return `
-    ${aliases.length ? `
-      <div class="profile-section">
-        <h3>Akceptowane warianty odpowiedzi</h3>
-        <div class="profile-chip-list">
-          ${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}
-        </div>
-      </div>
-    ` : ""}
-
-    ${books.length ? `
-      <div class="profile-section">
-        <h3>Lektury powiązane z motywem</h3>
-        <div class="profile-chip-list">
-          ${books.map(t => `<span class="profile-chip">${escapeHtml(t)}</span>`).join("")}
-        </div>
-      </div>
-    ` : ""}
+    ${aliases.length ? `<div class="profile-section"><h3>Akceptowane warianty odpowiedzi</h3><div class="profile-chip-list">${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}</div></div>` : ""}
+    ${books.length ? `<div class="profile-section"><h3>Lektury powiązane z motywem</h3><div class="profile-chip-list">${books.map(t => `<span class="profile-chip">${escapeHtml(t)}</span>`).join("")}</div></div>` : ""}
   `;
 }
 
@@ -452,7 +363,6 @@ function renderMotifExtras(motif) {
 
 function goScreen(n) {
   hideAll();
-
   if (n === 1) document.getElementById("screen-start").style.display = "block";
   if (n === 2) document.getElementById("screen-mode").style.display = "block";
   if (n === 3) {
@@ -472,9 +382,7 @@ function hideAll() {
 
 function setMode(m) {
   mode = m;
-  startApp();
 }
-
 
 function setView(v) {
   view = v;
@@ -486,13 +394,11 @@ function setView(v) {
 
 function startApp() {
   hideAll();
-
   if (mode === "learning") {
     document.getElementById("map").style.display = "block";
     renderMap();
     return;
   }
-
   if (mode === "quiz") {
     document.getElementById("quiz").style.display = "block";
     startQuiz();
@@ -505,18 +411,15 @@ function startApp() {
 
 function startQuiz() {
   score = 0;
-
   quizMode = "diagnostic";
   selectedBook = null;
   selectedMotif = null;
   scoredPairs = new Set();
   masteredPairs = new Set();
-
   answered = false;
   currentTaskType = null;
   currentTaskData = null;
   currentTask = null;
-
   renderScore();
   renderDiagnostic();
 }
@@ -529,62 +432,29 @@ function renderDiagnostic() {
   const el = document.getElementById("quiz-content");
   const books = getFilteredBooks();
   const motifs = getFilteredMotifs();
-
-  document.getElementById("nextBtn").style.display = "inline-block";
-
+  setNextButtonVisible(true);
   el.innerHTML = `
     <p class="small-note">Połącz jak największą ilość zagadnień z lekturami</p>
-
     <div class="diagnostic-layout">
-      <div>
-        <h3>Lektury</h3>
-        ${books.map(renderDiagnosticBook).join("")}
-      </div>
-
-      <div>
-        <h3>Motywy</h3>
-        ${motifs.map(renderDiagnosticMotif).join("")}
-      </div>
-    </div>
-  `;
+      <div><h3>Lektury</h3>${books.map(renderDiagnosticBook).join("")}</div>
+      <div><h3>Motywy</h3>${motifs.map(renderDiagnosticMotif).join("")}</div>
+    </div>`;
 }
 
 function renderDiagnosticBook(book) {
-  const selectedClass = selectedBook === book.id ? "selected" : "";
-  return `
-    <div class="quiz-item ${selectedClass}">
-      <div class="item-main" onclick="selectDiagnosticBook('${book.id}')">
-        📚 ${book.title}
-      </div>
-
-      <button
-        type="button"
-        class="icon-btn"
-        title="Dowiedz się więcej"
-        onclick="event.stopPropagation(); openBook('${book.id}')">
-        📖
-      </button>
-    </div>
-  `;
+  const sel = selectedBook === book.id ? "selected" : "";
+  return `<div class="quiz-item ${sel}">
+    <div class="item-main" onclick="selectDiagnosticBook('${book.id}')">📚 ${escapeHtml(book.title)}</div>
+    <button type="button" class="icon-btn" onclick="event.stopPropagation();openBook('${book.id}')">📖</button>
+  </div>`;
 }
 
 function renderDiagnosticMotif(motif) {
-  const selectedClass = selectedMotif === motif.id ? "selected" : "";
-  return `
-    <div class="quiz-item ${selectedClass}">
-      <div class="item-main" onclick="selectDiagnosticMotif('${motif.id}')">
-        🎯 ${motif.name}
-      </div>
-
-      <button
-        type="button"
-        class="icon-btn"
-        title="Dowiedz się więcej"
-        onclick="event.stopPropagation(); openMotif('${motif.id}')">
-        📖
-      </button>
-    </div>
-  `;
+  const sel = selectedMotif === motif.id ? "selected" : "";
+  return `<div class="quiz-item ${sel}">
+    <div class="item-main" onclick="selectDiagnosticMotif('${motif.id}')">🎯 ${escapeHtml(motif.name)}</div>
+    <button type="button" class="icon-btn" onclick="event.stopPropagation();openMotif('${motif.id}')">📖</button>
+  </div>`;
 }
 
 function selectDiagnosticBook(id) {
@@ -603,27 +473,17 @@ function selectDiagnosticMotif(id) {
 
 function tryDiagnosticMatch() {
   if (!selectedBook || !selectedMotif) return;
-
   const book = getBookById(selectedBook);
   if (!book) return;
-
   const pairKey = makePairKey(selectedBook, selectedMotif);
   const isCorrect = book.motifs.includes(selectedMotif);
-
   if (!isScoredPair(selectedBook, selectedMotif)) {
-    if (isCorrect) {
-      score += 100;
-      masteredPairs.add(pairKey);
-    } else {
-      score -= 50;
-    }
-
+    if (isCorrect) { score += 100; masteredPairs.add(pairKey); }
+    else score -= 50;
     scoredPairs.add(pairKey);
   }
-
   selectedBook = null;
   selectedMotif = null;
-
   renderScore();
 }
 
@@ -634,8 +494,9 @@ function finishDiagnosticAndStartEngine() {
 // =========================
 // ENGINE
 // =========================
+
 function availableTaskTypes() {
-  return ENGINE_TASK_TYPES.filter(type => ENGINE_TASK_ENABLED[type]);
+  return ENGINE_TASK_TYPES.filter(t => ENGINE_TASK_ENABLED[t]);
 }
 
 function refillTaskBag() {
@@ -654,7 +515,6 @@ function startEngine() {
   currentTaskData = null;
   currentTask = null;
   taskBag = [];
-
   setNextButtonVisible(false);
   renderEngineNextTask();
 }
@@ -662,40 +522,20 @@ function startEngine() {
 function renderEngineNextTask() {
   answered = false;
   setNextButtonVisible(false);
-
   const type = getNextTaskType();
   if (!type) {
-    document.getElementById("quiz-content").innerHTML = `
-      <div class="task-card">
-        <h2>Brak aktywnych typów zadań</h2>
-        <p>Włącz przynajmniej jeden typ w ENGINE_TASK_ENABLED.</p>
-      </div>
-    `;
+    document.getElementById("quiz-content").innerHTML = `<div class="task-card"><h2>Brak aktywnych typów zadań</h2></div>`;
     return;
   }
-
   currentTaskType = type;
   currentTask = createTaskByType(type);
   currentTaskData = clone(currentTask.data);
-
   currentTask.render();
 }
 
-
-
-
-
-
-
 function nextTask() {
-  if (quizMode === "diagnostic") {
-    finishDiagnosticAndStartEngine();
-    return;
-  }
-
-  if (quizMode === "engine") {
-    renderEngineNextTask();
-  }
+  if (quizMode === "diagnostic") { finishDiagnosticAndStartEngine(); return; }
+  if (quizMode === "engine") renderEngineNextTask();
 }
 
 function createTaskByType(type, presetData = null) {
@@ -712,13 +552,66 @@ function createTaskByType(type, presetData = null) {
 function getTaskXPromptCandidates() {
   if (view === "motifs") {
     const motifs = getFilteredMotifs();
-    const available = motifs.filter(motif => motif.books.some(bookId => !isMasteredPair(bookId, motif.id)));
-    return available.length ? available : motifs;
+    const av = motifs.filter(m => m.books.some(bId => !isMasteredPair(bId, m.id)));
+    return av.length ? av : motifs;
   }
-
   const books = getFilteredBooks();
-  const available = books.filter(book => book.motifs.some(motifId => !isMasteredPair(book.id, motifId)));
-  return available.length ? available : books;
+  const av = books.filter(b => b.motifs.some(mId => !isMasteredPair(b.id, mId)));
+  return av.length ? av : books;
+}
+
+function buildTaskXData() {
+  if (view === "motifs") {
+    const promptMotif = pickRandom(getTaskXPromptCandidates());
+    if (!promptMotif) return fallbackTaskXData();
+    const correctBooks = promptMotif.books.map(getBookById).filter(Boolean).filter(b => !isMasteredPair(b.id, promptMotif.id));
+    const allCorrectBooks = promptMotif.books.map(getBookById).filter(Boolean);
+    const correctBook = pickRandom(correctBooks.length ? correctBooks : allCorrectBooks);
+    if (!correctBook) return fallbackTaskXData();
+    let wrongBooks = getFilteredBooks().filter(b => !promptMotif.books.includes(b.id) && b.id !== correctBook.id);
+    if (!wrongBooks.length) wrongBooks = getFilteredBooks().filter(b => b.id !== correctBook.id);
+    const wrongBook = pickRandom(wrongBooks) || getFilteredBooks().find(b => b.id !== correctBook.id) || null;
+    if (!wrongBook || wrongBook.id === correctBook.id) return fallbackTaskXData();
+    const correctLeft = Math.random() < 0.5;
+    return {
+      promptType: "motif", promptId: promptMotif.id, promptTitle: promptMotif.name,
+      promptDescription: promptMotif.description, optionType: "book",
+      leftId: correctLeft ? correctBook.id : wrongBook.id,
+      rightId: correctLeft ? wrongBook.id : correctBook.id,
+      correctSide: correctLeft ? "left" : "right", correctBookId: correctBook.id
+    };
+  }
+  const promptBook = pickRandom(getTaskXPromptCandidates());
+  if (!promptBook) return fallbackTaskXData();
+  const correctMotifs = promptBook.motifs.map(getMotifById).filter(Boolean).filter(m => !isMasteredPair(promptBook.id, m.id));
+  const allCorrectMotifs = promptBook.motifs.map(getMotifById).filter(Boolean);
+  const correctMotif = pickRandom(correctMotifs.length ? correctMotifs : allCorrectMotifs);
+  if (!correctMotif) return fallbackTaskXData();
+  let wrongMotifs = getFilteredMotifs().filter(m => !promptBook.motifs.includes(m.id) && m.id !== correctMotif.id);
+  if (!wrongMotifs.length) wrongMotifs = getFilteredMotifs().filter(m => m.id !== correctMotif.id);
+  const wrongMotif = pickRandom(wrongMotifs) || getFilteredMotifs().find(m => m.id !== correctMotif.id) || null;
+  if (!wrongMotif || wrongMotif.id === correctMotif.id) return fallbackTaskXData();
+  const correctLeft = Math.random() < 0.5;
+  return {
+    promptType: "book", promptId: promptBook.id, promptTitle: promptBook.title,
+    promptDescription: promptBook.description, optionType: "motif",
+    leftId: correctLeft ? correctMotif.id : wrongMotif.id,
+    rightId: correctLeft ? wrongMotif.id : correctMotif.id,
+    correctSide: correctLeft ? "left" : "right", correctMotifId: correctMotif.id
+  };
+}
+
+function fallbackTaskXData() {
+  const book = getFilteredBooks()[0];
+  const motif = getFilteredMotifs()[0];
+  return {
+    promptType: view === "motifs" ? "motif" : "book",
+    promptId: view === "motifs" ? (motif ? motif.id : null) : (book ? book.id : null),
+    promptTitle: view === "motifs" ? (motif ? motif.name : "Brak motywu") : (book ? book.title : "Brak lektury"),
+    promptDescription: "", optionType: view === "motifs" ? "book" : "motif",
+    leftId: null, rightId: null, correctSide: "left",
+    correctBookId: null, correctMotifId: null, fallback: true
+  };
 }
 
 function createTaskX(presetData = null) {
@@ -726,562 +619,127 @@ function createTaskX(presetData = null) {
   return {
     type: "X",
     data: dataObj,
-    render() {
-      renderTaskX(this.data);
-      attachTaskXSwipeHandlers();
-    },
+    render() { renderTaskX(this.data); attachTaskXSwipeHandlers(); },
     submit(side) {
       const correct = side === this.data.correctSide;
-
       if (correct) {
         score += 25;
-        if (this.data.promptType === "book" && this.data.correctMotifId) {
+        if (this.data.promptType === "book" && this.data.correctMotifId)
           masteredPairs.add(makePairKey(this.data.promptId, this.data.correctMotifId));
-        }
-        if (this.data.promptType === "motif" && this.data.correctBookId) {
+        if (this.data.promptType === "motif" && this.data.correctBookId)
           masteredPairs.add(makePairKey(this.data.correctBookId, this.data.promptId));
-        }
       }
-
       renderScore();
-      document.getElementById("nextBtn").style.display = "inline-block";
+      setNextButtonVisible(true);
       renderTaskX(this.data, true);
     }
   };
 }
 
-function buildTaskXData() {
-  if (view === "motifs") {
-    const motifCandidates = getTaskXPromptCandidates();
-    const promptMotif = pickRandom(motifCandidates);
-    if (!promptMotif) {
-      return fallbackTaskXData();
-    }
-
-    const correctBooks = promptMotif.books
-      .map(getBookById)
-      .filter(Boolean)
-      .filter(book => !isMasteredPair(book.id, promptMotif.id));
-
-    const allCorrectBooks = promptMotif.books
-      .map(getBookById)
-      .filter(Boolean);
-
-    const correctBook = pickRandom(correctBooks.length ? correctBooks : allCorrectBooks);
-    if (!correctBook) {
-      return fallbackTaskXData();
-    }
-
-    let wrongBooks = getFilteredBooks().filter(book => !promptMotif.books.includes(book.id) && book.id !== correctBook.id);
-    if (!wrongBooks.length) {
-      wrongBooks = getFilteredBooks().filter(book => book.id !== correctBook.id);
-    }
-
-    let wrongBook = pickRandom(wrongBooks);
-    if (!wrongBook) {
-      const anyOtherBook = getFilteredBooks().find(book => book.id !== correctBook.id);
-      wrongBook = anyOtherBook || null;
-    }
-
-    if (!wrongBook || wrongBook.id === correctBook.id) {
-      return fallbackTaskXData();
-    }
-
-    const correctLeft = Math.random() < 0.5;
-
-    return {
-      promptType: "motif",
-      promptId: promptMotif.id,
-      promptTitle: promptMotif.name,
-      promptDescription: promptMotif.description,
-      optionType: "book",
-      leftId: correctLeft ? correctBook.id : wrongBook.id,
-      rightId: correctLeft ? wrongBook.id : correctBook.id,
-      correctSide: correctLeft ? "left" : "right",
-      correctBookId: correctBook.id,
-    };
-  }
-
-  const bookCandidates = getTaskXPromptCandidates();
-  const promptBook = pickRandom(bookCandidates);
-  if (!promptBook) {
-    return fallbackTaskXData();
-  }
-
-  const correctMotifs = promptBook.motifs
-    .map(getMotifById)
-    .filter(Boolean)
-    .filter(motif => !isMasteredPair(promptBook.id, motif.id));
-
-  const allCorrectMotifs = promptBook.motifs
-    .map(getMotifById)
-    .filter(Boolean);
-
-  const correctMotif = pickRandom(correctMotifs.length ? correctMotifs : allCorrectMotifs);
-  if (!correctMotif) {
-    return fallbackTaskXData();
-  }
-
-  let wrongMotifs = getFilteredMotifs().filter(motif => !promptBook.motifs.includes(motif.id) && motif.id !== correctMotif.id);
-  if (!wrongMotifs.length) {
-    wrongMotifs = getFilteredMotifs().filter(motif => motif.id !== correctMotif.id);
-  }
-
-  let wrongMotif = pickRandom(wrongMotifs);
-  if (!wrongMotif) {
-    const anyOtherMotif = getFilteredMotifs().find(motif => motif.id !== correctMotif.id);
-    wrongMotif = anyOtherMotif || null;
-  }
-
-  if (!wrongMotif || wrongMotif.id === correctMotif.id) {
-    return fallbackTaskXData();
-  }
-
-  const correctLeft = Math.random() < 0.5;
-
-  return {
-    promptType: "book",
-    promptId: promptBook.id,
-    promptTitle: promptBook.title,
-    promptDescription: promptBook.description,
-    optionType: "motif",
-    leftId: correctLeft ? correctMotif.id : wrongMotif.id,
-    rightId: correctLeft ? wrongMotif.id : correctMotif.id,
-    correctSide: correctLeft ? "left" : "right",
-    correctMotifId: correctMotif.id,
-  };
-}
-
-function fallbackTaskXData() {
-  const book = getFilteredBooks()[0];
-  const motif = getFilteredMotifs()[0];
-
-  return {
-    promptType: view === "motifs" ? "motif" : "book",
-    promptId: view === "motifs" ? (motif ? motif.id : null) : (book ? book.id : null),
-    promptTitle: view === "motifs" ? (motif ? motif.name : "Brak motywu") : (book ? book.title : "Brak lektury"),
-    promptDescription: "",
-    optionType: view === "motifs" ? "book" : "motif",
-    leftId: null,
-    rightId: null,
-    correctSide: "left",
-    correctBookId: null,
-    correctMotifId: null,
-    fallback: true
-  };
-}
-
 function renderTaskX(taskData, answeredState = false) {
   const el = document.getElementById("quiz-content");
-
   if (taskData.fallback) {
-    el.innerHTML = `
-      <div class="task-card">
-        <h2>Brak dostępnych par</h2>
-        <p>W wybranym zakresie nie ma już sensownej pary do pokazania.</p>
-      </div>
-    `;
+    el.innerHTML = `<div class="task-card"><h2>Brak dostępnych par</h2><p>W wybranym zakresie nie ma już sensownej pary do pokazania.</p></div>`;
     return;
   }
-
-  const promptHtml = `
-    <div class="task-head">
-      ${taskData.promptType === "book" ? "📚" : "🎯"} ${taskData.promptTitle}
-      ${
-        answeredState
-          ? `<button class="icon-btn task-profile-icon" title="Dowiedz się więcej" onclick="openCurrentTaskProfile()">📖</button>`
-          : ""
-      }
-    </div>
-  `;
-
-  const imagePlaceholder = `
-    <div class="task-image">
-      <span>📷</span>
-      <span>miejsce na obraz</span>
-    </div>
-  `;
-
+  const promptHtml = `<div class="task-head">
+    ${taskData.promptType === "book" ? "📚" : "🎯"} ${escapeHtml(taskData.promptTitle)}
+    ${answeredState ? `<button class="icon-btn task-profile-icon" onclick="openCurrentTaskProfile()">📖</button>` : ""}
+  </div>`;
   const leftLabel = taskData.optionType === "motif"
     ? getMotifById(taskData.leftId)?.name || "?"
     : getBookById(taskData.leftId)?.title || "?";
-
   const rightLabel = taskData.optionType === "motif"
     ? getMotifById(taskData.rightId)?.name || "?"
     : getBookById(taskData.rightId)?.title || "?";
-
   el.innerHTML = `
     <div class="task-card ${answeredState ? "answered" : ""}">
       <div class="task-swipe-instruction">← →</div>
       ${promptHtml}
-      ${imagePlaceholder}
-
+      <div class="task-image"><span>📷</span><span>miejsce na obraz</span></div>
       <div class="task-row">
-        <div class="task-choice" onclick="handleAnswer('left')">
-          ${leftLabel}
-        </div>
-
-        <div class="task-choice" onclick="handleAnswer('right')">
-          ${rightLabel}
-        </div>
+        <div class="task-choice" onclick="handleAnswer('left')">${escapeHtml(leftLabel)}</div>
+        <div class="task-choice" onclick="handleAnswer('right')">${escapeHtml(rightLabel)}</div>
       </div>
-    </div>
-  `;
-
+    </div>`;
   attachTaskXSwipeHandlers();
 }
 
-function renderTaskY1(taskData) {
-  const el = document.getElementById("quiz-content");
-
-  if (taskData.fallback) {
-    el.innerHTML = `
-      <div class="task-card">
-        <h2>Brak dostępnych zadań Y1</h2>
-        <p>W obecnym filtrze nie ma jeszcze sensownej pary motyw–lektura.</p>
-      </div>
-    `;
-    setNextButtonVisible(true);
-    return;
-  }
-
-  const hidden1Visible = taskData.revealedHints >= 1;
-  const hidden2Visible = taskData.revealedHints >= 2;
-
-  el.innerHTML = `
-    <div class="task-card ${taskData.submitted ? "answered" : ""}">
-      <div class="open-task-shell">
-        <div class="open-task-topline">Y1 • Motywy</div>
-        <h2 class="open-task-title">Podaj tytuł lektury</h2>
-
-        <div class="open-task-visible-hint">
-          <div class="hint-title">Podpowiedź 1</div>
-          <div class="hint-text">${escapeHtml(taskData.visibleHint)}</div>
-        </div>
-
-        <div class="open-task-hidden-grid">
-          <div class="hint-card ${hidden1Visible ? "revealed" : ""}">
-            <div class="hint-title">Podpowiedź 2</div>
-            <div class="hint-text">
-              ${hidden1Visible ? escapeHtml(taskData.hiddenHints[0]) : "Zakryta podpowiedź"}
-            </div>
-            <div class="hint-actions">
-              <button
-                type="button"
-                class="hint-reveal-btn"
-                onclick="revealCurrentHint(0)"
-                ${taskData.submitted || hidden1Visible ? "disabled" : ""}>
-                Odkryj
-              </button>
-            </div>
-          </div>
-
-          <div class="hint-card ${hidden2Visible ? "revealed" : ""}">
-            <div class="hint-title">Podpowiedź 3</div>
-            <div class="hint-text">
-              ${hidden2Visible ? escapeHtml(taskData.hiddenHints[1]) : "Zakryta podpowiedź"}
-            </div>
-            <div class="hint-actions">
-              <button
-                type="button"
-                class="hint-reveal-btn"
-                onclick="revealCurrentHint(1)"
-                ${taskData.submitted || !hidden1Visible || hidden2Visible ? "disabled" : ""}>
-                Odkryj
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="open-task-input-wrap">
-          <label for="y1-answer"><strong>Twoja odpowiedź</strong></label>
-          <input
-            id="y1-answer"
-            class="open-task-input"
-            type="text"
-            placeholder="Wpisz tytuł lektury"
-            value="${escapeHtml(taskData.userAnswer || "")}"
-            oninput="updateCurrentOpenTaskAnswer(this.value)"
-            ${taskData.submitted ? "disabled" : ""}>
-        </div>
-
-        <div class="open-task-actions">
-          <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted ? "disabled" : ""}>
-            Sprawdź
-          </button>
-        </div>
-
-        <div class="task-feedback ${taskData.feedbackType || ""}">
-          ${escapeHtml(taskData.feedback || "")}
-        </div>
-      </div>
-    </div>
-  `;
-
-  setNextButtonVisible(!!taskData.submitted);
-}
-
-function renderTaskY2(taskData) {
-  const el = document.getElementById("quiz-content");
-
-  if (taskData.fallback) {
-    el.innerHTML = `
-      <div class="task-card">
-        <h2>Brak dostępnych zadań Y2</h2>
-        <p>W obecnym filtrze nie ma jeszcze pary lektur z wystarczająco wspólnym motywem.</p>
-      </div>
-    `;
-    setNextButtonVisible(true);
-    return;
-  }
-
-  const bookA = getBookById(taskData.bookAId);
-  const bookB = getBookById(taskData.bookBId);
-  const hidden1Visible = taskData.revealedHints >= 1;
-  const hidden2Visible = taskData.revealedHints >= 2;
-
-  el.innerHTML = `
-    <div class="task-card ${taskData.submitted ? "answered" : ""}">
-      <div class="open-task-shell">
-        <div class="open-task-topline">Y2 • Lektury</div>
-        <h2 class="open-task-title">Jaki motyw łączy te dwie lektury?</h2>
-
-        <div class="cover-grid">
-          <div class="cover-card">
-            ${formatCoverVisual(bookA)}
-            <div class="cover-label">${escapeHtml(bookA?.title || "Lektura 1")}</div>
-          </div>
-
-          <div class="cover-card">
-            ${formatCoverVisual(bookB)}
-            <div class="cover-label">${escapeHtml(bookB?.title || "Lektura 2")}</div>
-          </div>
-        </div>
-
-        <div class="open-task-visible-hint">
-          <div class="hint-title">Instrukcja</div>
-          <div class="hint-text">${escapeHtml(taskData.visibleHint)}</div>
-        </div>
-
-        <div class="open-task-hidden-grid">
-          <div class="hint-card ${hidden1Visible ? "revealed" : ""}">
-            <div class="hint-title">Podpowiedź 1</div>
-            <div class="hint-text">
-              ${hidden1Visible ? escapeHtml(taskData.hiddenHints[0]) : "Zakryta podpowiedź"}
-            </div>
-            <div class="hint-actions">
-              <button
-                type="button"
-                class="hint-reveal-btn"
-                onclick="revealCurrentHint(0)"
-                ${taskData.submitted || hidden1Visible ? "disabled" : ""}>
-                Odkryj
-              </button>
-            </div>
-          </div>
-
-          <div class="hint-card ${hidden2Visible ? "revealed" : ""}">
-            <div class="hint-title">Podpowiedź 2</div>
-            <div class="hint-text">
-              ${hidden2Visible ? escapeHtml(taskData.hiddenHints[1]) : "Zakryta podpowiedź"}
-            </div>
-            <div class="hint-actions">
-              <button
-                type="button"
-                class="hint-reveal-btn"
-                onclick="revealCurrentHint(1)"
-                ${taskData.submitted || !hidden1Visible || hidden2Visible ? "disabled" : ""}>
-                Odkryj
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="open-task-input-wrap">
-          <label for="y2-answer"><strong>Twoja odpowiedź</strong></label>
-          <input
-            id="y2-answer"
-            class="open-task-input"
-            type="text"
-            placeholder="Wpisz nazwę motywu"
-            value="${escapeHtml(taskData.userAnswer || "")}"
-            oninput="updateCurrentOpenTaskAnswer(this.value)"
-            ${taskData.submitted ? "disabled" : ""}>
-        </div>
-
-        <div class="open-task-actions">
-          <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted ? "disabled" : ""}>
-            Sprawdź
-          </button>
-        </div>
-
-        <div class="task-feedback ${taskData.feedbackType || ""}">
-          ${escapeHtml(taskData.feedback || "")}
-        </div>
-      </div>
-    </div>
-  `;
-
-  setNextButtonVisible(!!taskData.submitted);
-}
-
+// =========================
+// TASK Y1
+// =========================
 
 function buildY1Candidates() {
   const filteredBooks = getFilteredBooks();
   const filteredMotifIds = new Set(getFilteredMotifs().map(m => m.id));
   const candidates = [];
-
   filteredBooks.forEach(book => {
     (book.motifs || []).forEach(motifId => {
-      if (filteredMotifIds.has(motifId)) {
-        candidates.push({
-          bookId: book.id,
-          motifId,
-        });
-      }
+      if (filteredMotifIds.has(motifId)) candidates.push({ bookId: book.id, motifId });
     });
   });
-
-  return candidates;
-}
-
-function buildY2Candidates() {
-  const filteredBooks = getFilteredBooks();
-  const filteredBookIds = new Set(filteredBooks.map(b => b.id));
-  const candidates = [];
-
-  getFilteredMotifs().forEach(motif => {
-    const books = (motif.books || [])
-      .map(getBookById)
-      .filter(book => book && filteredBookIds.has(book.id));
-
-    if (books.length < 2) return;
-
-    for (let i = 0; i < books.length; i++) {
-      for (let j = i + 1; j < books.length; j++) {
-        candidates.push({
-          motifId: motif.id,
-          bookAId: books[i].id,
-          bookBId: books[j].id,
-        });
-      }
-    }
-  });
-
   return candidates;
 }
 
 function buildY1HintPool(book, motif) {
   const pool = [];
-
-  if (book?.characters?.length) {
-    pool.push(`W utworze pojawia się postać: ${book.characters.slice(0, 2).join(", ")}`);
-  }
-
+  if (book?.characters?.length) pool.push(`W utworze pojawia się postać: ${book.characters.slice(0, 2).join(", ")}`);
   if (book?.images?.length) {
     const img = book.images[0];
-    const label = typeof img === "string"
-      ? img
-      : (img.label || img.alt || img.caption || "");
+    const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || "");
     if (label) pool.push(`Obraz / symbol: ${label}`);
   }
-
-  if (book?.quotes?.length) {
-    pool.push(`Fragment: ${book.quotes[0]}`);
-  }
-
-  if (book?.epoch) {
-    pool.push(`Epoka: ${book.epoch}`);
-  }
-
-  if (book?.description) {
-    pool.push(`Opis utworu: ${truncateText(book.description, 130)}`);
-  }
-
-  if (motif?.description) {
-    pool.push(`To motyw związany z: ${truncateText(motif.description, 110)}`);
-  }
-
+  if (book?.quotes?.length) pool.push(`Fragment: ${book.quotes[0]}`);
+  if (book?.epoch) pool.push(`Epoka: ${book.epoch}`);
+  if (book?.description) pool.push(`Opis utworu: ${truncateText(book.description, 130)}`);
+  if (motif?.description) pool.push(`To motyw związany z: ${truncateText(motif.description, 110)}`);
   return uniqueStrings(pool);
 }
 
-function buildY2HintPool(motif, bookA, bookB) {
-  const pool = [];
-
-  if (motif?.description) {
-    pool.push(`Wspólny motyw wiąże się z: ${truncateText(motif.description, 120)}`);
-  }
-
-  const chars = uniqueStrings([
-    ...(bookA?.characters || []),
-    ...(bookB?.characters || []),
-  ]);
-
-  if (chars.length) {
-    pool.push(`W jednej z lektur pojawia się: ${chars.slice(0, 2).join(", ")}`);
-  }
-
-  if (bookA?.images?.length) {
-    const img = bookA.images[0];
-    const label = typeof img === "string"
-      ? img
-      : (img.label || img.alt || img.caption || "");
-    if (label) pool.push(`Na jednym obrazie/symbolu ważne jest: ${label}`);
-  }
-
-  if (bookB?.images?.length) {
-    const img = bookB.images[0];
-    const label = typeof img === "string"
-      ? img
-      : (img.label || img.alt || img.caption || "");
-    if (label) pool.push(`Druga lektura podpowiada przez obraz: ${label}`);
-  }
-
-  if (bookA?.epoch && bookB?.epoch) {
-    pool.push(`Epoki utworów: ${bookA.epoch} / ${bookB.epoch}`);
-  }
-
-  return uniqueStrings(pool);
+function buildTaskY1Data() {
+  const candidates = buildY1Candidates();
+  if (!candidates.length) return { fallback: true, type: "Y1" };
+  const candidate = pickRandom(candidates);
+  const book = getBookById(candidate.bookId);
+  const motif = getMotifById(candidate.motifId);
+  if (!book || !motif) return { fallback: true, type: "Y1" };
+  const visibleHint = `Motyw: ${motif.description || motif.name}`;
+  const hiddenPool = buildY1HintPool(book, motif).filter(h => normalizeText(h) !== normalizeText(visibleHint));
+  return {
+    fallback: false, type: "Y1",
+    motifId: motif.id, targetBookId: book.id,
+    acceptedBookIds: uniqueStrings([...(motif.books || []).filter(id => getBookById(id))]),
+    visibleHint,
+    hiddenHints: [
+      hiddenPool[0] || `Epoka utworu: ${book.epoch || "nieznana"}`,
+      hiddenPool[1] || `Jednym z tropów są bohaterowie i świat przedstawiony.`,
+    ],
+    revealedHints: 0, userAnswer: "", submitted: false,
+    feedback: "", feedbackType: "", pointsAwarded: 0, correctAnswerLabel: ""
+  };
 }
 
 function createTaskY1(presetData = null) {
   const dataObj = presetData ? clone(presetData) : buildTaskY1Data();
-
   return {
     type: "Y1",
     data: dataObj,
-
-    render() {
-      renderTaskY1(this.data);
-    },
-
+    render() { renderTaskY1(this.data); },
     revealHint(index) {
       if (this.data.submitted) return;
-
-      if (index === 0 && this.data.revealedHints < 1) {
-        this.data.revealedHints = 1;
-      }
-
-      if (index === 1 && this.data.revealedHints < 2 && this.data.revealedHints >= 1) {
-        this.data.revealedHints = 2;
-      }
-
+      if (index === 0 && this.data.revealedHints < 1) this.data.revealedHints = 1;
+      if (index === 1 && this.data.revealedHints < 2 && this.data.revealedHints >= 1) this.data.revealedHints = 2;
       syncCurrentTaskData();
       this.render();
     },
-
     setAnswer(value) {
       if (this.data.submitted) return;
       this.data.userAnswer = value;
       syncCurrentTaskData();
     },
-
     submit() {
       if (this.data.submitted) return;
-
-      const rawAnswer = this.data.userAnswer || "";
-      const normalized = normalizeText(rawAnswer);
-
+      const normalized = normalizeText(this.data.userAnswer || "");
       if (!normalized) {
         this.data.feedback = "Wpisz odpowiedź.";
         this.data.feedbackType = "bad";
@@ -1289,126 +747,160 @@ function createTaskY1(presetData = null) {
         this.render();
         return;
       }
-
-      const matchedBook = this.data.acceptedBookIds
-        .map(getBookById)
-        .find(book => book && bookMatchesAnswer(book, normalized));
-
+      const matchedBook = this.data.acceptedBookIds.map(getBookById).find(b => b && bookMatchesAnswer(b, normalized));
       const points = pointsForHints(this.data.revealedHints);
-
       this.data.submitted = true;
       this.data.pointsAwarded = 0;
-
       if (matchedBook) {
         this.data.pointsAwarded = points;
         score += points;
         masteredPairs.add(makePairKey(matchedBook.id, this.data.motifId));
         this.data.feedback = `✅ Dobrze! +${points} pkt`;
         this.data.feedbackType = "ok";
-        this.data.correctAnswerLabel = matchedBook.title;
       } else {
-        const labels = this.data.acceptedBookIds
-          .map(getBookById)
-          .filter(Boolean)
-          .map(book => book.title);
-        this.data.feedback = `❌ Nie tym razem. Poprawna odpowiedź: ${labels.join(" / ")}`;
+        const labels = this.data.acceptedBookIds.map(getBookById).filter(Boolean).map(b => b.title);
+        this.data.feedback = `❌ Nie tym razem. Poprawna: ${labels.join(" / ")}`;
         this.data.feedbackType = "bad";
-        this.data.correctAnswerLabel = labels.join(" / ");
       }
-
       answered = true;
       syncCurrentTaskData();
       renderScore();
       this.render();
       setNextButtonVisible(true);
-    },
+    }
   };
 }
 
-function buildTaskY1Data() {
-  const candidates = buildY1Candidates();
-  if (!candidates.length) {
-    return {
-      fallback: true,
-      type: "Y1",
-    };
+function renderTaskY1(taskData) {
+  const el = document.getElementById("quiz-content");
+  if (taskData.fallback) {
+    el.innerHTML = `<div class="task-card"><h2>Brak dostępnych zadań Y1</h2><p>W obecnym filtrze nie ma pary motyw–lektura.</p></div>`;
+    setNextButtonVisible(true);
+    return;
   }
+  const h1v = taskData.revealedHints >= 1;
+  const h2v = taskData.revealedHints >= 2;
+  el.innerHTML = `
+    <div class="task-card ${taskData.submitted ? "answered" : ""}">
+      <div class="open-task-shell">
+        <div class="open-task-topline">Y1 • Motywy</div>
+        <h2 class="open-task-title">Podaj tytuł lektury</h2>
+        <div class="open-task-visible-hint">
+          <div class="hint-title">Podpowiedź 1</div>
+          <div class="hint-text">${escapeHtml(taskData.visibleHint)}</div>
+        </div>
+        <div class="open-task-hidden-grid">
+          <div class="hint-card ${h1v ? "revealed" : ""}">
+            <div class="hint-title">Podpowiedź 2</div>
+            <div class="hint-text">${h1v ? escapeHtml(taskData.hiddenHints[0]) : "Zakryta podpowiedź"}</div>
+            <div class="hint-actions">
+              <button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(0)" ${taskData.submitted || h1v ? "disabled" : ""}>Odkryj</button>
+            </div>
+          </div>
+          <div class="hint-card ${h2v ? "revealed" : ""}">
+            <div class="hint-title">Podpowiedź 3</div>
+            <div class="hint-text">${h2v ? escapeHtml(taskData.hiddenHints[1]) : "Zakryta podpowiedź"}</div>
+            <div class="hint-actions">
+              <button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(1)" ${taskData.submitted || !h1v || h2v ? "disabled" : ""}>Odkryj</button>
+            </div>
+          </div>
+        </div>
+        <div class="open-task-input-wrap">
+          <label for="y1-answer"><strong>Twoja odpowiedź</strong></label>
+          <input id="y1-answer" class="open-task-input" type="text" placeholder="Wpisz tytuł lektury"
+            value="${escapeHtml(taskData.userAnswer || "")}"
+            oninput="updateCurrentOpenTaskAnswer(this.value)"
+            ${taskData.submitted ? "disabled" : ""}>
+        </div>
+        <div class="open-task-actions">
+          <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted ? "disabled" : ""}>Sprawdź</button>
+        </div>
+        <div class="task-feedback ${taskData.feedbackType || ""}">${escapeHtml(taskData.feedback || "")}</div>
+      </div>
+    </div>`;
+  setNextButtonVisible(!!taskData.submitted);
+}
 
+// =========================
+// TASK Y2
+// =========================
+
+function buildY2Candidates() {
+  const filteredBooks = getFilteredBooks();
+  const filteredBookIds = new Set(filteredBooks.map(b => b.id));
+  const candidates = [];
+  getFilteredMotifs().forEach(motif => {
+    const books = (motif.books || []).map(getBookById).filter(b => b && filteredBookIds.has(b.id));
+    if (books.length < 2) return;
+    for (let i = 0; i < books.length; i++)
+      for (let j = i + 1; j < books.length; j++)
+        candidates.push({ motifId: motif.id, bookAId: books[i].id, bookBId: books[j].id });
+  });
+  return candidates;
+}
+
+function buildY2HintPool(motif, bookA, bookB) {
+  const pool = [];
+  if (motif?.description) pool.push(`Wspólny motyw wiąże się z: ${truncateText(motif.description, 120)}`);
+  const chars = uniqueStrings([...(bookA?.characters || []), ...(bookB?.characters || [])]);
+  if (chars.length) pool.push(`W jednej z lektur pojawia się: ${chars.slice(0, 2).join(", ")}`);
+  if (bookA?.images?.length) {
+    const img = bookA.images[0];
+    const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || "");
+    if (label) pool.push(`Na jednym obrazie/symbolu ważne jest: ${label}`);
+  }
+  if (bookB?.images?.length) {
+    const img = bookB.images[0];
+    const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || "");
+    if (label) pool.push(`Druga lektura podpowiada przez obraz: ${label}`);
+  }
+  if (bookA?.epoch && bookB?.epoch) pool.push(`Epoki utworów: ${bookA.epoch} / ${bookB.epoch}`);
+  return uniqueStrings(pool);
+}
+
+function buildTaskY2Data() {
+  const candidates = buildY2Candidates();
+  if (!candidates.length) return { fallback: true, type: "Y2" };
   const candidate = pickRandom(candidates);
-  const book = getBookById(candidate.bookId);
   const motif = getMotifById(candidate.motifId);
-
-  if (!book || !motif) {
-    return {
-      fallback: true,
-      type: "Y1",
-    };
-  }
-
-  const visibleHint = `Motyw: ${motif.description || motif.name}`;
-  const hiddenPool = buildY1HintPool(book, motif).filter(h => normalizeText(h) !== normalizeText(visibleHint));
-
+  const bookA = getBookById(candidate.bookAId);
+  const bookB = getBookById(candidate.bookBId);
+  if (!motif || !bookA || !bookB) return { fallback: true, type: "Y2" };
+  const hiddenPool = buildY2HintPool(motif, bookA, bookB);
   return {
-    fallback: false,
-    type: "Y1",
-    motifId: motif.id,
-    targetBookId: book.id,
-    acceptedBookIds: uniqueStrings([
-      ...(motif.books || []).filter(id => getBookById(id)),
-    ]),
-    visibleHint,
+    fallback: false, type: "Y2",
+    motifId: motif.id, bookAId: bookA.id, bookBId: bookB.id,
+    visibleHint: "Dwie okładki łączy jeden wspólny motyw. Wpisz jego nazwę.",
     hiddenHints: [
-      hiddenPool[0] || `Epoka utworu: ${book.epoch || "nieznana"}`,
-      hiddenPool[1] || `Jednym z tropów są bohaterowie i świat przedstawiony.`,
+      hiddenPool[0] || "Zwróć uwagę na sens obu utworów.",
+      hiddenPool[1] || "Spróbuj połączyć bohaterów, konflikt i temat przewodni.",
     ],
-    revealedHints: 0,
-    userAnswer: "",
-    submitted: false,
-    feedback: "",
-    feedbackType: "",
-    pointsAwarded: 0,
-    correctAnswerLabel: "",
+    revealedHints: 0, userAnswer: "", submitted: false,
+    feedback: "", feedbackType: "", pointsAwarded: 0, correctAnswerLabel: ""
   };
 }
 
 function createTaskY2(presetData = null) {
   const dataObj = presetData ? clone(presetData) : buildTaskY2Data();
-
   return {
     type: "Y2",
     data: dataObj,
-
-    render() {
-      renderTaskY2(this.data);
-    },
-
+    render() { renderTaskY2(this.data); },
     revealHint(index) {
       if (this.data.submitted) return;
-
-      if (index === 0 && this.data.revealedHints < 1) {
-        this.data.revealedHints = 1;
-      }
-
-      if (index === 1 && this.data.revealedHints < 2 && this.data.revealedHints >= 1) {
-        this.data.revealedHints = 2;
-      }
-
+      if (index === 0 && this.data.revealedHints < 1) this.data.revealedHints = 1;
+      if (index === 1 && this.data.revealedHints < 2 && this.data.revealedHints >= 1) this.data.revealedHints = 2;
       syncCurrentTaskData();
       this.render();
     },
-
     setAnswer(value) {
       if (this.data.submitted) return;
       this.data.userAnswer = value;
       syncCurrentTaskData();
     },
-
     submit() {
       if (this.data.submitted) return;
-
-      const rawAnswer = this.data.userAnswer || "";
-      const normalized = normalizeText(rawAnswer);
-
+      const normalized = normalizeText(this.data.userAnswer || "");
       if (!normalized) {
         this.data.feedback = "Wpisz odpowiedź.";
         this.data.feedbackType = "bad";
@@ -1416,13 +908,10 @@ function createTaskY2(presetData = null) {
         this.render();
         return;
       }
-
       const motif = getMotifById(this.data.motifId);
       const points = pointsForHints(this.data.revealedHints);
-
       this.data.submitted = true;
       this.data.pointsAwarded = 0;
-
       if (motif && motifMatchesAnswer(motif, normalized)) {
         this.data.pointsAwarded = points;
         score += points;
@@ -1430,72 +919,83 @@ function createTaskY2(presetData = null) {
         masteredPairs.add(makePairKey(this.data.bookBId, motif.id));
         this.data.feedback = `✅ Dobrze! +${points} pkt`;
         this.data.feedbackType = "ok";
-        this.data.correctAnswerLabel = motif.name;
       } else {
         const labels = getMotifAnswerVariants(motif);
-        this.data.feedback = `❌ Nie tym razem. Poprawna odpowiedź: ${labels.join(" / ")}`;
+        this.data.feedback = `❌ Nie tym razem. Poprawna: ${labels.join(" / ")}`;
         this.data.feedbackType = "bad";
-        this.data.correctAnswerLabel = labels.join(" / ");
       }
-
       answered = true;
       syncCurrentTaskData();
       renderScore();
       this.render();
       setNextButtonVisible(true);
-    },
+    }
   };
 }
 
-function buildTaskY2Data() {
-  const candidates = buildY2Candidates();
-  if (!candidates.length) {
-    return {
-      fallback: true,
-      type: "Y2",
-    };
+function renderTaskY2(taskData) {
+  const el = document.getElementById("quiz-content");
+  if (taskData.fallback) {
+    el.innerHTML = `<div class="task-card"><h2>Brak dostępnych zadań Y2</h2><p>W obecnym filtrze nie ma pary lektur z wspólnym motywem.</p></div>`;
+    setNextButtonVisible(true);
+    return;
   }
-
-  const candidate = pickRandom(candidates);
-  const motif = getMotifById(candidate.motifId);
-  const bookA = getBookById(candidate.bookAId);
-  const bookB = getBookById(candidate.bookBId);
-
-  if (!motif || !bookA || !bookB) {
-    return {
-      fallback: true,
-      type: "Y2",
-    };
-  }
-
-  const hiddenPool = buildY2HintPool(motif, bookA, bookB);
-
-  return {
-    fallback: false,
-    type: "Y2",
-    motifId: motif.id,
-    bookAId: bookA.id,
-    bookBId: bookB.id,
-    visibleHint: "Dwie okładki łączy jeden wspólny motyw. Wpisz jego nazwę.",
-    hiddenHints: [
-      hiddenPool[0] || "Zwróć uwagę na sens obu utworów.",
-      hiddenPool[1] || "Spróbuj połączyć bohaterów, konflikt i temat przewodni.",
-    ],
-    revealedHints: 0,
-    userAnswer: "",
-    submitted: false,
-    feedback: "",
-    feedbackType: "",
-    pointsAwarded: 0,
-    correctAnswerLabel: "",
-  };
+  const bookA = getBookById(taskData.bookAId);
+  const bookB = getBookById(taskData.bookBId);
+  const h1v = taskData.revealedHints >= 1;
+  const h2v = taskData.revealedHints >= 2;
+  el.innerHTML = `
+    <div class="task-card ${taskData.submitted ? "answered" : ""}">
+      <div class="open-task-shell">
+        <div class="open-task-topline">Y2 • Lektury</div>
+        <h2 class="open-task-title">Jaki motyw łączy te dwie lektury?</h2>
+        <div class="cover-grid">
+          <div class="cover-card">${formatCoverVisual(bookA)}<div class="cover-label">${escapeHtml(bookA?.title || "Lektura 1")}</div></div>
+          <div class="cover-card">${formatCoverVisual(bookB)}<div class="cover-label">${escapeHtml(bookB?.title || "Lektura 2")}</div></div>
+        </div>
+        <div class="open-task-visible-hint">
+          <div class="hint-title">Instrukcja</div>
+          <div class="hint-text">${escapeHtml(taskData.visibleHint)}</div>
+        </div>
+        <div class="open-task-hidden-grid">
+          <div class="hint-card ${h1v ? "revealed" : ""}">
+            <div class="hint-title">Podpowiedź 1</div>
+            <div class="hint-text">${h1v ? escapeHtml(taskData.hiddenHints[0]) : "Zakryta podpowiedź"}</div>
+            <div class="hint-actions">
+              <button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(0)" ${taskData.submitted || h1v ? "disabled" : ""}>Odkryj</button>
+            </div>
+          </div>
+          <div class="hint-card ${h2v ? "revealed" : ""}">
+            <div class="hint-title">Podpowiedź 2</div>
+            <div class="hint-text">${h2v ? escapeHtml(taskData.hiddenHints[1]) : "Zakryta podpowiedź"}</div>
+            <div class="hint-actions">
+              <button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(1)" ${taskData.submitted || !h1v || h2v ? "disabled" : ""}>Odkryj</button>
+            </div>
+          </div>
+        </div>
+        <div class="open-task-input-wrap">
+          <label for="y2-answer"><strong>Twoja odpowiedź</strong></label>
+          <input id="y2-answer" class="open-task-input" type="text" placeholder="Wpisz nazwę motywu"
+            value="${escapeHtml(taskData.userAnswer || "")}"
+            oninput="updateCurrentOpenTaskAnswer(this.value)"
+            ${taskData.submitted ? "disabled" : ""}>
+        </div>
+        <div class="open-task-actions">
+          <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted ? "disabled" : ""}>Sprawdź</button>
+        </div>
+        <div class="task-feedback ${taskData.feedbackType || ""}">${escapeHtml(taskData.feedback || "")}</div>
+      </div>
+    </div>`;
+  setNextButtonVisible(!!taskData.submitted);
 }
 
+// =========================
+// ANSWER HANDLERS
+// =========================
 
 function handleAnswer(side) {
   if (quizMode !== "engine") return;
   if (!currentTask || answered) return;
-
   answered = true;
   currentTask.submit(side);
 }
@@ -1503,63 +1003,37 @@ function handleAnswer(side) {
 function attachTaskXSwipeHandlers() {
   const card = document.querySelector(".task-card");
   if (!card || quizMode !== "engine" || currentTaskType !== "X") return;
-
   let startX = null;
-
-  card.onpointerdown = (e) => {
-    startX = e.clientX;
-    try {
-      card.setPointerCapture(e.pointerId);
-    } catch (_) {}
-  };
-
+  card.onpointerdown = (e) => { startX = e.clientX; try { card.setPointerCapture(e.pointerId); } catch (_) {} };
   card.onpointerup = (e) => {
     if (startX === null || answered) return;
     const diff = e.clientX - startX;
-
-    if (Math.abs(diff) > 55) {
-      handleAnswer(diff < 0 ? "left" : "right");
-    }
-
+    if (Math.abs(diff) > 55) handleAnswer(diff < 0 ? "left" : "right");
     startX = null;
   };
-
-  card.onpointercancel = () => {
-    startX = null;
-  };
+  card.onpointercancel = () => { startX = null; };
 }
 
 function openCurrentTaskProfile() {
   if (!currentTaskData || quizMode !== "engine") return;
-
-  if (currentTaskData.promptType === "book") {
-    openBook(currentTaskData.promptId);
-  } else {
-    openMotif(currentTaskData.promptId);
-  }
+  if (currentTaskData.promptType === "book") openBook(currentTaskData.promptId);
+  else openMotif(currentTaskData.promptId);
 }
 
 function revealCurrentHint(index) {
-  if (!currentTask || answered) return;
-  if (typeof currentTask.revealHint === "function") {
-    currentTask.revealHint(index);
-  }
+  if (!currentTask) return;
+  if (typeof currentTask.revealHint === "function") currentTask.revealHint(index);
 }
 
 function updateCurrentOpenTaskAnswer(value) {
-  if (!currentTask || answered) return;
-  if (typeof currentTask.setAnswer === "function") {
-    currentTask.setAnswer(value);
-  }
+  if (!currentTask) return;
+  if (typeof currentTask.setAnswer === "function") currentTask.setAnswer(value);
 }
 
 function submitCurrentOpenTask() {
   if (!currentTask || answered) return;
-  if (typeof currentTask.submit === "function") {
-    currentTask.submit();
-  }
+  if (typeof currentTask.submit === "function") currentTask.submit();
 }
-
 
 // =========================
 // KEYBOARD
@@ -1570,7 +1044,6 @@ document.addEventListener("keydown", (e) => {
   if (quizMode !== "engine") return;
   if (!currentTask || answered) return;
   if (currentTaskType !== "X") return;
-
   if (e.key === "ArrowLeft") handleAnswer("left");
   if (e.key === "ArrowRight") handleAnswer("right");
 });
@@ -1594,38 +1067,25 @@ function getFilteredBooks() {
 function getFilteredMotifs() {
   const books = getFilteredBooks();
   const map = new Map();
-
   books.forEach(book => {
     book.motifs.forEach(id => {
       const m = getMotifById(id);
       if (m) map.set(m.id, m);
     });
   });
-
   return [...map.values()];
 }
 
 function renderEpochFilter() {
   const el = document.getElementById("epochFilter");
   el.innerHTML = "";
-
   epochs.forEach(e => {
-    el.innerHTML += `
-      <label>
-        <input type="checkbox"
-          ${activeEpochs.has(e) ? "checked" : ""}
-          onchange="toggleEpoch('${e}')">
-        ${e}
-      </label>
-      <br>
-    `;
+    el.innerHTML += `<label><input type="checkbox" ${activeEpochs.has(e) ? "checked" : ""} onchange="toggleEpoch('${e}')"> ${e}</label><br>`;
   });
 }
 
 function toggleEpoch(epoch) {
-  activeEpochs.has(epoch)
-    ? activeEpochs.delete(epoch)
-    : activeEpochs.add(epoch);
+  activeEpochs.has(epoch) ? activeEpochs.delete(epoch) : activeEpochs.add(epoch);
 }
 
 // =========================
@@ -1635,28 +1095,17 @@ function toggleEpoch(epoch) {
 function renderMap() {
   const list = document.getElementById("list");
   const title = document.getElementById("map-title");
-
   list.innerHTML = "";
-
   if (view === "books") {
     title.innerText = "📚 Lektury";
     getFilteredBooks().forEach(b => {
-      list.innerHTML += `
-        <div class="map-item" onclick="openBook('${b.id}')">
-          📚 ${b.title}
-        </div>
-      `;
+      list.innerHTML += `<div class="map-item" onclick="openBook('${b.id}')">📚 ${escapeHtml(b.title)}</div>`;
     });
   }
-
   if (view === "motifs") {
     title.innerText = "🎯 Motywy";
     getFilteredMotifs().forEach(m => {
-      list.innerHTML += `
-        <div class="map-item" onclick="openMotif('${m.id}')">
-          🎯 ${m.name}
-        </div>
-      `;
+      list.innerHTML += `<div class="map-item" onclick="openMotif('${m.id}')">🎯 ${escapeHtml(m.name)}</div>`;
     });
   }
 }
@@ -1667,84 +1116,44 @@ function renderMap() {
 
 function openBook(id) {
   profileReturnTarget = mode === "quiz" ? "quiz" : "map";
-
-  if (mode === "quiz") {
-    quizSnapshot = captureQuizState();
-  }
-
+  if (mode === "quiz") quizSnapshot = captureQuizState();
   const book = getBookById(id);
   if (!book) return;
-
   hideAll();
   document.getElementById("profile").style.display = "block";
-
   document.getElementById("profile-content").innerHTML = `
     <h2>${escapeHtml(book.title)}</h2>
     <p>${escapeHtml(book.description || "")}</p>
-
-    <div class="profile-section">
-      <h3>Metadane</h3>
-      <div class="profile-chip-list">
-        ${book.epoch ? `<span class="profile-chip">${escapeHtml(book.epoch)}</span>` : ""}
-      </div>
+    <div class="profile-section"><h3>Epoka</h3>
+      <div class="profile-chip-list">${book.epoch ? `<span class="profile-chip">${escapeHtml(book.epoch)}</span>` : ""}</div>
     </div>
-
     ${renderBookExtras(book)}
-
-    <button onclick="returnFromProfile()">
-      ${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}
-    </button>
-  `;
+    <button onclick="returnFromProfile()">${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}</button>`;
 }
 
 function openMotif(id) {
   profileReturnTarget = mode === "quiz" ? "quiz" : "map";
-
-  if (mode === "quiz") {
-    quizSnapshot = captureQuizState();
-  }
-
+  if (mode === "quiz") quizSnapshot = captureQuizState();
   const motif = getMotifById(id);
   if (!motif) return;
-
   hideAll();
   document.getElementById("profile").style.display = "block";
-
-  const bookTitles = (motif.books || [])
-    .map(bookId => getBookById(bookId)?.title)
-    .filter(Boolean);
-
+  const bookTitles = (motif.books || []).map(bId => getBookById(bId)?.title).filter(Boolean);
   document.getElementById("profile-content").innerHTML = `
     <h2>${escapeHtml(motif.name)}</h2>
     <p>${escapeHtml(motif.description || "")}</p>
-
-    ${bookTitles.length ? `
-      <div class="profile-section">
-        <h3>Lektury</h3>
-        <div class="profile-chip-list">
-          ${bookTitles.map(t => `<span class="profile-chip">${escapeHtml(t)}</span>`).join("")}
-        </div>
-      </div>
-    ` : ""}
-
+    ${bookTitles.length ? `<div class="profile-section"><h3>Lektury</h3><div class="profile-chip-list">${bookTitles.map(t => `<span class="profile-chip">${escapeHtml(t)}</span>`).join("")}</div></div>` : ""}
     ${renderMotifExtras(motif)}
-
-    <button onclick="returnFromProfile()">
-      ${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}
-    </button>
-  `;
+    <button onclick="returnFromProfile()">${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}</button>`;
 }
-
 
 function returnFromProfile() {
   hideAll();
-
   if (profileReturnTarget === "quiz") {
     document.getElementById("quiz").style.display = "block";
     restoreQuizState();
     return;
   }
-
   goMap();
 }
 
@@ -1760,22 +1169,14 @@ function goMap() {
 
 function captureQuizState() {
   return {
-    score,
-    quizMode,
-    selectedBook,
-    selectedMotif,
-    scoredPairs: [...scoredPairs],
-    masteredPairs: [...masteredPairs],
-    answered,
-    currentTaskType,
-    currentTaskData: clone(currentTaskData),
-    profileReturnTarget
+    score, quizMode, selectedBook, selectedMotif,
+    scoredPairs: [...scoredPairs], masteredPairs: [...masteredPairs],
+    answered, currentTaskType, currentTaskData: clone(currentTaskData), profileReturnTarget
   };
 }
 
 function restoreQuizState() {
   if (!quizSnapshot) return;
-
   score = quizSnapshot.score;
   quizMode = quizSnapshot.quizMode;
   selectedBook = quizSnapshot.selectedBook;
@@ -1786,43 +1187,15 @@ function restoreQuizState() {
   currentTaskType = quizSnapshot.currentTaskType;
   currentTaskData = clone(quizSnapshot.currentTaskData);
   profileReturnTarget = quizSnapshot.profileReturnTarget || "quiz";
-
   renderScore();
-
-  if (quizMode === "diagnostic") {
-    renderDiagnostic();
-    return;
-  }
-
+  if (quizMode === "diagnostic") { renderDiagnostic(); return; }
   if (quizMode === "engine") {
     if (currentTaskType && currentTaskData) {
       currentTask = createTaskByType(currentTaskType, currentTaskData);
       currentTask.render();
-      document.getElementById("nextBtn").style.display = answered ? "inline-block" : "none";
+      setNextButtonVisible(answered);
     } else {
       renderEngineNextTask();
     }
   }
 }
-
-// =========================
-// BUTTON HOOK
-// =========================
-
-window.nextTask = nextTask;
-window.revealCurrentHint = revealCurrentHint;
-window.updateCurrentOpenTaskAnswer = updateCurrentOpenTaskAnswer;
-window.submitCurrentOpenTask = submitCurrentOpenTask;
-window.selectDiagnosticBook = selectDiagnosticBook;
-window.selectDiagnosticMotif = selectDiagnosticMotif;
-window.openBook = openBook;
-window.openMotif = openMotif;
-window.nextTask = nextTask;
-window.handleAnswer = handleAnswer;
-window.goScreen = goScreen;
-window.setMode = setMode;
-window.setView = setView;
-window.startApp = startApp;
-window.toggleEpoch = toggleEpoch;
-
-
