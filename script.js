@@ -111,6 +111,7 @@ const data = {
     { id: "motywszalenstwa", name: "Motyw Szaleństwa", description: "Sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy", books: ["magbet", "antygona"], aliases: ["szaleństwo", "obłęd"] , images: [{ src: "images/motywy/szaleństwo/Van_Gogh_-_Selbstbildnis_mit_verbundenem_Ohr.jpeg" }]},
     { id: "totalitaryzm", name: "Totalitaryzm", description: "System polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu", books: ["magbet", "innyswiat", "1984"], aliases: ["motyw totalitaryzmu", "system totalitarny"] , images: [{ src: "images/motywy/totalitaryzm/Guernica_reproduction_on_tiled_wall,_Guernica,_Spain_(PPL3-Altered)_julesvernex2.jpg" }]},
   ]
+};   
 
 const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"];
 
@@ -906,11 +907,5 @@ function restoreQuizState() {
     document.getElementById("quiz-label").textContent = "Ćwiczenia";
     if (currentTaskType && currentTaskData) { currentTask = createTaskByType(currentTaskType, currentTaskData); currentTask.render(); setNextButtonVisible(answered); }
     else renderEngineNextTask();
-  }
-}
-};
-
-const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"];
-
   }
 }
