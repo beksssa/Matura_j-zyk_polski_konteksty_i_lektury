@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Matura Polski</title>
+
 <style>
 body {
   margin: 0;
@@ -11,120 +12,75 @@ body {
   background: #f4f4f6;
 }
 
-/* ROOT APP */
+/* APP */
 #app {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 
-/* 🌫 BACKGROUND LAYER */
+/* 🌫 BACKGROUND */
 #bg-layer {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  pointer-events: none;
   background: #f6f6f8;
 }
 
-/* obiekty wiedzy */
+/* floating words */
 .bg-item {
   position: absolute;
   font-size: 18px;
-  font-weight: 500;
-  color: rgba(0,0,0,0.35);
-  filter: blur(1.5px);
-  opacity: 0.25;
-  white-space: nowrap;
-  transition: transform 0.2s linear;
+  color: rgba(0,0,0,0.25);
+  filter: blur(2px);
+  opacity: 0.2;
 }
 
-
-/* 🧭 SCENE LAYER */
-#scene-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  transition: all 0.8s cubic-bezier(.2,.8,.2,1);
-}
-
-/* 🪟 FOCUS LAYER */
+/* 🎯 MAIN UI */
 #focus-layer {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.6s ease;
 }
 
-/* GLASS CARD BASE */
-.glass {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(0,0,0,0.08);
+/* glass card */
+.screen {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(16px);
   border-radius: 18px;
-  padding: 20px;
+  padding: 30px;
+  min-width: 320px;
+  text-align: center;
   box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
 
+/* buttons */
+button {
+  margin: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #222;
+  color: white;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #ddd;
+  color: black;
+}
 </style>
 </head>
+
 <body>
-<div id="bg-layer"></div>
-<h1>📚 Matura Polski</h1>
 
-<!-- 🟢 EKRAN 1 -->
-<div id="screen-start">
-  <h2>Wybierz tryb</h2>
-  <button onclick="setMode('learning')">Nauka</button>
-  <button onclick="setMode('quiz')">Ćwiczenia</button>
-  <br><br>
-  <button onclick="goScreen(2)">Dalej</button>
-</div>
-
-<!-- 🟡 EKRAN 2 -->
-<div id="screen-mode" style="display:none">
-  <h2>Zakres</h2>
-  <button onclick="setView('books')">Lektury</button>
-  <button onclick="setView('motifs')">Motywy</button>
-  <br><br>
-  <button onclick="goScreen(3)">Dalej</button>
-  <button onclick="goScreen(1)">Wstecz</button>
-</div>
-
-<!-- 🔵 EKRAN 3 -->
-<div id="screen-epoch" style="display:none">
-  <h2>Filtr epok</h2>
-  <div id="epochFilter"></div>
-  <br>
-  <button onclick="startApp()">START</button>
-  <button onclick="goScreen(2)">Wstecz</button>
-</div>
-
-<!-- 🔴 MAPA -->
-<div id="map" style="display:none">
-  <h2 id="map-title"></h2>
-  <div id="list"></div>
-  <button onclick="goScreen(1)">Menu</button>
-</div>
-
-<!-- 🔴 QUIZ -->
-<div id="quiz" style="display:none">
-  <h2>Ćwiczenia diagnostyczne</h2>
-  <div id="score">Score: 0</div>
-  <div id="quiz-content"></div>
-  <button id="nextBtn" onclick="nextTask()" style="display:none">Dalej</button>
-  <br>
-  <button onclick="goScreen(1)">Koniec</button>
-</div>
-
-<!-- 🟣 PROFIL -->
-<div id="profile" style="display:none">
-  <div id="profile-content"></div>
+<div id="app">
+  <div id="bg-layer"></div>
+  <div id="focus-layer"></div>
 </div>
 
 <script src="script.js"></script>
