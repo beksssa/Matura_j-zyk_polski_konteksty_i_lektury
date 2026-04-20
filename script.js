@@ -23,6 +23,7 @@ let currentTask = null;
 // profile / snapshot state
 let quizSnapshot = null;
 let profileReturnTarget = "map";
+let profileStack = []; // stos historii profili
 let taskBag = [];
 
 // engine task registry
@@ -335,25 +336,78 @@ function formatCoverVisual(book) {
   return `<div class="cover-visual"><div class="cover-emoji">${escapeHtml(book?.coverEmoji || "📘")}</div></div>`;
 }
 
+// =========================
+// PROFILE EXTRAS (z klikalnymi chipami)
+// =========================
+
 function renderBookExtras(book) {
   const aliases = uniqueStrings(book?.aliases || []);
   const characters = uniqueStrings(book?.characters || []);
   const quotes = uniqueStrings(book?.quotes || []);
   const images = book?.images || [];
+  const motifObjects = (book?.motifs || []).map(getMotifById).filter(Boolean);
+
   return `
-    ${aliases.length ? `<div class="profile-section"><h3>Akceptowane warianty tytułu</h3><div class="profile-chip-list">${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}</div></div>` : ""}
-    ${characters.length ? `<div class="profile-section"><h3>Bohaterowie</h3><div class="profile-chip-list">${characters.map(c => `<span class="profile-chip">${escapeHtml(c)}</span>`).join("")}</div></div>` : ""}
-    ${quotes.length ? `<div class="profile-section"><h3>Fragmenty / cytaty</h3><div class="profile-media-list">${quotes.map(q => `<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join("")}</div></div>` : ""}
-    ${images.length ? `<div class="profile-section"><h3>Obrazy / symbole</h3><div class="profile-media-list">${images.map(img => { const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || ""); return `<div class="profile-media-item">${escapeHtml(label)}</div>`; }).join("")}</div></div>` : ""}
+    ${motifObjects.length ? `
+      <div class="profile-section">
+        <h3>Motywy</h3>
+        <div class="profile-chip-list">
+          ${motifObjects.map(m => `<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')">🎯 ${escapeHtml(m.name)}</span>`).join("")}
+        </div>
+      </div>` : ""}
+    ${aliases.length ? `
+      <div class="profile-section">
+        <h3>Akceptowane warianty tytułu</h3>
+        <div class="profile-chip-list">
+          ${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}
+        </div>
+      </div>` : ""}
+    ${characters.length ? `
+      <div class="profile-section">
+        <h3>Bohaterowie</h3>
+        <div class="profile-chip-list">
+          ${characters.map(c => `<span class="profile-chip">${escapeHtml(c)}</span>`).join("")}
+        </div>
+      </div>` : ""}
+    ${quotes.length ? `
+      <div class="profile-section">
+        <h3>Fragmenty / cytaty</h3>
+        <div class="profile-media-list">
+          ${quotes.map(q => `<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join("")}
+        </div>
+      </div>` : ""}
+    ${images.length ? `
+      <div class="profile-section">
+        <h3>Obrazy / symbole</h3>
+        <div class="profile-media-list">
+          ${images.map(img => {
+            const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || "");
+            return `<div class="profile-media-item">${escapeHtml(label)}</div>`;
+          }).join("")}
+        </div>
+      </div>` : ""}
   `;
 }
 
 function renderMotifExtras(motif) {
   const aliases = uniqueStrings(motif?.aliases || []);
-  const books = uniqueStrings((motif?.books || []).map(id => getBookById(id)?.title).filter(Boolean));
+  const bookObjects = (motif?.books || []).map(getBookById).filter(Boolean);
+
   return `
-    ${aliases.length ? `<div class="profile-section"><h3>Akceptowane warianty odpowiedzi</h3><div class="profile-chip-list">${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}</div></div>` : ""}
-    ${books.length ? `<div class="profile-section"><h3>Lektury powiązane z motywem</h3><div class="profile-chip-list">${books.map(t => `<span class="profile-chip">${escapeHtml(t)}</span>`).join("")}</div></div>` : ""}
+    ${bookObjects.length ? `
+      <div class="profile-section">
+        <h3>Lektury z tym motywem</h3>
+        <div class="profile-chip-list">
+          ${bookObjects.map(b => `<span class="profile-chip clickable" onclick="openBookFromProfile('${b.id}')">📚 ${escapeHtml(b.title)}</span>`).join("")}
+        </div>
+      </div>` : ""}
+    ${aliases.length ? `
+      <div class="profile-section">
+        <h3>Akceptowane warianty odpowiedzi</h3>
+        <div class="profile-chip-list">
+          ${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}
+        </div>
+      </div>` : ""}
   `;
 }
 
@@ -380,13 +434,8 @@ function hideAll() {
 // SETTINGS
 // =========================
 
-function setMode(m) {
-  mode = m;
-}
-
-function setView(v) {
-  view = v;
-}
+function setMode(m) { mode = m; }
+function setView(v) { view = v; }
 
 // =========================
 // START APP
@@ -496,7 +545,13 @@ function finishDiagnosticAndStartEngine() {
 // =========================
 
 function availableTaskTypes() {
-  return ENGINE_TASK_TYPES.filter(t => ENGINE_TASK_ENABLED[t]);
+  return ENGINE_TASK_TYPES.filter(t => {
+    if (!ENGINE_TASK_ENABLED[t]) return false;
+    // Y1 tylko w trybie lektur, Y2 tylko w trybie motywów
+    if (t === "Y1" && view !== "books") return false;
+    if (t === "Y2" && view !== "motifs") return false;
+    return true;
+  });
 }
 
 function refillTaskBag() {
@@ -642,16 +697,25 @@ function renderTaskX(taskData, answeredState = false) {
     el.innerHTML = `<div class="task-card"><h2>Brak dostępnych par</h2><p>W wybranym zakresie nie ma już sensownej pary do pokazania.</p></div>`;
     return;
   }
+
+  // Ikonka 📖 przenosi do profilu PYTANEGO elementu
+  // (jeśli pytamy o lekturę → otwieramy lekturę, jeśli o motyw → otwieramy motyw)
+  const profileBtnHtml = answeredState
+    ? `<button class="icon-btn task-profile-icon" title="Dowiedz się więcej" onclick="openCurrentTaskProfile()">📖</button>`
+    : "";
+
   const promptHtml = `<div class="task-head">
     ${taskData.promptType === "book" ? "📚" : "🎯"} ${escapeHtml(taskData.promptTitle)}
-    ${answeredState ? `<button class="icon-btn task-profile-icon" onclick="openCurrentTaskProfile()">📖</button>` : ""}
+    ${profileBtnHtml}
   </div>`;
+
   const leftLabel = taskData.optionType === "motif"
     ? getMotifById(taskData.leftId)?.name || "?"
     : getBookById(taskData.leftId)?.title || "?";
   const rightLabel = taskData.optionType === "motif"
     ? getMotifById(taskData.rightId)?.name || "?"
     : getBookById(taskData.rightId)?.title || "?";
+
   el.innerHTML = `
     <div class="task-card ${answeredState ? "answered" : ""}">
       <div class="task-swipe-instruction">← →</div>
@@ -666,7 +730,7 @@ function renderTaskX(taskData, answeredState = false) {
 }
 
 // =========================
-// TASK Y1
+// TASK Y1 (tylko tryb lektur)
 // =========================
 
 function buildY1Candidates() {
@@ -780,10 +844,14 @@ function renderTaskY1(taskData) {
   }
   const h1v = taskData.revealedHints >= 1;
   const h2v = taskData.revealedHints >= 2;
+  // Ikonka 📖 po sprawdzeniu → otwiera profil MOTYWU (bo odpowiadamy na pytanie o lekturę danego motywu)
+  const profileBtnHtml = taskData.submitted
+    ? `<button class="icon-btn" title="Profil motywu" onclick="openMotif('${escapeHtml(taskData.motifId)}')">📖</button>`
+    : "";
   el.innerHTML = `
     <div class="task-card ${taskData.submitted ? "answered" : ""}">
       <div class="open-task-shell">
-        <div class="open-task-topline">Y1 • Motywy</div>
+        <div class="open-task-topline">Y1 • Lektury ${profileBtnHtml}</div>
         <h2 class="open-task-title">Podaj tytuł lektury</h2>
         <div class="open-task-visible-hint">
           <div class="hint-title">Podpowiedź 1</div>
@@ -822,7 +890,7 @@ function renderTaskY1(taskData) {
 }
 
 // =========================
-// TASK Y2
+// TASK Y2 (tylko tryb motywów)
 // =========================
 
 function buildY2Candidates() {
@@ -944,10 +1012,14 @@ function renderTaskY2(taskData) {
   const bookB = getBookById(taskData.bookBId);
   const h1v = taskData.revealedHints >= 1;
   const h2v = taskData.revealedHints >= 2;
+  // Ikonka 📖 po sprawdzeniu → otwiera profil MOTYWU (bo odpowiadamy na pytanie o motyw łączący lektury)
+  const profileBtnHtml = taskData.submitted
+    ? `<button class="icon-btn" title="Profil motywu" onclick="openMotif('${escapeHtml(taskData.motifId)}')">📖</button>`
+    : "";
   el.innerHTML = `
     <div class="task-card ${taskData.submitted ? "answered" : ""}">
       <div class="open-task-shell">
-        <div class="open-task-topline">Y2 • Lektury</div>
+        <div class="open-task-topline">Y2 • Motywy ${profileBtnHtml}</div>
         <h2 class="open-task-title">Jaki motyw łączy te dwie lektury?</h2>
         <div class="cover-grid">
           <div class="cover-card">${formatCoverVisual(bookA)}<div class="cover-label">${escapeHtml(bookA?.title || "Lektura 1")}</div></div>
@@ -1014,6 +1086,7 @@ function attachTaskXSwipeHandlers() {
   card.onpointercancel = () => { startX = null; };
 }
 
+// Otwiera profil pytanego elementu w zadaniu X
 function openCurrentTaskProfile() {
   if (!currentTaskData || quizMode !== "engine") return;
   if (currentTaskData.promptType === "book") openBook(currentTaskData.promptId);
@@ -1111,43 +1184,141 @@ function renderMap() {
 }
 
 // =========================
-// PROFILE
+// PROFILE — stos nawigacji
 // =========================
 
+// Otwiera profil lektury. Zapamiętuje poprzedni widok na stosie.
 function openBook(id) {
-  profileReturnTarget = mode === "quiz" ? "quiz" : "map";
-  if (mode === "quiz") quizSnapshot = captureQuizState();
   const book = getBookById(id);
   if (!book) return;
+
+  // Zapamiętaj aktualny stan przed wejściem w profil
+  if (document.getElementById("profile").style.display === "block") {
+    // Już jesteśmy w profilu — dokładamy do stosu
+    profileStack.push({ type: "profile" });
+  } else {
+    // Wchodzimy z mapy lub quizu
+    profileStack = [];
+    profileReturnTarget = mode === "quiz" ? "quiz" : "map";
+    if (mode === "quiz") quizSnapshot = captureQuizState();
+  }
+
   hideAll();
   document.getElementById("profile").style.display = "block";
+  renderBookProfile(book);
+}
+
+// Otwiera profil motywu. Zapamiętuje poprzedni widok na stosie.
+function openMotif(id) {
+  const motif = getMotifById(id);
+  if (!motif) return;
+
+  if (document.getElementById("profile").style.display === "block") {
+    profileStack.push({ type: "profile" });
+  } else {
+    profileStack = [];
+    profileReturnTarget = mode === "quiz" ? "quiz" : "map";
+    if (mode === "quiz") quizSnapshot = captureQuizState();
+  }
+
+  hideAll();
+  document.getElementById("profile").style.display = "block";
+  renderMotifProfile(motif);
+}
+
+// Pomocnicze: otwiera lekturę będąc już w profilu (klik na chip)
+function openBookFromProfile(id) {
+  openBook(id);
+}
+
+// Pomocnicze: otwiera motyw będąc już w profilu (klik na chip)
+function openMotifFromProfile(id) {
+  openMotif(id);
+}
+
+function renderBookProfile(book) {
+  const canGoBack = profileStack.length > 0;
   document.getElementById("profile-content").innerHTML = `
-    <h2>${escapeHtml(book.title)}</h2>
+    <h2>📚 ${escapeHtml(book.title)}</h2>
     <p>${escapeHtml(book.description || "")}</p>
-    <div class="profile-section"><h3>Epoka</h3>
-      <div class="profile-chip-list">${book.epoch ? `<span class="profile-chip">${escapeHtml(book.epoch)}</span>` : ""}</div>
+    <div class="profile-section">
+      <h3>Epoka</h3>
+      <div class="profile-chip-list">
+        ${book.epoch ? `<span class="profile-chip">${escapeHtml(book.epoch)}</span>` : ""}
+      </div>
     </div>
     ${renderBookExtras(book)}
-    <button onclick="returnFromProfile()">${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}</button>`;
+    <br>
+    ${canGoBack
+      ? `<button onclick="goBackInProfile()">⬅ Wstecz</button>`
+      : `<button onclick="returnFromProfile()">${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}</button>`
+    }`;
+}
+
+function renderMotifProfile(motif) {
+  const canGoBack = profileStack.length > 0;
+  document.getElementById("profile-content").innerHTML = `
+    <h2>🎯 ${escapeHtml(motif.name)}</h2>
+    <p>${escapeHtml(motif.description || "")}</p>
+    ${renderMotifExtras(motif)}
+    <br>
+    ${canGoBack
+      ? `<button onclick="goBackInProfile()">⬅ Wstecz</button>`
+      : `<button onclick="returnFromProfile()">${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}</button>`
+    }`;
+}
+
+// Cofnięcie o jeden krok w stosie profili — uproszczone przez przeładowanie historii przeglądarki
+// W tej implementacji "wstecz" po prostu wraca do miejsca startowego,
+// bo stos śledzi tylko głębokość, nie konkretne ID.
+// Dla pełnej historii forward/back przechowujemy ID na stosie:
+let profileHistoryStack = [];
+
+function openBook(id) {
+  const book = getBookById(id);
+  if (!book) return;
+
+  if (document.getElementById("profile").style.display !== "block") {
+    profileHistoryStack = [];
+    profileReturnTarget = mode === "quiz" ? "quiz" : "map";
+    if (mode === "quiz") quizSnapshot = captureQuizState();
+  } else {
+    profileHistoryStack.push({ kind: "currentContent", html: document.getElementById("profile-content").innerHTML });
+  }
+
+  hideAll();
+  document.getElementById("profile").style.display = "block";
+  renderBookProfile(book);
 }
 
 function openMotif(id) {
-  profileReturnTarget = mode === "quiz" ? "quiz" : "map";
-  if (mode === "quiz") quizSnapshot = captureQuizState();
   const motif = getMotifById(id);
   if (!motif) return;
+
+  if (document.getElementById("profile").style.display !== "block") {
+    profileHistoryStack = [];
+    profileReturnTarget = mode === "quiz" ? "quiz" : "map";
+    if (mode === "quiz") quizSnapshot = captureQuizState();
+  } else {
+    profileHistoryStack.push({ kind: "currentContent", html: document.getElementById("profile-content").innerHTML });
+  }
+
   hideAll();
   document.getElementById("profile").style.display = "block";
-  const bookTitles = (motif.books || []).map(bId => getBookById(bId)?.title).filter(Boolean);
-  document.getElementById("profile-content").innerHTML = `
-    <h2>${escapeHtml(motif.name)}</h2>
-    <p>${escapeHtml(motif.description || "")}</p>
-    ${bookTitles.length ? `<div class="profile-section"><h3>Lektury</h3><div class="profile-chip-list">${bookTitles.map(t => `<span class="profile-chip">${escapeHtml(t)}</span>`).join("")}</div></div>` : ""}
-    ${renderMotifExtras(motif)}
-    <button onclick="returnFromProfile()">${profileReturnTarget === "quiz" ? "⬅ Powrót do ćwiczeń" : "⬅ Powrót"}</button>`;
+  renderMotifProfile(motif);
+}
+
+function openBookFromProfile(id) { openBook(id); }
+function openMotifFromProfile(id) { openMotif(id); }
+
+function goBackInProfile() {
+  if (!profileHistoryStack.length) { returnFromProfile(); return; }
+  const prev = profileHistoryStack.pop();
+  document.getElementById("profile-content").innerHTML = prev.html;
 }
 
 function returnFromProfile() {
+  profileHistoryStack = [];
   hideAll();
   if (profileReturnTarget === "quiz") {
     document.getElementById("quiz").style.display = "block";
