@@ -46,7 +46,7 @@ const data = {
       epoch: "młoda polska", motifs: ["naturalizm", "motywmiłości"],
       coverEmoji: "🌾", aliases: ["Chłopi Reymonta"],
       characters: ["Maciej Boryna", "Jagna", "Antek", "Hanka", "Kuba"],
-      quotes: [], images: [{ label: "Wiejska społeczność", alt: "Rytm natury i pracy" }]
+      quotes: [], images: [{ src: "images/lektury/chłopi/Chlopi-plakat-204569-602x802-nobckgr.webp" }]
     },
     {
       id: "antygona", title: "Antygona",
@@ -54,7 +54,7 @@ const data = {
       epoch: "antyk", motifs: ["motywbuntu", "fatum"],
       coverEmoji: "🏛️", aliases: ["Antygona Sofoklesa"],
       characters: ["Antygona", "Kreon", "Ismena", "Hajmon", "Tejrezjasz"],
-      quotes: [], images: [{ label: "Grób Polinejkesa", alt: "Konflikt prawa boskiego i państwowego" }]
+      quotes: [], images: [{ src: "images/lektury/antygona/productGfx_824_500_500.jpg" }]
     },
     {
       id: "tango", title: "Tango",
@@ -62,7 +62,7 @@ const data = {
       epoch: "współczesność", motifs: ["motywbuntu", "groteska", "motywrodziny"],
       coverEmoji: "🪑", aliases: ["Tango Mrożka"],
       characters: ["Artur", "Ala", "Edek", "Stomil", "Eleonora"],
-      quotes: [], images: [{ label: "Dom pełen chaosu", alt: "Rozpad porządku rodzinnego" }]
+      quotes: [], images: [{ src: "images/lektury/tango/plakat-spektakl-Tango-2025.jpg" }]
     },
     {
       id: "magbet", title: "Makbet",
@@ -70,7 +70,7 @@ const data = {
       epoch: "renesans", motifs: ["motywmiłości", "motywsumienia", "motywszalenstwa", "fatum"],
       coverEmoji: "👑", aliases: ["Macbeth", "Makbet Szekspira"],
       characters: ["Makbet", "Lady Makbet", "Banko", "Duncan", "Makduf", "Wiedźmy"],
-      quotes: [], images: [{ label: "Krwawa korona", alt: "Ambicja i władza" }]
+      quotes: [], images: [{ src: "images/lektury/magbet/4e4421b6b18d205ec1e82cb4bb61ad53.jpg" }]
     },
     {
       id: "zbrodniaikara", title: "Zbrodnia i kara",
@@ -78,7 +78,7 @@ const data = {
       epoch: "pozytywizm", motifs: ["motywmiłości", "motywsumienia"],
       coverEmoji: "🕯️", aliases: ["Zbrodnia i Kara", "Zbrodnia i kara Dostojewskiego"],
       characters: ["Raskolnikow", "Sonia", "Porfiry", "Dunia", "Swidrygajłow"],
-      quotes: [], images: [{ label: "Mroczne ulice Petersburga", alt: "Poczucie winy i rozpad psychiki" }]
+      quotes: [],images: [{ src: "images/lektury/zbrodnia i kara/1198.-ZBRODNIA_i_KARA.jpg" }]
     },
     {
       id: "innyswiat", title: "Inny świat",
@@ -86,7 +86,7 @@ const data = {
       epoch: "współczesność", motifs: ["totalitaryzm"],
       coverEmoji: "⛓️", aliases: ["Inny Świat Herlinga-Grudzińskiego"],
       characters: ["Narrator", "więźniowie łagru"],
-      quotes: [], images: [{ label: "Łagier", alt: "System odczłowieczający" }]
+      quotes: [], images: [{ src: "images/lektury/inny świat/images (2).jpeg" }]
     },
     {
       id: "1984", title: "Rok 1984",
@@ -94,22 +94,22 @@ const data = {
       epoch: "współczesność", motifs: ["totalitaryzm", "motywmiłości"],
       coverEmoji: "📕", aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
       characters: ["Winston", "Julia", "O'Brien", "Wielki Brat", "Parsons"],
-      quotes: [], images: [{ label: "Wielki Brat", alt: "Totalitarna kontrola" }]
+      quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
     },
   ],
   motifs: [
-    { id: "motywnarodowy", name: "Motyw Narodowy", description: "Problematyka kondycji narodu", books: ["wesele"], aliases: ["naród", "motyw narodu"] },
-    { id: "symbolizm", name: "Symbolizm", description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost", books: ["wesele"], aliases: ["symboliczność"] },
-    { id: "ludomania", name: "Ludomania", description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii", books: ["wesele"], aliases: ["ludofilia"] },
-    { id: "naturalizm", name: "Naturalizm", description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt", books: ["chłopi"], aliases: ["naturalistyczny obraz świata"] },
-    { id: "motywmiłości", name: "Motyw Miłości", description: "Przedstawienie relacji miłosnej", books: ["chłopi", "magbet", "zbrodniaikara", "1984"], aliases: ["miłość", "motyw miłości"] },
-    { id: "motywbuntu", name: "Motyw Buntu", description: "Sprzeciw wobec zastanego porządku, losu lub władzy", books: ["wesele", "antygona", "tango"], aliases: ["bunt", "motyw buntu"] },
-    { id: "fatum", name: "Fatum", description: "Personifikacja nieuchronnego, nieodwracalnego losu, nieodwołalnej woli bogów, na którą nikt nie ma wpływu.", books: ["antygona", "magbet"], aliases: ["los", "przeznaczenie"] },
-    { id: "groteska", name: "Groteska", description: "Połączenie w jednym dziele jednocześnie występujących pierwiastków przeciwstawnych", books: ["tango"], aliases: ["groteskowość"] },
-    { id: "motywrodziny", name: "Motyw Rodziny", description: "Przedstawienie i problematyka relacji rodzinnych", books: ["tango"], aliases: ["rodzina", "motyw rodziny"] },
-    { id: "motywsumienia", name: "Motyw Sumienia", description: "Wewnętrzny głos moralny, który staje się głównym sędzią i katem bohatera po dokonaniu zła", books: ["magbet", "zbrodniaikara"], aliases: ["sumienie", "wyrzuty sumienia"] },
-    { id: "motywszalenstwa", name: "Motyw Szaleństwa", description: "Sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy", books: ["magbet", "antygona"], aliases: ["szaleństwo", "obłęd"] },
-    { id: "totalitaryzm", name: "Totalitaryzm", description: "System polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu", books: ["magbet", "innyswiat", "1984"], aliases: ["motyw totalitaryzmu", "system totalitarny"] },
+    { id: "motywnarodowy", name: "Motyw Narodowy", description: "Problematyka kondycji narodu", books: ["wesele"], aliases: ["naród", "motyw narodu"], images: [{ src: "images/motywy/naród/wallpaperflare.com_wallpaper.jpg" } },
+    { id: "symbolizm", name: "Symbolizm", description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost", books: ["wesele"], aliases: ["symboliczność"], images: [{ src: "images/motywy/symbolizm/Bledne_kolo.jpg" } },
+    { id: "ludomania", name: "Ludomania", description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii", books: ["wesele"], aliases: ["ludofilia"], images: [{ src: "images/motywy/ludomania/Włodzimierz_Tetmajer_-_Blessing_of_Easter_Food_-_MNK_II-b-9_-_National_Museum_Kraków.jpg" } },
+    { id: "naturalizm", name: "Naturalizm", description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt", books: ["chłopi"], aliases: ["naturalistyczny obraz świata"], images: [{ src: "images/motywy/naturalizm/Aleksander_Gierymski,_Żydówka_z_pomarańczami.jpg" } },
+    { id: "motywmiłości", name: "Motyw Miłości", description: "Przedstawienie relacji miłosnej", books: ["chłopi", "magbet", "zbrodniaikara", "1984"], aliases: ["miłość", "motyw miłości"], images: [{ src: "images/moty_wmiłości/symbolizm/960px-Gustav_Klimt_016.jpg" } },
+    { id: "motywbuntu", name: "Motyw Buntu", description: "Sprzeciw wobec zastanego porządku, losu lub władzy", books: ["wesele", "antygona", "tango"], aliases: ["bunt", "motyw buntu"] , images: [{ src: "images/motywy/bunt/Eugène_Delacroix_-_La_liberté_guidant_le_peuple.jpg" }},
+    { id: "fatum", name: "Fatum", description: "Personifikacja nieuchronnego, nieodwracalnego losu, nieodwołalnej woli bogów, na którą nikt nie ma wpływu.", books: ["antygona", "magbet"], aliases: ["los", "przeznaczenie"] , images: [{ src: "images/motywy/fatum/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg" }},
+    { id: "groteska", name: "Groteska", description: "Połączenie w jednym dziele jednocześnie występujących pierwiastków przeciwstawnych", books: ["tango"], aliases: ["groteskowość"], images: [{ src: "images/motywy/groteska/El_jardín_de_las_Delicias,_de_El_Bosco.jpg" } },
+    { id: "motywrodziny", name: "Motyw Rodziny", description: "Przedstawienie i problematyka relacji rodzinnych", books: ["tango"], aliases: ["rodzina", "motyw rodziny"], images: [{ src: "images/motywy/rodzina/Jan_Matejko_-_Portret_trojga_dzieci_artysty.jpg" } },
+    { id: "motywsumienia", name: "Motyw Sumienia", description: "Wewnętrzny głos moralny, który staje się głównym sędzią i katem bohatera po dokonaniu zła", books: ["magbet", "zbrodniaikara"], aliases: ["sumienie", "wyrzuty sumienia"], images: [{ src: "images/motywy/sumienie/960px-Rembrandt_Harmensz_van_Rijn_-_Return_of_the_Prodigal_Son_-_Google_Art_Project.jpg" } },
+    { id: "motywszalenstwa", name: "Motyw Szaleństwa", description: "Sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy", books: ["magbet", "antygona"], aliases: ["szaleństwo", "obłęd"] , images: [{ src: "images/motywy/szaleństwo/Van_Gogh_-_Selbstbildnis_mit_verbundenem_Ohr.jpeg" }},
+    { id: "totalitaryzm", name: "Totalitaryzm", description: "System polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu", books: ["magbet", "innyswiat", "1984"], aliases: ["motyw totalitaryzmu", "system totalitarny"] , images: [{ src: "images/motywy/totalitaryzm/Guernica_reproduction_on_tiled_wall,_Guernica,_Spain_(PPL3-Altered)_julesvernex2.jpg" }},
   ]
 };
 
@@ -149,7 +149,10 @@ function bookMatchesAnswer(book, answer) { const n = normalizeText(answer); retu
 function motifMatchesAnswer(motif, answer) { const n = normalizeText(answer); return getMotifAnswerVariants(motif).some(v => normalizeText(v) === n); }
 
 function formatCoverVisual(book) {
-  if (book?.coverImage) return `<div class="cover-visual"><img src="${escapeHtml(book.coverImage)}" alt="${escapeHtml(book.title)}"></div>`;
+  const imgSrc = book?.images?.[0]?.src || book?.coverImage || null;
+  if (imgSrc) {
+    return `<div class="cover-visual"><img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(book?.title || "")}"></div>`;
+  }
   return `<div class="cover-visual"><div class="cover-emoji">${escapeHtml(book?.coverEmoji || "📘")}</div></div>`;
 }
 
@@ -162,20 +165,52 @@ function renderBookExtras(book) {
   const quotes = uniqueStrings(book?.quotes || []);
   const images = book?.images || [];
   const motifObjects = (book?.motifs || []).map(getMotifById).filter(Boolean);
+
+  // Buduj HTML zdjęć
+  let imagesHtml = "";
+  if (images.length) {
+    const imgItems = images.map(img => {
+      if (img?.src) {
+        return `<img class="profile-image-item" src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt || img.label || book.title)}">`;
+      }
+      const label = typeof img === "string" ? img : (img.label || img.alt || "");
+      return label ? `<div class="profile-image-placeholder">📷</div>` : "";
+    }).filter(Boolean).join("");
+    if (imgItems) {
+      imagesHtml = `<div class="profile-section"><h3>Obrazy</h3><div class="profile-image-grid">${imgItems}</div></div>`;
+    }
+  }
+
   return `
     ${motifObjects.length ? `<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjects.map(m => `<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')">🎯 ${escapeHtml(m.name)}</span>`).join("")}</div></div>` : ""}
-    ${aliases.length ? `<div class="profile-section"><h3>Akceptowane warianty tytułu</h3><div class="profile-chip-list">${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}</div></div>` : ""}
     ${characters.length ? `<div class="profile-section"><h3>Bohaterowie</h3><div class="profile-chip-list">${characters.map(c => `<span class="profile-chip">${escapeHtml(c)}</span>`).join("")}</div></div>` : ""}
     ${quotes.length ? `<div class="profile-section"><h3>Fragmenty / cytaty</h3><div class="profile-media-list">${quotes.map(q => `<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join("")}</div></div>` : ""}
-    ${images.length ? `<div class="profile-section"><h3>Obrazy / symbole</h3><div class="profile-media-list">${images.map(img => { const label = typeof img === "string" ? img : (img.label || img.alt || img.caption || ""); return `<div class="profile-media-item">${escapeHtml(label)}</div>`; }).join("")}</div></div>` : ""}`;
+    ${imagesHtml}
+  `;
 }
 
 function renderMotifExtras(motif) {
-  const aliases = uniqueStrings(motif?.aliases || []);
   const bookObjects = (motif?.books || []).map(getBookById).filter(Boolean);
+  const images = motif?.images || [];
+
+  let imagesHtml = "";
+  if (images.length) {
+    const imgItems = images.map(img => {
+      if (img?.src) {
+        return `<img class="profile-image-item" src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt || img.label || motif.name)}">`;
+      }
+      const label = typeof img === "string" ? img : (img.label || img.alt || "");
+      return label ? `<div class="profile-image-placeholder">📷</div>` : "";
+    }).filter(Boolean).join("");
+    if (imgItems) {
+      imagesHtml = `<div class="profile-section"><h3>Obrazy</h3><div class="profile-image-grid">${imgItems}</div></div>`;
+    }
+  }
+
   return `
     ${bookObjects.length ? `<div class="profile-section"><h3>Lektury z tym motywem</h3><div class="profile-chip-list">${bookObjects.map(b => `<span class="profile-chip clickable" onclick="openBookFromProfile('${b.id}')">📚 ${escapeHtml(b.title)}</span>`).join("")}</div></div>` : ""}
-    ${aliases.length ? `<div class="profile-section"><h3>Akceptowane warianty odpowiedzi</h3><div class="profile-chip-list">${aliases.map(a => `<span class="profile-chip">${escapeHtml(a)}</span>`).join("")}</div></div>` : ""}`;
+    ${imagesHtml}
+  `;
 }
 
 // =========================
@@ -379,34 +414,92 @@ function createTaskX(presetData = null) {
     type: "X", data: dataObj,
     render() { renderTaskX(this.data); attachTaskXSwipeHandlers(); },
     submit(side) {
+      this.data._chosenSide = side;
       const correct = side === this.data.correctSide;
       if (correct) {
         score += 25;
-        if (this.data.promptType === "book" && this.data.correctMotifId) masteredPairs.add(makePairKey(this.data.promptId, this.data.correctMotifId));
-        if (this.data.promptType === "motif" && this.data.correctBookId) masteredPairs.add(makePairKey(this.data.correctBookId, this.data.promptId));
+        if (this.data.promptType === "book" && this.data.correctMotifId)
+          masteredPairs.add(makePairKey(this.data.promptId, this.data.correctMotifId));
+        if (this.data.promptType === "motif" && this.data.correctBookId)
+          masteredPairs.add(makePairKey(this.data.correctBookId, this.data.promptId));
       }
-      renderScore(); setNextButtonVisible(true); renderTaskX(this.data, true);
+      renderScore();
+      setNextButtonVisible(true);
+      renderTaskX(this.data, true);
     }
   };
 }
 
 function renderTaskX(taskData, answeredState = false) {
   const el = document.getElementById("quiz-content");
-  if (taskData.fallback) { el.innerHTML = `<div class="task-card"><h2>Brak dostępnych par</h2><p>W wybranym zakresie nie ma już sensownej pary do pokazania.</p></div>`; return; }
-  const profileBtn = answeredState ? `<button class="icon-btn task-profile-icon" onclick="openCurrentTaskProfile()">📖</button>` : "";
-  const leftLabel = taskData.optionType === "motif" ? getMotifById(taskData.leftId)?.name || "?" : getBookById(taskData.leftId)?.title || "?";
-  const rightLabel = taskData.optionType === "motif" ? getMotifById(taskData.rightId)?.name || "?" : getBookById(taskData.rightId)?.title || "?";
+  if (taskData.fallback) {
+    el.innerHTML = `<div class="task-card"><h2>Brak dostępnych par</h2><p>W wybranym zakresie nie ma już sensownej pary do pokazania.</p></div>`;
+    return;
+  }
+
+  const leftItem = taskData.optionType === "motif"
+    ? getMotifById(taskData.leftId)
+    : getBookById(taskData.leftId);
+  const rightItem = taskData.optionType === "motif"
+    ? getMotifById(taskData.rightId)
+    : getBookById(taskData.rightId);
+
+  const leftLabel  = leftItem?.name  || leftItem?.title  || "?";
+  const rightLabel = rightItem?.name || rightItem?.title || "?";
+
+  // Obrazek pytanego elementu
+  const promptItem = taskData.promptType === "book"
+    ? getBookById(taskData.promptId)
+    : getMotifById(taskData.promptId);
+
+  const imgSrc = promptItem?.images?.[0]?.src || null;
+  const imgHtml = imgSrc
+    ? `<img class="tinder-card-img" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(promptItem?.title || promptItem?.name || "")}">`
+    : `<div class="tinder-card-img-placeholder">${escapeHtml(promptItem?.coverEmoji || (taskData.promptType === "book" ? "📚" : "🎯"))}</div>`;
+
+  const profileBtn = answeredState
+    ? `<button class="icon-btn" style="font-size:14px" onclick="openCurrentTaskProfile()">📖</button>`
+    : "";
+
+  // Stan odpowiedzi — kolorowanie choices
+  let leftClass = "", rightClass = "";
+  if (answeredState) {
+    const correctSide = taskData.correctSide;
+    leftClass  = correctSide === "left"  ? "reveal-correct" : (taskData._chosenSide === "left"  ? "chosen-wrong" : "");
+    rightClass = correctSide === "right" ? "reveal-correct" : (taskData._chosenSide === "right" ? "chosen-wrong" : "");
+  }
+
   el.innerHTML = `
-    <div class="task-card ${answeredState ? "answered" : ""}">
-      <div class="task-swipe-instruction">← →</div>
-      <div class="task-head">${taskData.promptType === "book" ? "📚" : "🎯"} ${escapeHtml(taskData.promptTitle)} ${profileBtn}</div>
-      <div class="task-image"><span>📷</span><span>miejsce na obraz</span></div>
-      <div class="task-row">
-        <div class="task-choice" onclick="handleAnswer('left')">${escapeHtml(leftLabel)}</div>
-        <div class="task-choice" onclick="handleAnswer('right')">${escapeHtml(rightLabel)}</div>
+    <div class="tinder-wrap" id="tinderWrap">
+      <div class="tinder-label">${taskData.promptType === "book" ? "Lektura" : "Motyw"} ${profileBtn}</div>
+      <div class="tinder-question">${escapeHtml(taskData.promptTitle)}</div>
+
+      <div class="tinder-card-stage">
+        <div class="tinder-card" id="tinderCard">
+          ${imgHtml}
+          <div class="tinder-card-name">${escapeHtml(taskData.promptTitle)}</div>
+          <div class="tinder-overlay tinder-overlay-left"  id="overlayLeft">← Nie</div>
+          <div class="tinder-overlay tinder-overlay-right" id="overlayRight">Tak →</div>
+        </div>
+      </div>
+
+      <div class="tinder-hint">${answeredState ? "" : "← przeciągnij lub kliknij →"}</div>
+
+      <div class="tinder-choices">
+        <div class="tinder-choice ${leftClass}"
+          onclick="${answeredState ? "" : "handleAnswer('left')"}"
+          style="${answeredState ? "cursor:default" : ""}">
+          ${escapeHtml(leftLabel)}
+        </div>
+        <div class="tinder-choice ${rightClass}"
+          onclick="${answeredState ? "" : "handleAnswer('right')"}"
+          style="${answeredState ? "cursor:default" : ""}">
+          ${escapeHtml(rightLabel)}
+        </div>
       </div>
     </div>`;
-  attachTaskXSwipeHandlers();
+
+  if (!answeredState) attachTaskXSwipeHandlers();
 }
 
 // =========================
@@ -584,12 +677,73 @@ function renderTaskY2(taskData) {
 function handleAnswer(side) { if (quizMode !== "engine") return; if (!currentTask || answered) return; answered = true; currentTask.submit(side); }
 
 function attachTaskXSwipeHandlers() {
-  const card = document.querySelector(".task-card");
+  const card = document.getElementById("tinderCard");
   if (!card || quizMode !== "engine" || currentTaskType !== "X") return;
-  let startX = null;
-  card.onpointerdown = (e) => { startX = e.clientX; try { card.setPointerCapture(e.pointerId); } catch (_) {} };
-  card.onpointerup = (e) => { if (startX === null || answered) return; const diff = e.clientX - startX; if (Math.abs(diff) > 55) handleAnswer(diff < 0 ? "left" : "right"); startX = null; };
-  card.onpointercancel = () => { startX = null; };
+
+  const overlayL = document.getElementById("overlayLeft");
+  const overlayR = document.getElementById("overlayRight");
+
+  let startX = null, currentX = 0, dragging = false;
+
+  function applyDrag(dx) {
+    const rot = dx * 0.08;
+    card.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
+    card.style.boxShadow = Math.abs(dx) > 10 ? "0 8px 32px rgba(0,0,0,.12)" : "";
+    const ratio = Math.min(Math.abs(dx) / 100, 1);
+    if (dx < 0) {
+      overlayL.style.opacity = ratio;
+      overlayR.style.opacity = 0;
+    } else {
+      overlayR.style.opacity = ratio;
+      overlayL.style.opacity = 0;
+    }
+  }
+
+  function snapBack() {
+    card.style.transition = "transform .35s cubic-bezier(.4,0,.2,1), box-shadow .2s";
+    card.style.transform = "translateX(0) rotate(0deg)";
+    card.style.boxShadow = "";
+    overlayL.style.opacity = 0;
+    overlayR.style.opacity = 0;
+    setTimeout(() => { card.style.transition = ""; }, 360);
+  }
+
+  function flyOut(direction) {
+    const tx = direction === "left" ? -500 : 500;
+    card.style.transition = "transform .38s cubic-bezier(.4,0,.2,1), opacity .38s";
+    card.style.transform = `translateX(${tx}px) rotate(${direction === "left" ? -20 : 20}deg)`;
+    card.style.opacity = "0";
+  }
+
+  card.onpointerdown = (e) => {
+    if (answered) return;
+    startX = e.clientX;
+    currentX = 0;
+    dragging = true;
+    card.style.transition = "";
+    card.setPointerCapture(e.pointerId);
+  };
+
+  card.onpointermove = (e) => {
+    if (!dragging || startX === null) return;
+    currentX = e.clientX - startX;
+    applyDrag(currentX);
+  };
+
+  card.onpointerup = () => {
+    if (!dragging || answered) return;
+    dragging = false;
+    if (Math.abs(currentX) > 70) {
+      const side = currentX < 0 ? "left" : "right";
+      flyOut(side);
+      setTimeout(() => handleAnswer(side), 200);
+    } else {
+      snapBack();
+    }
+    startX = null;
+  };
+
+  card.onpointercancel = () => { dragging = false; snapBack(); startX = null; };
 }
 
 function openCurrentTaskProfile() {
