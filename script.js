@@ -417,12 +417,24 @@ function renderMotifExtras(motif) {
 
 function goScreen(n) {
   hideAll();
-  if (n === 1) document.getElementById("screen-start").style.display = "block";
+  if (n === 1) sceneTransition("start");
   if (n === 2) document.getElementById("screen-mode").style.display = "block";
   if (n === 3) {
     document.getElementById("screen-epoch").style.display = "block";
     renderEpochFilter();
   }
+}
+function sceneTransition(sceneName) {
+  const scene = document.getElementById("scene-layer");
+
+  scene.style.opacity = 0;
+  scene.style.transform = "scale(0.98)";
+
+  setTimeout(() => {
+    renderScene(sceneName); // tu Twój switch-case UI
+    scene.style.opacity = 1;
+    scene.style.transform = "scale(1)";
+  }, 300);
 }
 
 function hideAll() {
