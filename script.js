@@ -472,7 +472,9 @@ function hideAll() {
 
 function setMode(m) {
   mode = m;
+  startApp();
 }
+
 
 function setView(v) {
   view = v;
@@ -1811,4 +1813,16 @@ window.nextTask = nextTask;
 window.revealCurrentHint = revealCurrentHint;
 window.updateCurrentOpenTaskAnswer = updateCurrentOpenTaskAnswer;
 window.submitCurrentOpenTask = submitCurrentOpenTask;
+window.selectDiagnosticBook = selectDiagnosticBook;
+window.selectDiagnosticMotif = selectDiagnosticMotif;
+window.openBook = openBook;
+window.openMotif = openMotif;
+window.nextTask = nextTask;
+window.handleAnswer = handleAnswer;
+window.goScreen = goScreen;
+window.setMode = setMode;
+window.setView = setView;
+window.startApp = startApp;
+window.toggleEpoch = toggleEpoch;
+
 
