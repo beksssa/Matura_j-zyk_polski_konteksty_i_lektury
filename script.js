@@ -158,7 +158,6 @@ function formatCoverVisual(book) {
 // =========================
 
 function renderBookExtras(book) {
-  const aliases = uniqueStrings(book?.aliases || []);
   const characters = uniqueStrings(book?.characters || []);
   const quotes = uniqueStrings(book?.quotes || []);
   const images = book?.images || [];
@@ -397,16 +396,11 @@ function renderTaskX(taskData, answeredState = false) {
   const profileBtn = answeredState ? `<button class="icon-btn task-profile-icon" onclick="openCurrentTaskProfile()">📖</button>` : "";
   const leftLabel = taskData.optionType === "motif" ? getMotifById(taskData.leftId)?.name || "?" : getBookById(taskData.leftId)?.title || "?";
   const rightLabel = taskData.optionType === "motif" ? getMotifById(taskData.rightId)?.name || "?" : getBookById(taskData.rightId)?.title || "?";
-  const img = getTaskImage(taskData);
-  const imageHTML = img
-  ? `<img src="${img.src}" alt="${escapeHtml(img.alt || "")}">`
-  : `<span>📷</span><span>brak obrazu</span>`;
-
   el.innerHTML = `
     <div class="task-card ${answeredState ? "answered" : ""}">
       <div class="task-swipe-instruction">← →</div>
       <div class="task-head">${taskData.promptType === "book" ? "📚" : "🎯"} ${escapeHtml(taskData.promptTitle)} ${profileBtn}</div>
-      <div class="task-image"> ${imageHTML}</div>
+      <div class="task-image"><span>📷</span><span>miejsce na obraz</span></div>
       <div class="task-row">
         <div class="task-choice" onclick="handleAnswer('left')">${escapeHtml(leftLabel)}</div>
         <div class="task-choice" onclick="handleAnswer('right')">${escapeHtml(rightLabel)}</div>
