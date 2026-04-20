@@ -455,6 +455,167 @@ button { cursor: pointer; font-family: inherit; }
   .epoch-grid { grid-template-columns: 1fr; }
   .choice-group.cols-2 { grid-template-columns: 1fr; }
 }
+  /* ── TASK X — TINDER CARD ── */
+.tinder-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+}
+
+.tinder-label {
+  font-family: var(--ff-sans);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.tinder-question {
+  font-family: var(--ff-serif);
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-align: center;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.tinder-card-stage {
+  width: 100%;
+  position: relative;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tinder-card {
+  position: absolute;
+  width: 260px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: grab;
+  transition: box-shadow .2s;
+  touch-action: none;
+  will-change: transform;
+}
+.tinder-card:active { cursor: grabbing; }
+
+.tinder-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  background: var(--cream);
+}
+
+.tinder-card-img-placeholder {
+  width: 100%;
+  height: 200px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+  line-height: 1;
+}
+
+.tinder-card-name {
+  padding: 10px 12px;
+  font-family: var(--ff-serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--ink);
+  text-align: center;
+  border-top: 1px solid var(--line);
+}
+
+/* swipe overlays */
+.tinder-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity .12s;
+  pointer-events: none;
+}
+.tinder-overlay-left  { background: rgba(155, 58, 42, .08); color: #9b3a2a; }
+.tinder-overlay-right { background: rgba(45, 74, 62, .08);  color: var(--green); }
+
+/* choices flanking the card */
+.tinder-choices {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tinder-choice {
+  border: 1px solid var(--line);
+  padding: 14px 10px;
+  text-align: center;
+  font-family: var(--ff-sans);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  line-height: 1.4;
+}
+.tinder-choice:hover { background: var(--cream); border-color: var(--ink); }
+.tinder-choice.chosen-correct { background: var(--green); border-color: var(--green); color: var(--white); }
+.tinder-choice.chosen-wrong   { background: #9b3a2a; border-color: #9b3a2a; color: var(--white); }
+.tinder-choice.reveal-correct { background: var(--green); border-color: var(--green); color: var(--white); }
+
+.tinder-hint {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* profile images */
+.profile-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+.profile-image-item {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--line);
+}
+.profile-image-placeholder {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
 </style>
 </head>
 <body>
