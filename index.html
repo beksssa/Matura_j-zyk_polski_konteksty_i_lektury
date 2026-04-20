@@ -52,6 +52,8 @@ button{cursor:pointer}
 .profile-section h3{margin:0 0 8px}
 .profile-chip-list{display:flex;flex-wrap:wrap;gap:8px}
 .profile-chip{border:1px solid #d5d5d5;border-radius:999px;padding:6px 10px;background:#fafafa;font-size:14px}
+.profile-chip.clickable{cursor:pointer}
+.profile-chip.clickable:hover{background:#f0f0f0;border-color:#aaa}
 .profile-media-list{display:grid;gap:8px}
 .profile-media-item{border:1px solid #dcdcdc;border-radius:12px;padding:10px 12px;background:#fff}
 @media(max-width:760px){.diagnostic-layout{grid-template-columns:1fr}.task-row{flex-direction:column}}
@@ -109,10 +111,8 @@ button{cursor:pointer}
 <!-- 🟣 PROFIL -->
 <div id="profile" style="display:none">
   <div id="profile-content"></div>
-  <button onclick="returnFromProfile()">Powrót</button>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
