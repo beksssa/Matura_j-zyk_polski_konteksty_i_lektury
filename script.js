@@ -1,5 +1,5 @@
 // =========================
-// 🧠 STATE
+//  Baza
 // =========================
 
 let mode = "learning";
@@ -27,7 +27,7 @@ const ENGINE_TASK_TYPES = ["X", "Y1", "Y2"];
 const ENGINE_TASK_ENABLED = { X: true, Y1: true, Y2: true };
 
 // =========================
-// 📚 DATA
+// Dane
 // =========================
 
 const data = {
@@ -166,7 +166,7 @@ function renderBookExtras(book) {
   const images = book?.images || [];
   const motifObjects = (book?.motifs || []).map(getMotifById).filter(Boolean);
 
-  // Buduj HTML zdjęć
+  //  HTML zdjęć
   let imagesHtml = "";
   if (images.length) {
     const imgItems = images.map(img => {
@@ -232,7 +232,7 @@ function hideAll() {
 }
 
 // =========================
-// SETTINGS — z wizualnym stanem przycisków
+// SETTINGS — przyciski
 // =========================
 
 function setMode(m) {
@@ -461,7 +461,6 @@ function renderTaskX(taskData, answeredState = false) {
     ? `<button class="icon-btn" style="font-size:14px" onclick="openCurrentTaskProfile()">📖</button>`
     : "";
 
-  // Stan odpowiedzi — kolorowanie choices
   let leftClass = "", rightClass = "";
   if (answeredState) {
     const correctSide = taskData.correctSide;
