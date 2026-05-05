@@ -427,8 +427,12 @@ function createTaskX(presetData = null) {
       renderScore();
       setNextButtonVisible(true);
       renderTaskX(this.data, true);
+      if (this.data.promptType === 'book') {
+        showLearnMoreBox('book', this.data.promptId);
+      } else {
+        showLearnMoreBox('motif', this.data.promptId);
+      }
     }
-  };
 }
 
 function renderTaskX(taskData, answeredState = false) {
