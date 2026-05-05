@@ -409,32 +409,6 @@ function fallbackTaskXData() {
   return { promptType: view === "motifs" ? "motif" : "book", promptId: view === "motifs" ? (motif ? motif.id : null) : (book ? book.id : null), promptTitle: view === "motifs" ? (motif ? motif.name : "Brak motywu") : (book ? book.title : "Brak lektury"), promptDescription: "", optionType: view === "motifs" ? "book" : "motif", leftId: null, rightId: null, correctSide: "left", correctBookId: null, correctMotifId: null, fallback: true };
 }
 
-function createTaskX(presetData = null) {
-  const dataObj = presetData || buildTaskXData();
-  return {
-    type: "X", data: dataObj,
-    render() { renderTaskX(this.data); attachTaskXSwipeHandlers(); },
-    submit(side) {
-      this.data._chosenSide = side;
-      const correct = side === this.data.correctSide;
-      if (correct) {
-        score += 25;
-        if (this.data.promptType === "book" && this.data.correctMotifId)
-          masteredPairs.add(makePairKey(this.data.promptId, this.data.correctMotifId));
-        if (this.data.promptType === "motif" && this.data.correctBookId)
-          masteredPairs.add(makePairKey(this.data.correctBookId, this.data.promptId));
-      }
-      renderScore();
-      setNextButtonVisible(true);
-      renderTaskX(this.data, true);
-      if (this.data.promptType === 'book') {
-        showLearnMoreBox('book', this.data.promptId);
-      } else {
-        showLearnMoreBox('motif', this.data.promptId);
-      }
-    }
-}
-
 function renderTaskX(taskData, answeredState = false) {
   const el = document.getElementById("quiz-content");
   if (taskData.fallback) {
@@ -506,6 +480,42 @@ function renderTaskX(taskData, answeredState = false) {
   if (!answeredState) attachTaskXSwipeHandlers();
 }
 
+function createTaskX(presetData = null) {
+  const dataObj = presetData || buildTaskXData();
+  return {
+    type: "X",
+    data: dataObj,
+    render() {
+      renderTaskX(this.data);
+      attachTaskXSwipeHandlers();
+    },
+    submit(side) {
+      this.data._chosenSide = side;
+      const correct = side === this.data.correctSide;
+      if (correct) {
+        score += 25;
+        if (this.data.promptType === "book" && this.data.correctMotifId) {
+          masteredPairs.add(
+            makePairKey(this.data.promptId, this.data.correctMotifId)
+          );
+        }
+        if (this.data.promptType === "motif" && this.data.correctBookId) {
+          masteredPairs.add(
+            makePairKey(this.data.correctBookId, this.data.promptId)
+          );
+        }
+      }
+      renderScore();
+      setNextButtonVisible(true);
+      renderTaskX(this.data, true);
+      if (this.data.promptType === "book") {
+        showLearnMoreBox("book", this.data.promptId);
+      } else {
+        showLearnMoreBox("motif", this.data.promptId);
+      }
+    }
+  };
+}
 // =========================
 // TASK Y1
 // =========================
