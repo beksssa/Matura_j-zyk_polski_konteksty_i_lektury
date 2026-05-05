@@ -348,6 +348,7 @@ function startEngine() {
 }
 
 function renderEngineNextTask() {
+  hideLearnMoreBox();
   answered = false; setNextButtonVisible(false);
   const type = getNextTaskType();
   if (!type) { document.getElementById("quiz-content").innerHTML = `<div class="task-card"><h2>Brak aktywnych typów zadań</h2></div>`; return; }
