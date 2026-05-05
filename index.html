@@ -1621,15 +1621,16 @@ function animateConnectingLine(w1, w2, correct, onDone) {
 }
 
 window.nextTask = function() {
-  if(quizMode==='diagnostic') {
+  hideLearnMoreBox();
+  if (quizMode === 'diagnostic') {
     stopDiagnostic();
-    document.getElementById('quiz').style.display='block';
+    document.getElementById('quiz').style.display = 'block';
     finishDiagnosticAndStartEngine();
     return;
   }
-  if(quizMode==='engine') renderEngineNextTask();
+  if (quizMode === 'engine') renderEngineNextTask();
 };
-
+  
 // ═══════════════════════════════════════
 // ZADANIE X — tinder 9:16 z bocznym layoutem
 // ═══════════════════════════════════════
