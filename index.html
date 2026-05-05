@@ -568,24 +568,32 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
   </div>
 
   <!-- MAPA -->
-  <div id="map" style="display:none;width:100%;max-width:700px">
-    <h2 id="map-title"></h2>
-    <div id="list"></div>
-    <br>
-    <button class="btn-end" onclick="goToMenu()">Menu</button>
-  </div>
+  <!-- ── MAPA ── -->
+<div id="map" style="display:none;width:100%;max-width:700px">
+  <h2 id="map-title" style="display:none"></h2>
+  <div id="list" style="display:none"></div>
+</div>
+<!-- przycisk Menu dla mapy — poza #app żeby był fixed -->
+<button id="map-menu-btn" onclick="goToMenu()">Menu</button>
 
   <!-- QUIZ -->
-  <div id="quiz" style="display:none;width:100%;max-width:700px">
-    <div id="quiz-header">
-      <h2 id="quiz-label">Diagnostyka</h2>
+  <!-- ── QUIZ ── -->
+<div id="quiz" style="display:none">
+  <div id="quiz-header">
+    <h2 id="quiz-label">Diagnostyka</h2>
+    <div id="quiz-header-right">
       <span id="score">Score: 0</span>
+      <button id="nextBtn" onclick="nextTask()" style="display:none">Dalej →</button>
+      <button class="btn-end-quiz" onclick="goToMenu()">Zakończ</button>
     </div>
-    <div id="quiz-content"></div>
-    <button id="nextBtn" onclick="nextTask()">Dalej</button>
-    <br>
-    <button class="btn-end" onclick="goToMenu()">Zakończ</button>
   </div>
+  <!-- box "dowiedz się więcej" -->
+  <div id="learn-more-box" onclick="handleLearnMore()">
+    <div class="lmb-title" id="lmb-title">—</div>
+    <div class="lmb-sub">Dowiedz się więcej</div>
+  </div>
+  <div id="quiz-content"></div>
+</div>
 
   <!-- PROFIL -->
   <div id="profile" style="display:none;width:100%;max-width:700px">
@@ -633,6 +641,185 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
 }
 
+(function injectLayoutCSS(){
+  const s = document.createElement('style');
+  s.textContent = `
+  /* ── QUIZ HEADER z przyciskami ── */
+  #quiz-header {
+    position: relative; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #quiz-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
+  #nextBtn {
+    margin-top: 0 !important;
+    font-size: 10px;
+    padding: .55rem 1.4rem;
+  }
+  .btn-end-quiz {
+    font-family: var(--ff-sans);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: .45rem 1.1rem;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .btn-end-quiz:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ── BOX "dowiedz się więcej" ── */
+  #learn-more-box {
+    display: none;
+    margin-top: 10px;
+    border: 1px solid var(--line);
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    animation: slideInBox .4s cubic-bezier(.4,0,.2,1) both;
+  }
+  #learn-more-box:hover { background: #f5f5f5; border-color: var(--ink); }
+  #learn-more-box.visible { display: block; }
+  @keyframes slideInBox {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lmb-title {
+    font-family: var(--ff-serif);
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .lmb-sub {
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── QUIZ CONTENT bez scrollowania ── */
+  #quiz {
+    display: flex;
+    flex-direction: column;
+    max-height: 100dvh;
+    padding: 18px 16px 10px;
+    overflow: hidden;
+  }
+  #quiz-content {
+    margin-top: 0 !important;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ── Y1 bez obramówki ── */
+  .y1-shell {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ── Y2 nowy układ 3-kolumnowy ── */
+  .y2-layout {
+    display: grid;
+    grid-template-columns: 160px 1fr 160px;
+    gap: 14px;
+    align-items: start;
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .y2-cover-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .y2-cover-col .cover-visual {
+    width: 100%;
+    min-height: 100px;
+    max-height: 160px;
+  }
+  .y2-cover-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: .04em;
+  }
+  .y2-center {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .y2-title {
+    font-family: var(--ff-serif);
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-align: center;
+    margin: 0 0 4px;
+  }
+
+  /* ── Mapa — przycisk Menu ── */
+  #map-menu-btn {
+    position: fixed;
+    top: 52px;
+    right: 28px;
+    z-index: 100;
+    font-family: var(--ff-sans);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: .45rem 1.1rem;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    display: none;
+  }
+  #map-menu-btn.visible { display: block; }
+  #map-menu-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ── Animacja wejścia profilu ── */
+  @keyframes profileZoomIn {
+    from { opacity: 0; transform: scale(.94); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  #profile-content {
+    animation: profileZoomIn .5s cubic-bezier(.4,0,.2,1) both;
+  }
+
+  /* ── Diagnostyka — linia gumy ── */
+  #diagnostic-canvas {
+    display: none;
+    position: fixed; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  #diagnostic-canvas.active { display: block; }
+
+  @media(max-width:520px){
+    .y2-layout { grid-template-columns: 1fr; }
+    .y2-cover-col { flex-direction: row; gap: 10px; }
+  }
+  `;
+  document.head.appendChild(s);
+})();
+  
 function initParticles() {
   resizeCanvas();
   particles = BG_WORDS.map((word, i) => {
@@ -703,6 +890,44 @@ drawBg();
 // NAVIGATION
 // ═══════════════════════════════════════
 
+function showLearnMoreBox(type, id) {
+  const box = document.getElementById('learn-more-box');
+  const titleEl = document.getElementById('lmb-title');
+  if (!box || !titleEl) return;
+
+  let label = '';
+  if (type === 'book') {
+    const b = getBookById(id);
+    label = b ? b.title : '';
+  } else {
+    const m = getMotifById(id);
+    label = m ? m.name : '';
+  }
+
+  box._learnType = type;
+  box._learnId = id;
+  titleEl.textContent = label;
+  box.classList.add('visible');
+  // Restart animacji
+  box.style.animation = 'none';
+  box.offsetHeight; // reflow
+  box.style.animation = '';
+}
+
+function hideLearnMoreBox() {
+  const box = document.getElementById('learn-more-box');
+  if (box) box.classList.remove('visible');
+}
+
+function handleLearnMore() {
+  const box = document.getElementById('learn-more-box');
+  if (!box) return;
+  const type = box._learnType;
+  const id = box._learnId;
+  if (type === 'book') window.openBook(id);
+  else window.openMotif(id);
+}
+  
 let screenHistory = [];
 let currentScreen = 'screen-start';
 
@@ -833,17 +1058,18 @@ function stopMapFloat() {
   const shell = document.getElementById('map-float-shell');
   if (shell) shell.innerHTML = '';
   document.getElementById('map').style.display = 'none';
+  document.getElementById('map-menu-btn').classList.remove('visible');
 }
 
 function startMapFloat() {
   const mapEl = document.getElementById('map');
   mapEl.style.display = 'block';
-
-  // Ukryj stary list i tytuł
   document.getElementById('map-title').style.display = 'none';
   document.getElementById('list').style.display = 'none';
 
-  // Utwórz shell dla pływających słów
+  // Pokaż przycisk Menu
+  document.getElementById('map-menu-btn').classList.add('visible');
+
   let shell = document.getElementById('map-float-shell');
   if (!shell) {
     shell = document.createElement('div');
@@ -860,7 +1086,7 @@ function startMapFloat() {
 
   const W = window.innerWidth, H = window.innerHeight;
 
-  items.forEach((item, i) => {
+  items.forEach((item) => {
     const el = document.createElement('div');
     el.style.cssText = `
       position:fixed;
@@ -874,26 +1100,31 @@ function startMapFloat() {
       z-index:4;
       white-space:nowrap;
       pointer-events:all;
-      transition:opacity .2s;
       opacity:.85;
+      transition:opacity .2s, transform .2s;
     `;
     el.textContent = item.label;
     el.onclick = () => {
-      if (item.type === 'book') window.openBook(item.id);
-      else window.openMotif(item.id);
+      // Animacja zoom-in przed przejściem do profilu
+      el.style.transform = 'scale(1.18)';
+      el.style.opacity = '1';
+      setTimeout(() => {
+        if (item.type === 'book') window.openBook(item.id);
+        else window.openMotif(item.id);
+      }, 220);
     };
-    el.onmouseenter = () => el.style.opacity = '1';
-    el.onmouseleave = () => el.style.opacity = '.85';
+    el.onmouseenter = () => { el.style.opacity = '1'; };
+    el.onmouseleave = () => { el.style.opacity = '.85'; };
     shell.appendChild(el);
 
     const w = el.offsetWidth || item.label.length * 10;
     const h = 28;
     mapWords.push({
       el, item,
-      x: Math.random()*(W-w-40)+20,
-      y: Math.random()*(H-h-80)+40,
-      vx: (Math.random()-.5)*.12,
-      vy: (Math.random()-.5)*.09,
+      x: Math.random() * (W - w - 40) + 20,
+      y: Math.random() * (H - h - 80) + 40,
+      vx: (Math.random() - .5) * .12,
+      vy: (Math.random() - .5) * .09,
       w, h,
     });
   });
@@ -1205,12 +1436,49 @@ function animateDiag() {
 }
 
 // Każda para ma element SVG line który aktualizujemy
+const MAX_PAIR_DIST = 280; // max odległość między połączonymi słowami
+
 function updateDiagSvgLines() {
   diagPairs.forEach(pair => {
-    if(!pair.line) return;
-    const c1=getDiagCenter(pair.w1), c2=getDiagCenter(pair.w2);
-    pair.line.setAttribute('x1',c1.x); pair.line.setAttribute('y1',c1.y);
-    pair.line.setAttribute('x2',c2.x); pair.line.setAttribute('y2',c2.y);
+    if (!pair.line) return;
+    const c1 = getDiagCenter(pair.w1);
+    const c2 = getDiagCenter(pair.w2);
+
+    // Organiczna krzywa zamiast prostej linii
+    const mx = (c1.x + c2.x) / 2;
+    const my = (c1.y + c2.y) / 2;
+    const dx = c2.x - c1.x;
+    const dy = c2.y - c1.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    // Wygięcie krzywej — prostopadle do linii, zależne od odległości
+    const bend = Math.min(dist * .18, 40);
+    const nx = -dy / (dist || 1);
+    const ny = dx / (dist || 1);
+    // Użyj fazy czasowej żeby krzywa "oddychała"
+    const t = (Date.now() / 3000);
+    const wave = Math.sin(t + pair.phase) * bend * .4;
+    const cx = mx + nx * (bend + wave);
+    const cy = my + ny * (bend + wave);
+
+    // SVG path zamiast line
+    if (pair.path) {
+      pair.path.setAttribute('d', `M ${c1.x} ${c1.y} Q ${cx} ${cy} ${c2.x} ${c2.y}`);
+    }
+
+    // Siła gumy — jeśli za daleko, przyciągnij
+    if (dist > MAX_PAIR_DIST) {
+      const pull = (dist - MAX_PAIR_DIST) * 0.002;
+      const ux = dx / dist, uy = dy / dist;
+      if (!pair.w1.stopped) { pair.w1.vx += ux * pull; pair.w1.vy += uy * pull; }
+      if (!pair.w2.stopped) { pair.w2.vx -= ux * pull; pair.w2.vy -= uy * pull; }
+    }
+
+    // Opacity zależna od dystansu — im dalej tym mocniej widać napięcie
+    const tensionRatio = Math.min(dist / MAX_PAIR_DIST, 1);
+    if (pair.path) {
+      pair.path.setAttribute('opacity', (0.3 + tensionRatio * 0.4).toFixed(2));
+    }
   });
 }
 
@@ -1275,15 +1543,21 @@ function handleDiagClick(item, el) {
         renderScore();
       }
       // Stała linia
-      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-      const c1=getDiagCenter(bookW), c2=getDiagCenter(motifW);
-      line.setAttribute('x1',c1.x);line.setAttribute('y1',c1.y);
-      line.setAttribute('x2',c2.x);line.setAttribute('y2',c2.y);
-      line.setAttribute('stroke','#0a0a0a');
-      line.setAttribute('stroke-width','0.8');
-      line.setAttribute('opacity','0.5');
-      diagSvg.appendChild(line);
-      diagPairs.push({bookId:bookItem.id,motifId:motifItem.id,w1:bookW,w2:motifW,line});
+     // Organiczna krzywa zamiast prostej linii
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('stroke','#0a0a0a');
+      path.setAttribute('stroke-width','0.8');
+      path.setAttribute('fill','none');
+      path.setAttribute('opacity','0.4');
+      diagSvg.appendChild(path);
+      diagPairs.push({
+        bookId: bookItem.id,
+        motifId: motifItem.id,
+        w1: bookW, w2: motifW,
+        path,
+        phase: Math.random() * Math.PI * 2,  // losowa faza dla organicznego ruchu
+        line: null,
+      });
       // Odblokuj ruch
       bookW.stopped=false; motifW.stopped=false;
       // Pokoloruj połączone
@@ -1701,53 +1975,58 @@ function renderHints3Col(taskData, inputId, inputPlaceholder) {
   document.head.appendChild(s);
 })();
 
-// Zastąp renderTaskY1
 function renderTaskY1(taskData) {
-  const el=document.getElementById('quiz-content');
-  if(taskData.fallback){el.innerHTML=`<div class="task-card"><h2>Brak dostępnych zadań Y1</h2></div>`;setNextButtonVisible(true);return;}
-  const profileBtn=taskData.submitted?`<button class="icon-btn" onclick="openMotif('${escapeHtml(taskData.motifId)}')">📖</button>`:'';
-  el.innerHTML=`
-    <div class="task-card ${taskData.submitted?'answered':''}">
-      <div class="open-task-shell">
-        <div class="open-task-topline">Y1 · Lektury ${profileBtn}</div>
-        <h2 class="open-task-title">Podaj tytuł lektury</h2>
-        ${renderHints3Col(taskData,'y1-answer','Wpisz tytuł lektury')}
-        <div class="open-task-input-wrap">
-          <label for="y1-answer">Twoja odpowiedź</label>
-          <input id="y1-answer" class="open-task-input" type="text" placeholder="Wpisz tytuł lektury"
-            value="${escapeHtml(taskData.userAnswer||'')}"
-            oninput="updateCurrentOpenTaskAnswer(this.value)"
-            ${taskData.submitted?'disabled':''}>
-        </div>
-        <div class="open-task-actions">
-          <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted?'disabled':''}>Sprawdź</button>
-        </div>
-        <div class="task-feedback ${taskData.feedbackType||''}">${escapeHtml(taskData.feedback||'')}</div>
+  const el = document.getElementById('quiz-content');
+  if (taskData.fallback) {
+    el.innerHTML = `<div class="y1-shell"><h2 style="font-family:var(--ff-serif);font-weight:300">Brak dostępnych zadań Y1</h2></div>`;
+    setNextButtonVisible(true);
+    return;
+  }
+  el.innerHTML = `
+    <div class="y1-shell">
+      <div class="open-task-topline" style="text-align:center;margin-bottom:10px">Y1 · Lektury</div>
+      <h2 class="open-task-title" style="margin-bottom:12px">Podaj tytuł lektury</h2>
+      ${renderHints3Col(taskData, 'y1-answer', 'Wpisz tytuł lektury')}
+      <div class="open-task-input-wrap" style="margin-top:10px">
+        <label for="y1-answer">Twoja odpowiedź</label>
+        <input id="y1-answer" class="open-task-input" type="text"
+          placeholder="Wpisz tytuł lektury"
+          value="${escapeHtml(taskData.userAnswer||'')}"
+          oninput="updateCurrentOpenTaskAnswer(this.value)"
+          ${taskData.submitted?'disabled':''}>
       </div>
+      <div class="open-task-actions" style="margin-top:8px">
+        <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted?'disabled':''}>Sprawdź</button>
+      </div>
+      <div class="task-feedback ${taskData.feedbackType||''}" style="margin-top:6px">${escapeHtml(taskData.feedback||'')}</div>
     </div>`;
   setNextButtonVisible(!!taskData.submitted);
+  if (taskData.submitted) showLearnMoreBox('motif', taskData.motifId);
 }
 
-// Zastąp renderTaskY2
 function renderTaskY2(taskData) {
-  const el=document.getElementById('quiz-content');
-  if(taskData.fallback){el.innerHTML=`<div class="task-card"><h2>Brak dostępnych zadań Y2</h2></div>`;setNextButtonVisible(true);return;}
-  const bookA=getBookById(taskData.bookAId);
-  const bookB=getBookById(taskData.bookBId);
-  const profileBtn=taskData.submitted?`<button class="icon-btn" onclick="openMotif('${escapeHtml(taskData.motifId)}')">📖</button>`:'';
-  el.innerHTML=`
-    <div class="task-card ${taskData.submitted?'answered':''}">
-      <div class="open-task-shell">
-        <div class="open-task-topline">Y2 · Motywy ${profileBtn}</div>
-        <h2 class="open-task-title">Jaki motyw łączy te dwie lektury?</h2>
-        <div class="cover-grid">
-          <div class="cover-card">${formatCoverVisual(bookA)}<div class="cover-label">${escapeHtml(bookA?.title||'Lektura 1')}</div></div>
-          <div class="cover-card">${formatCoverVisual(bookB)}<div class="cover-label">${escapeHtml(bookB?.title||'Lektura 2')}</div></div>
-        </div>
-        ${renderHints3Col(taskData,'y2-answer','Wpisz nazwę motywu')}
+  const el = document.getElementById('quiz-content');
+  if (taskData.fallback) {
+    el.innerHTML = `<div class="y2-layout"><div></div><div><h2 style="font-family:var(--ff-serif);font-weight:300">Brak dostępnych zadań Y2</h2></div><div></div></div>`;
+    setNextButtonVisible(true);
+    return;
+  }
+  const bookA = getBookById(taskData.bookAId);
+  const bookB = getBookById(taskData.bookBId);
+  el.innerHTML = `
+    <div class="y2-layout">
+      <div class="y2-cover-col">
+        ${formatCoverVisual(bookA)}
+        <div class="y2-cover-label">${escapeHtml(bookA?.title||'Lektura 1')}</div>
+      </div>
+      <div class="y2-center">
+        <div class="open-task-topline" style="text-align:center">Y2 · Motywy</div>
+        <h2 class="y2-title">Jaki motyw łączy te lektury?</h2>
+        ${renderHints3Col(taskData, 'y2-answer', 'Wpisz nazwę motywu')}
         <div class="open-task-input-wrap">
           <label for="y2-answer">Twoja odpowiedź</label>
-          <input id="y2-answer" class="open-task-input" type="text" placeholder="Wpisz nazwę motywu"
+          <input id="y2-answer" class="open-task-input" type="text"
+            placeholder="Wpisz nazwę motywu"
             value="${escapeHtml(taskData.userAnswer||'')}"
             oninput="updateCurrentOpenTaskAnswer(this.value)"
             ${taskData.submitted?'disabled':''}>
@@ -1757,8 +2036,13 @@ function renderTaskY2(taskData) {
         </div>
         <div class="task-feedback ${taskData.feedbackType||''}">${escapeHtml(taskData.feedback||'')}</div>
       </div>
+      <div class="y2-cover-col">
+        ${formatCoverVisual(bookB)}
+        <div class="y2-cover-label">${escapeHtml(bookB?.title||'Lektura 2')}</div>
+      </div>
     </div>`;
   setNextButtonVisible(!!taskData.submitted);
+  if (taskData.submitted) showLearnMoreBox('motif', taskData.motifId);
 }
 
 // ═══════════════════════════════════════
