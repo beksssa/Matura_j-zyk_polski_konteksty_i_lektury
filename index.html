@@ -1530,7 +1530,8 @@ function animateDiag() {
     if(w.stopped) return;
     w.x+=w.vx; w.y+=w.vy;
     // Tłumienie
-    w.vx*=0.98; w.vy*=0.98;
+    w.vx = w.vx * 0.98 + (Math.random() - 0.5) * 0.04;
+    w.vy = w.vy * 0.98 + (Math.random() - 0.5) * 0.03;    
     // speed cap
     const spd=Math.sqrt(w.vx*w.vx+w.vy*w.vy);
     if(spd>.35){w.vx*=.35/spd;w.vy*=.35/spd;}
