@@ -1534,6 +1534,11 @@ function animateDiag() {
   if(w.y > H-eh-90){ w.y = H-eh-90; w.vy = -Math.abs(w.vy); }
   w.el.style.left = w.x+'px';
   w.el.style.top = w.y+'px';
+  const spd = Math.sqrt(w.vx*w.vx + w.vy*w.vy);
+  if(spd > 0.13){ w.vx *= 0.13/spd; w.vy *= 0.13/spd; }
+
+  w.el.style.left = w.x+'px';
+  w.el.style.top = w.y+'px';
 });
 
   // Aktualizuj linie SVG
