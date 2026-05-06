@@ -48,6 +48,43 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 #bg-canvas.blurred{filter:blur(18px) opacity(.35)}
 #bg-canvas.very-blurred{filter:blur(28px) opacity(.2)}
 
+/* ═══ RADIALNY BLUR NA PROFILU ═══ */
+/* Warstwa która przykrywa canvas na krawędziach ale zostawia środek ostry */
+#profile-radial-blur {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+  /* Użyjemy backdrop-filter na pseudo-warstwie przez overlay */
+}
+
+/* Overlay z radialnym gradientem - rozmycie rośnie od środka do krawędzi */
+#profile-edge-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  display: none;
+  /* Delikatna winietka */
+  background: radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    transparent 0%,
+    transparent 35%,
+    rgba(255,255,255,0.15) 60%,
+    rgba(255,255,255,0.45) 80%,
+    rgba(255,255,255,0.7) 100%
+  );
+}
+
+/* Canvas z efektem rozmycia krawędzi dla profilu */
+#bg-canvas.profile-blur {
+  /* Całe canvas jest lekko rozmyte, ale overlay w środku to maskuje */
+  filter: blur(8px) opacity(.28);
+}
+
 /* ═══ BACK ARROW ═══ */
 #back-btn{
   position:fixed;top:22px;right:28px;
@@ -486,7 +523,8 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 .diag-word.book-word{font-style:normal}
 .diag-word.motif-word{font-style:italic}
 .diag-word.selected{color:#000;font-weight:400}
-.diag-word.matched{color:var(--muted);pointer-events:none}
+
+/* Usunięto .diag-word.matched - nie szarzejemy po połączeniu */
 
 #diag-shell{
   position:fixed;inset:0;
@@ -498,6 +536,20 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
   position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
   z-index:10;
   display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+
+/* ═══ DIAGNOSTIC SCORE ═══ */
+#diag-score {
+  font-family: var(--ff-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: rgba(255,255,255,0.85);
+  padding: 5px 14px;
+  border: 1px solid var(--line);
+  backdrop-filter: blur(4px);
 }
 
 /* ═══ RESPONSIVE ═══ */
@@ -514,6 +566,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 
 <!-- ══ CANVAS TŁO ══ -->
 <canvas id="bg-canvas"></canvas>
+
+<!-- ══ RADIALNY BLUR DLA PROFILU ══ -->
+<div id="profile-edge-vignette"></div>
 
 <!-- ══ DIAGNOSTIC SVG LINIE ══ -->
 <svg id="diagnostic-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -568,32 +623,29 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
   </div>
 
   <!-- MAPA -->
-  <!-- ── MAPA ── -->
-<div id="map" style="display:none;width:100%;max-width:700px">
-  <h2 id="map-title" style="display:none"></h2>
-  <div id="list" style="display:none"></div>
-</div>
-<!-- przycisk Menu dla mapy — poza #app żeby był fixed -->
-<button id="map-menu-btn" onclick="goToMenu()">Menu</button>
+  <div id="map" style="display:none;width:100%;max-width:700px">
+    <h2 id="map-title" style="display:none"></h2>
+    <div id="list" style="display:none"></div>
+  </div>
+  <button id="map-menu-btn" onclick="goToMenu()">Menu</button>
 
   <!-- QUIZ -->
-  <!-- ── QUIZ ── -->
-<div id="quiz" style="display:none">
-  <div id="quiz-header">
-    <h2 id="quiz-label">Diagnostyka</h2>
-    <div id="quiz-header-right">
-      <span id="score">Score: 0</span>
-      <button id="nextBtn" onclick="nextTask()" style="display:none">Dalej →</button>
-      <button class="btn-end-quiz" onclick="goToMenu()">Zakończ</button>
+  <div id="quiz" style="display:none">
+    <div id="quiz-header">
+      <h2 id="quiz-label">Diagnostyka</h2>
+      <div id="quiz-header-right">
+        <span id="score">Score: 0</span>
+        <button id="nextBtn" onclick="nextTask()" style="display:none">Dalej →</button>
+        <button class="btn-end-quiz" onclick="goToMenu()">Zakończ</button>
+      </div>
     </div>
+    <!-- box "dowiedz się więcej" -->
+    <div id="learn-more-box" onclick="handleLearnMore()">
+      <div class="lmb-title" id="lmb-title">—</div>
+      <div class="lmb-sub">Dowiedz się więcej</div>
+    </div>
+    <div id="quiz-content"></div>
   </div>
-  <!-- box "dowiedz się więcej" -->
-  <div id="learn-more-box" onclick="handleLearnMore()">
-    <div class="lmb-title" id="lmb-title">—</div>
-    <div class="lmb-sub">Dowiedz się więcej</div>
-  </div>
-  <div id="quiz-content"></div>
-</div>
 
   <!-- PROFIL -->
   <div id="profile" style="display:none;width:100%;max-width:700px">
@@ -606,6 +658,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 <div id="diag-shell">
   <div id="diag-words"></div>
   <div id="diag-controls">
+    <div id="diag-score">Score: 0</div>
     <p class="small-note" style="color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:center">Połącz lektury z motywami</p>
     <button class="btn-end" onclick="nextTask()" id="diagNextBtn" style="display:none">Dalej →</button>
   </div>
@@ -831,7 +884,7 @@ function initParticles() {
       word, font,
       x: Math.random() * (window.innerWidth - w - 60) + 30,
       y: Math.random() * (window.innerHeight - 80) + 40,
-      vx: (Math.random() - .5) * .12,   // bardzo wolno
+      vx: (Math.random() - .5) * .12,
       vy: (Math.random() - .5) * .09,
       alpha: Math.random() * .10 + .03,
       w, h,
@@ -839,7 +892,6 @@ function initParticles() {
   });
 }
 
-// Kolizje — zatrzymaj nachodzenie
 function resolveCollisions() {
   for (let i = 0; i < particles.length; i++) {
     for (let j = i + 1; j < particles.length; j++) {
@@ -849,12 +901,10 @@ function resolveCollisions() {
       const minDx = (a.w + b.w)/2 + 10;
       const minDy = (a.h + b.h)/2 + 6;
       if (Math.abs(dx) < minDx && Math.abs(dy) < minDy) {
-        // odbij
         const nx = dx / (Math.abs(dx) || 1);
         const ny = dy / (Math.abs(dy) || 1);
         a.vx += nx * .04; a.vy += ny * .04;
         b.vx -= nx * .04; b.vy -= ny * .04;
-        // damp
         a.vx *= .92; a.vy *= .92;
         b.vx *= .92; b.vy *= .92;
       }
@@ -867,10 +917,8 @@ function drawBg() {
   resolveCollisions();
   particles.forEach(p => {
     p.x += p.vx; p.y += p.vy;
-    // clamp speed
     const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
     if (spd > .18) { p.vx *= .18/spd; p.vy *= .18/spd; }
-    // bounce walls
     if (p.x < 10) { p.x = 10; p.vx = Math.abs(p.vx); }
     if (p.x > canvas.width - p.w - 10) { p.x = canvas.width - p.w - 10; p.vx = -Math.abs(p.vx); }
     if (p.y < 20) { p.y = 20; p.vy = Math.abs(p.vy); }
@@ -908,9 +956,8 @@ function showLearnMoreBox(type, id) {
   box._learnId = id;
   titleEl.textContent = label;
   box.classList.add('visible');
-  // Restart animacji
   box.style.animation = 'none';
-  box.offsetHeight; // reflow
+  box.offsetHeight;
   box.style.animation = '';
 }
 
@@ -932,9 +979,15 @@ let screenHistory = [];
 let currentScreen = 'screen-start';
 
 function blurBg(level) {
-  canvas.classList.remove('blurred','very-blurred');
+  canvas.classList.remove('blurred','very-blurred','profile-blur');
   if (level === 'medium') canvas.classList.add('blurred');
   if (level === 'heavy') canvas.classList.add('very-blurred');
+  if (level === 'profile') canvas.classList.add('profile-blur');
+}
+
+function showProfileVignette(show) {
+  const v = document.getElementById('profile-edge-vignette');
+  if (v) v.style.display = show ? 'block' : 'none';
 }
 
 function showPanel(id) {
@@ -976,12 +1029,14 @@ function handleBack() {
   if (!screenHistory.length) return;
   const prev = screenHistory.pop();
   updateBackBtn();
+  showProfileVignette(false);
   if (['screen-start','screen-mode','screen-epoch'].includes(prev)) {
     ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
     stopDiagnostic();
     stopMapFloat();
     showPanel(prev);
-    blurBg(prev === 'screen-start' ? 'none' : 'medium');
+    // Na ekranach onboardingu — BRAK blura, canvas widoczne
+    blurBg('none');
   } else if (prev === 'map') {
     showView('map');
     startMapFloat();
@@ -997,6 +1052,7 @@ function goToMenu() {
   screenHistory = [];
   updateBackBtn();
   blurBg('none');
+  showProfileVignette(false);
   ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
   stopDiagnostic();
   stopMapFloat();
@@ -1009,12 +1065,13 @@ window.goScreen = function(n) {
   if (n === 1) {
     screenHistory = []; updateBackBtn();
     blurBg('none');
+    showProfileVignette(false);
     ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
     stopDiagnostic(); stopMapFloat();
     showPanel('screen-start');
   }
-  if (n === 2) { pushScreen(currentScreen); blurBg('medium'); showPanel('screen-mode'); }
-  if (n === 3) { pushScreen(currentScreen); blurBg('medium'); showPanel('screen-epoch'); renderEpochFilter(); }
+  if (n === 2) { pushScreen(currentScreen); blurBg('none'); showPanel('screen-mode'); }
+  if (n === 3) { pushScreen(currentScreen); blurBg('none'); showPanel('screen-epoch'); renderEpochFilter(); }
 };
 
 window.setModeAndAdvance = function(m) {
@@ -1033,13 +1090,15 @@ window.setViewAndAdvance = function(v) {
 
 window.startApp = function() {
   pushScreen('screen-epoch');
-  blurBg('heavy');
+  showProfileVignette(false);
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active','exit'));
   ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
   if (mode === 'learning') {
+    blurBg('none');
     showView('map');
     startMapFloat();
   } else {
+    blurBg('heavy');
     showView('quiz');
     startQuiz();
   }
@@ -1067,7 +1126,6 @@ function startMapFloat() {
   document.getElementById('map-title').style.display = 'none';
   document.getElementById('list').style.display = 'none';
 
-  // Pokaż przycisk Menu
   document.getElementById('map-menu-btn').classList.add('visible');
 
   let shell = document.getElementById('map-float-shell');
@@ -1105,7 +1163,6 @@ function startMapFloat() {
     `;
     el.textContent = item.label;
     el.onclick = () => {
-      // Animacja zoom-in przed przejściem do profilu
       el.style.transform = 'scale(1.18)';
       el.style.opacity = '1';
       setTimeout(() => {
@@ -1169,7 +1226,7 @@ function animateMapWords() {
 }
 
 // ═══════════════════════════════════════
-// PROFILE — blur
+// PROFILE — radialny blur
 // ═══════════════════════════════════════
 
 window.openBook = function(id) {
@@ -1177,7 +1234,9 @@ window.openBook = function(id) {
   updateBackBtn();
   if (mode==='quiz') quizSnapshot = captureQuizState();
   profileReturnTarget = mode==='quiz'?'quiz':'map';
-  blurBg('medium');
+  // Radialny blur profilu: canvas lekko rozmyte + winietka krawędzi
+  blurBg('profile');
+  showProfileVignette(true);
   stopMapFloat();
   const book = getBookById(id); if(!book) return;
   showView('profile');
@@ -1189,7 +1248,8 @@ window.openMotif = function(id) {
   updateBackBtn();
   if (mode==='quiz') quizSnapshot = captureQuizState();
   profileReturnTarget = mode==='quiz'?'quiz':'map';
-  blurBg('medium');
+  blurBg('profile');
+  showProfileVignette(true);
   stopMapFloat();
   const motif = getMotifById(id); if(!motif) return;
   showView('profile');
@@ -1200,6 +1260,7 @@ window.openBookFromProfile = id => window.openBook(id);
 window.openMotifFromProfile = id => window.openMotif(id);
 
 window.returnFromProfile = function() {
+  showProfileVignette(false);
   if (!screenHistory.length) { goToMenu(); return; }
   handleBack();
 };
@@ -1296,20 +1357,31 @@ window.toggleEpochSlider = function(epoch, row) {
 };
 
 // ═══════════════════════════════════════
-// DIAGNOSTYKA — pływające słowa + linie SVG
+// DIAGNOSTYKA — pływające słowa + linie MAPA MYŚLI
 // ═══════════════════════════════════════
 
 let diagWords = [];
 let diagSelected = null;
-let diagPairs = [];   // { bookId, motifId, w1, w2 }  poprawne połączenia
+let diagPairs = [];
 let diagAnimFrame = null;
 let diagSvg = null;
+
+// Maksymalna odległość między połączonymi słowami (siła gumy)
+const MAX_PAIR_DIST = 260;
+// Odległość od linii, przy której słowo się odbija
+const LINE_REPEL_DIST = 28;
 
 function stopDiagnostic() {
   if (diagAnimFrame) { cancelAnimationFrame(diagAnimFrame); diagAnimFrame = null; }
   document.getElementById('diag-shell').classList.remove('active');
   const svg = document.getElementById('diagnostic-canvas');
   if (svg) { svg.style.display='none'; svg.innerHTML=''; }
+}
+
+// ── Aktualizacja score w diagnostyce ──
+function updateDiagScore() {
+  const el = document.getElementById('diag-score');
+  if (el) el.textContent = 'Score: ' + score;
 }
 
 window.renderDiagnostic = function() {
@@ -1328,6 +1400,7 @@ window.renderDiagnostic = function() {
   document.getElementById('diagNextBtn').style.display='inline-block';
 
   diagWords=[]; diagSelected=null; diagPairs=[];
+  updateDiagScore();
 
   const books = getFilteredBooks();
   const motifs = getFilteredMotifs();
@@ -1338,19 +1411,18 @@ window.renderDiagnostic = function() {
 
   const W=window.innerWidth, H=window.innerHeight;
 
-  all.forEach((item,i) => {
+  all.forEach((item) => {
     const el = document.createElement('div');
     el.className=`diag-word ${item.type==='book'?'book-word':'motif-word'}`;
     el.textContent=item.label;
     const size = item.type==='book'?(15+Math.random()*5):(13+Math.random()*6);
     el.style.fontSize=size+'px';
-    // bold dla lektur
     el.style.fontWeight = item.type==='book'?'600':'300';
     el.style.fontStyle = item.type==='motif'?'italic':'normal';
     el.style.left=(Math.random()*(W*0.78)+W*0.11)+'px';
     el.style.top=(Math.random()*(H*0.72)+H*0.1)+'px';
     el.style.cursor='pointer';
-    el.style.transition='transform .15s, color .15s';
+    el.style.transition='color .15s';
     el.onclick=()=>handleDiagClick(item,el);
     container.appendChild(el);
 
@@ -1362,6 +1434,8 @@ window.renderDiagnostic = function() {
       vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.22,
       w, h,
       stopped: false,
+      // Oryginalne właściwości — przywracamy po deselect
+      _origColor: null,
     });
   });
 
@@ -1369,8 +1443,8 @@ window.renderDiagnostic = function() {
   animateDiag();
 };
 
-function resolveDiagCollisions() {
-  // kolizje słów między sobą
+// ── Kolizje między słowami ──
+function resolveDiagWordCollisions() {
   for (let i=0;i<diagWords.length;i++) {
     for (let j=i+1;j<diagWords.length;j++) {
       const a=diagWords[i],b=diagWords[j];
@@ -1386,235 +1460,308 @@ function resolveDiagCollisions() {
       }
     }
   }
+}
 
-  // kolizje słów z liniami (przybliżenie — odpychaj od segmentu)
+// ── Kolizje słów z liniami (odpychanie od krzywej) ──
+function resolveDiagLineCollisions() {
   diagPairs.forEach(pair => {
     const w1=pair.w1, w2=pair.w2;
     const ax=w1.x+w1.w/2, ay=w1.y+w1.h/2;
     const bx=w2.x+w2.w/2, by=w2.y+w2.h/2;
+
     diagWords.forEach(w => {
-      if(w===w1||w===w2||w.stopped) return;
+      if(w===w1||w===w2) return;
       const cx=w.x+w.w/2, cy=w.y+w.h/2;
-      // punkt najbliższy na segmencie ab
+
+      // Punkt najbliższy na segmencie ab
       const dx=bx-ax, dy=by-ay;
-      const len=Math.sqrt(dx*dx+dy*dy)||1;
-      const t=Math.max(0,Math.min(1,((cx-ax)*dx+(cy-ay)*dy)/(len*len)));
+      const len2=dx*dx+dy*dy;
+      if(len2===0) return;
+      const t=Math.max(0,Math.min(1,((cx-ax)*dx+(cy-ay)*dy)/len2));
       const nearX=ax+t*dx, nearY=ay+t*dy;
       const ndx=cx-nearX, ndy=cy-nearY;
       const dist=Math.sqrt(ndx*ndx+ndy*ndy);
-      if(dist<30){
-        const push=.08/Math.max(dist,.1);
-        w.vx+=ndx*push; w.vy+=ndy*push;
+
+      if(dist < LINE_REPEL_DIST && dist > 0.1) {
+        const strength = (LINE_REPEL_DIST - dist) / LINE_REPEL_DIST * 0.12;
+        const nx=ndx/dist, ny=ndy/dist;
+        if(!w.stopped) {
+          w.vx += nx * strength;
+          w.vy += ny * strength;
+        }
       }
     });
   });
 }
 
+// ── Siła gumy — ciągnie słowa do siebie jeśli za daleko ──
+function applyRubberBandForces() {
+  diagPairs.forEach(pair => {
+    const w1=pair.w1, w2=pair.w2;
+    const dx=(w2.x+w2.w/2)-(w1.x+w1.w/2);
+    const dy=(w2.y+w2.h/2)-(w1.y+w1.h/2);
+    const dist=Math.sqrt(dx*dx+dy*dy);
+
+    if(dist > MAX_PAIR_DIST) {
+      // Im dalej tym silniejsze przyciąganie (sprężyna)
+      const excess = dist - MAX_PAIR_DIST;
+      const pull = excess * 0.0025;
+      const ux=dx/dist, uy=dy/dist;
+      if(!w1.stopped){w1.vx+=ux*pull; w1.vy+=uy*pull;}
+      if(!w2.stopped){w2.vx-=ux*pull; w2.vy-=uy*pull;}
+    }
+  });
+}
+
 function animateDiag() {
   const W=window.innerWidth,H=window.innerHeight;
-  resolveDiagCollisions();
+
+  resolveDiagWordCollisions();
+  resolveDiagLineCollisions();
+  applyRubberBandForces();
 
   diagWords.forEach(w => {
     if(w.stopped) return;
     w.x+=w.vx; w.y+=w.vy;
+    // Tłumienie
+    w.vx*=0.98; w.vy*=0.98;
     // speed cap
     const spd=Math.sqrt(w.vx*w.vx+w.vy*w.vy);
-    if(spd>.3){w.vx*=.3/spd;w.vy*=.3/spd;}
+    if(spd>.35){w.vx*=.35/spd;w.vy*=.35/spd;}
     // walls
     if(w.x<10){w.x=10;w.vx=Math.abs(w.vx);}
     if(w.x>W-w.w-10){w.x=W-w.w-10;w.vx=-Math.abs(w.vx);}
     if(w.y<20){w.y=20;w.vy=Math.abs(w.vy);}
-    if(w.y>H-w.h-70){w.y=H-w.h-70;w.vy=-Math.abs(w.vy);}
+    if(w.y>H-w.h-90){w.y=H-w.h-90;w.vy=-Math.abs(w.vy);}
     w.el.style.left=w.x+'px';
     w.el.style.top=w.y+'px';
   });
 
-  // Przerysuj dynamiczne linie połączeń
+  // Aktualizuj linie SVG
   updateDiagSvgLines();
 
   diagAnimFrame=requestAnimationFrame(animateDiag);
 }
 
-// Każda para ma element SVG line który aktualizujemy
-const MAX_PAIR_DIST = 280; // max odległość między połączonymi słowami
-
-function updateDiagSvgLines() {
-  diagPairs.forEach(pair => {
-    if (!pair.line) return;
-    const c1 = getDiagCenter(pair.w1);
-    const c2 = getDiagCenter(pair.w2);
-
-    // Organiczna krzywa zamiast prostej linii
-    const mx = (c1.x + c2.x) / 2;
-    const my = (c1.y + c2.y) / 2;
-    const dx = c2.x - c1.x;
-    const dy = c2.y - c1.y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-
-    // Wygięcie krzywej — prostopadle do linii, zależne od odległości
-    const bend = Math.min(dist * .18, 40);
-    const nx = -dy / (dist || 1);
-    const ny = dx / (dist || 1);
-    // Użyj fazy czasowej żeby krzywa "oddychała"
-    const t = (Date.now() / 3000);
-    const wave = Math.sin(t + pair.phase) * bend * .4;
-    const cx = mx + nx * (bend + wave);
-    const cy = my + ny * (bend + wave);
-
-    // SVG path zamiast line
-    if (pair.path) {
-      pair.path.setAttribute('d', `M ${c1.x} ${c1.y} Q ${cx} ${cy} ${c2.x} ${c2.y}`);
-    }
-
-    // Siła gumy — jeśli za daleko, przyciągnij
-    if (dist > MAX_PAIR_DIST) {
-      const pull = (dist - MAX_PAIR_DIST) * 0.002;
-      const ux = dx / dist, uy = dy / dist;
-      if (!pair.w1.stopped) { pair.w1.vx += ux * pull; pair.w1.vy += uy * pull; }
-      if (!pair.w2.stopped) { pair.w2.vx -= ux * pull; pair.w2.vy -= uy * pull; }
-    }
-
-    // Opacity zależna od dystansu — im dalej tym mocniej widać napięcie
-    const tensionRatio = Math.min(dist / MAX_PAIR_DIST, 1);
-    if (pair.path) {
-      pair.path.setAttribute('opacity', (0.3 + tensionRatio * 0.4).toFixed(2));
-    }
-  });
+// ── Centrum słowa ──
+function getDiagCenter(w) {
+  return { x: w.x + w.w/2, y: w.y + w.h/2 };
 }
 
-function getDiagCenter(w) {
-  return {x:w.x+w.w/2, y:w.y+w.h/2};
+// ── Aktualizacja organicznych krzywych ──
+function updateDiagSvgLines() {
+  const now = Date.now() / 1000;
+  diagPairs.forEach(pair => {
+    if(!pair.path) return;
+    const c1=getDiagCenter(pair.w1);
+    const c2=getDiagCenter(pair.w2);
+    const dx=c2.x-c1.x, dy=c2.y-c1.y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    const mx=(c1.x+c2.x)/2, my=(c1.y+c2.y)/2;
+
+    // Organiczne wygięcie — perpendikularnie do linii, z falowaniem w czasie
+    const len=dist||1;
+    const nx=-dy/len, ny=dx/len; // normalny wektor
+    const bend = Math.min(dist*0.15, 35);
+    const wave = Math.sin(now * 0.8 + pair.phase) * bend * 0.5;
+    const wave2 = Math.cos(now * 0.5 + pair.phase * 1.3) * bend * 0.25;
+
+    // Dwa punkty kontrolne dla cubic bezier — bardziej organiczny ruch
+    const cp1x = c1.x + dx*0.3 + nx*(bend + wave);
+    const cp1y = c1.y + dy*0.3 + ny*(bend + wave);
+    const cp2x = c1.x + dx*0.7 + nx*(bend * 0.7 + wave2);
+    const cp2y = c1.y + dy*0.7 + ny*(bend * 0.7 + wave2);
+
+    pair.path.setAttribute('d',
+      `M ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}`
+    );
+
+    // Kolor i grubość zależna od napięcia
+    const tension = Math.min(dist / MAX_PAIR_DIST, 1.5);
+    const opacity = 0.25 + tension * 0.35;
+    const strokeW = 0.7 + tension * 0.5;
+    pair.path.setAttribute('opacity', opacity.toFixed(2));
+    pair.path.setAttribute('stroke-width', strokeW.toFixed(2));
+  });
 }
 
 function handleDiagClick(item, el) {
-  // Nie reaguj jeśli już jest w parze (dopasowanej) — chyba że może mieć więcej połączeń
-  // Lektury mogą mieć wiele motywów i odwrotnie — nie blokujemy
-
   if (!diagSelected) {
+    // Pierwsza selekcja
     diagSelected = item.id;
-    el.style.color='#000';
-    el.style.transform='scale(1.08)';
-    // zatrzymaj słowo
-    const w=diagWords.find(d=>d.item.id===item.id);
-    if(w){w.stopped=true;}
+    el.style.color = '#000';
+    el.style.fontWeight = item.type === 'book' ? '600' : '400';
+    const w = diagWords.find(d=>d.item.id===item.id);
+    if(w) { w.stopped = true; }
     return;
   }
 
-  // Druga selekcja
   const firstW = diagWords.find(d=>d.item.id===diagSelected);
   const secondW = diagWords.find(d=>d.item.id===item.id);
 
-  // Reset podświetlenia pierwszego
-  if(firstW) {
-    firstW.el.style.color='';
-    firstW.el.style.transform='';
-  }
-
-  if(!firstW||!secondW||firstW.item.type===secondW.item.type) {
-    // ten sam typ — anuluj i zacznij nową selekcję
-    if(firstW) firstW.stopped=false;
-    diagSelected=item.id;
-    el.style.color='#000';
-    el.style.transform='scale(1.08)';
-    const w=diagWords.find(d=>d.item.id===item.id);
-    if(w) w.stopped=true;
+  // Jeśli kliknięto to samo słowo — odznacz
+  if(firstW && firstW === secondW) {
+    firstW.el.style.color = '';
+    firstW.el.style.fontWeight = firstW.item.type === 'book' ? '600' : '300';
+    firstW.stopped = false;
+    diagSelected = null;
     return;
   }
 
-  // Animacja łączącej linii (tymczasowej)
-  const bookItem=firstW.item.type==='book'?firstW.item:secondW.item;
-  const motifItem=firstW.item.type==='motif'?firstW.item:secondW.item;
-  const bookW=firstW.item.type==='book'?firstW:secondW;
-  const motifW=firstW.item.type==='motif'?firstW:secondW;
+  // Reset podświetlenia pierwszego
+  if(firstW) {
+    firstW.el.style.color = '';
+    firstW.el.style.fontWeight = firstW.item.type === 'book' ? '600' : '300';
+  }
 
-  const book=getBookById(bookItem.id);
-  const isCorrect=book&&book.motifs.includes(motifItem.id);
+  if(!firstW || !secondW || firstW.item.type === secondW.item.type) {
+    // Ten sam typ — anuluj i zacznij nową selekcję
+    if(firstW) firstW.stopped = false;
+    diagSelected = item.id;
+    el.style.color = '#000';
+    el.style.fontWeight = item.type === 'book' ? '600' : '400';
+    const w = diagWords.find(d=>d.item.id===item.id);
+    if(w) w.stopped = true;
+    return;
+  }
 
-  el.style.color=''; el.style.transform='';
+  const bookItem = firstW.item.type==='book' ? firstW.item : secondW.item;
+  const motifItem = firstW.item.type==='motif' ? firstW.item : secondW.item;
+  const bookW = firstW.item.type==='book' ? firstW : secondW;
+  const motifW = firstW.item.type==='motif' ? firstW : secondW;
+
+  const book = getBookById(bookItem.id);
+  const isCorrect = book && book.motifs.includes(motifItem.id);
+
+  el.style.color = '';
+  el.style.fontWeight = item.type === 'book' ? '600' : '300';
+
+  // Sprawdź czy ta para już istnieje
+  const alreadyLinked = diagPairs.some(
+    p => p.bookId === bookItem.id && p.motifId === motifItem.id
+  );
 
   // Animowana linia "płynąca"
   animateConnectingLine(bookW, motifW, isCorrect, () => {
-    if(isCorrect) {
+    if(isCorrect && !alreadyLinked) {
       // Punkty
-      if(!isScoredPair(bookItem.id,motifItem.id)) {
-        score+=100;
-        masteredPairs.add(makePairKey(bookItem.id,motifItem.id));
-        scoredPairs.add(makePairKey(bookItem.id,motifItem.id));
+      if(!isScoredPair(bookItem.id, motifItem.id)) {
+        score += 100;
+        masteredPairs.add(makePairKey(bookItem.id, motifItem.id));
+        scoredPairs.add(makePairKey(bookItem.id, motifItem.id));
+        // Aktualizuj oba score — w #quiz-header i w #diag-score
         renderScore();
+        updateDiagScore();
       }
-      // Stała linia
-     // Organiczna krzywa zamiast prostej linii
-      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('stroke','#0a0a0a');
-      path.setAttribute('stroke-width','0.8');
-      path.setAttribute('fill','none');
-      path.setAttribute('opacity','0.4');
+
+      // Stała organiczna krzywa SVG
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('stroke', '#0a0a0a');
+      path.setAttribute('stroke-width', '0.8');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('opacity', '0.35');
+      path.setAttribute('stroke-linecap', 'round');
       diagSvg.appendChild(path);
+
       diagPairs.push({
         bookId: bookItem.id,
         motifId: motifItem.id,
-        w1: bookW, w2: motifW,
+        w1: bookW,
+        w2: motifW,
         path,
-        phase: Math.random() * Math.PI * 2,  // losowa faza dla organicznego ruchu
-        line: null,
+        phase: Math.random() * Math.PI * 2,
       });
-      // Odblokuj ruch
-      bookW.stopped=false; motifW.stopped=false;
-      // Pokoloruj połączone
-      bookW.el.style.color='var(--muted)';
-      motifW.el.style.color='var(--muted)';
-    } else {
-      // Błąd — odblokuj i dolicz punkty
-      if(!isScoredPair(bookItem.id,motifItem.id)) {
-        score-=50;
-        scoredPairs.add(makePairKey(bookItem.id,motifItem.id));
+
+      // Odblokuj ruch — słowa znów pływają
+      bookW.stopped = false;
+      motifW.stopped = false;
+      // Nie szarzejemy! Słowa zachowują normalny kolor
+      bookW.el.style.color = '';
+      motifW.el.style.color = '';
+
+    } else if(!isCorrect) {
+      // Błędne połączenie
+      if(!isScoredPair(bookItem.id, motifItem.id)) {
+        score -= 50;
+        scoredPairs.add(makePairKey(bookItem.id, motifItem.id));
         renderScore();
+        updateDiagScore();
       }
-      bookW.stopped=false; motifW.stopped=false;
+      bookW.stopped = false;
+      motifW.stopped = false;
+    } else {
+      // Już połączone — po prostu odblokuj
+      bookW.stopped = false;
+      motifW.stopped = false;
     }
   });
 
-  diagSelected=null;
+  diagSelected = null;
 }
 
+// ── Animowana linia "płynąca" od punktu do punktu ──
 function animateConnectingLine(w1, w2, correct, onDone) {
-  // Rysuj animowaną linię która "płynie" od w1 do w2
-  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-  const c1=getDiagCenter(w1), c2=getDiagCenter(w2);
-  line.setAttribute('x1',c1.x); line.setAttribute('y1',c1.y);
-  line.setAttribute('x2',c1.x); line.setAttribute('y2',c1.y); // start: długość 0
-  line.setAttribute('stroke', correct?'#0a0a0a':'#7a2010');
-  line.setAttribute('stroke-width','1.2');
-  line.setAttribute('stroke-dasharray','4 3');
-  line.setAttribute('opacity','0.7');
-  diagSvg.appendChild(line);
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const c1 = getDiagCenter(w1);
+  const c2 = getDiagCenter(w2);
 
-  const duration=420;
-  const start=performance.now();
+  path.setAttribute('stroke', correct ? '#0a0a0a' : '#8a2010');
+  path.setAttribute('stroke-width', '1.4');
+  path.setAttribute('stroke-dasharray', '6 4');
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke-linecap', 'round');
+  path.setAttribute('opacity', '0.8');
+  diagSvg.appendChild(path);
+
+  const duration = 450;
+  const startTime = performance.now();
 
   function step(now) {
-    const t=Math.min((now-start)/duration,1);
-    const ex=c1.x+(c2.x-c1.x)*t;
-    const ey=c1.y+(c2.y-c1.y)*t;
-    line.setAttribute('x2',ex); line.setAttribute('y2',ey);
-    if(t<1) { requestAnimationFrame(step); return; }
+    const t = Math.min((now - startTime) / duration, 1);
+    // easing
+    const te = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
 
-    // Linia dotarła
+    const ex = c1.x + (c2.x - c1.x) * te;
+    const ey = c1.y + (c2.y - c1.y) * te;
+
+    // Organiczna krzywa podczas animacji
+    const mx = (c1.x + ex) / 2;
+    const my = (c1.y + ey) / 2;
+    const phase = now / 800;
+    const bend = Math.sqrt((ex-c1.x)**2+(ey-c1.y)**2) * 0.2;
+    const dx = ex - c1.x, dy = ey - c1.y;
+    const len = Math.sqrt(dx*dx+dy*dy)||1;
+    const nx = -dy/len, ny = dx/len;
+    const cpx = mx + nx * (bend + Math.sin(phase) * bend * 0.4);
+    const cpy = my + ny * (bend + Math.sin(phase) * bend * 0.4);
+
+    path.setAttribute('d', `M ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} Q ${cpx.toFixed(1)} ${cpy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+
+    if(t < 1) { requestAnimationFrame(step); return; }
+
+    // Dotarła do celu
     if(!correct) {
-      // Animacja rozpadu
-      let alpha=0.7;
-      let shake=0;
-      const dissolve=()=>{
-        alpha-=.06; shake=(Math.random()-.5)*4;
-        line.setAttribute('opacity',alpha);
-        line.setAttribute('transform',`translate(${shake},${shake})`);
-        if(alpha>0) requestAnimationFrame(dissolve);
-        else { line.remove(); onDone(); }
+      // Animacja rozpadu — drżenie i zanikanie
+      let alpha = 0.8;
+      let shakeX = 0, shakeY = 0;
+      const dissolve = () => {
+        alpha -= 0.055;
+        shakeX = (Math.random() - 0.5) * 5;
+        shakeY = (Math.random() - 0.5) * 3;
+        path.setAttribute('opacity', Math.max(0, alpha).toString());
+        path.setAttribute('transform', `translate(${shakeX},${shakeY})`);
+        if(alpha > 0) requestAnimationFrame(dissolve);
+        else { path.remove(); onDone(); }
       };
-      setTimeout(dissolve, 100);
+      setTimeout(dissolve, 80);
     } else {
-      line.remove();
-      onDone();
+      // Flesz potwierdzenia — krótki rozbłysk
+      path.setAttribute('stroke-dasharray', 'none');
+      path.setAttribute('opacity', '0.9');
+      setTimeout(() => {
+        path.remove();
+        onDone();
+      }, 120);
     }
   }
   requestAnimationFrame(step);
@@ -1635,11 +1782,9 @@ window.nextTask = function() {
 // ZADANIE X — tinder 9:16 z bocznym layoutem
 // ═══════════════════════════════════════
 
-// CSS do zadania X — wstrzyknij dynamicznie
 (function injectTinderCSS(){
   const s=document.createElement('style');
   s.textContent=`
-  /* ── TINDER X — nowy układ ── */
   .tinder-scene {
     display: grid;
     grid-template-columns: 1fr 220px 1fr;
@@ -1834,7 +1979,6 @@ function attachTinderXHandlers(taskData) {
   let startX=null, currentX=0, dragging=false;
 
   function applyDrag(dx) {
-    // Obrót względem dolnego rogu (lewego lub prawego)
     const dir=dx<0?'left':'right';
     const originX=dir==='left'?'left bottom':'right bottom';
     card.style.transformOrigin=originX;
@@ -1890,26 +2034,23 @@ function attachTinderXHandlers(taskData) {
   card.onpointercancel=()=>{dragging=false;snapBack();startX=null;};
 }
 
-// Keyboard — z animacją flyOut
 document.addEventListener('keydown',(e)=>{
   if(mode!=='quiz'||quizMode!=='engine'||!currentTask||answered||currentTaskType!=='X') return;
   const card=document.getElementById('tinderCard');
   if(!card) return;
   if(e.key==='ArrowLeft') {
-    const dir='left';
     card.style.transformOrigin='left bottom';
     card.style.transition='transform .42s cubic-bezier(.4,0,.2,1), opacity .42s';
     card.style.transform='translateX(-600px) rotate(-25deg)';
     card.style.opacity='0';
-    setTimeout(()=>handleAnswer(dir),220);
+    setTimeout(()=>handleAnswer('left'),220);
   }
   if(e.key==='ArrowRight') {
-    const dir='right';
     card.style.transformOrigin='right bottom';
     card.style.transition='transform .42s cubic-bezier(.4,0,.2,1), opacity .42s';
     card.style.transform='translateX(600px) rotate(25deg)';
     card.style.opacity='0';
-    setTimeout(()=>handleAnswer(dir),220);
+    setTimeout(()=>handleAnswer('right'),220);
   }
 });
 
@@ -1946,7 +2087,6 @@ function renderHints3Col(taskData, inputId, inputPlaceholder) {
     </div>`;
 }
 
-// Wstrzyknij CSS dla 3-kolumnowych podpowiedzi
 (function injectHintCSS(){
   const s=document.createElement('style');
   s.textContent=`
@@ -2050,9 +2190,11 @@ function renderTaskY2(taskData) {
 // SCORE & INIT
 // ═══════════════════════════════════════
 
-window.renderScore=function(){
-  const el=document.getElementById('score');
-  if(el) el.innerText='Score: '+score;
+window.renderScore = function() {
+  const el = document.getElementById('score');
+  if(el) el.innerText = 'Score: ' + score;
+  // Też aktualizuj score w diagnostyce jeśli aktywna
+  updateDiagScore();
 };
 
 // CSS — wolniejsze przejścia paneli
