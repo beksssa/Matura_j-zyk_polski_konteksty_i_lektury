@@ -1521,35 +1521,19 @@ function applyRubberBandForces() {
 
 function animateDiag() {
   const W=window.innerWidth,H=window.innerHeight;
-
   resolveDiagWordCollisions();
   resolveDiagLineCollisions();
   applyRubberBandForces();
-
   diagWords.forEach(w => {
   if(w.stopped) return;
-  // Organiczny szum — Perlin-like przez czas
-  const t = Date.now() / 1000;
-  w.vx += (Math.random() - 0.5) * 0.08;
-  w.vy += (Math.random() - 0.5) * 0.06;
-  // Tłumienie tylko do minimalnej prędkości, nie do zera
-  const spd = Math.sqrt(w.vx*w.vx + w.vy*w.vy);
-  const targetSpd = 0.4 + Math.sin(t * 0.7 + w.x * 0.01) * 0.2;
-  if (spd > 0.01) {
-    w.vx = (w.vx / spd) * Math.min(spd * 0.97, Math.max(spd, targetSpd));
-    w.vy = (w.vy / spd) * Math.min(spd * 0.97, Math.max(spd, targetSpd));
-  } else {
-    w.vx = (Math.random() - 0.5) * 0.4;
-    w.vy = (Math.random() - 0.5) * 0.4;
-  }
   w.x += w.vx; w.y += w.vy;
-  // walls
-  if(w.x<10){w.x=10; w.vx=Math.abs(w.vx)+0.2;}
-  if(w.x>W-w.w-10){w.x=W-w.w-10; w.vx=-Math.abs(w.vx)-0.2;}
-  if(w.y<20){w.y=20; w.vy=Math.abs(w.vy)+0.2;}
-  if(w.y>H-w.h-90){w.y=H-w.h-90; w.vy=-Math.abs(w.vy)-0.2;}
-  w.el.style.left=w.x+'px';
-  w.el.style.top=w.y+'px';
+  const ew = w.el.offsetWidth, eh = w.el.offsetHeight;
+  if(w.x < 20){ w.x = 20; w.vx = Math.abs(w.vx); }
+  if(w.x > W-ew-20){ w.x = W-ew-20; w.vx = -Math.abs(w.vx); }
+  if(w.y < 20){ w.y = 20; w.vy = Math.abs(w.vy); }
+  if(w.y > H-eh-90){ w.y = H-eh-90; w.vy = -Math.abs(w.vy); }
+  w.el.style.left = w.x+'px';
+  w.el.style.top = w.y+'px';
 });
 
   // Aktualizuj linie SVG
