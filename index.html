@@ -1446,8 +1446,23 @@ window.renderDiagnostic = function() {
   });
 
   if (diagAnimFrame) cancelAnimationFrame(diagAnimFrame);
-  animateDiag();
-};
+
+  // Poczekaj na renderowanie DOM żeby offsetWidth był poprawny
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      diagWords.forEach(w => {
+        const measured = w.el.offsetWidth || w.item.label.length * 9;
+        w.w = measured;
+        w.h = parseFloat(w.el.style.fontSize) * 1.3;
+        // Popraw pozycję żeby nie wychodziła poza ekran
+        if (w.x + w.w > window.innerWidth - 10) {
+          w.x = window.innerWidth - w.w - 10;
+          w.el.style.left = w.x + 'px';
+        }
+      });
+      animateDiag();
+    });
+  });
 
 // ── Kolizje między słowami ──
 function resolveDiagWordCollisions() {
@@ -2213,6 +2228,62 @@ window.renderScore = function() {
 
 blurBg('none');
 renderEpochFilter();
+
+// ═══════════════════════════════════════
+// AUTO-SKALOWANIE ZADAŃ (X, Y1, Y2)
+// ═══════════════════════════════════════
+
+function scaleTaskToFit() {
+  const content = document.getElementById('quiz-content');
+  if (!content) return;
+  const inner = content.firstElementChild;
+  if (!inner) return;
+
+  // Reset skali żeby zmierzyć naturalny rozmiar
+  inner.style.transform = '';
+  inner.style.transformOrigin = 'top center';
+
+  requestAnimationFrame(() => {
+    const availH = content.clientHeight || window.innerHeight * 0.75;
+    const availW = content.clientWidth || window.innerWidth;
+    const naturalH = inner.scrollHeight;
+    const naturalW = inner.scrollWidth;
+
+    const scaleH = availH / naturalH;
+    const scaleW = availW / naturalW;
+    const scale = Math.min(scaleH, scaleW, 1); // nigdy nie powiększaj
+
+    if (scale < 0.99) {
+      inner.style.transform = `scale(${scale.toFixed(3)})`;
+      inner.style.transformOrigin = 'top center';
+    }
+  });
+}
+
+// Wywołuj skalowanie po każdym renderowaniu zadania
+const _origRenderTaskX = renderTaskX;
+window.renderTaskX = function(taskData, answeredState) {
+  _origRenderTaskX(taskData, answeredState);
+  requestAnimationFrame(scaleTaskToFit);
+};
+
+const _origRenderTaskY1 = renderTaskY1;
+window.renderTaskY1 = function(taskData) {
+  _origRenderTaskY1(taskData);
+  requestAnimationFrame(scaleTaskToFit);
+};
+
+const _origRenderTaskY2 = renderTaskY2;
+window.renderTaskY2 = function(taskData) {
+  _origRenderTaskY2(taskData);
+  requestAnimationFrame(scaleTaskToFit);
+};
+
+// Reaguj na zmianę rozmiaru okna
+window.addEventListener('resize', () => {
+  if (quizMode === 'engine') requestAnimationFrame(scaleTaskToFit);
+});
+  
 </script>
 </body>
 </html>
