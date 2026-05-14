@@ -37,7 +37,6 @@ html,body{
 
 button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 
-/* ═══ CANVAS TŁO ═══ */
 #bg-canvas{
   position:fixed;inset:0;
   width:100%;height:100%;
@@ -47,28 +46,14 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 }
 #bg-canvas.blurred{filter:blur(18px) opacity(.35)}
 #bg-canvas.very-blurred{filter:blur(28px) opacity(.2)}
+#bg-canvas.profile-blur{filter:blur(8px) opacity(.28)}
 
-/* ═══ RADIALNY BLUR NA PROFILU ═══ */
-/* Warstwa która przykrywa canvas na krawędziach ale zostawia środek ostry */
-#profile-radial-blur {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  display: none;
-  /* Użyjemy backdrop-filter na pseudo-warstwie przez overlay */
-}
-
-/* Overlay z radialnym gradientem - rozmycie rośnie od środka do krawędzi */
 #profile-edge-vignette {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 1;
   display: none;
-  /* Delikatna winietka */
   background: radial-gradient(
     ellipse 55% 55% at 50% 50%,
     transparent 0%,
@@ -79,106 +64,66 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
   );
 }
 
-/* Canvas z efektem rozmycia krawędzi dla profilu */
-#bg-canvas.profile-blur {
-  /* Całe canvas jest lekko rozmyte, ale overlay w środku to maskuje */
-  filter: blur(8px) opacity(.28);
-}
-
-/* ═══ BACK ARROW ═══ */
 #back-btn{
   position:fixed;top:22px;right:28px;
   z-index:100;
   display:none;
   align-items:center;gap:6px;
   font-family:var(--ff-sans);
-  font-size:11px;
-  font-weight:400;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:var(--muted);
-  cursor:pointer;
-  transition:color .2s;
-  padding:6px 0;
+  font-size:11px;font-weight:400;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;
+  transition:color .2s;padding:6px 0;
 }
 #back-btn.visible{display:flex}
 #back-btn:hover{color:var(--ink)}
 #back-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .2s}
 #back-btn:hover svg{transform:translateX(-3px)}
 
-/* ═══ APP SHELL ═══ */
 #app{
   position:relative;z-index:1;
   min-height:100dvh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
   padding:2rem 1.5rem;
 }
 
-/* ═══ ONBOARDING PANELS ═══ */
 .panel{
   position:absolute;
   width:100%;max-width:420px;
   display:flex;flex-direction:column;align-items:center;gap:0;
-  opacity:0;
-  transform:scale(.97);
+  opacity:0;transform:scale(.97);
   pointer-events:none;
   transition:opacity .7s var(--ease),transform .7s var(--ease);
 }
-.panel.active{
-  opacity:1;transform:scale(1);pointer-events:all;
-  position:relative;
-}
-.panel.exit{
-  opacity:0;transform:scale(1.03);pointer-events:none;
-}
+.panel.active{opacity:1;transform:scale(1);pointer-events:all;position:relative;}
+.panel.exit{opacity:0;transform:scale(1.03);pointer-events:none;}
 
 .panel-eyebrow{
-  font-family:var(--ff-sans);
-  font-size:9px;font-weight:400;
+  font-family:var(--ff-sans);font-size:9px;font-weight:400;
   letter-spacing:.28em;text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:2.2rem;
-  text-align:center;
+  color:var(--muted);margin-bottom:2.2rem;text-align:center;
 }
-
 .panel-heading{
   font-family:var(--ff-serif);
-  font-size:clamp(2.6rem,7vw,3.8rem);
-  font-weight:300;
-  line-height:1.05;
-  letter-spacing:-.02em;
-  color:var(--ink);
-  text-align:center;
-  margin-bottom:3rem;
+  font-size:clamp(2.6rem,7vw,3.8rem);font-weight:300;
+  line-height:1.05;letter-spacing:-.02em;
+  color:var(--ink);text-align:center;margin-bottom:3rem;
 }
 .panel-heading em{font-style:italic;font-weight:300}
 
-/* ═══ MODE TILES ═══ */
 .mode-grid{
-  width:100%;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:1px;
-  background:var(--line);
-  border:1px solid var(--line);
-  margin-bottom:0;
+  width:100%;display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--line);border:1px solid var(--line);
 }
-
 .mode-tile{
-  background:var(--bg);
-  padding:1.8rem 1.4rem 1.6rem;
-  display:flex;flex-direction:column;
-  align-items:flex-start;gap:.3rem;
-  cursor:pointer;
-  transition:background .25s var(--ease);
-  position:relative;
-  overflow:hidden;
+  background:var(--bg);padding:1.8rem 1.4rem 1.6rem;
+  display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;
+  cursor:pointer;transition:background .25s var(--ease);
+  position:relative;overflow:hidden;
 }
 .mode-tile::before{
-  content:'';
-  position:absolute;bottom:0;left:0;right:0;
+  content:'';position:absolute;bottom:0;left:0;right:0;
   height:2px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;
   transition:transform .35s var(--ease);
@@ -187,178 +132,60 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 .mode-tile.chosen{background:var(--ink)}
 .mode-tile.chosen .tile-label,.mode-tile.chosen .tile-sub{color:var(--bg)}
 .mode-tile.chosen::before{transform:scaleX(1);background:var(--bg)}
+.tile-label{font-family:var(--ff-serif);font-size:1.5rem;font-weight:300;line-height:1;color:var(--ink);transition:color .25s;}
+.tile-sub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .25s;}
 
-.tile-label{
-  font-family:var(--ff-serif);
-  font-size:1.5rem;font-weight:300;line-height:1;
-  color:var(--ink);transition:color .25s;
-}
-.tile-sub{
-  font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);transition:color .25s;
-}
-
-/* ═══ EPOCH SLIDERS ═══ */
 .epoch-list{
-  width:100%;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:10px 20px;
-  margin-bottom:2.8rem;
+  width:100%;display:grid;grid-template-columns:1fr 1fr;
+  gap:10px 20px;margin-bottom:2.8rem;
 }
-
-.epoch-row{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;cursor:pointer;padding:4px 0;
-}
-.epoch-name{
-  font-family:var(--ff-sans);
-  font-size:12px;font-weight:300;
-  letter-spacing:.06em;text-transform:capitalize;
-  color:var(--ink2);transition:color .2s;
-}
-
-.epoch-slider{
-  position:relative;
-  width:36px;height:20px;flex-shrink:0;
-  cursor:pointer;
-}
-.epoch-slider-track{
-  position:absolute;inset:0;
-  border-radius:10px;
-  background:var(--line);
-  transition:background .3s var(--ease);
-}
-.epoch-slider-thumb{
-  position:absolute;
-  top:3px;left:3px;
-  width:14px;height:14px;
-  border-radius:50%;
-  background:var(--bg);
-  box-shadow:0 1px 3px rgba(0,0,0,.2);
-  transition:transform .3s var(--ease),background .3s;
-}
+.epoch-row{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:4px 0;}
+.epoch-name{font-family:var(--ff-sans);font-size:12px;font-weight:300;letter-spacing:.06em;text-transform:capitalize;color:var(--ink2);transition:color .2s;}
+.epoch-slider{position:relative;width:36px;height:20px;flex-shrink:0;cursor:pointer;}
+.epoch-slider-track{position:absolute;inset:0;border-radius:10px;background:var(--line);transition:background .3s var(--ease);}
+.epoch-slider-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .3s var(--ease);}
 .epoch-row.on .epoch-slider-track{background:var(--ink)}
 .epoch-row.on .epoch-slider-thumb{transform:translateX(16px)}
 .epoch-row.on .epoch-name{color:var(--ink);font-weight:400}
 
-/* ═══ QUIZ / MAP SHELLS ═══ */
-#quiz-content{margin-top:12px}
-
-.diagnostic-layout{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:14px;margin-top:10px;
-}
 .quiz-item,.map-item{
-  border:1px solid var(--line);
-  padding:10px 14px;margin-bottom:8px;
+  border:1px solid var(--line);padding:10px 14px;margin-bottom:8px;
   display:flex;justify-content:space-between;align-items:center;
-  gap:10px;user-select:none;background:var(--bg);
-  transition:background .15s;
+  gap:10px;user-select:none;background:var(--bg);transition:background .15s;
 }
 .quiz-item.selected{border-color:var(--ink);background:#f8f8f8}
 .quiz-item:hover,.map-item:hover{background:#f8f8f8}
 .item-main{flex:1;cursor:pointer;font-size:14px}
-.icon-btn{
-  border:none;background:transparent;font-size:16px;
-  cursor:pointer;padding:0 2px;line-height:1;
-  color:var(--muted);transition:color .15s;
-}
+.icon-btn{border:none;background:transparent;font-size:16px;cursor:pointer;padding:0 2px;line-height:1;color:var(--muted);transition:color .15s;}
 .icon-btn:hover{color:var(--ink)}
 .small-note{margin:0 0 10px;color:var(--muted);font-size:13px}
 
-/* ═══ TASK CARD ═══ */
-.task-card{
-  max-width:560px;margin:0 auto;text-align:center;
-  border:1px solid var(--line);
-  padding:28px 24px;background:var(--bg);
-}
-.task-head{
-  font-family:var(--ff-serif);font-size:20px;font-weight:300;
-  margin-bottom:12px;
-  display:flex;justify-content:center;align-items:center;
-  gap:8px;flex-wrap:wrap;
-}
-.task-swipe-instruction{
-  font-size:16px;margin-bottom:12px;
-  color:var(--muted);letter-spacing:.24em;
-}
-.task-image{
-  height:110px;border:1px dashed var(--line);
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  gap:6px;background:#fafafa;
-  margin:10px 0 16px;color:var(--muted);font-size:13px;
-}
-.task-row{display:flex;justify-content:space-between;gap:10px}
-.task-choice{
-  flex:1;min-height:76px;border:1px solid var(--line);
-  padding:12px;display:flex;justify-content:center;
-  align-items:center;text-align:center;
-  cursor:pointer;background:var(--bg);font-size:14px;
-  transition:background .15s,border-color .15s;
-}
-.task-choice:hover{background:#f5f5f5;border-color:var(--ink)}
+.task-card{max-width:560px;margin:0 auto;text-align:center;border:1px solid var(--line);padding:28px 24px;background:var(--bg);}
 .task-card.answered{border-color:var(--ink)}
-.task-card.answered .task-choice{opacity:.9}
 
-/* ═══ NEXT BTN ═══ */
 #nextBtn{
-  margin-top:14px;
-  font-family:var(--ff-sans);font-size:11px;font-weight:400;
+  margin-top:14px;font-family:var(--ff-sans);font-size:11px;font-weight:400;
   letter-spacing:.2em;text-transform:uppercase;
-  color:var(--bg);background:var(--ink);
-  border:1px solid var(--ink);
-  padding:.75rem 2.2rem;
-  cursor:pointer;transition:background .18s,opacity .18s;
-  display:none;
+  color:var(--bg);background:var(--ink);border:1px solid var(--ink);
+  padding:.75rem 2.2rem;cursor:pointer;transition:background .18s;display:none;
 }
 #nextBtn:hover{background:#333}
 
-/* ═══ QUIZ HEADER ═══ */
 #quiz-header{
-  width:100%;max-width:700px;
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:1.2rem;padding-bottom:.8rem;
-  border-bottom:1px solid var(--line);
+  width:100%;max-width:700px;display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--line);
 }
-#quiz-header h2{
-  font-family:var(--ff-serif);font-size:1rem;font-weight:300;
-  letter-spacing:.04em;color:var(--muted);
-}
-#score{
-  font-size:11px;font-weight:400;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--ink);
-}
+#quiz-header h2{font-family:var(--ff-serif);font-size:1rem;font-weight:300;letter-spacing:.04em;color:var(--muted);}
+#score{font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);}
 
-/* ═══ OPEN TASKS (Y1/Y2) ═══ */
-.open-task-shell{display:grid;gap:12px;text-align:left}
-.open-task-topline{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-.open-task-title{font-family:var(--ff-serif);font-size:1.4rem;font-weight:300;text-align:center;margin:0}
-.open-task-visible-hint{border:1px solid var(--line);padding:12px;background:#fafafa;text-align:left}
-.open-task-hidden-grid{display:grid;gap:8px}
-.hint-card{border:1px solid var(--line);padding:12px;background:var(--bg);text-align:left}
-.hint-card.revealed{background:#f8f8f8;border-color:var(--ink2)}
-.hint-title{font-weight:400;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.hint-text{color:var(--ink);font-size:13px}
-.hint-actions{margin-top:8px}
-.hint-reveal-btn{
-  border:1px solid var(--line);background:var(--bg);
-  padding:5px 13px;font-family:var(--ff-sans);
-  font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  cursor:pointer;transition:background .15s,border-color .15s;
-}
-.hint-reveal-btn:hover{background:#f5f5f5;border-color:var(--ink)}
-.hint-reveal-btn:disabled{opacity:.3;cursor:not-allowed}
-.open-task-input-wrap{display:grid;gap:6px}
-.open-task-input-wrap label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .open-task-input{
-  width:100%;box-sizing:border-box;
-  border:1px solid var(--line);
+  width:100%;box-sizing:border-box;border:1px solid var(--line);
   padding:11px 13px;font-size:15px;font-family:var(--ff-sans);
-  background:var(--bg);color:var(--ink);
-  transition:border-color .15s;outline:none;
+  background:var(--bg);color:var(--ink);transition:border-color .15s;outline:none;
 }
 .open-task-input:focus{border-color:var(--ink)}
+.open-task-input-wrap{display:grid;gap:6px}
+.open-task-input-wrap label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .open-task-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .open-task-actions button{
   font-family:var(--ff-sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
@@ -371,197 +198,61 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 .task-feedback.ok{color:#1a4a2e}
 .task-feedback.bad{color:#7a2a1a}
 
-/* ═══ COVERS (Y2) ═══ */
-.cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.cover-card{border:1px solid var(--line);background:var(--bg);padding:10px;display:grid;gap:6px;justify-items:center}
 .cover-visual{width:100%;min-height:130px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .cover-visual img{width:100%;height:100%;object-fit:cover;display:block}
 .cover-emoji{font-size:50px;line-height:1}
-.cover-label{font-size:11px;color:var(--muted);text-align:center;letter-spacing:.04em}
 
-/* ═══ TINDER CARD (X) ═══ */
-.tinder-wrap{
-  position:relative;width:100%;max-width:400px;
-  margin:0 auto;display:flex;flex-direction:column;
-  align-items:center;gap:14px;user-select:none;
-}
-.tinder-label{
-  font-family:var(--ff-sans);font-size:10px;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-align:center;
-}
-.tinder-question{
-  font-family:var(--ff-serif);font-size:1.15rem;font-weight:300;
-  text-align:center;color:var(--ink);line-height:1.3;
-}
-.tinder-card-stage{
-  width:100%;position:relative;height:310px;
-  display:flex;align-items:center;justify-content:center;
-}
-.tinder-card{
-  position:absolute;width:240px;
-  background:var(--bg);border:1px solid var(--line2);
-  display:flex;flex-direction:column;overflow:hidden;
-  cursor:grab;touch-action:none;will-change:transform;
-  transition:box-shadow .2s;
-}
-.tinder-card:active{cursor:grabbing}
-.tinder-card-img{width:100%;height:190px;object-fit:cover;display:block;background:#f0f0f0}
-.tinder-card-img-placeholder{
-  width:100%;height:190px;background:#f5f5f5;
-  display:flex;align-items:center;justify-content:center;
-  font-size:64px;line-height:1;
-}
-.tinder-card-name{
-  padding:9px 12px;
-  font-family:var(--ff-serif);font-size:1rem;font-weight:300;
-  color:var(--ink);text-align:center;border-top:1px solid var(--line);
-}
-.tinder-overlay{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--ff-sans);font-size:10px;font-weight:400;
-  letter-spacing:.2em;text-transform:uppercase;
-  opacity:0;transition:opacity .1s;pointer-events:none;
-}
-.tinder-overlay-left{background:rgba(120,30,20,.07);color:#7a2010}
-.tinder-overlay-right{background:rgba(20,50,30,.07);color:#1a3a20}
-.tinder-choices{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tinder-choice{
-  border:1px solid var(--line);padding:13px 10px;
-  text-align:center;font-family:var(--ff-sans);
-  font-size:12px;font-weight:300;color:var(--ink);
-  background:var(--bg);cursor:pointer;
-  transition:background .15s,border-color .15s;line-height:1.4;
-}
-.tinder-choice:hover{background:#f5f5f5;border-color:var(--ink)}
-.tinder-choice.chosen-correct{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.tinder-choice.chosen-wrong{background:#7a2010;border-color:#7a2010;color:var(--bg)}
-.tinder-choice.reveal-correct{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.tinder-hint{
-  font-size:10px;color:var(--muted);text-align:center;
-  letter-spacing:.12em;text-transform:uppercase;
-}
-
-/* ═══ PROFILE ═══ */
 .profile-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
-.profile-section h3{
-  font-family:var(--ff-sans);font-size:9px;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:var(--muted);margin:0 0 10px;font-weight:400;
-}
+.profile-section h3{font-family:var(--ff-sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:400;}
 .profile-chip-list{display:flex;flex-wrap:wrap;gap:6px}
-.profile-chip{
-  border:1px solid var(--line);padding:4px 10px;
-  background:var(--bg);font-size:12px;color:var(--ink);
-}
+.profile-chip{border:1px solid var(--line);padding:4px 10px;background:var(--bg);font-size:12px;color:var(--ink);}
 .profile-chip.clickable{cursor:pointer;transition:background .15s,border-color .15s}
 .profile-chip.clickable:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .profile-media-list{display:grid;gap:6px}
 .profile-media-item{border:1px solid var(--line);padding:8px 12px;background:var(--bg);font-size:13px}
-
-/* profile image layout */
-.profile-image-wide{
-  width:50%;margin:14px auto 0;display:block;
-}
-.profile-image-wide img{width:100%;display:block;border:1px solid var(--line)}
-
 .profile-two-col{display:grid;grid-template-columns:1fr 220px;gap:20px;align-items:start}
 .profile-two-col-img img{width:100%;display:block;border:1px solid var(--line)}
-.profile-two-col-text{}
-.profile-image-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
-  gap:8px;margin-top:6px;
-}
-.profile-image-item{
-  width:100%;aspect-ratio:4/3;object-fit:cover;
-  display:block;border:1px solid var(--line);
-}
-.profile-image-placeholder{
-  width:100%;aspect-ratio:4/3;background:#f5f5f5;
-  border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:32px;
-}
+.profile-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:6px;}
+.profile-image-item{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border:1px solid var(--line);}
 
-/* ═══ MAP ═══ */
-#map-title{
-  font-family:var(--ff-serif);font-size:1.7rem;font-weight:300;
-  margin-bottom:1rem;color:var(--ink);
-}
+#map-title{font-family:var(--ff-serif);font-size:1.7rem;font-weight:300;margin-bottom:1rem;color:var(--ink);}
 
-/* ═══ BTN END ═══ */
 .btn-end{
-  font-family:var(--ff-sans);font-size:10px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--muted);
-  background:transparent;border:1px solid var(--line);
-  padding:.55rem 1.3rem;cursor:pointer;margin-top:10px;
-  transition:color .15s,border-color .15s;
+  font-family:var(--ff-sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);background:transparent;border:1px solid var(--line);
+  padding:.55rem 1.3rem;cursor:pointer;margin-top:10px;transition:color .15s,border-color .15s;
 }
 .btn-end:hover{color:var(--ink);border-color:var(--ink)}
 
-/* ═══ DIAGNOSTIC CANVAS ═══ */
 #diagnostic-canvas{
-  position:fixed;inset:0;
-  width:100%;height:100%;
-  pointer-events:none;z-index:2;
-  display:none;
+  position:fixed;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:2;display:none;
 }
-#diagnostic-canvas.active { 
-  display: block;
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-}
-/* diagnostic words */
+#diagnostic-canvas.active{display:block}
+
 .diag-word{
-  position:fixed;
-  font-family:var(--ff-serif);
-  font-weight:300;
-  color:var(--ink2);
-  cursor:pointer;
-  user-select:none;
-  transition:color .2s,transform .1s;
-  z-index:3;
-  white-space:nowrap;
+  position:fixed;font-family:var(--ff-serif);font-weight:300;
+  color:var(--ink2);cursor:pointer;user-select:none;
+  transition:color .15s;z-index:3;white-space:nowrap;
 }
 .diag-word:hover{color:#000}
-.diag-word.book-word{font-style:normal}
-.diag-word.motif-word{font-style:italic}
-.diag-word.selected{color:#000;font-weight:400}
 
-/* Usunięto .diag-word.matched - nie szarzejemy po połączeniu */
-
-#diag-shell{
-  position:fixed;inset:0;
-  display:none;z-index:3;
-}
+#diag-shell{position:fixed;inset:0;display:none;z-index:3;}
 #diag-shell.active{display:block}
 
 #diag-controls{
   position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
-  z-index:10;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
+  z-index:10;display:flex;flex-direction:column;align-items:center;gap:10px;
 }
 
-/* ═══ DIAGNOSTIC SCORE ═══ */
-#diag-score {
-  font-family: var(--ff-sans);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: rgba(255,255,255,0.85);
-  padding: 5px 14px;
-  border: 1px solid var(--line);
-  backdrop-filter: blur(4px);
+#diag-score{
+  font-family:var(--ff-sans);font-size:11px;font-weight:400;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink);
+  background:rgba(255,255,255,0.85);padding:5px 14px;
+  border:1px solid var(--line);backdrop-filter:blur(4px);
 }
 
-/* ═══ RESPONSIVE ═══ */
 @media(max-width:760px){
-  .diagnostic-layout{grid-template-columns:1fr}
   .task-row{flex-direction:column}
   .epoch-list{grid-template-columns:1fr}
   .mode-grid{grid-template-columns:1fr}
@@ -571,25 +262,17 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 </head>
 <body>
 
-<!-- ══ CANVAS TŁO ══ -->
 <canvas id="bg-canvas"></canvas>
-
-<!-- ══ RADIALNY BLUR DLA PROFILU ══ -->
 <div id="profile-edge-vignette"></div>
-
-<!-- ══ DIAGNOSTIC SVG LINIE ══ -->
 <svg id="diagnostic-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
 
-<!-- ══ BACK ARROW ══ -->
 <button id="back-btn" onclick="handleBack()">
   <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
   <span>Powrót</span>
 </button>
 
-<!-- ══ APP ══ -->
 <div id="app">
-
-  <!-- EKRAN 1: TRYB -->
+  <!-- EKRAN 1 -->
   <div id="screen-start" class="panel active">
     <p class="panel-eyebrow">Matura · Język Polski</p>
     <h1 class="panel-heading">Jak chcesz<br><em>pracować?</em></h1>
@@ -605,7 +288,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
     </div>
   </div>
 
-  <!-- EKRAN 2: ZAKRES -->
+  <!-- EKRAN 2 -->
   <div id="screen-mode" class="panel">
     <p class="panel-eyebrow">Krok 2 z 3</p>
     <h1 class="panel-heading">Wybierz<br><em>zakres</em></h1>
@@ -621,7 +304,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
     </div>
   </div>
 
-  <!-- EKRAN 3: EPOKI -->
+  <!-- EKRAN 3 -->
   <div id="screen-epoch" class="panel">
     <p class="panel-eyebrow">Krok 3 z 3</p>
     <h1 class="panel-heading">Filtruj<br><em>epoki</em></h1>
@@ -646,7 +329,6 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
         <button class="btn-end-quiz" onclick="goToMenu()">Zakończ</button>
       </div>
     </div>
-    <!-- box "dowiedz się więcej" -->
     <div id="learn-more-box" onclick="handleLearnMore()">
       <div class="lmb-title" id="lmb-title">—</div>
       <div class="lmb-sub">Dowiedz się więcej</div>
@@ -658,10 +340,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
   <div id="profile" style="display:none;width:100%;max-width:700px">
     <div id="profile-content"></div>
   </div>
-
 </div>
 
-<!-- DIAGNOSTIC FLOATING WORDS -->
+<!-- DIAGNOSTIC SHELL -->
 <div id="diag-shell">
   <div id="diag-words"></div>
   <div id="diag-controls">
@@ -674,9 +355,96 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
 <script src="script.js"></script>
 <script>
 // ═══════════════════════════════════════
+// INJECTED CSS
+// ═══════════════════════════════════════
+(function injectAllCSS(){
+  const s = document.createElement('style');
+  s.textContent = `
+  .panel{transition:opacity .9s cubic-bezier(.4,0,.2,1),transform .9s cubic-bezier(.4,0,.2,1)!important}
+  #bg-canvas{transition:filter .9s cubic-bezier(.4,0,.2,1)!important}
+
+  #quiz-header{position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  #quiz-header-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+  #nextBtn{margin-top:0!important;font-size:10px;padding:.55rem 1.4rem}
+  .btn-end-quiz{font-family:var(--ff-sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line);padding:.45rem 1.1rem;cursor:pointer;transition:color .15s,border-color .15s}
+  .btn-end-quiz:hover{color:var(--ink);border-color:var(--ink)}
+
+  #learn-more-box{display:none;margin-top:10px;border:1px solid var(--line);padding:12px 16px;cursor:pointer;transition:background .15s,border-color .15s;animation:slideInBox .4s cubic-bezier(.4,0,.2,1) both}
+  #learn-more-box:hover{background:#f5f5f5;border-color:var(--ink)}
+  #learn-more-box.visible{display:block}
+  @keyframes slideInBox{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+  .lmb-title{font-family:var(--ff-serif);font-size:1.1rem;font-weight:300;color:var(--ink);margin-bottom:2px}
+  .lmb-sub{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+  #quiz{display:flex;flex-direction:column;height:100dvh;padding:18px 16px 10px;overflow:hidden;box-sizing:border-box}
+  #quiz-content{margin-top:0!important;flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:center;min-height:0}
+
+  .y1-shell{max-width:600px;margin:0 auto;width:100%}
+
+  .y2-layout{display:grid;grid-template-columns:160px 1fr 160px;gap:14px;align-items:start;max-width:700px;margin:0 auto;width:100%}
+  .y2-cover-col{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .y2-cover-col .cover-visual{width:100%;min-height:100px;max-height:160px}
+  .y2-cover-label{font-size:11px;color:var(--muted);text-align:center;letter-spacing:.04em}
+  .y2-center{display:flex;flex-direction:column;gap:10px}
+  .y2-title{font-family:var(--ff-serif);font-size:1.2rem;font-weight:300;text-align:center;margin:0 0 4px}
+
+  #map-menu-btn{position:fixed;top:52px;right:28px;z-index:100;font-family:var(--ff-sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line);padding:.45rem 1.1rem;cursor:pointer;transition:color .15s,border-color .15s;display:none}
+  #map-menu-btn.visible{display:block}
+  #map-menu-btn:hover{color:var(--ink);border-color:var(--ink)}
+
+  @keyframes profileZoomIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+  #profile-content{animation:profileZoomIn .5s cubic-bezier(.4,0,.2,1) both}
+
+  .tinder-scene{display:grid;grid-template-columns:1fr 220px 1fr;align-items:center;gap:18px;max-width:680px;margin:0 auto;padding:10px 0}
+  .tinder-side{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .tinder-side-label{font-family:var(--ff-sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center}
+  .tinder-side-choice{border:1px solid var(--line);padding:16px 12px;text-align:center;font-family:var(--ff-serif);font-size:1.05rem;font-weight:300;color:var(--ink);background:var(--bg);cursor:pointer;transition:background .15s,border-color .15s;line-height:1.4;width:100%}
+  .tinder-side-choice:hover{background:#f5f5f5;border-color:var(--ink)}
+  .tinder-side-choice.chosen-correct{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .tinder-side-choice.chosen-wrong{background:#7a2010;border-color:#7a2010;color:var(--bg)}
+  .tinder-side-choice.reveal-correct{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .tinder-center{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .tinder-card-x{width:220px;aspect-ratio:9/16;background:var(--bg);border:1px solid var(--line2);display:flex;flex-direction:column;overflow:hidden;cursor:grab;touch-action:none;will-change:transform;transform-origin:bottom center;position:relative}
+  .tinder-card-x:active{cursor:grabbing}
+  .tinder-card-x img{width:100%;flex:1;object-fit:cover;display:block;min-height:0}
+  .tinder-card-x .tinder-card-emoji{flex:1;display:flex;align-items:center;justify-content:center;font-size:72px;background:#f5f5f5}
+  .tinder-card-x-name{padding:8px 10px;font-family:var(--ff-serif);font-size:.9rem;font-weight:300;color:var(--ink);text-align:center;border-top:1px solid var(--line);flex-shrink:0}
+  .tinder-overlay-x{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--ff-sans);font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;opacity:0;transition:opacity .1s;pointer-events:none}
+  .tinder-overlay-x.left{background:rgba(120,30,20,.09);color:#7a2010}
+  .tinder-overlay-x.right{background:rgba(20,50,30,.09);color:#1a3a20}
+  .tinder-hint-x{font-size:10px;color:var(--muted);text-align:center;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+
+  .hints-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:4px 0}
+  .hint-col{border:1px solid var(--line);padding:10px 10px 8px;background:var(--bg);text-align:left;display:flex;flex-direction:column;gap:4px}
+  .hint-col.revealed{background:#f8f8f8;border-color:var(--ink2)}
+  .hint-col.locked .hint-text{color:var(--muted);font-style:italic}
+  .hint-col.hint-blocked{opacity:.45}
+  .hint-col .hint-title{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400}
+  .hint-col .hint-text{font-size:12px;color:var(--ink);flex:1}
+  .hint-col .hint-actions{margin-top:auto;padding-top:6px}
+  .hint-reveal-btn{border:1px solid var(--line);background:var(--bg);padding:5px 13px;font-family:var(--ff-sans);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .15s,border-color .15s}
+  .hint-reveal-btn:hover{background:#f5f5f5;border-color:var(--ink)}
+  .hint-reveal-btn:disabled{opacity:.3;cursor:not-allowed}
+
+  .open-task-topline{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+  .open-task-title{font-family:var(--ff-serif);font-size:1.4rem;font-weight:300;text-align:center;margin:0}
+
+  @media(max-width:600px){
+    .tinder-scene{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+    .tinder-scene .tinder-side:first-child{order:2}
+    .tinder-scene .tinder-center{order:1}
+    .tinder-scene .tinder-side:last-child{order:3}
+    .y2-layout{grid-template-columns:1fr}
+    .y2-cover-col{flex-direction:row;gap:10px}
+    .hints-3col{grid-template-columns:1fr}
+  }
+  `;
+  document.head.appendChild(s);
+})();
+
+// ═══════════════════════════════════════
 // CANVAS TŁO
 // ═══════════════════════════════════════
-
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -684,255 +452,52 @@ const BG_WORDS = [
   ...data.books.map(b => b.title),
   ...data.motifs.map(m => m.name),
 ];
-
 const FONTS = [
-  '300 18px "Cormorant Garamond"',
-  '300 italic 22px "Cormorant Garamond"',
-  '400 15px "Cormorant Garamond"',
-  '300 26px "Cormorant Garamond"',
-  '300 italic 14px "Cormorant Garamond"',
-  '600 16px "Cormorant Garamond"',
+  '300 18px "Cormorant Garamond"','300 italic 22px "Cormorant Garamond"',
+  '400 15px "Cormorant Garamond"','300 26px "Cormorant Garamond"',
+  '300 italic 14px "Cormorant Garamond"','600 16px "Cormorant Garamond"',
 ];
 
 let particles = [];
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 
-(function injectLayoutCSS(){
-  const s = document.createElement('style');
-  s.textContent = `
-  /* ── QUIZ HEADER z przyciskami ── */
-  #quiz-header {
-    position: relative; 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  #quiz-header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-left: auto;
-  }
-  #nextBtn {
-    margin-top: 0 !important;
-    font-size: 10px;
-    padding: .55rem 1.4rem;
-  }
-  .btn-end-quiz {
-    font-family: var(--ff-sans);
-    font-size: 10px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid var(--line);
-    padding: .45rem 1.1rem;
-    cursor: pointer;
-    transition: color .15s, border-color .15s;
-  }
-  .btn-end-quiz:hover { color: var(--ink); border-color: var(--ink); }
-
-  /* ── BOX "dowiedz się więcej" ── */
-  #learn-more-box {
-    display: none;
-    margin-top: 10px;
-    border: 1px solid var(--line);
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: background .15s, border-color .15s;
-    animation: slideInBox .4s cubic-bezier(.4,0,.2,1) both;
-  }
-  #learn-more-box:hover { background: #f5f5f5; border-color: var(--ink); }
-  #learn-more-box.visible { display: block; }
-  @keyframes slideInBox {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .lmb-title {
-    font-family: var(--ff-serif);
-    font-size: 1.1rem;
-    font-weight: 300;
-    color: var(--ink);
-    margin-bottom: 2px;
-  }
-  .lmb-sub {
-    font-size: 9px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* ── QUIZ CONTENT bez scrollowania ── */
-  #quiz {
-    display: flex;
-    flex-direction: column;
-    max-height: 100dvh;
-    padding: 18px 16px 10px;
-    overflow: hidden;
-  }
-  #quiz-content {
-    margin-top: 0 !important;
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  /* ── Y1 bez obramówki ── */
-  .y1-shell {
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  /* ── Y2 nowy układ 3-kolumnowy ── */
-  .y2-layout {
-    display: grid;
-    grid-template-columns: 160px 1fr 160px;
-    gap: 14px;
-    align-items: start;
-    max-width: 700px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  .y2-cover-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-  }
-  .y2-cover-col .cover-visual {
-    width: 100%;
-    min-height: 100px;
-    max-height: 160px;
-  }
-  .y2-cover-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: .04em;
-  }
-  .y2-center {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .y2-title {
-    font-family: var(--ff-serif);
-    font-size: 1.2rem;
-    font-weight: 300;
-    text-align: center;
-    margin: 0 0 4px;
-  }
-
-  /* ── Mapa — przycisk Menu ── */
-  #map-menu-btn {
-    position: fixed;
-    top: 52px;
-    right: 28px;
-    z-index: 100;
-    font-family: var(--ff-sans);
-    font-size: 10px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid var(--line);
-    padding: .45rem 1.1rem;
-    cursor: pointer;
-    transition: color .15s, border-color .15s;
-    display: none;
-  }
-  #map-menu-btn.visible { display: block; }
-  #map-menu-btn:hover { color: var(--ink); border-color: var(--ink); }
-
-  /* ── Animacja wejścia profilu ── */
-  @keyframes profileZoomIn {
-    from { opacity: 0; transform: scale(.94); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-  #profile-content {
-    animation: profileZoomIn .5s cubic-bezier(.4,0,.2,1) both;
-  }
-
-  /* ── Diagnostyka — linia gumy ── */
-  #diagnostic-canvas {
-    display: none;
-    position: fixed; inset: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-  #diagnostic-canvas.active { display: block; }
-
-  @media(max-width:520px){
-    .y2-layout { grid-template-columns: 1fr; }
-    .y2-cover-col { flex-direction: row; gap: 10px; }
-  }
-  `;
-  document.head.appendChild(s);
-})();
-  
 function initParticles() {
   resizeCanvas();
   particles = BG_WORDS.map((word, i) => {
     const font = FONTS[i % FONTS.length];
     ctx.font = font;
     const w = ctx.measureText(word).width;
-    const h = 24;
-    return {
-      word, font,
-      x: Math.random() * (window.innerWidth - w - 60) + 30,
-      y: Math.random() * (window.innerHeight - 80) + 40,
-      vx: (Math.random() - .5) * .12,
-      vy: (Math.random() - .5) * .09,
-      alpha: Math.random() * .10 + .03,
-      w, h,
-    };
+    return { word, font, x: Math.random()*(window.innerWidth-w-60)+30, y: Math.random()*(window.innerHeight-80)+40, vx:(Math.random()-.5)*.12, vy:(Math.random()-.5)*.09, alpha:Math.random()*.10+.03, w, h:24 };
   });
 }
 
 function resolveCollisions() {
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const a = particles[i], b = particles[j];
-      const dx = (a.x + a.w/2) - (b.x + b.w/2);
-      const dy = (a.y + a.h/2) - (b.y + b.h/2);
-      const minDx = (a.w + b.w)/2 + 10;
-      const minDy = (a.h + b.h)/2 + 6;
-      if (Math.abs(dx) < minDx && Math.abs(dy) < minDy) {
-        const nx = dx / (Math.abs(dx) || 1);
-        const ny = dy / (Math.abs(dy) || 1);
-        a.vx += nx * .04; a.vy += ny * .04;
-        b.vx -= nx * .04; b.vy -= ny * .04;
-        a.vx *= .92; a.vy *= .92;
-        b.vx *= .92; b.vy *= .92;
-      }
+  for (let i=0;i<particles.length;i++) for (let j=i+1;j<particles.length;j++) {
+    const a=particles[i],b=particles[j];
+    const dx=(a.x+a.w/2)-(b.x+b.w/2), dy=(a.y+a.h/2)-(b.y+b.h/2);
+    const minDx=(a.w+b.w)/2+10, minDy=(a.h+b.h)/2+6;
+    if(Math.abs(dx)<minDx&&Math.abs(dy)<minDy){
+      const nx=dx/(Math.abs(dx)||1),ny=dy/(Math.abs(dy)||1);
+      a.vx+=nx*.04;a.vy+=ny*.04;b.vx-=nx*.04;b.vy-=ny*.04;
+      a.vx*=.92;a.vy*=.92;b.vx*=.92;b.vy*=.92;
     }
   }
 }
 
 function drawBg() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   resolveCollisions();
   particles.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
-    if (spd > .18) { p.vx *= .18/spd; p.vy *= .18/spd; }
-    if (p.x < 10) { p.x = 10; p.vx = Math.abs(p.vx); }
-    if (p.x > canvas.width - p.w - 10) { p.x = canvas.width - p.w - 10; p.vx = -Math.abs(p.vx); }
-    if (p.y < 20) { p.y = 20; p.vy = Math.abs(p.vy); }
-    if (p.y > canvas.height - 20) { p.y = canvas.height - 20; p.vy = -Math.abs(p.vy); }
-    ctx.font = p.font;
-    ctx.fillStyle = `rgba(10,10,10,${p.alpha})`;
-    ctx.fillText(p.word, p.x, p.y);
+    p.x+=p.vx;p.y+=p.vy;
+    const spd=Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+    if(spd>.18){p.vx*=.18/spd;p.vy*=.18/spd;}
+    if(p.x<10){p.x=10;p.vx=Math.abs(p.vx);}
+    if(p.x>canvas.width-p.w-10){p.x=canvas.width-p.w-10;p.vx=-Math.abs(p.vx);}
+    if(p.y<20){p.y=20;p.vy=Math.abs(p.vy);}
+    if(p.y>canvas.height-20){p.y=canvas.height-20;p.vy=-Math.abs(p.vy);}
+    ctx.font=p.font;ctx.fillStyle=`rgba(10,10,10,${p.alpha})`;
+    ctx.fillText(p.word,p.x,p.y);
   });
   requestAnimationFrame(drawBg);
 }
@@ -942,385 +507,258 @@ initParticles();
 drawBg();
 
 // ═══════════════════════════════════════
-// NAVIGATION
+// NAVIGATION HELPERS
 // ═══════════════════════════════════════
-
-function showLearnMoreBox(type, id) {
-  const box = document.getElementById('learn-more-box');
-  const titleEl = document.getElementById('lmb-title');
-  if (!box || !titleEl) return;
-
-  let label = '';
-  if (type === 'book') {
-    const b = getBookById(id);
-    label = b ? b.title : '';
-  } else {
-    const m = getMotifById(id);
-    label = m ? m.name : '';
-  }
-
-  box._learnType = type;
-  box._learnId = id;
-  titleEl.textContent = label;
-  box.classList.add('visible');
-  box.style.animation = 'none';
-  box.offsetHeight;
-  box.style.animation = '';
-}
-
-function hideLearnMoreBox() {
-  const box = document.getElementById('learn-more-box');
-  if (box) box.classList.remove('visible');
-}
-
-function handleLearnMore() {
-  const box = document.getElementById('learn-more-box');
-  if (!box) return;
-  const type = box._learnType;
-  const id = box._learnId;
-  if (type === 'book') window.openBook(id);
-  else window.openMotif(id);
-}
-  
-let screenHistory = [];
-let currentScreen = 'screen-start';
 
 function blurBg(level) {
   canvas.classList.remove('blurred','very-blurred','profile-blur');
-  if (level === 'medium') canvas.classList.add('blurred');
-  if (level === 'heavy') canvas.classList.add('very-blurred');
-  if (level === 'profile') canvas.classList.add('profile-blur');
+  if(level==='medium') canvas.classList.add('blurred');
+  if(level==='heavy') canvas.classList.add('very-blurred');
+  if(level==='profile') canvas.classList.add('profile-blur');
 }
 
 function showProfileVignette(show) {
   const v = document.getElementById('profile-edge-vignette');
-  if (v) v.style.display = show ? 'block' : 'none';
+  if(v) v.style.display = show ? 'block' : 'none';
 }
+
+function showLearnMoreBox(type, id) {
+  const box = document.getElementById('learn-more-box');
+  const titleEl = document.getElementById('lmb-title');
+  if(!box||!titleEl) return;
+  const label = type==='book' ? (getBookById(id)?.title||'') : (getMotifById(id)?.name||'');
+  box._learnType=type; box._learnId=id;
+  titleEl.textContent=label;
+  box.classList.add('visible');
+  box.style.animation='none'; box.offsetHeight; box.style.animation='';
+}
+
+function hideLearnMoreBox() {
+  const box = document.getElementById('learn-more-box');
+  if(box) box.classList.remove('visible');
+}
+
+function handleLearnMore() {
+  const box = document.getElementById('learn-more-box');
+  if(!box) return;
+  if(box._learnType==='book') window.openBook(box._learnId);
+  else window.openMotif(box._learnId);
+}
+
+let screenHistory = [];
+let currentScreen = 'screen-start';
 
 function showPanel(id) {
   document.querySelectorAll('.panel').forEach(p => {
-    if (p.classList.contains('active')) {
-      p.classList.add('exit');
-      p.classList.remove('active');
-      setTimeout(() => p.classList.remove('exit'), 900);
-    }
+    if(p.classList.contains('active')){ p.classList.add('exit'); p.classList.remove('active'); setTimeout(()=>p.classList.remove('exit'),900); }
   });
   const panel = document.getElementById(id);
-  if (panel) {
-    setTimeout(() => {
-      panel.classList.add('active');
-      currentScreen = id;
-    }, 100);
-  }
+  if(panel) setTimeout(()=>{ panel.classList.add('active'); currentScreen=id; }, 100);
 }
 
 function showView(id) {
-  ['map','quiz','profile'].forEach(v => {
-    document.getElementById(v).style.display = 'none';
-  });
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active','exit'));
-  document.getElementById(id).style.display = 'block';
-  currentScreen = id;
+  ['map','quiz','profile'].forEach(v=>document.getElementById(v).style.display='none');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active','exit'));
+  document.getElementById(id).style.display='block';
+  currentScreen=id;
 }
 
 function updateBackBtn() {
-  document.getElementById('back-btn').classList.toggle('visible', screenHistory.length > 0);
+  document.getElementById('back-btn').classList.toggle('visible', screenHistory.length>0);
 }
 
-function pushScreen(id) {
-  screenHistory.push(id || currentScreen);
-  updateBackBtn();
-}
+function pushScreen(id) { screenHistory.push(id||currentScreen); updateBackBtn(); }
 
 function handleBack() {
-  if (!screenHistory.length) return;
+  if(!screenHistory.length) return;
   const prev = screenHistory.pop();
   updateBackBtn();
   showProfileVignette(false);
-  if (['screen-start','screen-mode','screen-epoch'].includes(prev)) {
-    ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
-    stopDiagnostic();
-    stopMapFloat();
-    showPanel(prev);
-    // Na ekranach onboardingu — BRAK blura, canvas widoczne
-    blurBg('none');
-  } else if (prev === 'map') {
-    showView('map');
-    startMapFloat();
-    blurBg('none');
-  } else if (prev === 'quiz') {
-    showView('quiz');
-    restoreQuizState();
-    blurBg('heavy');
+  if(['screen-start','screen-mode','screen-epoch'].includes(prev)){
+    ['map','quiz','profile'].forEach(v=>document.getElementById(v).style.display='none');
+    stopDiagnostic(); stopMapFloat();
+    showPanel(prev); blurBg('none');
+  } else if(prev==='map'){
+    showView('map'); startMapFloat(); blurBg('none');
+  } else if(prev==='quiz'){
+    showView('quiz'); restoreQuizState(); blurBg('heavy');
   }
 }
 
 function goToMenu() {
-  screenHistory = [];
-  updateBackBtn();
-  blurBg('none');
-  showProfileVignette(false);
-  ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
-  stopDiagnostic();
-  stopMapFloat();
+  screenHistory=[]; updateBackBtn();
+  blurBg('none'); showProfileVignette(false);
+  ['map','quiz','profile'].forEach(v=>document.getElementById(v).style.display='none');
+  stopDiagnostic(); stopMapFloat();
   showPanel('screen-start');
   document.getElementById('btn-learning').classList.remove('chosen');
   document.getElementById('btn-quiz').classList.remove('chosen');
 }
 
 window.goScreen = function(n) {
-  if (n === 1) {
-    screenHistory = []; updateBackBtn();
-    blurBg('none');
-    showProfileVignette(false);
-    ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
-    stopDiagnostic(); stopMapFloat();
-    showPanel('screen-start');
-  }
-  if (n === 2) { pushScreen(currentScreen); blurBg('none'); showPanel('screen-mode'); }
-  if (n === 3) { pushScreen(currentScreen); blurBg('none'); showPanel('screen-epoch'); renderEpochFilter(); }
+  if(n===1){ screenHistory=[];updateBackBtn();blurBg('none');showProfileVignette(false);['map','quiz','profile'].forEach(v=>document.getElementById(v).style.display='none');stopDiagnostic();stopMapFloat();showPanel('screen-start'); }
+  if(n===2){ pushScreen(currentScreen);blurBg('none');showPanel('screen-mode'); }
+  if(n===3){ pushScreen(currentScreen);blurBg('none');showPanel('screen-epoch');renderEpochFilter(); }
 };
 
 window.setModeAndAdvance = function(m) {
   setMode(m);
-  document.getElementById('btn-learning').classList.toggle('chosen', m==='learning');
-  document.getElementById('btn-quiz').classList.toggle('chosen', m==='quiz');
-  setTimeout(() => goScreen(2), 350);
+  document.getElementById('btn-learning').classList.toggle('chosen',m==='learning');
+  document.getElementById('btn-quiz').classList.toggle('chosen',m==='quiz');
+  setTimeout(()=>goScreen(2),350);
 };
 
 window.setViewAndAdvance = function(v) {
   setView(v);
-  document.getElementById('btn-books').classList.toggle('chosen', v==='books');
-  document.getElementById('btn-motifs').classList.toggle('chosen', v==='motifs');
-  setTimeout(() => goScreen(3), 350);
+  document.getElementById('btn-books').classList.toggle('chosen',v==='books');
+  document.getElementById('btn-motifs').classList.toggle('chosen',v==='motifs');
+  setTimeout(()=>goScreen(3),350);
 };
 
 window.startApp = function() {
-  pushScreen('screen-epoch');
-  showProfileVignette(false);
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active','exit'));
-  ['map','quiz','profile'].forEach(v => document.getElementById(v).style.display='none');
-  if (mode === 'learning') {
-    blurBg('none');
-    showView('map');
-    startMapFloat();
-  } else {
-    blurBg('heavy');
-    showView('quiz');
-    startQuiz();
-  }
+  pushScreen('screen-epoch'); showProfileVignette(false);
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active','exit'));
+  ['map','quiz','profile'].forEach(v=>document.getElementById(v).style.display='none');
+  if(mode==='learning'){ blurBg('none');showView('map');startMapFloat(); }
+  else { blurBg('heavy');showView('quiz');startQuiz(); }
   updateBackBtn();
 };
 
 // ═══════════════════════════════════════
 // MAP — pływające słowa
 // ═══════════════════════════════════════
-
 let mapWords = [];
 let mapAnimFrame = null;
 
 function stopMapFloat() {
-  if (mapAnimFrame) { cancelAnimationFrame(mapAnimFrame); mapAnimFrame = null; }
-  const shell = document.getElementById('map-float-shell');
-  if (shell) shell.innerHTML = '';
-  document.getElementById('map').style.display = 'none';
+  if(mapAnimFrame){cancelAnimationFrame(mapAnimFrame);mapAnimFrame=null;}
+  const shell=document.getElementById('map-float-shell');
+  if(shell) shell.innerHTML='';
+  document.getElementById('map').style.display='none';
   document.getElementById('map-menu-btn').classList.remove('visible');
 }
 
 function startMapFloat() {
-  const mapEl = document.getElementById('map');
-  mapEl.style.display = 'block';
-  document.getElementById('map-title').style.display = 'none';
-  document.getElementById('list').style.display = 'none';
-
+  document.getElementById('map').style.display='block';
+  document.getElementById('map-title').style.display='none';
+  document.getElementById('list').style.display='none';
   document.getElementById('map-menu-btn').classList.add('visible');
 
-  let shell = document.getElementById('map-float-shell');
-  if (!shell) {
-    shell = document.createElement('div');
-    shell.id = 'map-float-shell';
-    shell.style.cssText = 'position:fixed;inset:0;z-index:4;pointer-events:none';
-    document.body.appendChild(shell);
-  }
-  shell.innerHTML = '';
-  mapWords = [];
+  let shell=document.getElementById('map-float-shell');
+  if(!shell){ shell=document.createElement('div'); shell.id='map-float-shell'; shell.style.cssText='position:fixed;inset:0;z-index:4;pointer-events:none'; document.body.appendChild(shell); }
+  shell.innerHTML=''; mapWords=[];
 
-  const items = view === 'books'
-    ? getFilteredBooks().map(b => ({ id: b.id, label: b.title, type: 'book' }))
-    : getFilteredMotifs().map(m => ({ id: m.id, label: m.name, type: 'motif' }));
+  const items = view==='books'
+    ? getFilteredBooks().map(b=>({id:b.id,label:b.title,type:'book'}))
+    : getFilteredMotifs().map(m=>({id:m.id,label:m.name,type:'motif'}));
+  const W=window.innerWidth, H=window.innerHeight;
 
-  const W = window.innerWidth, H = window.innerHeight;
-
-  items.forEach((item) => {
-    const el = document.createElement('div');
-    el.style.cssText = `
-      position:fixed;
-      font-family:'Cormorant Garamond',serif;
-      font-weight:${item.type==='book'?'600':'300'};
-      font-style:${item.type==='motif'?'italic':'normal'};
-      font-size:${16 + Math.random()*10}px;
-      color:#0a0a0a;
-      cursor:pointer;
-      user-select:none;
-      z-index:4;
-      white-space:nowrap;
-      pointer-events:all;
-      opacity:.85;
-      transition:opacity .2s, transform .2s;
-    `;
-    el.textContent = item.label;
-    el.onclick = () => {
-      el.style.transform = 'scale(1.18)';
-      el.style.opacity = '1';
-      setTimeout(() => {
-        if (item.type === 'book') window.openBook(item.id);
-        else window.openMotif(item.id);
-      }, 220);
-    };
-    el.onmouseenter = () => { el.style.opacity = '1'; };
-    el.onmouseleave = () => { el.style.opacity = '.85'; };
+  items.forEach(item=>{
+    const el=document.createElement('div');
+    el.style.cssText=`position:fixed;font-family:'Cormorant Garamond',serif;font-weight:${item.type==='book'?'600':'300'};font-style:${item.type==='motif'?'italic':'normal'};font-size:${16+Math.random()*10}px;color:#0a0a0a;cursor:pointer;user-select:none;z-index:4;white-space:nowrap;pointer-events:all;opacity:.85;transition:opacity .2s,transform .2s`;
+    el.textContent=item.label;
+    el.onclick=()=>{ el.style.transform='scale(1.18)';el.style.opacity='1'; setTimeout(()=>{ if(item.type==='book') window.openBook(item.id); else window.openMotif(item.id); },220); };
+    el.onmouseenter=()=>{el.style.opacity='1'};
+    el.onmouseleave=()=>{el.style.opacity='.85'};
     shell.appendChild(el);
-
-    const w = el.offsetWidth || item.label.length * 10;
-    const h = 28;
-    mapWords.push({
-      el, item,
-      x: Math.random() * (W - w - 40) + 20,
-      y: Math.random() * (H - h - 80) + 40,
-      vx: (Math.random() - .5) * .12,
-      vy: (Math.random() - .5) * .09,
-      w, h,
-    });
+    const w=el.offsetWidth||item.label.length*10;
+    mapWords.push({ el,item, x:Math.random()*(W-w-40)+20, y:Math.random()*(H-80)+40, vx:(Math.random()-.5)*.12, vy:(Math.random()-.5)*.09, w, h:28 });
   });
 
-  if (mapAnimFrame) cancelAnimationFrame(mapAnimFrame);
+  if(mapAnimFrame) cancelAnimationFrame(mapAnimFrame);
   animateMapWords();
 }
 
 function resolveMapCollisions() {
-  for (let i = 0; i < mapWords.length; i++) {
-    for (let j = i+1; j < mapWords.length; j++) {
-      const a = mapWords[i], b = mapWords[j];
-      const dx = (a.x+a.w/2)-(b.x+b.w/2);
-      const dy = (a.y+a.h/2)-(b.y+b.h/2);
-      const minDx = (a.w+b.w)/2+14;
-      const minDy = (a.h+b.h)/2+8;
-      if (Math.abs(dx)<minDx && Math.abs(dy)<minDy) {
-        const nx=dx/(Math.abs(dx)||1), ny=dy/(Math.abs(dy)||1);
-        a.vx+=nx*.05; a.vy+=ny*.05;
-        b.vx-=nx*.05; b.vy-=ny*.05;
-        a.vx*=.9; a.vy*=.9; b.vx*=.9; b.vy*=.9;
-      }
+  for(let i=0;i<mapWords.length;i++) for(let j=i+1;j<mapWords.length;j++){
+    const a=mapWords[i],b=mapWords[j];
+    const dx=(a.x+a.w/2)-(b.x+b.w/2),dy=(a.y+a.h/2)-(b.y+b.h/2);
+    const minDx=(a.w+b.w)/2+14,minDy=(a.h+b.h)/2+8;
+    if(Math.abs(dx)<minDx&&Math.abs(dy)<minDy){
+      const nx=dx/(Math.abs(dx)||1),ny=dy/(Math.abs(dy)||1);
+      a.vx+=nx*.05;a.vy+=ny*.05;b.vx-=nx*.05;b.vy-=ny*.05;
+      a.vx*=.9;a.vy*=.9;b.vx*=.9;b.vy*=.9;
     }
   }
 }
 
 function animateMapWords() {
-  const W = window.innerWidth, H = window.innerHeight;
+  const W=window.innerWidth,H=window.innerHeight;
   resolveMapCollisions();
-  mapWords.forEach(w => {
-    w.x += w.vx; w.y += w.vy;
-    const spd = Math.sqrt(w.vx*w.vx+w.vy*w.vy);
-    if (spd>.18){w.vx*=.18/spd;w.vy*=.18/spd;}
-    if (w.x<10){w.x=10;w.vx=Math.abs(w.vx);}
-    if (w.x>W-w.w-10){w.x=W-w.w-10;w.vx=-Math.abs(w.vx);}
-    if (w.y<20){w.y=20;w.vy=Math.abs(w.vy);}
-    if (w.y>H-w.h-60){w.y=H-w.h-60;w.vy=-Math.abs(w.vy);}
-    w.el.style.left=w.x+'px';
-    w.el.style.top=w.y+'px';
+  mapWords.forEach(w=>{
+    w.x+=w.vx;w.y+=w.vy;
+    const spd=Math.sqrt(w.vx*w.vx+w.vy*w.vy);
+    if(spd>.18){w.vx*=.18/spd;w.vy*=.18/spd;}
+    if(w.x<10){w.x=10;w.vx=Math.abs(w.vx);}
+    if(w.x>W-w.w-10){w.x=W-w.w-10;w.vx=-Math.abs(w.vx);}
+    if(w.y<20){w.y=20;w.vy=Math.abs(w.vy);}
+    if(w.y>H-w.h-60){w.y=H-w.h-60;w.vy=-Math.abs(w.vy);}
+    w.el.style.left=w.x+'px';w.el.style.top=w.y+'px';
   });
-  mapAnimFrame = requestAnimationFrame(animateMapWords);
+  mapAnimFrame=requestAnimationFrame(animateMapWords);
 }
 
 // ═══════════════════════════════════════
-// PROFILE — radialny blur
+// PROFILE
 // ═══════════════════════════════════════
-
 window.openBook = function(id) {
-  pushScreen(currentScreen);
-  updateBackBtn();
-  if (mode==='quiz') quizSnapshot = captureQuizState();
-  profileReturnTarget = mode==='quiz'?'quiz':'map';
-  // Radialny blur profilu: canvas lekko rozmyte + winietka krawędzi
-  blurBg('profile');
-  showProfileVignette(true);
-  stopMapFloat();
-  const book = getBookById(id); if(!book) return;
-  showView('profile');
-  renderBookProfileNew(book);
+  pushScreen(currentScreen); updateBackBtn();
+  if(mode==='quiz') quizSnapshot=captureQuizState();
+  profileReturnTarget=mode==='quiz'?'quiz':'map';
+  blurBg('profile'); showProfileVignette(true); stopMapFloat();
+  const book=getBookById(id); if(!book) return;
+  showView('profile'); renderBookProfileNew(book);
 };
 
 window.openMotif = function(id) {
-  pushScreen(currentScreen);
-  updateBackBtn();
-  if (mode==='quiz') quizSnapshot = captureQuizState();
-  profileReturnTarget = mode==='quiz'?'quiz':'map';
-  blurBg('profile');
-  showProfileVignette(true);
-  stopMapFloat();
-  const motif = getMotifById(id); if(!motif) return;
-  showView('profile');
-  renderMotifProfileNew(motif);
+  pushScreen(currentScreen); updateBackBtn();
+  if(mode==='quiz') quizSnapshot=captureQuizState();
+  profileReturnTarget=mode==='quiz'?'quiz':'map';
+  blurBg('profile'); showProfileVignette(true); stopMapFloat();
+  const motif=getMotifById(id); if(!motif) return;
+  showView('profile'); renderMotifProfileNew(motif);
 };
 
 window.openBookFromProfile = id => window.openBook(id);
 window.openMotifFromProfile = id => window.openMotif(id);
-
-window.returnFromProfile = function() {
-  showProfileVignette(false);
-  if (!screenHistory.length) { goToMenu(); return; }
-  handleBack();
-};
+window.returnFromProfile = function() { showProfileVignette(false); if(!screenHistory.length){goToMenu();return;} handleBack(); };
 window.goBackInProfile = window.returnFromProfile;
 
-// Smart image layout
 function renderSmartImages(images, entityTitle) {
-  if (!images||!images.length) return '';
-  const img = images[0];
-  if (!img?.src) return '';
-  const id = 'si-'+Math.random().toString(36).slice(2);
-  const src = escapeHtml(img.src);
-  const alt = escapeHtml(img.alt||img.label||entityTitle||'');
-  return `<div class="profile-section" id="${id}-sec"><h3>Obraz</h3><img id="${id}" src="${src}" alt="${alt}" style="display:none" onload="applySmartImg('${id}')" onerror="document.getElementById('${id}-sec').style.display='none'"></div>`;
+  if(!images||!images.length) return '';
+  const img=images[0]; if(!img?.src) return '';
+  const id='si-'+Math.random().toString(36).slice(2);
+  return `<div class="profile-section" id="${id}-sec"><h3>Obraz</h3><img id="${id}" src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt||img.label||entityTitle||'')}" style="display:none" onload="applySmartImg('${id}')" onerror="document.getElementById('${id}-sec').style.display='none'"></div>`;
 }
 
 window.applySmartImg = function(id) {
-  const img = document.getElementById(id); if(!img) return;
-  const w=img.naturalWidth, h=img.naturalHeight;
+  const img=document.getElementById(id); if(!img) return;
+  const w=img.naturalWidth,h=img.naturalHeight;
   img.style.display='';
-  if (w>=h) {
-    img.style.cssText='display:block;width:50%;max-width:100%;margin:8px auto 0;border:1px solid var(--line)';
-  } else {
-    const sec = document.getElementById(id+'-sec');
-    const pc = document.getElementById('profile-content');
+  if(w>=h){ img.style.cssText='display:block;width:50%;max-width:100%;margin:8px auto 0;border:1px solid var(--line)'; }
+  else {
+    const sec=document.getElementById(id+'-sec'),pc=document.getElementById('profile-content');
     if(!sec||!pc) return;
-    img.remove(); sec.remove();
-    const desc = pc.querySelector('p');
-    const secs = [...pc.querySelectorAll('.profile-section')];
-    const colR = document.createElement('div');
-    colR.className='profile-two-col-img';
-    const i2=document.createElement('img');
-    i2.src=img.src; i2.alt=img.alt;
-    i2.style.cssText='width:100%;display:block;border:1px solid var(--line)';
+    img.remove();sec.remove();
+    const secs=[...pc.querySelectorAll('.profile-section')];
+    const colR=document.createElement('div'); colR.className='profile-two-col-img';
+    const i2=document.createElement('img'); i2.src=img.src;i2.alt=img.alt;i2.style.cssText='width:100%;display:block;border:1px solid var(--line)';
     colR.appendChild(i2);
-    const colL=document.createElement('div');
-    colL.className='profile-two-col-text';
+    const colL=document.createElement('div'); colL.className='profile-two-col-text';
     secs.slice(0,2).forEach(s=>colL.appendChild(s));
-    const two=document.createElement('div');
-    two.className='profile-two-col';
-    two.style.marginTop='14px';
-    two.appendChild(colL); two.appendChild(colR);
-    if(desc&&desc.nextSibling) pc.insertBefore(two,desc.nextSibling);
-    else pc.appendChild(two);
+    const two=document.createElement('div'); two.className='profile-two-col';two.style.marginTop='14px';
+    two.appendChild(colL);two.appendChild(colR);
+    const desc=pc.querySelector('p');
+    if(desc&&desc.nextSibling) pc.insertBefore(two,desc.nextSibling); else pc.appendChild(two);
   }
 };
 
 function renderBookProfileNew(book) {
-  const canGoBack = screenHistory.length > 1;
-  const motifObjs = (book.motifs||[]).map(getMotifById).filter(Boolean);
-  const chars = uniqueStrings(book.characters||[]);
-  const quotes = uniqueStrings(book.quotes||[]);
-  document.getElementById('profile-content').innerHTML = `
+  const canGoBack=screenHistory.length>1;
+  const motifObjs=(book.motifs||[]).map(getMotifById).filter(Boolean);
+  const chars=uniqueStrings(book.characters||[]);
+  const quotes=uniqueStrings(book.quotes||[]);
+  document.getElementById('profile-content').innerHTML=`
     <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">📚 ${escapeHtml(book.title)}</h2>
     <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">${escapeHtml(book.description||'')}</p>
     <div class="profile-section"><h3>Epoka</h3><div class="profile-chip-list"><span class="profile-chip">${escapeHtml(book.epoch||'')}</span></div></div>
@@ -1332,9 +770,9 @@ function renderBookProfileNew(book) {
 }
 
 function renderMotifProfileNew(motif) {
-  const canGoBack = screenHistory.length > 1;
-  const bookObjs = (motif.books||[]).map(getBookById).filter(Boolean);
-  document.getElementById('profile-content').innerHTML = `
+  const canGoBack=screenHistory.length>1;
+  const bookObjs=(motif.books||[]).map(getBookById).filter(Boolean);
+  document.getElementById('profile-content').innerHTML=`
     <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">🎯 ${escapeHtml(motif.name)}</h2>
     <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">${escapeHtml(motif.description||'')}</p>
     ${bookObjs.length?`<div class="profile-section"><h3>Lektury z tym motywem</h3><div class="profile-chip-list">${bookObjs.map(b=>`<span class="profile-chip clickable" onclick="openBookFromProfile('${b.id}')">📚 ${escapeHtml(b.title)}</span>`).join('')}</div></div>`:''}
@@ -1345,192 +783,111 @@ function renderMotifProfileNew(motif) {
 // ═══════════════════════════════════════
 // EPOCH SLIDERS
 // ═══════════════════════════════════════
-
 window.renderEpochFilter = function() {
-  const el = document.getElementById('epochFilter');
-  el.innerHTML = '';
-  epochs.forEach(e => {
-    const on = activeEpochs.has(e);
-    el.innerHTML += `<div class="epoch-row ${on?'on':''}" onclick="toggleEpochSlider('${e}',this)">
-      <span class="epoch-name">${e}</span>
-      <div class="epoch-slider"><div class="epoch-slider-track"></div><div class="epoch-slider-thumb"></div></div>
-    </div>`;
+  const el=document.getElementById('epochFilter'); el.innerHTML='';
+  epochs.forEach(e=>{
+    const on=activeEpochs.has(e);
+    el.innerHTML+=`<div class="epoch-row ${on?'on':''}" onclick="toggleEpochSlider('${e}',this)"><span class="epoch-name">${e}</span><div class="epoch-slider"><div class="epoch-slider-track"></div><div class="epoch-slider-thumb"></div></div></div>`;
   });
 };
-
-window.toggleEpochSlider = function(epoch, row) {
-  if (activeEpochs.has(epoch)) { activeEpochs.delete(epoch); row.classList.remove('on'); }
-  else { activeEpochs.add(epoch); row.classList.add('on'); }
+window.toggleEpochSlider = function(epoch,row){
+  if(activeEpochs.has(epoch)){activeEpochs.delete(epoch);row.classList.remove('on');}
+  else{activeEpochs.add(epoch);row.classList.add('on');}
 };
 
 // ═══════════════════════════════════════
-// DIAGNOSTYKA — pływające słowa + linie MAPA MYŚLI
+// DIAGNOSTYKA
 // ═══════════════════════════════════════
-
 let diagWords = [];
 let diagSelected = null;
 let diagPairs = [];
 let diagAnimFrame = null;
 let diagSvg = null;
 
-// Maksymalna odległość między połączonymi słowami (siła gumy)
 const MAX_PAIR_DIST = 260;
-// Odległość od linii, przy której słowo się odbija
 const LINE_REPEL_DIST = 28;
 
 function stopDiagnostic() {
-  if (diagAnimFrame) { cancelAnimationFrame(diagAnimFrame); diagAnimFrame = null; }
+  if(diagAnimFrame){cancelAnimationFrame(diagAnimFrame);diagAnimFrame=null;}
   document.getElementById('diag-shell').classList.remove('active');
-  const svg = document.getElementById('diagnostic-canvas');
-  if (svg) { svg.style.display='none'; svg.innerHTML=''; }
+  const svg=document.getElementById('diagnostic-canvas');
+  if(svg){svg.style.display='none';svg.innerHTML='';svg.classList.remove('active');}
 }
 
-// ── Aktualizacja score w diagnostyce ──
 function updateDiagScore() {
-  const el = document.getElementById('diag-score');
-  if (el) el.textContent = 'Score: ' + score;
+  const el=document.getElementById('diag-score');
+  if(el) el.textContent='Score: '+score;
 }
-
-window.renderDiagnostic = function() {
-  document.getElementById('quiz').style.display='none';
-  const shell = document.getElementById('diag-shell');
-  shell.classList.add('active');
-  blurBg('heavy');
-
-  diagSvg = document.getElementById('diagnostic-canvas');
-  diagSvg.innerHTML='';
-  diagSvg.classList.add('active');
-
-  const container = document.getElementById('diag-words');
-  container.innerHTML='';
-  document.getElementById('diagNextBtn').style.display='inline-block';
-
-  diagWords=[]; diagSelected=null; diagPairs=[];
-  updateDiagScore();
-
-  const books = getFilteredBooks();
-  const motifs = getFilteredMotifs();
-  const all = [
-    ...books.map(b=>({id:b.id,label:b.title,type:'book'})),
-    ...motifs.map(m=>({id:m.id,label:m.name,type:'motif'})),
-  ];
-
-  const W=window.innerWidth, H=window.innerHeight;
-
-  all.forEach((item) => {
-    const el = document.createElement('div');
-    el.className=`diag-word ${item.type==='book'?'book-word':'motif-word'}`;
-    el.textContent=item.label;
-    const size = item.type==='book'?(15+Math.random()*5):(13+Math.random()*6);
-    el.style.fontSize=size+'px';
-    el.style.fontWeight = item.type==='book'?'600':'300';
-    el.style.fontStyle = item.type==='motif'?'italic':'normal';
-    el.style.left=(Math.random()*(W*0.78)+W*0.11)+'px';
-    el.style.top=(Math.random()*(H*0.72)+H*0.1)+'px';
-    el.style.cursor='pointer';
-    el.style.transition='color .15s';
-    el.onclick=()=>handleDiagClick(item,el);
-    container.appendChild(el);
-
-    const w=el.offsetWidth||item.label.length*9;
-    const h=parseFloat(el.style.fontSize)*1.3;
-    diagWords.push({
-      el, item,
-      x:parseFloat(el.style.left), y:parseFloat(el.style.top),
-      vx:(Math.random()-.5)*.15, vy:(Math.random()-.5)*.11,
-      w, h,
-      stopped: false,
-      // Oryginalne właściwości — przywracamy po deselect
-      _origColor: null,
-    });
-  });
-
-  if (diagAnimFrame) cancelAnimationFrame(diagAnimFrame);
-
-  // Poczekaj na renderowanie DOM żeby offsetWidth był poprawny
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      diagWords.forEach(w => {
-        const measured = w.el.offsetWidth || w.item.label.length * 9;
-        w.w = measured;
-        w.h = parseFloat(w.el.style.fontSize) * 1.3;
-        // Popraw pozycję żeby nie wychodziła poza ekran
-        if (w.x + w.w > window.innerWidth - 10) {
-          w.x = window.innerWidth - w.w - 10;
-          w.el.style.left = w.x + 'px';
-        }
-      });
-      animateDiag();
-    });
-  });
 
 // ── Kolizje między słowami ──
 function resolveDiagWordCollisions() {
-  for (let i=0;i<diagWords.length;i++) {
-    for (let j=i+1;j<diagWords.length;j++) {
-      const a=diagWords[i],b=diagWords[j];
-      if(a.stopped&&b.stopped) continue;
-      const dx=(a.x+a.w/2)-(b.x+b.w/2);
-      const dy=(a.y+a.h/2)-(b.y+b.h/2);
-      const minDx=(a.w+b.w)/2+12;
-      const minDy=(a.h+b.h)/2+7;
-      if(Math.abs(dx)<minDx&&Math.abs(dy)<minDy){
-        const nx=dx/(Math.abs(dx)||1),ny=dy/(Math.abs(dy)||1);
-        if(!a.stopped){a.vx+=nx*.06;a.vy+=ny*.06;}
-        if(!b.stopped){b.vx-=nx*.06;b.vy-=ny*.06;}
-      }
+  for(let i=0;i<diagWords.length;i++) for(let j=i+1;j<diagWords.length;j++){
+    const a=diagWords[i],b=diagWords[j];
+    if(a.stopped&&b.stopped) continue;
+    const dx=(a.x+a.w/2)-(b.x+b.w/2),dy=(a.y+a.h/2)-(b.y+b.h/2);
+    const minDx=(a.w+b.w)/2+12,minDy=(a.h+b.h)/2+7;
+    if(Math.abs(dx)<minDx&&Math.abs(dy)<minDy){
+      const nx=dx/(Math.abs(dx)||1),ny=dy/(Math.abs(dy)||1);
+      if(!a.stopped){a.vx+=nx*.06;a.vy+=ny*.06;}
+      if(!b.stopped){b.vx-=nx*.06;b.vy-=ny*.06;}
     }
   }
 }
 
-// ── Kolizje słów z liniami (odpychanie od krzywej) ──
+// ── Odpychanie od linii ──
 function resolveDiagLineCollisions() {
-  diagPairs.forEach(pair => {
-    const w1=pair.w1, w2=pair.w2;
-    const ax=w1.x+w1.w/2, ay=w1.y+w1.h/2;
-    const bx=w2.x+w2.w/2, by=w2.y+w2.h/2;
-
-    diagWords.forEach(w => {
+  diagPairs.forEach(pair=>{
+    const w1=pair.w1,w2=pair.w2;
+    const ax=w1.x+w1.w/2,ay=w1.y+w1.h/2,bx=w2.x+w2.w/2,by=w2.y+w2.h/2;
+    diagWords.forEach(w=>{
       if(w===w1||w===w2) return;
-      const cx=w.x+w.w/2, cy=w.y+w.h/2;
-
-      // Punkt najbliższy na segmencie ab
-      const dx=bx-ax, dy=by-ay;
-      const len2=dx*dx+dy*dy;
+      const cx=w.x+w.w/2,cy=w.y+w.h/2;
+      const dx=bx-ax,dy=by-ay,len2=dx*dx+dy*dy;
       if(len2===0) return;
       const t=Math.max(0,Math.min(1,((cx-ax)*dx+(cy-ay)*dy)/len2));
-      const nearX=ax+t*dx, nearY=ay+t*dy;
-      const ndx=cx-nearX, ndy=cy-nearY;
+      const nearX=ax+t*dx,nearY=ay+t*dy;
+      const ndx=cx-nearX,ndy=cy-nearY;
       const dist=Math.sqrt(ndx*ndx+ndy*ndy);
-
-      if(dist < LINE_REPEL_DIST && dist > 0.1) {
-        const strength = (LINE_REPEL_DIST - dist) / LINE_REPEL_DIST * 0.12;
-        const nx=ndx/dist, ny=ndy/dist;
-        if(!w.stopped) {
-          w.vx += nx * strength;
-          w.vy += ny * strength;
-        }
+      if(dist<LINE_REPEL_DIST&&dist>0.1){
+        const strength=(LINE_REPEL_DIST-dist)/LINE_REPEL_DIST*0.12;
+        if(!w.stopped){w.vx+=ndx/dist*strength;w.vy+=ndy/dist*strength;}
       }
     });
   });
 }
 
-// ── Siła gumy — ciągnie słowa do siebie jeśli za daleko ──
+// ── Siła gumy ──
 function applyRubberBandForces() {
-  diagPairs.forEach(pair => {
-    const w1=pair.w1, w2=pair.w2;
-    const dx=(w2.x+w2.w/2)-(w1.x+w1.w/2);
-    const dy=(w2.y+w2.h/2)-(w1.y+w1.h/2);
+  diagPairs.forEach(pair=>{
+    const w1=pair.w1,w2=pair.w2;
+    const dx=(w2.x+w2.w/2)-(w1.x+w1.w/2),dy=(w2.y+w2.h/2)-(w1.y+w1.h/2);
     const dist=Math.sqrt(dx*dx+dy*dy);
-
-    if(dist > MAX_PAIR_DIST) {
-      // Im dalej tym silniejsze przyciąganie (sprężyna)
-      const excess = dist - MAX_PAIR_DIST;
-      const pull = excess * 0.0025;
-      const ux=dx/dist, uy=dy/dist;
-      if(!w1.stopped){w1.vx+=ux*pull; w1.vy+=uy*pull;}
-      if(!w2.stopped){w2.vx-=ux*pull; w2.vy-=uy*pull;}
+    if(dist>MAX_PAIR_DIST){
+      const pull=(dist-MAX_PAIR_DIST)*0.0025,ux=dx/dist,uy=dy/dist;
+      if(!w1.stopped){w1.vx+=ux*pull;w1.vy+=uy*pull;}
+      if(!w2.stopped){w2.vx-=ux*pull;w2.vy-=uy*pull;}
     }
+  });
+}
+
+function getDiagCenter(w) { return {x:w.x+w.w/2,y:w.y+w.h/2}; }
+
+function updateDiagSvgLines() {
+  const now=Date.now()/1000;
+  diagPairs.forEach(pair=>{
+    if(!pair.path) return;
+    const c1=getDiagCenter(pair.w1),c2=getDiagCenter(pair.w2);
+    const dx=c2.x-c1.x,dy=c2.y-c1.y,dist=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=-dy/dist,ny=dx/dist;
+    const bend=Math.min(dist*0.15,35);
+    const wave=Math.sin(now*0.8+pair.phase)*bend*0.5;
+    const wave2=Math.cos(now*0.5+pair.phase*1.3)*bend*0.25;
+    const cp1x=c1.x+dx*0.3+nx*(bend+wave),cp1y=c1.y+dy*0.3+ny*(bend+wave);
+    const cp2x=c1.x+dx*0.7+nx*(bend*0.7+wave2),cp2y=c1.y+dy*0.7+ny*(bend*0.7+wave2);
+    pair.path.setAttribute('d',`M ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}`);
+    const tension=Math.min(dist/MAX_PAIR_DIST,1.5);
+    pair.path.setAttribute('opacity',(0.25+tension*0.35).toFixed(2));
+    pair.path.setAttribute('stroke-width',(0.7+tension*0.5).toFixed(2));
   });
 }
 
@@ -1539,407 +896,176 @@ function animateDiag() {
   resolveDiagWordCollisions();
   resolveDiagLineCollisions();
   applyRubberBandForces();
-  diagWords.forEach(w => {
-  if(w.stopped) return;
-  w.x += w.vx; w.y += w.vy;
-  const ew = w.el.offsetWidth, eh = w.el.offsetHeight;
-  if(w.x < 20){ w.x = 20; w.vx = Math.abs(w.vx); }
-  if(w.x > W-ew-20){ w.x = W-ew-20; w.vx = -Math.abs(w.vx); }
-  if(w.y < 20){ w.y = 20; w.vy = Math.abs(w.vy); }
-  if(w.y > H-eh-90){ w.y = H-eh-90; w.vy = -Math.abs(w.vy); }
-  w.el.style.left = w.x+'px';
-  w.el.style.top = w.y+'px';
-  const spd = Math.sqrt(w.vx*w.vx + w.vy*w.vy);
-  if(spd > 0.13){ w.vx *= 0.13/spd; w.vy *= 0.13/spd; }
-
-  w.el.style.left = w.x+'px';
-  w.el.style.top = w.y+'px';
-});
-
-  // Aktualizuj linie SVG
+  diagWords.forEach(w=>{
+    if(w.stopped) return;
+    w.x+=w.vx;w.y+=w.vy;
+    const ew=w.w,eh=w.h;
+    if(w.x<20){w.x=20;w.vx=Math.abs(w.vx);}
+    if(w.x>W-ew-20){w.x=W-ew-20;w.vx=-Math.abs(w.vx);}
+    if(w.y<20){w.y=20;w.vy=Math.abs(w.vy);}
+    if(w.y>H-eh-90){w.y=H-eh-90;w.vy=-Math.abs(w.vy);}
+    const spd=Math.sqrt(w.vx*w.vx+w.vy*w.vy);
+    if(spd>0.13){w.vx*=0.13/spd;w.vy*=0.13/spd;}
+    w.el.style.left=w.x+'px';w.el.style.top=w.y+'px';
+  });
   updateDiagSvgLines();
-
   diagAnimFrame=requestAnimationFrame(animateDiag);
 }
 
-// ── Centrum słowa ──
-function getDiagCenter(w) {
-  return { x: w.x + w.w/2, y: w.y + w.h/2 };
-}
-
-// ── Aktualizacja organicznych krzywych ──
-function updateDiagSvgLines() {
-  const now = Date.now() / 1000;
-  diagPairs.forEach(pair => {
-    if(!pair.path) return;
-    const c1=getDiagCenter(pair.w1);
-    const c2=getDiagCenter(pair.w2);
-    const dx=c2.x-c1.x, dy=c2.y-c1.y;
-    const dist=Math.sqrt(dx*dx+dy*dy);
-    const mx=(c1.x+c2.x)/2, my=(c1.y+c2.y)/2;
-
-    // Organiczne wygięcie — perpendikularnie do linii, z falowaniem w czasie
-    const len=dist||1;
-    const nx=-dy/len, ny=dx/len; // normalny wektor
-    const bend = Math.min(dist*0.15, 35);
-    const wave = Math.sin(now * 0.8 + pair.phase) * bend * 0.5;
-    const wave2 = Math.cos(now * 0.5 + pair.phase * 1.3) * bend * 0.25;
-
-    // Dwa punkty kontrolne dla cubic bezier — bardziej organiczny ruch
-    const cp1x = c1.x + dx*0.3 + nx*(bend + wave);
-    const cp1y = c1.y + dy*0.3 + ny*(bend + wave);
-    const cp2x = c1.x + dx*0.7 + nx*(bend * 0.7 + wave2);
-    const cp2y = c1.y + dy*0.7 + ny*(bend * 0.7 + wave2);
-
-    pair.path.setAttribute('d',
-      `M ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}`
-    );
-
-    // Kolor i grubość zależna od napięcia
-    const tension = Math.min(dist / MAX_PAIR_DIST, 1.5);
-    const opacity = 0.25 + tension * 0.35;
-    const strokeW = 0.7 + tension * 0.5;
-    pair.path.setAttribute('opacity', opacity.toFixed(2));
-    pair.path.setAttribute('stroke-width', strokeW.toFixed(2));
-  });
-}
-
-function handleDiagClick(item, el) {
-  if (!diagSelected) {
-    // Pierwsza selekcja
-    diagSelected = item.id;
-    el.style.color = '#000';
-    el.style.fontWeight = item.type === 'book' ? '600' : '400';
-    const w = diagWords.find(d=>d.item.id===item.id);
-    if(w) { w.stopped = true; }
-    return;
-  }
-
-  const firstW = diagWords.find(d=>d.item.id===diagSelected);
-  const secondW = diagWords.find(d=>d.item.id===item.id);
-
-  // Jeśli kliknięto to samo słowo — odznacz
-  if(firstW && firstW === secondW) {
-    firstW.el.style.color = '';
-    firstW.el.style.fontWeight = firstW.item.type === 'book' ? '600' : '300';
-    firstW.stopped = false;
-    diagSelected = null;
-    return;
-  }
-
-  // Reset podświetlenia pierwszego
-  if(firstW) {
-    firstW.el.style.color = '';
-    firstW.el.style.fontWeight = firstW.item.type === 'book' ? '600' : '300';
-  }
-
-  if(!firstW || !secondW || firstW.item.type === secondW.item.type) {
-    // Ten sam typ — anuluj i zacznij nową selekcję
-    if(firstW) firstW.stopped = false;
-    diagSelected = item.id;
-    el.style.color = '#000';
-    el.style.fontWeight = item.type === 'book' ? '600' : '400';
-    const w = diagWords.find(d=>d.item.id===item.id);
-    if(w) w.stopped = true;
-    return;
-  }
-
-  const bookItem = firstW.item.type==='book' ? firstW.item : secondW.item;
-  const motifItem = firstW.item.type==='motif' ? firstW.item : secondW.item;
-  const bookW = firstW.item.type==='book' ? firstW : secondW;
-  const motifW = firstW.item.type==='motif' ? firstW : secondW;
-
-  const book = getBookById(bookItem.id);
-  const isCorrect = book && book.motifs.includes(motifItem.id);
-
-  el.style.color = '';
-  el.style.fontWeight = item.type === 'book' ? '600' : '300';
-
-  // Sprawdź czy ta para już istnieje
-  const alreadyLinked = diagPairs.some(
-    p => p.bookId === bookItem.id && p.motifId === motifItem.id
-  );
-
-  // Animowana linia "płynąca"
-  animateConnectingLine(bookW, motifW, isCorrect, () => {
-    if(isCorrect && !alreadyLinked) {
-      // Punkty
-      if(!isScoredPair(bookItem.id, motifItem.id)) {
-        score += 100;
-        masteredPairs.add(makePairKey(bookItem.id, motifItem.id));
-        scoredPairs.add(makePairKey(bookItem.id, motifItem.id));
-        // Aktualizuj oba score — w #quiz-header i w #diag-score
-        renderScore();
-        updateDiagScore();
-      }
-
-      // Stała organiczna krzywa SVG
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('stroke', '#0a0a0a');
-      path.setAttribute('stroke-width', '0.8');
-      path.setAttribute('fill', 'none');
-      path.setAttribute('opacity', '0.35');
-      path.setAttribute('stroke-linecap', 'round');
-      diagSvg.appendChild(path);
-
-      diagPairs.push({
-        bookId: bookItem.id,
-        motifId: motifItem.id,
-        w1: bookW,
-        w2: motifW,
-        path,
-        phase: Math.random() * Math.PI * 2,
-      });
-
-      // Odblokuj ruch — słowa znów pływają
-      bookW.stopped = false;
-      motifW.stopped = false;
-      // Nie szarzejemy! Słowa zachowują normalny kolor
-      bookW.el.style.color = '';
-      motifW.el.style.color = '';
-
-    } else if(!isCorrect) {
-      // Błędne połączenie
-      if(!isScoredPair(bookItem.id, motifItem.id)) {
-        score -= 50;
-        scoredPairs.add(makePairKey(bookItem.id, motifItem.id));
-        renderScore();
-        updateDiagScore();
-      }
-      bookW.stopped = false;
-      motifW.stopped = false;
-    } else {
-      // Już połączone — po prostu odblokuj
-      bookW.stopped = false;
-      motifW.stopped = false;
-    }
-  });
-
-  diagSelected = null;
-}
-
-// ── Animowana linia "płynąca" od punktu do punktu ──
-function animateConnectingLine(w1, w2, correct, onDone) {
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  const c1 = getDiagCenter(w1);
-  const c2 = getDiagCenter(w2);
-
-  path.setAttribute('stroke', correct ? '#0a0a0a' : '#8a2010');
-  path.setAttribute('stroke-width', '1.4');
-  path.setAttribute('stroke-dasharray', '6 4');
-  path.setAttribute('fill', 'none');
-  path.setAttribute('stroke-linecap', 'round');
-  path.setAttribute('opacity', '0.8');
+function animateConnectingLine(w1,w2,correct,onDone){
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  const c1=getDiagCenter(w1),c2=getDiagCenter(w2);
+  path.setAttribute('stroke',correct?'#0a0a0a':'#8a2010');
+  path.setAttribute('stroke-width','1.4');
+  path.setAttribute('stroke-dasharray','6 4');
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke-linecap','round');
+  path.setAttribute('opacity','0.8');
   diagSvg.appendChild(path);
-
-  const duration = 450;
-  const startTime = performance.now();
-
-  function step(now) {
-    const t = Math.min((now - startTime) / duration, 1);
-    // easing
-    const te = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-
-    const ex = c1.x + (c2.x - c1.x) * te;
-    const ey = c1.y + (c2.y - c1.y) * te;
-
-    // Organiczna krzywa podczas animacji
-    const mx = (c1.x + ex) / 2;
-    const my = (c1.y + ey) / 2;
-    const phase = now / 800;
-    const bend = Math.sqrt((ex-c1.x)**2+(ey-c1.y)**2) * 0.2;
-    const dx = ex - c1.x, dy = ey - c1.y;
-    const len = Math.sqrt(dx*dx+dy*dy)||1;
-    const nx = -dy/len, ny = dx/len;
-    const cpx = mx + nx * (bend + Math.sin(phase) * bend * 0.4);
-    const cpy = my + ny * (bend + Math.sin(phase) * bend * 0.4);
-
-    path.setAttribute('d', `M ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} Q ${cpx.toFixed(1)} ${cpy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
-
-    if(t < 1) { requestAnimationFrame(step); return; }
-
-    // Dotarła do celu
-    if(!correct) {
-      // Animacja rozpadu — drżenie i zanikanie
-      let alpha = 0.8;
-      let shakeX = 0, shakeY = 0;
-      const dissolve = () => {
-        alpha -= 0.055;
-        shakeX = (Math.random() - 0.5) * 5;
-        shakeY = (Math.random() - 0.5) * 3;
-        path.setAttribute('opacity', Math.max(0, alpha).toString());
-        path.setAttribute('transform', `translate(${shakeX},${shakeY})`);
-        if(alpha > 0) requestAnimationFrame(dissolve);
-        else { path.remove(); onDone(); }
+  const duration=450,startTime=performance.now();
+  function step(now){
+    const t=Math.min((now-startTime)/duration,1);
+    const te=t<0.5?2*t*t:-1+(4-2*t)*t;
+    const ex=c1.x+(c2.x-c1.x)*te,ey=c1.y+(c2.y-c1.y)*te;
+    const mx=(c1.x+ex)/2,my=(c1.y+ey)/2;
+    const pdx=ex-c1.x,pdy=ey-c1.y,plen=Math.sqrt(pdx*pdx+pdy*pdy)||1;
+    const pnx=-pdy/plen,pny=pdx/plen;
+    const bend=plen*0.2;
+    const phase=now/800;
+    const cpx=mx+pnx*(bend+Math.sin(phase)*bend*0.4);
+    const cpy=my+pny*(bend+Math.sin(phase)*bend*0.4);
+    path.setAttribute('d',`M ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} Q ${cpx.toFixed(1)} ${cpy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+    if(t<1){requestAnimationFrame(step);return;}
+    if(!correct){
+      let alpha=0.8;
+      const dissolve=()=>{
+        alpha-=0.055;
+        const sx=(Math.random()-.5)*5,sy=(Math.random()-.5)*3;
+        path.setAttribute('opacity',Math.max(0,alpha).toString());
+        path.setAttribute('transform',`translate(${sx},${sy})`);
+        if(alpha>0) requestAnimationFrame(dissolve); else{path.remove();onDone();}
       };
-      setTimeout(dissolve, 80);
+      setTimeout(dissolve,80);
     } else {
-      // Flesz potwierdzenia — krótki rozbłysk
-      path.setAttribute('stroke-dasharray', 'none');
-      path.setAttribute('opacity', '0.9');
-      setTimeout(() => {
-        path.remove();
-        onDone();
-      }, 120);
+      path.setAttribute('stroke-dasharray','none');path.setAttribute('opacity','0.9');
+      setTimeout(()=>{path.remove();onDone();},120);
     }
   }
   requestAnimationFrame(step);
 }
 
+function handleDiagClick(item,el){
+  if(!diagSelected){
+    diagSelected=item.id;
+    el.style.color='#000';el.style.fontWeight=item.type==='book'?'600':'400';
+    const w=diagWords.find(d=>d.item.id===item.id);
+    if(w) w.stopped=true;
+    return;
+  }
+  const firstW=diagWords.find(d=>d.item.id===diagSelected);
+  const secondW=diagWords.find(d=>d.item.id===item.id);
+  if(firstW&&firstW===secondW){
+    firstW.el.style.color='';firstW.el.style.fontWeight=firstW.item.type==='book'?'600':'300';
+    firstW.stopped=false;diagSelected=null;return;
+  }
+  if(firstW){firstW.el.style.color='';firstW.el.style.fontWeight=firstW.item.type==='book'?'600':'300';}
+  if(!firstW||!secondW||firstW.item.type===secondW.item.type){
+    if(firstW) firstW.stopped=false;
+    diagSelected=item.id;el.style.color='#000';el.style.fontWeight=item.type==='book'?'600':'400';
+    const w=diagWords.find(d=>d.item.id===item.id);
+    if(w) w.stopped=true;
+    return;
+  }
+  const bookItem=firstW.item.type==='book'?firstW.item:secondW.item;
+  const motifItem=firstW.item.type==='motif'?firstW.item:secondW.item;
+  const bookW=firstW.item.type==='book'?firstW:secondW;
+  const motifW=firstW.item.type==='motif'?firstW:secondW;
+  const book=getBookById(bookItem.id);
+  const isCorrect=book&&book.motifs.includes(motifItem.id);
+  el.style.color='';el.style.fontWeight=item.type==='book'?'600':'300';
+  const alreadyLinked=diagPairs.some(p=>p.bookId===bookItem.id&&p.motifId===motifItem.id);
+  animateConnectingLine(bookW,motifW,isCorrect,()=>{
+    if(isCorrect&&!alreadyLinked){
+      if(!isScoredPair(bookItem.id,motifItem.id)){
+        score+=100;masteredPairs.add(makePairKey(bookItem.id,motifItem.id));scoredPairs.add(makePairKey(bookItem.id,motifItem.id));
+        renderScore();updateDiagScore();
+      }
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('stroke','#0a0a0a');path.setAttribute('stroke-width','0.8');
+      path.setAttribute('fill','none');path.setAttribute('opacity','0.35');path.setAttribute('stroke-linecap','round');
+      diagSvg.appendChild(path);
+      diagPairs.push({bookId:bookItem.id,motifId:motifItem.id,w1:bookW,w2:motifW,path,phase:Math.random()*Math.PI*2});
+      bookW.stopped=false;motifW.stopped=false;
+      bookW.el.style.color='';motifW.el.style.color='';
+    } else if(!isCorrect){
+      if(!isScoredPair(bookItem.id,motifItem.id)){score-=50;scoredPairs.add(makePairKey(bookItem.id,motifItem.id));renderScore();updateDiagScore();}
+      bookW.stopped=false;motifW.stopped=false;
+    } else {
+      bookW.stopped=false;motifW.stopped=false;
+    }
+  });
+  diagSelected=null;
+}
+
+window.renderDiagnostic = function() {
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('diag-shell').classList.add('active');
+  blurBg('heavy');
+  diagSvg=document.getElementById('diagnostic-canvas');
+  diagSvg.innerHTML='';
+  diagSvg.classList.add('active');
+  const container=document.getElementById('diag-words');
+  container.innerHTML='';
+  document.getElementById('diagNextBtn').style.display='inline-block';
+  diagWords=[];diagSelected=null;diagPairs=[];
+  updateDiagScore();
+
+  const books=getFilteredBooks(),motifs=getFilteredMotifs();
+  const all=[...books.map(b=>({id:b.id,label:b.title,type:'book'})),...motifs.map(m=>({id:m.id,label:m.name,type:'motif'}))];
+  const W=window.innerWidth,H=window.innerHeight;
+
+  all.forEach(item=>{
+    const el=document.createElement('div');
+    el.className=`diag-word ${item.type==='book'?'book-word':'motif-word'}`;
+    el.textContent=item.label;
+    const size=item.type==='book'?(15+Math.random()*5):(13+Math.random()*6);
+    el.style.fontSize=size+'px';
+    el.style.fontWeight=item.type==='book'?'600':'300';
+    el.style.fontStyle=item.type==='motif'?'italic':'normal';
+    el.style.left=(Math.random()*(W*0.78)+W*0.11)+'px';
+    el.style.top=(Math.random()*(H*0.72)+H*0.1)+'px';
+    el.onclick=()=>handleDiagClick(item,el);
+    container.appendChild(el);
+    const w=el.offsetWidth||item.label.length*9;
+    const h=size*1.3;
+    diagWords.push({el,item,x:parseFloat(el.style.left),y:parseFloat(el.style.top),vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.11,w,h,stopped:false});
+  });
+
+  if(diagAnimFrame) cancelAnimationFrame(diagAnimFrame);
+  // Podwójny rAF — czekaj na renderowanie DOM (offsetWidth musi być gotowy)
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    diagWords.forEach(w=>{
+      const measured=w.el.offsetWidth||w.item.label.length*9;
+      w.w=measured;
+      w.h=parseFloat(w.el.style.fontSize)*1.3;
+      if(w.x+w.w>W-10){w.x=W-w.w-10;w.el.style.left=w.x+'px';}
+    });
+    animateDiag();
+  }));
+};
+
 window.nextTask = function() {
   hideLearnMoreBox();
-  if (quizMode === 'diagnostic') {
-    stopDiagnostic();
-    document.getElementById('quiz').style.display = 'block';
-    finishDiagnosticAndStartEngine();
-    return;
-  }
-  if (quizMode === 'engine') renderEngineNextTask();
+  if(quizMode==='diagnostic'){stopDiagnostic();document.getElementById('quiz').style.display='block';finishDiagnosticAndStartEngine();return;}
+  if(quizMode==='engine') renderEngineNextTask();
 };
-  
-// ═══════════════════════════════════════
-// ZADANIE X — tinder 9:16 z bocznym layoutem
-// ═══════════════════════════════════════
 
-(function injectTinderCSS(){
-  const s=document.createElement('style');
-  s.textContent=`
-  .tinder-scene {
-    display: grid;
-    grid-template-columns: 1fr 220px 1fr;
-    align-items: center;
-    gap: 18px;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 10px 0;
-  }
-  .tinder-side {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .tinder-side-label {
-    font-family: var(--ff-sans);
-    font-size: 10px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: center;
-  }
-  .tinder-side-choice {
-    border: 1px solid var(--line);
-    padding: 16px 12px;
-    text-align: center;
-    font-family: var(--ff-serif);
-    font-size: 1.05rem;
-    font-weight: 300;
-    color: var(--ink);
-    background: var(--bg);
-    cursor: pointer;
-    transition: background .15s, border-color .15s;
-    line-height: 1.4;
-    width: 100%;
-  }
-  .tinder-side-choice:hover { background:#f5f5f5; border-color:var(--ink); }
-  .tinder-side-choice.chosen-correct { background:var(--ink); border-color:var(--ink); color:var(--bg); }
-  .tinder-side-choice.chosen-wrong { background:#7a2010; border-color:#7a2010; color:var(--bg); }
-  .tinder-side-choice.reveal-correct { background:var(--ink); border-color:var(--ink); color:var(--bg); }
-  .tinder-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  .tinder-center-label {
-    font-family: var(--ff-sans);
-    font-size: 10px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: center;
-  }
-  .tinder-card-x {
-    width: 220px;
-    aspect-ratio: 9/16;
-    background: var(--bg);
-    border: 1px solid var(--line2);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    cursor: grab;
-    touch-action: none;
-    will-change: transform;
-    transform-origin: bottom center;
-    position: relative;
-  }
-  .tinder-card-x:active { cursor: grabbing; }
-  .tinder-card-x img {
-    width: 100%;
-    flex: 1;
-    object-fit: cover;
-    display: block;
-    min-height: 0;
-  }
-  .tinder-card-x .tinder-card-emoji {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 72px;
-    background: #f5f5f5;
-  }
-  .tinder-card-x-name {
-    padding: 8px 10px;
-    font-family: var(--ff-serif);
-    font-size: .9rem;
-    font-weight: 300;
-    color: var(--ink);
-    text-align: center;
-    border-top: 1px solid var(--line);
-    flex-shrink: 0;
-  }
-  .tinder-overlay-x {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--ff-sans);
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: opacity .1s;
-    pointer-events: none;
-  }
-  .tinder-overlay-x.left { background: rgba(120,30,20,.09); color: #7a2010; }
-  .tinder-overlay-x.right { background: rgba(20,50,30,.09); color: #1a3a20; }
-  .tinder-hint-x {
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-  @media(max-width:600px){
-    .tinder-scene { grid-template-columns:1fr; grid-template-rows: auto auto auto; }
-    .tinder-scene .tinder-side:first-child { order:2; }
-    .tinder-scene .tinder-center { order:1; }
-    .tinder-scene .tinder-side:last-child { order:3; }
-  }
-  `;
-  document.head.appendChild(s);
-})();
-
-function renderTaskX(taskData, answeredState=false) {
+// ═══════════════════════════════════════
+// ZADANIE X
+// ═══════════════════════════════════════
+function renderTaskX(taskData,answeredState=false){
   const el=document.getElementById('quiz-content');
-  if(taskData.fallback) {
-    el.innerHTML=`<div class="task-card"><h2>Brak dostępnych par</h2></div>`;
-    return;
-  }
+  if(taskData.fallback){el.innerHTML=`<div class="task-card"><h2>Brak dostępnych par</h2></div>`;return;}
   const leftItem=taskData.optionType==='motif'?getMotifById(taskData.leftId):getBookById(taskData.leftId);
   const rightItem=taskData.optionType==='motif'?getMotifById(taskData.rightId):getBookById(taskData.rightId);
   const leftLabel=leftItem?.name||leftItem?.title||'?';
@@ -1950,18 +1076,14 @@ function renderTaskX(taskData, answeredState=false) {
     ?`<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(promptItem?.title||promptItem?.name||'')}" style="width:100%;flex:1;object-fit:cover;display:block;min-height:0">`
     :`<div class="tinder-card-emoji">${escapeHtml(promptItem?.coverEmoji||(taskData.promptType==='book'?'📚':'🎯'))}</div>`;
   const profileBtn=answeredState?`<button class="icon-btn" style="font-size:13px;margin-left:4px" onclick="openCurrentTaskProfile()">📖</button>`:'';
-
   let leftClass='',rightClass='';
   if(answeredState){
     leftClass=taskData.correctSide==='left'?'reveal-correct':(taskData._chosenSide==='left'?'chosen-wrong':'');
     rightClass=taskData.correctSide==='right'?'reveal-correct':(taskData._chosenSide==='right'?'chosen-wrong':'');
   }
-
   el.innerHTML=`
     <div style="text-align:center;margin-bottom:8px">
-      <span style="font-family:var(--ff-sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">
-        ${taskData.promptType==='book'?'Lektura':'Motyw'}
-      </span>${profileBtn}
+      <span style="font-family:var(--ff-sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">${taskData.promptType==='book'?'Lektura':'Motyw'}</span>${profileBtn}
     </div>
     <div class="tinder-scene">
       <div class="tinder-side">
@@ -1986,304 +1108,156 @@ function renderTaskX(taskData, answeredState=false) {
         </div>
       </div>
     </div>`;
-
-  if(!answeredState) attachTinderXHandlers(taskData);
+  if(!answeredState) attachTinderXHandlers();
+  requestAnimationFrame(scaleTaskToFit);
 }
 
-function attachTinderXHandlers(taskData) {
-  const card=document.getElementById('tinderCard');
-  if(!card) return;
-  const overlayL=document.getElementById('overlayLeft');
-  const overlayR=document.getElementById('overlayRight');
-  let startX=null, currentX=0, dragging=false;
-
-  function applyDrag(dx) {
+function attachTinderXHandlers(){
+  const card=document.getElementById('tinderCard'); if(!card) return;
+  const overlayL=document.getElementById('overlayLeft'),overlayR=document.getElementById('overlayRight');
+  let startX=null,currentX=0,dragging=false;
+  function applyDrag(dx){
     const dir=dx<0?'left':'right';
-    const originX=dir==='left'?'left bottom':'right bottom';
-    card.style.transformOrigin=originX;
-    const rot=dx*0.10;
-    card.style.transform=`translateX(${dx*0.6}px) rotate(${rot}deg)`;
+    card.style.transformOrigin=dir==='left'?'left bottom':'right bottom';
+    card.style.transform=`translateX(${dx*0.6}px) rotate(${dx*0.10}deg)`;
     card.style.boxShadow=Math.abs(dx)>10?'0 12px 40px rgba(0,0,0,.15)':'';
     const ratio=Math.min(Math.abs(dx)/120,1);
-    overlayL.style.opacity=dx<0?ratio:0;
-    overlayR.style.opacity=dx>0?ratio:0;
+    overlayL.style.opacity=dx<0?ratio:0;overlayR.style.opacity=dx>0?ratio:0;
   }
-
-  function snapBack() {
-    card.style.transition='transform .4s cubic-bezier(.4,0,.2,1), box-shadow .2s';
-    card.style.transform='';
-    card.style.boxShadow='';
-    overlayL.style.opacity=0; overlayR.style.opacity=0;
+  function snapBack(){
+    card.style.transition='transform .4s cubic-bezier(.4,0,.2,1),box-shadow .2s';
+    card.style.transform='';card.style.boxShadow='';
+    overlayL.style.opacity=0;overlayR.style.opacity=0;
     setTimeout(()=>{card.style.transition='';},420);
   }
-
-  function flyOut(direction) {
-    const tx=direction==='left'?-600:600;
-    const rot=direction==='left'?-25:25;
-    const originX=direction==='left'?'left bottom':'right bottom';
-    card.style.transformOrigin=originX;
-    card.style.transition='transform .42s cubic-bezier(.4,0,.2,1), opacity .42s';
-    card.style.transform=`translateX(${tx}px) rotate(${rot}deg)`;
-    card.style.opacity='0';
+  function flyOut(dir){
+    const tx=dir==='left'?-600:600,rot=dir==='left'?-25:25;
+    card.style.transformOrigin=dir==='left'?'left bottom':'right bottom';
+    card.style.transition='transform .42s cubic-bezier(.4,0,.2,1),opacity .42s';
+    card.style.transform=`translateX(${tx}px) rotate(${rot}deg)`;card.style.opacity='0';
   }
-
-  card.onpointerdown=(e)=>{
-    if(answered) return;
-    startX=e.clientX; currentX=0; dragging=true;
-    card.style.transition='';
-    card.setPointerCapture(e.pointerId);
-  };
-  card.onpointermove=(e)=>{
-    if(!dragging||startX===null||answered) return;
-    currentX=e.clientX-startX;
-    applyDrag(currentX);
-  };
+  card.onpointerdown=(e)=>{if(answered) return;startX=e.clientX;currentX=0;dragging=true;card.style.transition='';card.setPointerCapture(e.pointerId);};
+  card.onpointermove=(e)=>{if(!dragging||startX===null||answered) return;currentX=e.clientX-startX;applyDrag(currentX);};
   card.onpointerup=()=>{
-    if(!dragging||answered) return;
-    dragging=false;
-    if(Math.abs(currentX)>90) {
-      const side=currentX<0?'left':'right';
-      flyOut(side);
-      setTimeout(()=>handleAnswer(side),220);
-    } else {
-      snapBack();
-    }
-    startX=null;
+    if(!dragging||answered) return;dragging=false;
+    if(Math.abs(currentX)>90){const side=currentX<0?'left':'right';flyOut(side);setTimeout(()=>handleAnswer(side),220);}
+    else snapBack();startX=null;
   };
   card.onpointercancel=()=>{dragging=false;snapBack();startX=null;};
 }
 
 document.addEventListener('keydown',(e)=>{
   if(mode!=='quiz'||quizMode!=='engine'||!currentTask||answered||currentTaskType!=='X') return;
-  const card=document.getElementById('tinderCard');
-  if(!card) return;
-  if(e.key==='ArrowLeft') {
-    card.style.transformOrigin='left bottom';
-    card.style.transition='transform .42s cubic-bezier(.4,0,.2,1), opacity .42s';
-    card.style.transform='translateX(-600px) rotate(-25deg)';
-    card.style.opacity='0';
-    setTimeout(()=>handleAnswer('left'),220);
-  }
-  if(e.key==='ArrowRight') {
-    card.style.transformOrigin='right bottom';
-    card.style.transition='transform .42s cubic-bezier(.4,0,.2,1), opacity .42s';
-    card.style.transform='translateX(600px) rotate(25deg)';
-    card.style.opacity='0';
-    setTimeout(()=>handleAnswer('right'),220);
-  }
+  const card=document.getElementById('tinderCard'); if(!card) return;
+  if(e.key==='ArrowLeft'){card.style.transformOrigin='left bottom';card.style.transition='transform .42s cubic-bezier(.4,0,.2,1),opacity .42s';card.style.transform='translateX(-600px) rotate(-25deg)';card.style.opacity='0';setTimeout(()=>handleAnswer('left'),220);}
+  if(e.key==='ArrowRight'){card.style.transformOrigin='right bottom';card.style.transition='transform .42s cubic-bezier(.4,0,.2,1),opacity .42s';card.style.transform='translateX(600px) rotate(25deg)';card.style.opacity='0';setTimeout(()=>handleAnswer('right'),220);}
 });
 
 // ═══════════════════════════════════════
-// ZADANIA Y — 3 kolumny podpowiedzi
+// ZADANIA Y
 // ═══════════════════════════════════════
-
-function renderHints3Col(taskData, inputId, inputPlaceholder) {
-  const h1v=taskData.revealedHints>=1, h2v=taskData.revealedHints>=2;
-  return `
-    <div class="hints-3col">
-      <div class="hint-col hint-col-visible">
-        <div class="hint-title">Podpowiedź 1</div>
-        <div class="hint-text">${escapeHtml(taskData.visibleHint)}</div>
-      </div>
-      <div class="hint-col ${h1v?'revealed':'locked'}">
-        <div class="hint-title">Podpowiedź 2</div>
-        <div class="hint-text">${h1v?escapeHtml(taskData.hiddenHints[0]):'—'}</div>
-        <div class="hint-actions">
-          <button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(0)" ${taskData.submitted||h1v?'disabled':''}>
-            ${h1v?'Odkryta':'Odkryj'}
-          </button>
-        </div>
-      </div>
-      <div class="hint-col ${h2v?'revealed':'locked'} ${!h1v?'hint-blocked':''}">
-        <div class="hint-title">Podpowiedź 3</div>
-        <div class="hint-text">${h2v?escapeHtml(taskData.hiddenHints[1]):'—'}</div>
-        <div class="hint-actions">
-          <button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(1)" ${taskData.submitted||!h1v||h2v?'disabled':''}>
-            ${h2v?'Odkryta':'Odkryj'}
-          </button>
-        </div>
-      </div>
-    </div>`;
+function renderHints3Col(taskData){
+  const h1v=taskData.revealedHints>=1,h2v=taskData.revealedHints>=2;
+  return `<div class="hints-3col">
+    <div class="hint-col">
+      <div class="hint-title">Podpowiedź 1</div>
+      <div class="hint-text">${escapeHtml(taskData.visibleHint)}</div>
+    </div>
+    <div class="hint-col ${h1v?'revealed':'locked'}">
+      <div class="hint-title">Podpowiedź 2</div>
+      <div class="hint-text">${h1v?escapeHtml(taskData.hiddenHints[0]):'—'}</div>
+      <div class="hint-actions"><button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(0)" ${taskData.submitted||h1v?'disabled':''}>${h1v?'Odkryta':'Odkryj'}</button></div>
+    </div>
+    <div class="hint-col ${h2v?'revealed':'locked'} ${!h1v?'hint-blocked':''}">
+      <div class="hint-title">Podpowiedź 3</div>
+      <div class="hint-text">${h2v?escapeHtml(taskData.hiddenHints[1]):'—'}</div>
+      <div class="hint-actions"><button type="button" class="hint-reveal-btn" onclick="revealCurrentHint(1)" ${taskData.submitted||!h1v||h2v?'disabled':''}>${h2v?'Odkryta':'Odkryj'}</button></div>
+    </div>
+  </div>`;
 }
 
-(function injectHintCSS(){
-  const s=document.createElement('style');
-  s.textContent=`
-  .hints-3col {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin: 4px 0;
-  }
-  .hint-col {
-    border: 1px solid var(--line);
-    padding: 10px 10px 8px;
-    background: var(--bg);
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .hint-col.revealed { background: #f8f8f8; border-color: var(--ink2); }
-  .hint-col.locked .hint-text { color: var(--muted); font-style: italic; }
-  .hint-col.hint-blocked { opacity: .45; }
-  .hint-col .hint-title { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
-  .hint-col .hint-text { font-size: 12px; color: var(--ink); flex: 1; }
-  .hint-col .hint-actions { margin-top: auto; padding-top: 6px; }
-  @media(max-width:520px){ .hints-3col { grid-template-columns: 1fr; } }
-  `;
-  document.head.appendChild(s);
-})();
+function renderTaskY1(taskData){
+  const el=document.getElementById('quiz-content');
+  if(taskData.fallback){el.innerHTML=`<div class="y1-shell"><h2 style="font-family:var(--ff-serif);font-weight:300">Brak dostępnych zadań Y1</h2></div>`;setNextButtonVisible(true);return;}
+  el.innerHTML=`<div class="y1-shell">
+    <div class="open-task-topline" style="text-align:center;margin-bottom:10px">Y1 · Lektury</div>
+    <h2 class="open-task-title" style="margin-bottom:12px">Podaj tytuł lektury</h2>
+    ${renderHints3Col(taskData)}
+    <div class="open-task-input-wrap" style="margin-top:10px">
+      <label for="y1-answer">Twoja odpowiedź</label>
+      <input id="y1-answer" class="open-task-input" type="text" placeholder="Wpisz tytuł lektury" value="${escapeHtml(taskData.userAnswer||'')}" oninput="updateCurrentOpenTaskAnswer(this.value)" ${taskData.submitted?'disabled':''}>
+    </div>
+    <div class="open-task-actions" style="margin-top:8px">
+      <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted?'disabled':''}>Sprawdź</button>
+    </div>
+    <div class="task-feedback ${taskData.feedbackType||''}" style="margin-top:6px">${escapeHtml(taskData.feedback||'')}</div>
+  </div>`;
+  setNextButtonVisible(!!taskData.submitted);
+  if(taskData.submitted) showLearnMoreBox('motif',taskData.motifId);
+  requestAnimationFrame(scaleTaskToFit);
+}
 
-function renderTaskY1(taskData) {
-  const el = document.getElementById('quiz-content');
-  if (taskData.fallback) {
-    el.innerHTML = `<div class="y1-shell"><h2 style="font-family:var(--ff-serif);font-weight:300">Brak dostępnych zadań Y1</h2></div>`;
-    setNextButtonVisible(true);
-    return;
-  }
-  el.innerHTML = `
-    <div class="y1-shell">
-      <div class="open-task-topline" style="text-align:center;margin-bottom:10px">Y1 · Lektury</div>
-      <h2 class="open-task-title" style="margin-bottom:12px">Podaj tytuł lektury</h2>
-      ${renderHints3Col(taskData, 'y1-answer', 'Wpisz tytuł lektury')}
-      <div class="open-task-input-wrap" style="margin-top:10px">
-        <label for="y1-answer">Twoja odpowiedź</label>
-        <input id="y1-answer" class="open-task-input" type="text"
-          placeholder="Wpisz tytuł lektury"
-          value="${escapeHtml(taskData.userAnswer||'')}"
-          oninput="updateCurrentOpenTaskAnswer(this.value)"
-          ${taskData.submitted?'disabled':''}>
+function renderTaskY2(taskData){
+  const el=document.getElementById('quiz-content');
+  if(taskData.fallback){el.innerHTML=`<div><h2 style="font-family:var(--ff-serif);font-weight:300">Brak dostępnych zadań Y2</h2></div>`;setNextButtonVisible(true);return;}
+  const bookA=getBookById(taskData.bookAId),bookB=getBookById(taskData.bookBId);
+  el.innerHTML=`<div class="y2-layout">
+    <div class="y2-cover-col">
+      ${formatCoverVisual(bookA)}
+      <div class="y2-cover-label">${escapeHtml(bookA?.title||'Lektura 1')}</div>
+    </div>
+    <div class="y2-center">
+      <div class="open-task-topline" style="text-align:center">Y2 · Motywy</div>
+      <h2 class="y2-title">Jaki motyw łączy te lektury?</h2>
+      ${renderHints3Col(taskData)}
+      <div class="open-task-input-wrap">
+        <label for="y2-answer">Twoja odpowiedź</label>
+        <input id="y2-answer" class="open-task-input" type="text" placeholder="Wpisz nazwę motywu" value="${escapeHtml(taskData.userAnswer||'')}" oninput="updateCurrentOpenTaskAnswer(this.value)" ${taskData.submitted?'disabled':''}>
       </div>
-      <div class="open-task-actions" style="margin-top:8px">
+      <div class="open-task-actions">
         <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted?'disabled':''}>Sprawdź</button>
       </div>
-      <div class="task-feedback ${taskData.feedbackType||''}" style="margin-top:6px">${escapeHtml(taskData.feedback||'')}</div>
-    </div>`;
+      <div class="task-feedback ${taskData.feedbackType||''}">${escapeHtml(taskData.feedback||'')}</div>
+    </div>
+    <div class="y2-cover-col">
+      ${formatCoverVisual(bookB)}
+      <div class="y2-cover-label">${escapeHtml(bookB?.title||'Lektura 2')}</div>
+    </div>
+  </div>`;
   setNextButtonVisible(!!taskData.submitted);
-  if (taskData.submitted) showLearnMoreBox('motif', taskData.motifId);
+  if(taskData.submitted) showLearnMoreBox('motif',taskData.motifId);
+  requestAnimationFrame(scaleTaskToFit);
 }
 
-function renderTaskY2(taskData) {
-  const el = document.getElementById('quiz-content');
-  if (taskData.fallback) {
-    el.innerHTML = `<div class="y2-layout"><div></div><div><h2 style="font-family:var(--ff-serif);font-weight:300">Brak dostępnych zadań Y2</h2></div><div></div></div>`;
-    setNextButtonVisible(true);
-    return;
-  }
-  const bookA = getBookById(taskData.bookAId);
-  const bookB = getBookById(taskData.bookBId);
-  el.innerHTML = `
-    <div class="y2-layout">
-      <div class="y2-cover-col">
-        ${formatCoverVisual(bookA)}
-        <div class="y2-cover-label">${escapeHtml(bookA?.title||'Lektura 1')}</div>
-      </div>
-      <div class="y2-center">
-        <div class="open-task-topline" style="text-align:center">Y2 · Motywy</div>
-        <h2 class="y2-title">Jaki motyw łączy te lektury?</h2>
-        ${renderHints3Col(taskData, 'y2-answer', 'Wpisz nazwę motywu')}
-        <div class="open-task-input-wrap">
-          <label for="y2-answer">Twoja odpowiedź</label>
-          <input id="y2-answer" class="open-task-input" type="text"
-            placeholder="Wpisz nazwę motywu"
-            value="${escapeHtml(taskData.userAnswer||'')}"
-            oninput="updateCurrentOpenTaskAnswer(this.value)"
-            ${taskData.submitted?'disabled':''}>
-        </div>
-        <div class="open-task-actions">
-          <button type="button" onclick="submitCurrentOpenTask()" ${taskData.submitted?'disabled':''}>Sprawdź</button>
-        </div>
-        <div class="task-feedback ${taskData.feedbackType||''}">${escapeHtml(taskData.feedback||'')}</div>
-      </div>
-      <div class="y2-cover-col">
-        ${formatCoverVisual(bookB)}
-        <div class="y2-cover-label">${escapeHtml(bookB?.title||'Lektura 2')}</div>
-      </div>
-    </div>`;
-  setNextButtonVisible(!!taskData.submitted);
-  if (taskData.submitted) showLearnMoreBox('motif', taskData.motifId);
+// ═══════════════════════════════════════
+// AUTO-SKALOWANIE
+// ═══════════════════════════════════════
+function scaleTaskToFit(){
+  const content=document.getElementById('quiz-content'); if(!content) return;
+  const inner=content.firstElementChild; if(!inner) return;
+  inner.style.transform='';inner.style.transformOrigin='top center';
+  requestAnimationFrame(()=>{
+    const availH=content.clientHeight||window.innerHeight*0.75;
+    const availW=content.clientWidth||window.innerWidth;
+    const naturalH=inner.scrollHeight,naturalW=inner.scrollWidth;
+    const scale=Math.min(availH/naturalH,availW/naturalW,1);
+    if(scale<0.99){inner.style.transform=`scale(${scale.toFixed(3)})`;inner.style.transformOrigin='top center';}
+  });
 }
+
+window.addEventListener('resize',()=>{ if(quizMode==='engine') requestAnimationFrame(scaleTaskToFit); });
 
 // ═══════════════════════════════════════
 // SCORE & INIT
 // ═══════════════════════════════════════
-
-window.renderScore = function() {
-  const el = document.getElementById('score');
-  if(el) el.innerText = 'Score: ' + score;
-  // Też aktualizuj score w diagnostyce jeśli aktywna
+window.renderScore = function(){
+  const el=document.getElementById('score');
+  if(el) el.innerText='Score: '+score;
   updateDiagScore();
 };
 
-// CSS — wolniejsze przejścia paneli
-(function(){
-  const s=document.createElement('style');
-  s.textContent=`
-  .panel { transition: opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1) !important; }
-  #bg-canvas { transition: filter .9s cubic-bezier(.4,0,.2,1) !important; }
-  `;
-  document.head.appendChild(s);
-})();
-
 blurBg('none');
 renderEpochFilter();
-
-// ═══════════════════════════════════════
-// AUTO-SKALOWANIE ZADAŃ (X, Y1, Y2)
-// ═══════════════════════════════════════
-
-function scaleTaskToFit() {
-  const content = document.getElementById('quiz-content');
-  if (!content) return;
-  const inner = content.firstElementChild;
-  if (!inner) return;
-
-  // Reset skali żeby zmierzyć naturalny rozmiar
-  inner.style.transform = '';
-  inner.style.transformOrigin = 'top center';
-
-  requestAnimationFrame(() => {
-    const availH = content.clientHeight || window.innerHeight * 0.75;
-    const availW = content.clientWidth || window.innerWidth;
-    const naturalH = inner.scrollHeight;
-    const naturalW = inner.scrollWidth;
-
-    const scaleH = availH / naturalH;
-    const scaleW = availW / naturalW;
-    const scale = Math.min(scaleH, scaleW, 1); // nigdy nie powiększaj
-
-    if (scale < 0.99) {
-      inner.style.transform = `scale(${scale.toFixed(3)})`;
-      inner.style.transformOrigin = 'top center';
-    }
-  });
-}
-
-// Wywołuj skalowanie po każdym renderowaniu zadania
-const _origRenderTaskX = renderTaskX;
-window.renderTaskX = function(taskData, answeredState) {
-  _origRenderTaskX(taskData, answeredState);
-  requestAnimationFrame(scaleTaskToFit);
-};
-
-const _origRenderTaskY1 = renderTaskY1;
-window.renderTaskY1 = function(taskData) {
-  _origRenderTaskY1(taskData);
-  requestAnimationFrame(scaleTaskToFit);
-};
-
-const _origRenderTaskY2 = renderTaskY2;
-window.renderTaskY2 = function(taskData) {
-  _origRenderTaskY2(taskData);
-  requestAnimationFrame(scaleTaskToFit);
-};
-
-// Reaguj na zmianę rozmiaru okna
-window.addEventListener('resize', () => {
-  if (quizMode === 'engine') requestAnimationFrame(scaleTaskToFit);
-});
-  
 </script>
 </body>
 </html>
