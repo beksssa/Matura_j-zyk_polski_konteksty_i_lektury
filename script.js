@@ -110,8 +110,28 @@ const data = {
     { id: "motywsumienia", name: "Motyw Sumienia", description: "Wewnętrzny głos moralny, który staje się głównym sędzią i katem bohatera po dokonaniu zła", books: ["magbet", "zbrodniaikara"], aliases: ["sumienie", "wyrzuty sumienia"], images: [{ src: "images/motywy/sumienie/960px-Rembrandt_Harmensz_van_Rijn_-_Return_of_the_Prodigal_Son_-_Google_Art_Project.jpg" }] },
     { id: "motywszalenstwa", name: "Motyw Szaleństwa", description: "Sposób przedstawienia bohatera, którego psychika ulega dezintegracji pod wpływem skrajnych emocji, poczucia winy lub traumy", books: ["magbet", "antygona"], aliases: ["szaleństwo", "obłęd"] , images: [{ src: "images/motywy/szaleństwo/Van_Gogh_-_Selbstbildnis_mit_verbundenem_Ohr.jpeg" }]},
     { id: "totalitaryzm", name: "Totalitaryzm", description: "System polityczny dążący do pełnej unifikacji społeczeństwa i zniszczenia indywidualizmu", books: ["magbet", "innyswiat", "1984"], aliases: ["motyw totalitaryzmu", "system totalitarny"] , images: [{ src: "images/motywy/totalitaryzm/Guernica_reproduction_on_tiled_wall,_Guernica,_Spain_(PPL3-Altered)_julesvernex2.jpg" }]},
-  ]
+  ],
+
+characters: [
+  {
+    id: "chochol",
+    name: "Chochoł",
+    description: "Symbol marazmu narodowego i uśpienia społeczeństwa polskiego.",
+    motifs: ["symbolizm", "motywnarodowy"]
+  },
+  
+  {
+    id: "raskolnikow",
+    name: "Raskolnikow",
+    description: "Student przekonany o własnej wyjątkowości, który morderstwem próbuje udowodnić swoją teorię nadczłowieka.",
+    motifs: ["motywsumienia"]
+    }
+  
+  ]  
 };   
+
+
+
 
 const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"];
 
