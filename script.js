@@ -98,7 +98,7 @@ const data = {
     },
   ],
   motifs: [
-    { id: "motywnarodowy", name: "Motyw Narodowy", description: "Problematyka kondycji narodu", books: ["wesele"], aliases: ["naród", "motyw narodu"], images: [{ src: "images/motywy/naród/wallpaperflare.com_wallpaper.jpg" }] },
+    { id: "motywnarodowy", name: "Motyw Narodowy", description: "Problematyka kondycji narodu", books: ["wesele"], aliases: ["naród", "motyw narodu"], images: [{title: "", author: " ",  src: "images/motywy/naród/wallpaperflare.com_wallpaper.jpg" }], poems: [{title: "", author: " ",  src: "images/motywy/naród/wallpaperflare.com_wallpaper.txt" }] },
     { id: "symbolizm", name: "Symbolizm", description: "Posługiwanie się wieloznacznymi obrazami do wyrażania stanów duszy i treści niewyrażalnych wprost", books: ["wesele"], aliases: ["symboliczność"], images: [{ src: "images/motywy/symbolizm/Bledne_kolo.jpg" }] },
     { id: "ludomania", name: "Ludomania", description: "Powierzchowna fascynacja wsią i życiem chłopów jako źródłem pierwotnej energii", books: ["wesele"], aliases: ["ludofilia"], images: [{ src: "images/motywy/ludomania/Włodzimierz_Tetmajer_-_Blessing_of_Easter_Food_-_MNK_II-b-9_-_National_Museum_Kraków.jpg" }] },
     { id: "naturalizm", name: "Naturalizm", description: "Ukazanie człowieka jako istoty zdeterminowanej przez biologię, instynkty i walkę o byt", books: ["chłopi"], aliases: ["naturalistyczny obraz świata"], images: [{ src: "images/motywy/naturalizm/Aleksander_Gierymski,_Żydówka_z_pomarańczami.jpg" }] },
