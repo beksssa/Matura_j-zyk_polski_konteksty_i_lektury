@@ -96,6 +96,46 @@ const data = {
       characters: ["Winston", "Julia", "O'Brien", "Wielki Brat", "Parsons"],
       quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
     },
+    {
+      id: "spapiec", title: "Skąpiec",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "lalka", title: "Lalka",
+      description: ".",
+      epoch: "", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "spapiec", title: "Skąpiec",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "spapiec", title: "Skąpiec",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "spapiec", title: "Skąpiec",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
   ],
   motifs: [
     { id: "motywnarodowy", name: "Motyw Narodowy", description: "Problematyka kondycji narodu", books: ["wesele"], aliases: ["naród", "motyw narodu"], images: [{ src: "images/motywy/naród/wallpaperflare.com_wallpaper.jpg" }] },
