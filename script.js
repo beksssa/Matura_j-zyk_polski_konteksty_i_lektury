@@ -110,10 +110,10 @@ const data = {
       epoch: "", motifs: [],
       coverEmoji: "📕", aliases: [],
       characters: [],
-      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+      quotes: [], images: [{ src: "images/lektury/skapiec/2823.jpg" }]
     },
     {
-      id: "spapiec", title: "Skąpiec",
+      id: "potop", title: "Potop",
       description: ".",
       epoch: "współczesność", motifs: [],
       coverEmoji: "📕", aliases: [],
@@ -121,7 +121,7 @@ const data = {
       quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
     },
     {
-      id: "spapiec", title: "Skąpiec",
+      id: "przedwiosnie", title: "Przedwiośnie",
       description: ".",
       epoch: "współczesność", motifs: [],
       coverEmoji: "📕", aliases: [],
@@ -129,7 +129,65 @@ const data = {
       quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
     },
     {
-      id: "spapiec", title: "Skąpiec",
+      id: "ferdydurke", title: "Ferdydurke",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "gaz", title: "Proszę państwa do gazu",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },{
+      id: "getto", title: "Zdążyć przed Panem Bogiem",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },{
+      id: "dzuma", title: "Dżuma",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },{
+      id: "edek", title: "Górą Edek",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    ,{
+      id: "miejsce", title: "Miejsce",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },,{
+      id: "andrews", title: " Profesor Andrews w Warszawie",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },,{
+      id: "iliada", title: "Iliada", 
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },,{
+      id: "polikarp", title: "Rozmowa Mistrza Polikarpa ze Śmiercią ",
       description: ".",
       epoch: "współczesność", motifs: [],
       coverEmoji: "📕", aliases: [],
