@@ -125,7 +125,28 @@ characters: [
     name: "Raskolnikow",
     description: "Student przekonany o własnej wyjątkowości, który morderstwem próbuje udowodnić swoją teorię nadczłowieka.",
     motifs: ["motywsumienia"]
-    }
+  },
+
+  {
+    id: "wokulski",
+    name: "Stanisław Wokulski",
+    description: "Zamożny kupiec, właściciel sklepu galanteryjnego. Zakochany w Izabeli Łęckiej, którą chce do siebie przekonać swoim majątkiem.",
+    motifs: ["motywmiłości"]
+  },
+
+  {
+    id: "sonia",
+    name: "Sonia Marmieładowa",
+    description: "Młoda dziewczyna, pracuje jako prostytutka aby utrzymać rodzinę. Mocno wierzy w Boga, przebaczenie i odkupienie. Zakochuje się w Rodionie i towarzyszy mu na wygnaniu.",
+    motifs: ["motywmiłości", "motywsumienia"]
+  },
+
+  {
+    id: "makbet",
+    name: "makbet",
+    description: "Kuzyn i ryczerz króla Dunkana. Po usłyszeniu przepowiedni czarownic budzi się w nim żądza władzy. Podstępem morduje króla i sam przejmuje władzę. Nękany jest póćniej strachem i wątpliwościami.",
+    motifs: ["fatum", "motywsumienia"]
+  },
   
   ]  
 };   
