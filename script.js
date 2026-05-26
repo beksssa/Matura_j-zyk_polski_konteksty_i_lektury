@@ -119,6 +119,48 @@ characters: [
     description: "Symbol marazmu narodowego i uśpienia społeczeństwa polskiego.",
     motifs: ["symbolizm", "motywnarodowy"]
   },
+
+  {
+    id: "mlody",
+    name: "Pan Młody",
+    description: "Krakowski artysta, który bierze chłopkę za żonę. Idealizuje wieś, nie mając tak naprawdę o niej pojęcia",
+    motifs: ["ludomania",]
+  },
+
+  {
+    id: "gospodarz",
+    name: "Gospodarz",
+    description: "Artysta od długiego czasu mieszkający na wsi. Podczas wesela nawiedza go Wernyhora i rozkazuje mu zebrać chłopów do walki. Dostaje od niego złoty róg, który jednak przekazuje Jaśkowi",
+    motifs: ["motywnarodowy]
+  },
+
+  {
+    id: "antygona",
+    name: "Antygona",
+    description: "Córka Edypa, siostra zmarłych Eteokla i Polinika. Staje przed tragiczną decyzją, czy posłuchać rozkazu króla i nie pochować Polinika, czy postępować zgodnie z obrzędami godnie pochować brata.",
+    motifs: []
+  },
+
+  {
+    id: "kreon",
+    name: "Kreon",
+    description: "Król Teb. Rozkazuje nie chować zmarłego Polinika, jednego z braci Antygony. Nie obchodzą go protersty ludu, a swoimi decyzjami prowadzi do śmierci swojej rodziny.",
+    motifs: []
+  },
+
+  {
+    id: "ismena",
+    name: "Ismena",
+    description: "Siostra Antygony. Nie zgadza się z planem siostry o pochowaniu brata, boi się konsekwencji złamania rozkazu króla",
+    motifs: []
+  },
+  
+  {
+    id: "hajmon",
+    name: "Hajmon",
+    description: "Symbol marazmu narodowego i uśpienia społeczeństwa polskiego.",
+    motifs: ["symbolizm", "motywnarodowy"]
+  },
   
   {
     id: "raskolnikow",
