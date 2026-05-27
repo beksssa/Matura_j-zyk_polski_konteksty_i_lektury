@@ -131,7 +131,7 @@ characters: [
     id: "gospodarz",
     name: "Gospodarz",
     description: "Artysta od długiego czasu mieszkający na wsi. Podczas wesela nawiedza go Wernyhora i rozkazuje mu zebrać chłopów do walki. Dostaje od niego złoty róg, który jednak przekazuje Jaśkowi",
-    motifs: ["motywnarodowy]
+    motifs: []
   },
 
   {
@@ -285,6 +285,27 @@ characters: [
     id: "rieux",
     name: "Bernard Rieux",
     description: "Lekarz mieszkający w Oranie. Od samego początku walczy z epidemią i całkowicie się temu oddaje.",
+    motifs: []
+  },
+
+  {
+    id: "boryna",
+    name: "Maciej Boryna",
+    description: "Najbogatszy chłop w Lipcach. Pracowity i zaradny, widzi świat w obiektywie możliwych interesów.",
+    motifs: []
+  },
+
+  {
+    id: "jagna",
+    name: "Jagna",
+    description: "Młoda i piękna chłopka. Wychodzi za Borynę, lecz dalej kręci (do zmiany i guess ale nie mam lepszego słowa) z innymi mężczyznami, w tym z Antonim, synem Boryny.",
+    motifs: []
+  },
+
+  {
+    id: "Antoni",
+    name: "Antoni Boryna",
+    description: "Syn Macieja. Pracowity ale porywczy mężczyzna. Czuje się niesprawiedliwie traktowany przez ojca, przy czym zainteresowany jest Jagną, żoną ojca.",
     motifs: []
   },
 
