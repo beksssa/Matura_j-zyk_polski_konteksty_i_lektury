@@ -309,6 +309,26 @@ characters: [
     motifs: []
   },
 
+  {
+    id: "hektor",
+    name: "Hektor",
+    description: "Najstarszy syn Priama i Hekabe, najdzielniejszy wojownik Troi. Podejmuje się walki z Achillesem w obronie ojczyzny.",
+    motifs: []
+  },
+
+  {
+    id: "parys",
+    name: "Parys",
+    description: "Młodszy syn Priama. Uwodzi i porywa Helenę, co prowadzi do wojny.",
+    motifs: []
+  },
+  
+  {
+    id: "achilles",
+    name: "Achilles",
+    description: "Najsłynniejszy grecki heros. Niepokonany w walce, woli kótkie ale pełne chwały życie.",
+    motifs: []
+  }, 
   ]  
 };   
 
