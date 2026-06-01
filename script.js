@@ -336,6 +336,20 @@ characters: [
     description: "Najsłynniejszy grecki heros. Niepokonany w walce, woli kótkie ale pełne chwały życie.",
     motifs: []
   }, 
+
+  {
+    id: "polikarp",
+    name: "Mistrz Polikarp",
+    description: "Uczony, który prosi Boga o rozmowę ze Śmiercią. Chce dowiedzieć się, dlaczego Śmierć zabiera ludziom życie.",
+    motifs: []
+  },
+
+  {
+    id: "smierc",
+    name: "Śmierć",
+    description: "Uosobiona śmierć. idk co tu dac jeszcze pomysle o tym",
+    motifs: []
+  },
   ]  
 };   
 
