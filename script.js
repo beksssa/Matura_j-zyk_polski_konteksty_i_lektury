@@ -121,6 +121,13 @@ characters: [
   },
 
   {
+    id: "poeta",
+    name: "Poeta",
+    description: "Artysta negatywnie nastawiony do chłopomanii. którego nawiedza Rycerz. Spotkanie daje mu nadzieje i chęć do walki o niepodległość, która jednak znika z najdejściem poranka.",
+    motifs: []
+  },
+
+  {
     id: "mlody",
     name: "Pan Młody",
     description: "Krakowski artysta, który bierze chłopkę za żonę. Idealizuje wieś, nie mając tak naprawdę o niej pojęcia",
