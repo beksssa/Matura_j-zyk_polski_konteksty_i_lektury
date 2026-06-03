@@ -35,65 +35,65 @@ const data = {
     {
       id: "wesele", title: "Wesele",
       description: "Diagnoza społeczeństwa polskiego (niemoc narodowa), symbolizm (zjawy jako uosobienie lęków i marzeń), marazm narodowy (chocholi taniec), rozbicie mitu ludomanii oraz prywata kontra sprawa narodowa",
-      epoch: "młoda polska", motifs: ["motywnarodowy", "symbolizm", "ludomania"],
+      epoch: "młoda polska", motifs: [],
       coverEmoji: "🎭", aliases: ["Wesele Wyspiańskiego"],
-      characters: ["Chochoł", "Gospodarz", "Pan Młody", "Rachel", "Stańczyk"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/wesele/wesele_okładka.png" }]
     },
     {
       id: "chłopi", title: "Chłopi",
       description: "Realistyczna powieść ukazująca życie wiejskiej społeczności podporządkowane rytmowi natury, pracy i tradycji.",
-      epoch: "młoda polska", motifs: ["naturalizm", "motywmiłości"],
+      epoch: "młoda polska", motifs: [],
       coverEmoji: "🌾", aliases: ["Chłopi Reymonta"],
-      characters: ["Maciej Boryna", "Jagna", "Antek", "Hanka", "Kuba"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/chłopi/Chlopi-plakat-204569-602x802-nobckgr.webp" }]
     },
     {
       id: "antygona", title: "Antygona",
       description: "Nierozwiązywalny konflikt między prawem boskim a prawem państwowym, prowadząca do nieuchronnej katastrofy bohatera.",
-      epoch: "antyk", motifs: ["motywbuntu", "fatum"],
+      epoch: "antyk", motifs: [],
       coverEmoji: "🏛️", aliases: ["Antygona Sofoklesa"],
-      characters: ["Antygona", "Kreon", "Ismena", "Hajmon", "Tejrezjasz"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/antygona/productGfx_824_500_500.jpg" }]
     },
     {
       id: "tango", title: "Tango",
       description: "Analiza upadku tradycyjnych wartości, w której próba przywrócenia porządku przez młodego intelektualistę kończy się zwycięstwem brutalnej, prymitywnej siły.",
-      epoch: "współczesność", motifs: ["motywbuntu", "groteska", "motywrodziny"],
+      epoch: "współczesność", motifs: [],
       coverEmoji: "🪑", aliases: ["Tango Mrożka"],
-      characters: ["Artur", "Ala", "Edek", "Stomil", "Eleonora"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/tango/plakat-spektakl-Tango-2025.jpg" }]
     },
     {
       id: "magbet", title: "Makbet",
       description: "Studium destrukcyjnej siły ambicji i mechanizmu władzy, który popycha człowieka do zbrodni, skutkując całkowitym rozpadem jego psychiki.",
-      epoch: "renesans", motifs: ["motywmiłości", "motywsumienia", "motywszalenstwa", "fatum"],
+      epoch: "renesans", motifs: [],
       coverEmoji: "👑", aliases: ["Macbeth", "Makbet Szekspira"],
-      characters: ["Makbet", "Lady Makbet", "Banko", "Duncan", "Makduf", "Wiedźmy"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/magbet/4e4421b6b18d205ec1e82cb4bb61ad53.jpg" }]
     },
     {
       id: "zbrodniaikara", title: "Zbrodnia i kara",
       description: "Psychologiczna opowieść o upadku i odkupieniu człowieka, który morderstwo uzasadnia ideologią, by ostatecznie ulec miażdżącej sile własnego sumienia.",
-      epoch: "pozytywizm", motifs: ["motywmiłości", "motywsumienia"],
+      epoch: "pozytywizm", motifs: [],
       coverEmoji: "🕯️", aliases: ["Zbrodnia i Kara", "Zbrodnia i kara Dostojewskiego"],
-      characters: ["Raskolnikow", "Sonia", "Porfiry", "Dunia", "Swidrygajłow"],
+      characters: [],
       quotes: [],images: [{ src: "images/lektury/zbrodnia i kara/1198.-ZBRODNIA_i_KARA.jpg" }]
     },
     {
       id: "innyswiat", title: "Inny świat",
       description: "Świadectwo nieludzkiego systemu sowieckich łagrów, testującego granice człowieczeństwa w warunkach głodu, pracy ponad siły i wszechobecnego terroru.",
-      epoch: "współczesność", motifs: ["totalitaryzm"],
+      epoch: "współczesność", motifs: [],
       coverEmoji: "⛓️", aliases: ["Inny Świat Herlinga-Grudzińskiego"],
-      characters: ["Narrator", "więźniowie łagru"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/inny świat/images (2).jpeg" }]
     },
     {
       id: "1984", title: "Rok 1984",
       description: "Przerażająca wizja państwa totalitarnego, w którym Partia sprawuje absolutną kontrolę nad czynami, przeszłością, a nawet myślami i uczuciami jednostki.",
-      epoch: "współczesność", motifs: ["totalitaryzm", "motywmiłości"],
+      epoch: "współczesność", motifs: [],
       coverEmoji: "📕", aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
-      characters: ["Winston", "Julia", "O'Brien", "Wielki Brat", "Parsons"],
+      characters: [],
       quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
     },
     {
