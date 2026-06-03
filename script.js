@@ -96,6 +96,104 @@ const data = {
       characters: ["Winston", "Julia", "O'Brien", "Wielki Brat", "Parsons"],
       quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
     },
+    {
+      id: "spapiec", title: "Skąpiec",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "lalka", title: "Lalka",
+      description: ".",
+      epoch: "", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/2823.jpg" }]
+    },
+    {
+      id: "potop", title: "Potop",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "przedwiosnie", title: "Przedwiośnie",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "ferdydurke", title: "Ferdydurke",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    {
+      id: "gaz", title: "Proszę państwa do gazu",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },{
+      id: "getto", title: "Zdążyć przed Panem Bogiem",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },{
+      id: "dzuma", title: "Dżuma",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },{
+      id: "edek", title: "Górą Edek",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
+    ,{
+      id: "miejsce", title: "Miejsce",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },,{
+      id: "andrews", title: " Profesor Andrews w Warszawie",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },,{
+      id: "iliada", title: "Iliada", 
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },,{
+      id: "polikarp", title: "Rozmowa Mistrza Polikarpa ze Śmiercią ",
+      description: ".",
+      epoch: "współczesność", motifs: [],
+      coverEmoji: "📕", aliases: [],
+      characters: [],
+      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    },
   ],
   motifs: [
     { id: "motywsmierci", name: "Motyw Śmierci", description: "Nieuchronność kresu życia i refleksja nad sensem istnienia", books: [], aliases: ["śmierć", "smierc", "motyw śmierci", "motyw smierci"], images: [], poems: [] },
