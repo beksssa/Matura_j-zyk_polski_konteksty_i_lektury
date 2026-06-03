@@ -358,7 +358,7 @@ characters: [
     id: "edek",
     name: "Edek",
     description: "Niewykształcony prostak pozbawiony zasad, jednak uważany przez Stomila za zabawnego i prawdziwego. Wierzy, że jego siła fizyczna daje mu władzę.",
-    motifs: ["motywpolskiipolakow]
+    motifs: ["motywpolskiipolakow"]
   },
 
   {
