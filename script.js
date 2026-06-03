@@ -119,6 +119,248 @@ const data = {
   ]
 };   
 
+characters: [
+  {
+    id: "chochol",
+    name: "Chochoł",
+    description: "Symbol marazmu narodowego i uśpienia społeczeństwa polskiego.",
+    motifs: ["symbolizm", "motywnarodowy", "motywtanca"]
+  },
+
+  {
+    id: "poeta",
+    name: "Poeta",
+    description: "Artysta negatywnie nastawiony do chłopomanii. którego nawiedza Rycerz. Spotkanie daje mu nadzieje i chęć do walki o niepodległość, która jednak znika z najdejściem poranka.",
+    motifs: ["motywartysty", "motywpatriotyzmu"]
+  },
+
+  {
+    id: "mlody",
+    name: "Pan Młody",
+    description: "Krakowski artysta, który bierze chłopkę za żonę. Idealizuje wieś, nie mając tak naprawdę o niej pojęcia",
+    motifs: ["ludomania", "motywwsi"]
+  },
+
+  {
+    id: "gospodarz",
+    name: "Gospodarz",
+    description: "Artysta od długiego czasu mieszkający na wsi. Podczas wesela nawiedza go Wernyhora i rozkazuje mu zebrać chłopów do walki. Dostaje od niego złoty róg, który jednak przekazuje Jaśkowi",
+    motifs: []
+  },
+
+  {
+    id: "antygona",
+    name: "Antygona",
+    description: "Córka Edypa, siostra zmarłych Eteokla i Polinika. Staje przed tragiczną decyzją, czy posłuchać rozkazu króla i nie pochować Polinika, czy postępować zgodnie z obrzędami godnie pochować brata.",
+    motifs: ["motywbuntu"]
+  },
+
+  {
+    id: "kreon",
+    name: "Kreon",
+    description: "Król Teb. Rozkazuje nie chować zmarłego Polinika, jednego z braci Antygony. Nie obchodzą go protersty ludu, a swoimi decyzjami prowadzi do śmierci swojej rodziny.",
+    motifs: []
+  },
+
+  {
+    id: "ismena",
+    name: "Ismena",
+    description: "Siostra Antygony. Nie zgadza się z planem siostry o pochowaniu brata, boi się konsekwencji złamania rozkazu króla",
+    motifs: []
+  },
+  
+  {
+    id: "raskolnikow",
+    name: "Raskolnikow",
+    description: "Student przekonany o własnej wyjątkowości, który morderstwem próbuje udowodnić swoją teorię nadczłowieka.",
+    motifs: ["motywsumienia", "motywmiasta", "motywzbrodni", "motywbiedy", "motywwinyikary"]
+  },
+  
+  {
+    id: "sonia",
+    name: "Sonia Marmieładowa",
+    description: "Młoda dziewczyna, pracuje jako prostytutka aby utrzymać rodzinę. Mocno wierzy w Boga, przebaczenie i odkupienie. Zakochuje się w Rodionie i towarzyszy mu na wygnaniu.",
+    motifs: ["motywmiłości", "motywsumienia"]
+  },
+
+  {
+    id: "makbet",
+    name: "makbet",
+    description: "Kuzyn i ryczerz króla Dunkana. Po usłyszeniu przepowiedni czarownic budzi się w nim żądza władzy. Podstępem morduje króla i sam przejmuje władzę. Nękany jest póćniej strachem i wątpliwościami.",
+    motifs: ["motywfatumprzeznaczenia", "motywprzepowiedni", "motywwladzy", "motywspisku"]
+  },
+
+  {
+    id: "lmakbet",
+    name: "Lady Makbet",
+    description: "Żona makbeta, która planuje zabójstwo Dunkana. Nasila żądzę władzy męża. Ostatecznie popada w szaleństwo.",
+    motifs: ["motywkobiety", "motywszalenstwa", "motywspisku"]
+  },
+
+  {
+    id: "artur",
+    name: "Artur",
+    description: "Młody student medycyny. Stara się przywrócić w domu dawny porządek.",
+    motifs: ["motywpolskiipolakow", "motywobyczajowitradycji", "motywrodziny"]
+  },
+  
+  {
+    id: "edek",
+    name: "Edek",
+    description: "Niewykształcony prostak pozbawiony zasad, jednak uważany przez Stomila za zabawnego i prawdziwego. Wierzy, że jego siła fizyczna daje mu władzę.",
+    motifs: ["motywpolskiipolakow]
+  },
+
+  {
+    id: "winston",
+    name: "Winston Smith",
+    description: "Pracownik Departamentu Archiwów w Ministerstwie Prawdy. Sprzeciwia się reżimowi, prowadzi pamiętnik, ma kochankę, chce walczyć z systemem.",
+    motifs: ["motywbuntu"]
+  },
+  
+  {
+    id: "brat",
+    name: "Wielki Brat",
+    description: "Tajemniczy przywódca Oceanii. Stoi on za całą inwigilacją i kontrolą społeczeństwa. Jednocześnie samo jego istnienie jest niepewne, może on równie dobrze być tylko symbolem używanym przez reżim.",
+    motifs: ["motywtotalitaryzmu"]
+  },
+  
+  {
+    id: "harpagon",
+    name: "Harpagon",
+    description: "Paryski mieszczanin i lichwiarz. Cechuje go wyjątkowe skąpstwo. Jego żądza gromadzenia pieniędzy zatruwa jego życie rodzinne.",
+    motifs: ["motywpieniadza"]
+  },
+
+  {
+    id: "wokulski",
+    name: "Stanisław Wokulski",
+    description: "Zamożny kupiec, właściciel sklepu galanteryjnego. Zakochany w Izabeli Łęckiej, którą chce do siebie przekonać swoim majątkiem.",
+    motifs: ["motywmiłości", "motywfilantropii", ]
+  },
+
+  {
+    id: "rzecki",
+    name: "Ignacy Rzecki",
+    description: "Przyjaciel Wokulskiego, pracuje w jego sklepie. Prowadzi pamiętnik. Próbuje zeswatać Wokulskuego z Stawską",
+    motifs: ["motywstarosci", "motywmieszczanstwa"]
+  },
+
+  {
+    id: "lecka",
+    name: "Izabela Łęcka",
+    description: "Młoda arystokratka, której rodzina straciła majątek. Uważana za niezwykle piękną. Powierzchownie interesuje się sztuką i kulturą, tak naprawdę jest płytka i materialistyczna.",
+    motifs: ["motywkobiety", "motywarystokracji"]
+  },
+
+  {
+    id: "kmicic",
+    name: "Andrzej Kmicic",
+    description: "Młody szlachcic, ma ożenić się z Oleńką. Z początku skłonny do przemocy awanturnik, przechodzi przemianę pod nazwiskiem Babinicz. Staje w obronie ojczyzny i odzyskuje swój honor.",
+    motifs: ["motywprzemiany"]
+  },
+
+  {
+    id: "michal",
+    name: "Michał Wołodyjowski",
+    description: "Polski pułkownik. Uczciwy i sprawiedliwy, ceniący honor podan wszystko. Oddany walce przeciwko szwedom.",
+    motifs: ["motywpatrioty"]
+  },
+
+  {
+    id: "baryka",
+    name: "Cezary Baryka",
+    description: "Syn Carskiego urzędnika mieszkający w dzieciństwie w Baku. Po odzyskaniu przez Polskę niepodległości wraca do kraju. Jest świadkiem sytuacji społecznej i ekonomicznej młodego państwa, będąc również kuszony przez idee rewolucyjne.",
+    motifs: ["motywprzemiany", "motywbuntu", "motywrewolucji"]
+  },
+
+  {
+    id: "starybaryka",
+    name: "Seweryn Baryka",
+    description: "Ojciec Cezarego, urzędnik Cesarski. Idealizuje Polskę, wpaja synowi ideę 'szklanych domów'. Umiera w drodze do ojczyzny.",
+    motifs: ["motywojca", "motywpatriotyzmu"]
+  },
+
+  {
+    id: "jozek",
+    name: "Józio Kowalksi",
+    description: "Trzydziestoletni Józef, który zmienia się w szesnastolatka i wraca do szkoły. Podróżuje następnie przez stancję Młodziaków i wieś Miętusa. W każdym z tych miejsc spotyka się i konfrontuje role nadawane ludziom przez społeczeństwo",
+    motifs: ["motywbuntu", "motywszkoly", "motywdomu", "motywdworku"]
+  },
+
+  {
+    id: "mietus",
+    name: "Miętus",
+    description: "W szkole przedstawiciel chłopców, czyli tych, którzy swoją dorosłość próbują udowodnić przez wulgarne zachowanie (coś do dokończenia jeszcze",
+    motifs: ["motywszkoly", "motywdworku"]
+  },
+
+  {
+    id: "rieux",
+    name: "Bernard Rieux",
+    description: "Lekarz mieszkający w Oranie. Od samego początku walczy z epidemią i całkowicie się temu oddaje.",
+    motifs: ["motywprzyjazni", "motywposwiecenia"]
+  },
+
+  {
+    id: "boryna",
+    name: "Maciej Boryna",
+    description: "Najbogatszy chłop w Lipcach. Pracowity i zaradny, widzi świat w obiektywie możliwych interesów.",
+    motifs: ["motywojca"]
+  },
+
+  {
+    id: "jagna",
+    name: "Jagna",
+    description: "Młoda i piękna chłopka. Wychodzi za Borynę, lecz dalej kręci (do zmiany i guess ale nie mam lepszego słowa) z innymi mężczyznami, w tym z Antonim, synem Boryny.",
+    motifs: ["motywkobiety", ]
+  },
+
+  {
+    id: "antoni",
+    name: "Antoni Boryna",
+    description: "Syn Macieja. Pracowity ale porywczy mężczyzna. Czuje się niesprawiedliwie traktowany przez ojca, przy czym zainteresowany jest Jagną, żoną ojca.",
+    motifs: ["motywsyna"]
+  },
+
+  {
+    id: "hektor",
+    name: "Hektor",
+    description: "Najstarszy syn Priama i Hekabe, najdzielniejszy wojownik Troi. Podejmuje się walki z Achillesem w obronie ojczyzny.",
+    motifs: ["motywpatriotyzmu]
+  },
+
+  {
+    id: "parys",
+    name: "Parys",
+    description: "Młodszy syn Priama. Uwodzi i porywa Helenę, co prowadzi do wojny.",
+    motifs: []
+  },
+  
+  {
+    id: "achilles",
+    name: "Achilles",
+    description: "Najsłynniejszy grecki heros. Niepokonany w walce, woli kótkie ale pełne chwały życie.",
+    motifs: []
+  }, 
+
+  {
+    id: "polikarp",
+    name: "Mistrz Polikarp",
+    description: "Uczony, który prosi Boga o rozmowę ze Śmiercią. Chce dowiedzieć się, dlaczego Śmierć zabiera ludziom życie.",
+    motifs: []
+  },
+
+  {
+    id: "smierc",
+    name: "Śmierć",
+    description: "Uosobiona śmierć. idk co tu dac jeszcze pomysle o tym",
+    motifs: ["motywsmierci]
+  },
+  ]  
+};   
+
+
 const epochs = ["młoda polska", "pozytywizm", "romantyzm", "antyk", "współczesność", "renesans"];
 
 // =========================
