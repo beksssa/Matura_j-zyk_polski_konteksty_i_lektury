@@ -758,12 +758,23 @@ function renderBookProfileNew(book) {
   const motifObjs=(book.motifs||[]).map(getMotifById).filter(Boolean);
   const chars=uniqueStrings(book.characters||[]);
   const quotes=uniqueStrings(book.quotes||[]);
+  const characterObjs = (book.characters || []).map(getCharacterById).filter(Boolean);
   document.getElementById('profile-content').innerHTML=`
     <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">📚 ${escapeHtml(book.title)}</h2>
     <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">${escapeHtml(book.description||'')}</p>
     <div class="profile-section"><h3>Epoka</h3><div class="profile-chip-list"><span class="profile-chip">${escapeHtml(book.epoch||'')}</span></div></div>
     ${motifObjs.length?`<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjs.map(m=>`<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')">🎯 ${escapeHtml(m.name)}</span>`).join('')}</div></div>`:''}
-    ${chars.length?`<div class="profile-section"><h3>Bohaterowie</h3><div class="profile-chip-list">${chars.map(c=>`<span class="profile-chip">${escapeHtml(c)}</span>`).join('')}</div></div>`:''}
+    ${characterObjs.length ? `
+      <div class="profile-section">
+        <h3>Bohaterowie</h3>
+        <div class="profile-chip-list">
+          ${characterObjs.map(c => `
+            <span class="profile-chip clickable" onclick="openCharacterFromProfile('${c.id}')">
+              👤 ${escapeHtml(c.name)}
+            </span>
+          `).join('')}
+        </div>
+      </div>` : ''}
     ${quotes.length?`<div class="profile-section"><h3>Cytaty</h3><div class="profile-media-list">${quotes.map(q=>`<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join('')}</div></div>`:''}
     ${renderSmartImages(book.images,book.title)}
     <br><button class="btn-end" onclick="${canGoBack?'goBackInProfile()':'returnFromProfile()'}">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
