@@ -719,78 +719,25 @@ window.openMotif = function(id) {
   showView('profile'); renderMotifProfileNew(motif);
 };
 
-window.openBookFromProfile = id => window.openBook(id);
-window.openMotifFromProfile = id => window.openMotif(id);
-window.returnFromProfile = function() { showProfileVignette(false); if(!screenHistory.length){goToMenu();return;} handleBack(); };
-window.goBackInProfile = window.returnFromProfile;
-
-function renderSmartImages(images, entityTitle) {
-  if(!images||!images.length) return '';
-  const img=images[0]; if(!img?.src) return '';
-  const id='si-'+Math.random().toString(36).slice(2);
-  return `<div class="profile-section" id="${id}-sec"><h3>Obraz</h3><img id="${id}" src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt||img.label||entityTitle||'')}" style="display:none" onload="applySmartImg('${id}')" onerror="document.getElementById('${id}-sec').style.display='none'"></div>`;
-}
-
-window.applySmartImg = function(id) {
-  const img=document.getElementById(id); if(!img) return;
-  const w=img.naturalWidth,h=img.naturalHeight;
-  img.style.display='';
-  if(w>=h){ img.style.cssText='display:block;width:50%;max-width:100%;margin:8px auto 0;border:1px solid var(--line)'; }
-  else {
-    const sec=document.getElementById(id+'-sec'),pc=document.getElementById('profile-content');
-    if(!sec||!pc) return;
-    img.remove();sec.remove();
-    const secs=[...pc.querySelectorAll('.profile-section')];
-    const colR=document.createElement('div'); colR.className='profile-two-col-img';
-    const i2=document.createElement('img'); i2.src=img.src;i2.alt=img.alt;i2.style.cssText='width:100%;display:block;border:1px solid var(--line)';
-    colR.appendChild(i2);
-    const colL=document.createElement('div'); colL.className='profile-two-col-text';
-    secs.slice(0,2).forEach(s=>colL.appendChild(s));
-    const two=document.createElement('div'); two.className='profile-two-col';two.style.marginTop='14px';
-    two.appendChild(colL);two.appendChild(colR);
-    const desc=pc.querySelector('p');
-    if(desc&&desc.nextSibling) pc.insertBefore(two,desc.nextSibling); else pc.appendChild(two);
-  }
+window.openCharacter = function(id) {
+  pushScreen(currentScreen); updateBackBtn();
+  if(mode==='quiz') quizSnapshot=captureQuizState();
+  profileReturnTarget=mode==='quiz'?'quiz':'map';
+  blurBg('profile'); showProfileVignette(true); stopMapFloat();
+  const character=getCharacterById(id); if(!character) return;
+  showView('profile'); renderCharacterProfileNew(character);
 };
 
-function renderBookProfileNew(book) {
-  const canGoBack=screenHistory.length>1;
-  const motifObjs=(book.motifs||[]).map(getMotifById).filter(Boolean);
-  const chars=uniqueStrings(book.characters||[]);
-  const quotes=uniqueStrings(book.quotes||[]);
-  const characterObjs = (book.characters || []).map(getCharacterById).filter(Boolean);
-  document.getElementById('profile-content').innerHTML=`
-    <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">📚 ${escapeHtml(book.title)}</h2>
-    <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">${escapeHtml(book.description||'')}</p>
-    <div class="profile-section"><h3>Epoka</h3><div class="profile-chip-list"><span class="profile-chip">${escapeHtml(book.epoch||'')}</span></div></div>
-    ${motifObjs.length?`<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjs.map(m=>`<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')">🎯 ${escapeHtml(m.name)}</span>`).join('')}</div></div>`:''}
-    ${characterObjs.length ? `
-      <div class="profile-section">
-        <h3>Bohaterowie</h3>
-        <div class="profile-chip-list">
-          ${characterObjs.map(c => `
-            <span class="profile-chip clickable" onclick="openCharacterFromProfile('${c.id}')">
-              👤 ${escapeHtml(c.name)}
-            </span>
-          `).join('')}
-        </div>
-      </div>` : ''}
-    ${quotes.length?`<div class="profile-section"><h3>Cytaty</h3><div class="profile-media-list">${quotes.map(q=>`<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join('')}</div></div>`:''}
-    ${renderSmartImages(book.images,book.title)}
-    <br><button class="btn-end" onclick="${canGoBack?'goBackInProfile()':'returnFromProfile()'}">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
-}
+window.openBookFromProfile = id => window.openBook(id);
+window.openMotifFromProfile = id => window.openMotif(id);
+window.openCharacterFromProfile = id => window.openCharacter(id);
 
-function renderMotifProfileNew(motif) {
-  const canGoBack=screenHistory.length>1;
-  const bookObjs=(motif.books||[]).map(getBookById).filter(Boolean);
-  document.getElementById('profile-content').innerHTML=`
-    <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">🎯 ${escapeHtml(motif.name)}</h2>
-    <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">${escapeHtml(motif.description||'')}</p>
-    ${bookObjs.length?`<div class="profile-section"><h3>Lektury z tym motywem</h3><div class="profile-chip-list">${bookObjs.map(b=>`<span class="profile-chip clickable" onclick="openBookFromProfile('${b.id}')">📚 ${escapeHtml(b.title)}</span>`).join('')}</div></div>`:''}
-    ${renderSmartImages(motif.images,motif.name)}
-    <br><button class="btn-end" onclick="${canGoBack?'goBackInProfile()':'returnFromProfile()'}">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
-}
-
+window.returnFromProfile = function() {
+  showProfileVignette(false);
+  if(!screenHistory.length){goToMenu();return;}
+  handleBack();
+};
+window.goBackInProfile = window.returnFromProfile;
 // ═══════════════════════════════════════
 // EPOCH SLIDERS
 // ═══════════════════════════════════════
