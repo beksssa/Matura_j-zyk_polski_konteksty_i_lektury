@@ -1299,6 +1299,189 @@ function toggleEpoch(epoch, btn) {
 }
 
 // =========================
+// POEMS
+// =========================
+
+async function loadPoems(poems) {
+  if (!poems || !poems.length) return [];
+  const results = await Promise.all(
+    poems.map(async (poem) => {
+      try {
+        const res = await fetch(poem.src);
+        if (!res.ok) return null;
+        const text = await res.text();
+        return { ...poem, text };
+      } catch { return null; }
+    })
+  );
+  return results.filter(Boolean);
+}
+
+function renderPoemsHtml(poems) {
+  if (!poems || !poems.length) return "";
+  return `<div class="profile-section">
+    <h3>Fragmenty i wiersze</h3>
+    <div class="profile-poems-list">
+      ${poems.map(p => `
+        <div class="profile-poem">
+          <div class="profile-poem-meta">
+            ${escapeHtml(p.author || "")}${p.author && p.title ? " — " : ""}${escapeHtml(p.title || "")}
+          </div>
+          <div class="profile-poem-text">${escapeHtml(p.text || "")}</div>
+        </div>
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+// =========================
+// PROFILE RENDERERS
+// =========================
+
+function renderSmartImages(images, entityTitle) {
+  if (!images || !images.length) return '';
+  const img = images[0];
+  if (!img?.src) return '';
+  const id = 'si-' + Math.random().toString(36).slice(2);
+  return `<div class="profile-section" id="${id}-sec"><h3>Obraz</h3><img id="${id}" src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt || img.label || entityTitle || '')}" style="display:none" onload="applySmartImg('${id}')" onerror="document.getElementById('${id}-sec').style.display='none'"></div>`;
+}
+
+function renderBookProfile(book) {
+  const canGoBack = profileHistoryStack.length > 0;
+  const motifObjs = (book.motifs || []).map(getMotifById).filter(Boolean);
+  const characterObjs = (book.characters || []).map(getCharacterById).filter(Boolean);
+  const quotes = uniqueStrings(book.quotes || []);
+  document.getElementById('profile-content').innerHTML = `
+    <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">
+      📚 ${escapeHtml(book.title)}
+    </h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">
+      ${escapeHtml(book.description || '')}
+    </p>
+    <div class="profile-section">
+      <h3>Epoka</h3>
+      <div class="profile-chip-list">
+        <span class="profile-chip">${escapeHtml(book.epoch || '')}</span>
+      </div>
+    </div>
+    ${motifObjs.length ? `
+      <div class="profile-section">
+        <h3>Motywy</h3>
+        <div class="profile-chip-list">
+          ${motifObjs.map(m => `
+            <span class="profile-chip clickable" onclick="window.openMotifFromProfile('${m.id}')">
+              🎯 ${escapeHtml(m.name)}
+            </span>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    ${characterObjs.length ? `
+      <div class="profile-section">
+        <h3>Bohaterowie</h3>
+        <div class="profile-chip-list">
+          ${characterObjs.map(c => `
+            <span class="profile-chip clickable" onclick="window.openCharacterFromProfile('${c.id}')">
+              👤 ${escapeHtml(c.name)}
+            </span>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    ${quotes.length ? `
+      <div class="profile-section">
+        <h3>Cytaty</h3>
+        <div class="profile-media-list">
+          ${quotes.map(q => `<div class="profile-media-item">„${escapeHtml(q)}"</div>`).join('')}
+        </div>
+      </div>` : ''}
+    ${renderSmartImages(book.images, book.title)}
+    <br>
+    <button class="btn-end" onclick="${canGoBack ? 'goBackInProfile()' : 'returnFromProfile()'}">
+      ⬅ ${profileReturnTarget === 'quiz' ? 'Powrót do ćwiczeń' : 'Powrót'}
+    </button>`;
+}
+
+function renderMotifProfile(motif) {
+  const canGoBack = profileHistoryStack.length > 0;
+  const bookObjs = getBooksByMotif(motif.id);
+  const characterObjs = getCharactersByMotif(motif.id);
+  document.getElementById('profile-content').innerHTML = `
+    <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">
+      🎯 ${escapeHtml(motif.name)}
+    </h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">
+      ${escapeHtml(motif.description || '')}
+    </p>
+    ${bookObjs.length ? `
+      <div class="profile-section">
+        <h3>Lektury z tym motywem</h3>
+        <div class="profile-chip-list">
+          ${bookObjs.map(b => `
+            <span class="profile-chip clickable" onclick="window.openBookFromProfile('${b.id}')">
+              📚 ${escapeHtml(b.title)}
+            </span>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    ${characterObjs.length ? `
+      <div class="profile-section">
+        <h3>Bohaterowie z tym motywem</h3>
+        <div class="profile-chip-list">
+          ${characterObjs.map(c => `
+            <span class="profile-chip clickable" onclick="window.openCharacterFromProfile('${c.id}')">
+              👤 ${escapeHtml(c.name)}
+            </span>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    ${renderSmartImages(motif.images, motif.name)}
+    <br>
+    <button class="btn-end" onclick="${canGoBack ? 'goBackInProfile()' : 'returnFromProfile()'}">
+      ⬅ ${profileReturnTarget === 'quiz' ? 'Powrót do ćwiczeń' : 'Powrót'}
+    </button>`;
+}
+
+async function renderCharacterProfile(character) {
+  const canGoBack = profileHistoryStack.length > 0;
+  const book = getBookByCharacter(character.id);
+  const motifObjs = (character.motifs || []).map(getMotifById).filter(Boolean);
+  document.getElementById('profile-content').innerHTML = `
+    <h2 style="font-family:var(--ff-serif);font-size:2rem;font-weight:300;margin-bottom:.5rem">
+      👤 ${escapeHtml(character.name)}
+    </h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:.5rem">
+      ${escapeHtml(character.description || '')}
+    </p>
+    ${book ? `
+      <div class="profile-section">
+        <h3>Lektura</h3>
+        <div class="profile-chip-list">
+          <span class="profile-chip clickable" onclick="window.openBookFromProfile('${book.id}')">
+            📚 ${escapeHtml(book.title)}
+          </span>
+        </div>
+      </div>` : ''}
+    ${motifObjs.length ? `
+      <div class="profile-section">
+        <h3>Motywy</h3>
+        <div class="profile-chip-list">
+          ${motifObjs.map(m => `
+            <span class="profile-chip clickable" onclick="window.openMotifFromProfile('${m.id}')">
+              🎯 ${escapeHtml(m.name)}
+            </span>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    <div id="poems-placeholder"></div>
+    <br>
+    <button class="btn-end" onclick="${canGoBack ? 'goBackInProfile()' : 'returnFromProfile()'}">
+      ⬅ ${profileReturnTarget === 'quiz' ? 'Powrót do ćwiczeń' : 'Powrót'}
+    </button>`;
+  const poems = await loadPoems(character.poems || []);
+  const placeholder = document.getElementById('poems-placeholder');
+  if (placeholder) placeholder.innerHTML = renderPoemsHtml(poems);
+}
+
+// =========================
 // MAP
 // =========================
 
