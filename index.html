@@ -64,6 +64,11 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;padding:0}
   );
 }
 
+.profile-poems-list { display: grid; gap: 16px; margin-top: 6px; }
+.profile-poem { border-left: 1px solid var(--line2); padding: 2px 0 2px 16px; }
+.profile-poem-meta { font-family: var(--ff-sans); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.profile-poem-text { font-family: var(--ff-serif); font-size: 1.05rem; font-weight: 300; font-style: italic; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+
 #back-btn{
   position:fixed;top:22px;right:28px;
   z-index:100;
@@ -707,7 +712,7 @@ window.openBook = function(id) {
   profileReturnTarget=mode==='quiz'?'quiz':'map';
   blurBg('profile'); showProfileVignette(true); stopMapFloat();
   const book=getBookById(id); if(!book) return;
-  showView('profile'); renderBookProfileNew(book);
+  showView('profile'); renderBookProfile(book);
 };
 
 window.openMotif = function(id) {
@@ -716,7 +721,7 @@ window.openMotif = function(id) {
   profileReturnTarget=mode==='quiz'?'quiz':'map';
   blurBg('profile'); showProfileVignette(true); stopMapFloat();
   const motif=getMotifById(id); if(!motif) return;
-  showView('profile'); renderMotifProfileNew(motif);
+  showView('profile'); renderMotifProfile(motif);
 };
 
 window.openCharacter = function(id) {
@@ -725,7 +730,7 @@ window.openCharacter = function(id) {
   profileReturnTarget=mode==='quiz'?'quiz':'map';
   blurBg('profile'); showProfileVignette(true); stopMapFloat();
   const character=getCharacterById(id); if(!character) return;
-  showView('profile'); renderCharacterProfileNew(character);
+  showView('profile'); renderCharacterProfile(character);
 };
 
 window.openBookFromProfile = id => window.openBook(id);
