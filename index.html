@@ -660,7 +660,7 @@ function startMapFloat() {
 
   items.forEach(item=>{
     const el=document.createElement('div');
-    el.style.cssText=`position:fixed;font-family:'Cormorant Garamond',serif;font-weight:${item.type==='book'?'600':'300'};font-style:${item.type==='motif'?'italic':'normal'};font-size:${16+Math.random()*10}px;color:#0a0a0a;cursor:pointer;user-select:none;z-index:4;white-space:nowrap;pointer-events:all;opacity:.85;transition:opacity .2s,transform .2s`;
+    el.style.cssText=`position:fixed;font-family:'Cormorant Garamond',serif;font-weight:${item.type==='book'?'600':'300'};font-style:${item.type==='motif'?'italic':'normal'};font-size:${16+Math.random()*10}px;color:#33415c;cursor:pointer;user-select:none;z-index:4;white-space:nowrap;pointer-events:all;opacity:.85;transition:opacity .2s,transform .2s`;
     el.textContent=item.label;
     el.onclick=()=>{ el.style.transform='scale(1.18)';el.style.opacity='1'; setTimeout(()=>{ if(item.type==='book') window.openBook(item.id); else window.openMotif(item.id); },220); };
     el.onmouseenter=()=>{el.style.opacity='1'};
@@ -878,7 +878,7 @@ function animateDiag() {
 function animateConnectingLine(w1,w2,correct,onDone){
   const path=document.createElementNS('http://www.w3.org/2000/svg','path');
   const c1=getDiagCenter(w1),c2=getDiagCenter(w2);
-  path.setAttribute('stroke',correct?'#0a0a0a':'#8a2010');
+  path.setAttribute('stroke',correct?'#33415c':'#8a2010');
   path.setAttribute('stroke-width','1.4');
   path.setAttribute('stroke-dasharray','6 4');
   path.setAttribute('fill','none');
@@ -954,7 +954,7 @@ function handleDiagClick(item,el){
         renderScore();updateDiagScore();
       }
       const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('stroke','#0a0a0a');path.setAttribute('stroke-width','0.8');
+      path.setAttribute('stroke','#33415c');path.setAttribute('stroke-width','0.8');
       path.setAttribute('fill','none');path.setAttribute('opacity','0.35');path.setAttribute('stroke-linecap','round');
       diagSvg.appendChild(path);
       diagPairs.push({bookId:bookItem.id,motifId:motifItem.id,w1:bookW,w2:motifW,path,phase:Math.random()*Math.PI*2});
