@@ -1342,8 +1342,16 @@ function renderSmartImages(images, entityTitle) {
   if (!images || !images.length) return '';
   const img = images[0];
   if (!img?.src) return '';
-  const id = 'si-' + Math.random().toString(36).slice(2);
-  return `<div class="profile-section" id="${id}-sec"><h3>Obraz</h3><img id="${id}" src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt || img.label || entityTitle || '')}" style="display:none" onload="applySmartImg('${id}')" onerror="document.getElementById('${id}-sec').style.display='none'"></div>`;
+  return `
+    <div class="profile-section">
+      <h3>Obraz</h3>
+      <img 
+        src="${escapeHtml(img.src)}" 
+        alt="${escapeHtml(img.alt || img.label || entityTitle || '')}"
+        style="width:100%;max-width:340px;display:block;border:1px solid var(--line);margin-top:6px"
+        onerror="this.parentElement.style.display='none'"
+      >
+    </div>`;
 }
 
 function renderBookProfile(book) {
