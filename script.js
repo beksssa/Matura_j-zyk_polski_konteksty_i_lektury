@@ -46,6 +46,252 @@ const data = {
     { id:"andrews",title:"Profesor Andrews w Warszawie",description:"Opowiadanie Tokarczuk o zderzeniu zachodniej wrażliwości z postkomunistyczną Warszawą lat 90. Warszawa jako przestrzeń obcości i fascynacji.",epoch:"współczesność",motifs:["motywpodrozywedrowki","motywmiasta","motywkonfliktu"],coverEmoji:"🏙️",aliases:["Profesor Andrews w Warszawie Tokarczuk"],characters:[],quotes:[],images:[{src:"images/lektury/andrews/andrews.jpg"}]},
     { id:"iliada",title:"Iliada",description:"Epos Homera o ostatnim roku wojny trojańskiej. Bohaterowie stają wobec pytań o honor, śmierć i sens walki — Hektor ginie za ojczyznę, Achilles za zemstę.",epoch:"antyk",motifs:["motywwojny","motywpatriotyzmu","motywfatumprzeznaczenia","motywsmierci","motywrycerza","motywzemsty"],coverEmoji:"🛡️",aliases:["Iliada Homera"],characters:["hektor","parys","achilles"],quotes:[],images:[{src:"images/lektury/iliada/iliada.jpg"}]},
     { id:"polikarp",title:"Rozmowa Mistrza Polikarpa ze Śmiercią",description:"Średniowieczny dialog uczonego ze spersonifikowaną Śmiercią. Refleksja nad przemijaniem i równością wszystkich wobec śmierci.",epoch:"średniowiecze",motifs:["motywsmierci","motywprzemijania","motywuczniaimistrza","motywboga"],coverEmoji:"💀",aliases:["Rozmowa Mistrza Polikarpa ze Śmiercią"],characters:["polikarp","smierc"],quotes:[],images:[{src:"images/lektury/polikarp/polikarp.jpg"}]},
+    {
+      id: "genesis",
+      title: "Księga Rodzaju",
+      description: "Księga Rodzaju opisuje stworzenie świata, początki ludzkości oraz pierwsze relacje człowieka z Bogiem. Motyw Boga ukazuje akt stworzenia i ustanowienie porządku świata jako fundament istnienia człowieka. Motyw rodziny ujawnia się w historiach pierwszych ludzi i ich potomków, pokazując narodziny więzi i konfliktów międzyludzkich.",
+      epoch: "starożytność",
+      motifs: ["motywboga", "motywrodziny"],
+      coverEmoji: "📖",
+      aliases: ["Genesis", "Biblia Księga Rodzaju"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "job",
+      title: "Księga Hioba",
+      description: "Księga Hioba przedstawia historię sprawiedliwego człowieka wystawionego na próbę cierpienia i utraty wszystkiego, co posiada. Motyw cierpienia ukazuje ból niewinnego człowieka i pytanie o sens bólu. Motyw Boga pokazuje relację człowieka z absolutem i próbę zrozumienia boskiej sprawiedliwości. Motyw winy i kary zostaje zakwestionowany poprzez los niewinnego Hioba.",
+      epoch: "starożytność",
+      motifs: ["motywcierpienia", "motywboga", "motywwinyikary"],
+      coverEmoji: "🕊️",
+      aliases: ["Hiob", "Księga Hioba Biblia"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "ecclesiastes",
+      title: "Księga Koheleta",
+      description: "Księga Koheleta jest refleksją nad sensem życia, jego ulotnością i nieuchronnym przemijaniem wszystkiego, co ludzkie. Motyw przemijania ukazuje marność i nietrwałość ludzkich działań oraz dóbr. Motyw Boga wskazuje na poszukiwanie sensu istnienia w relacji z absolutem.",
+      epoch: "starożytność",
+      motifs: ["motywprzemijania", "motywboga"],
+      coverEmoji: "⏳",
+      aliases: ["Kohelet", "Eklezjastes"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "psalms",
+      title: "Księga Psalmów",
+      description: "Księga Psalmów to zbiór modlitw, hymnów i lamentacji wyrażających pełne spektrum ludzkich emocji wobec Boga. Motyw Boga ukazuje bliską relację człowieka z absolutem poprzez modlitwę i uwielbienie. Motyw cierpienia pojawia się w lamentacjach i prośbach o ratunek w sytuacjach granicznych.",
+      epoch: "starożytność",
+      motifs: ["motywboga", "motywcierpienia"],
+      coverEmoji: "🎶",
+      aliases: ["Psalmy", "Psalterz"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "apocalypse_john",
+      title: "Apokalipsa św. Jana",
+      description: "Apokalipsa św. Jana przedstawia wizję końca świata, ostatecznej walki dobra ze złem oraz triumfu boskiego porządku. Motyw Boga ukazuje ostateczne zwycięstwo absolutu nad chaosem. Motyw zła przedstawia destrukcyjne siły działające przeciwko światu. Motyw wojny ujawnia się jako kosmiczny konflikt sił duchowych. Motyw władzy ukazuje sąd i ustanowienie nowego porządku.",
+      epoch: "starożytność",
+      motifs: ["motywboga", "motywzla", "motywwojny", "motywwladzy"],
+      coverEmoji: "🔥",
+      aliases: ["Apokalipsa", "Apokalipsa Jana"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "orpheus",
+      title: "Mit o Orfeuszu i Eurydyce",
+      description: "Mit opowiada o Orfeuszu, który schodzi do świata zmarłych, by odzyskać ukochaną Eurydykę, lecz traci ją przez własne zwątpienie. Motyw miłości ukazuje siłę uczucia przekraczającego granice życia i śmierci. Motyw śmierci przedstawia nieodwracalność losu i granicę między światami. Motyw przemijania podkreśla kruchość ludzkiego szczęścia.",
+      epoch: "starożytność",
+      motifs: ["motywmilosci", "motywsmierci", "motywprzemijania"],
+      coverEmoji: "🎻",
+      aliases: ["Orfeusz", "Orfeusz i Eurydyka"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "sisyphus",
+      title: "Mit o Syzyfie",
+      description: "Mit o Syzyfie przedstawia karę wiecznego wtaczania głazu pod górę, który zawsze spada tuż przed celem. Motyw cierpienia ukazuje absurdalny i niekończący się wysiłek jednostki. Motyw buntu ujawnia się w próbie sprytu i sprzeciwie wobec bogów. Motyw przemijania podkreśla cykliczność i bezsens powtarzalnego losu.",
+      epoch: "starożytność",
+      motifs: ["motywcierpienia", "motywbuntu", "motywprzemijania"],
+      coverEmoji: "🪨",
+      aliases: ["Syzyf", "Syzyfowa praca"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "prometheus",
+      title: "Mit o Prometeuszu",
+      description: "Mit o Prometeuszu opowiada o tytanie, który stworzył lub wspierał ludzi i został za to surowo ukarany przez bogów. Motyw buntu ukazuje sprzeciw wobec boskiego porządku. Motyw poświęcenia przedstawia oddanie dobra ludzkości kosztem własnego cierpienia. Motyw cierpienia ujawnia wieczną karę jako konsekwencję sprzeciwu wobec władzy.",
+      epoch: "starożytność",
+      motifs: ["motywbuntu", "motywposwiecenia", "motywcierpienia"],
+      coverEmoji: "🔥",
+      aliases: ["Prometeusz"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "narcissus",
+      title: "Mit o Narcyzie",
+      description: "Mit o Narcyzie przedstawia młodzieńca zakochanego we własnym odbiciu, który nie potrafi oderwać się od siebie samego. Motyw miłości ukazuje uczucie skierowane ku własnej osobie jako formę destrukcji. Motyw samotności pokazuje całkowite wyobcowanie jednostki. Motyw przemiany ujawnia się w przemianie Narcyza w kwiat.",
+      epoch: "starożytność",
+      motifs: ["motywmilosci", "motywsamotnosci", "motywprzemiany"],
+      coverEmoji: "🌸",
+      aliases: ["Narcyz"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "theseus",
+      title: "Mit o Tezeuszu",
+      description: "Mit o Tezeuszu opowiada o herosie, który pokonuje Minotaura i odnajduje drogę z labiryntu dzięki pomocy Ariadny. Motyw podróży i wędrówki ukazuje drogę bohatera przez nieznane i niebezpieczne przestrzenie. Motyw rycerza przedstawia odwagę i heroizm jednostki. Motyw miłości pojawia się w relacji z Ariadną jako element prowadzący do zwycięstwa.",
+      epoch: "starożytność",
+      motifs: ["motywpodrozywedrowki", "motywrycerza", "motywmilosci"],
+      coverEmoji: "🧵",
+      aliases: ["Tezeusz", "Minotaur"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "heracles",
+      title: "Mit o Heraklesie",
+      description: "Mit o Heraklesie przedstawia bohatera wykonującego dwanaście prac jako pokutę i drogę do oczyszczenia. Motyw pracy ukazuje wysiłek i próbę przekroczenia ludzkich ograniczeń. Motyw poświęcenia ujawnia cenę heroizmu i cierpienia. Motyw rycerza pokazuje idealizację siły i odwagi.",
+      epoch: "starożytność",
+      motifs: ["motywpracy", "motywposwiecenia", "motywrycerza"],
+      coverEmoji: "🦁",
+      aliases: ["Herakles", "Herkules"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "daedalus_icarus",
+      title: "Mit o Dedalu i Ikarze",
+      description: "Mit opowiada o ucieczce Dedala i Ikara z Krety przy użyciu skrzydeł, zakończonej tragicznym upadkiem Ikara. Motyw marzycielstwa ukazuje dążenie do przekraczania granic ludzkich możliwości. Motyw podróży i wędrówki przedstawia ucieczkę jako drogę ku wolności. Motyw przemiany ujawnia dojrzewanie i konsekwencje wyborów.",
+      epoch: "starożytność",
+      motifs: ["motywmarzycielstwa", "motywpodrozywedrowki", "motywprzemiany"],
+      coverEmoji: "🕊️",
+      aliases: ["Dedal i Ikar"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "oedipus",
+      title: "Mit o Edypie",
+      description: "Mit o Edypie opowiada o królu, który nieświadomie spełnia tragiczną przepowiednię o zabiciu ojca i poślubieniu matki. Motyw fatum/przeznaczenia ukazuje nieuchronność losu człowieka. Motyw szaleństwa przedstawia rozpad tożsamości i psychiczne załamanie bohatera. Motyw winy i kary ukazuje konsekwencje czynów niezależnych od świadomości.",
+      epoch: "starożytność",
+      motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary"],
+      coverEmoji: "👁️",
+      aliases: ["Edyp", "Król Edyp"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "trojan_war",
+      title: "Wojna trojańska",
+      description: "Wojna trojańska przedstawia wieloletni konflikt między Grekami a Troją wywołany porwaniem Heleny. Motyw wojny ukazuje destrukcyjny wpływ konfliktu na jednostki i społeczeństwa. Motyw patriotyzmu przedstawia walkę o honor i ojczyznę. Motyw zdrady ujawnia konsekwencje nielojalności. Motyw zemsty napędza działania bohaterów po obu stronach konfliktu.",
+      epoch: "starożytność",
+      motifs: ["motywwojny", "motywpatriotyzmu", "motywzdrady", "motywzemsty"],
+      coverEmoji: "⚔️",
+      aliases: ["Iliada", "wojna o Troję"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "lament_swietokrzyski",
+      title: "Lament świętokrzyski",
+      description: "Lament świętokrzyski to średniowieczny monolog Matki Boskiej opłakującej mękę i śmierć Chrystusa. Motyw matki ukazuje cierpienie rodzicielskie i bezradność wobec losu dziecka. Motyw cierpienia przedstawia ból emocjonalny i duchowy. Motyw Boga ujawnia religijny wymiar tragedii.",
+      epoch: "średniowiecze",
+      motifs: ["motywmatki", "motywcierpienia", "motywboga"],
+      coverEmoji: "💔",
+      aliases: ["Posłuchajcie bracia miła"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "roland",
+      title: "Pieśń o Rolandzie",
+      description: "Pieśń o Rolandzie to średniowieczny epos rycerski opisujący bohaterską śmierć Rolanda w walce z Saracenami. Motyw rycerza ukazuje ideał honoru i odwagi. Motyw patriotyzmu przedstawia lojalność wobec władcy i ojczyzny. Motyw poświęcenia ujawnia gotowość do śmierci za wartości. Motyw wojny pokazuje brutalność konfliktu.",
+      epoch: "średniowiecze",
+      motifs: ["motywrycerza", "motywpatriotyzmu", "motywposwiecenia", "motywwojny"],
+      coverEmoji: "🛡️",
+      aliases: ["Roland"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "dziady_ii",
+      title: "Dziady cz. II",
+      description: "Dziady cz. II przedstawiają obrzęd wywoływania duchów i kontaktu ze światem zmarłych. Motyw winy i kary ukazuje konsekwencje moralne czynów po śmierci. Motyw Boga pojawia się jako element porządku metafizycznego. Motyw śmierci podkreśla granicę między światem żywych i umarłych.",
+      epoch: "romantyzm",
+      motifs: ["motywwinyikary", "motywboga", "motywsmierci"],
+      coverEmoji: "🕯️",
+      aliases: ["Dziady II"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "dziady_iii",
+      title: "Dziady cz. III",
+      description: "Dziady cz. III ukazują walkę jednostki i narodu z opresyjną władzą zaborcy. Motyw buntu przedstawia sprzeciw wobec tyranii. Motyw patriotyzmu ukazuje cierpienie i poświęcenie Polaków. Motyw władzy pokazuje mechanizmy opresji. Motyw cierpienia ujawnia doświadczenie zesłania i represji.",
+      epoch: "romantyzm",
+      motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia"],
+      coverEmoji: "🇵🇱",
+      aliases: ["Dziady III"],
+      characters: [],
+      quotes: [],
+      images: []
+    },
+    
+    {
+      id: "pan_tadeusz",
+      title: "Pan Tadeusz",
+      description: "Pan Tadeusz przedstawia historię szlacheckiego Soplicowa i konfliktów oraz pojednania jego mieszkańców. Motyw patriotyzmu ukazuje tęsknotę za ojczyzną i nadzieję na jej odrodzenie. Motyw tradycji i obyczajów przedstawia świat szlachty i jego rytuały. Motyw miłości ukazuje relacje bohaterów jako siłę jednoczącą. Motyw natury ukazuje harmonię świata przyrody i człowieka. Motyw dworku idealizuje życie szlacheckie.",
+      epoch: "romantyzm",
+      motifs: ["motywpatriotyzmu", "motywobyczajowitradycji", "motywmilosci", "motywprzyrodynatury", "motywdworku"],
+      coverEmoji: "🌿",
+      aliases: ["Pan Tadeusz Mickiewicz"],
+      characters: [],
+      quotes: [],
+      images: []
+    }
   ],
   motifs: [
     { id:"motywsmierci",name:"Motyw Śmierci",description:"Nieuchronność kresu życia i refleksja nad sensem istnienia",books:["antygona","getto","dzuma","iliada","polikarp"],aliases:["śmierć","smierc","motyw śmierci","motyw smierci"],images:[],poems:[]},
