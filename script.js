@@ -386,7 +386,7 @@ const data = {
   ]
 };
 
-const epochs = ["średniowiecze","antyk","renesans","barok","romantyzm","pozytywizm","młoda polska","współczesność"];
+const epochs = ["średniowiecze","antyk","renesans","barok","romantyzm","pozytywizm","młoda polska","współczesność","starożytność"];
 
 // ═══════════════════════════════════════════════════════
 //  HELPERS
