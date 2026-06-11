@@ -119,8 +119,13 @@ input{font-family:inherit}
   padding:2rem 1.5rem 1.8rem;
   display:flex;flex-direction:column;align-items:flex-start;gap:.4rem;
 }
-.tile:hover{background:var(--ink);transform:translateY(-3px);box-shadow:4px 4px 0 var(--accent)}
-.tile:hover .tile-label,.tile:hover .tile-sub,.tile:hover .tile-icon{color:#fff}
+.tile:nth-child(1):hover{background:var(--accent);border-color:var(--accent);transform:translateY(-3px);box-shadow:4px 4px 0 var(--ink)}
+.tile:nth-child(2):hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-3px);box-shadow:4px 4px 0 var(--accent)}
+.tile:nth-child(1):hover .tile-label,.tile:nth-child(1):hover .tile-sub,.tile:nth-child(1):hover .tile-icon{color:#fff}
+.tile:nth-child(2):hover .tile-label,.tile:nth-child(2):hover .tile-sub,.tile:nth-child(2):hover .tile-icon{color:#fff}
+.tile.chosen:nth-child(1){background:var(--accent);border-color:var(--accent);box-shadow:4px 4px 0 var(--ink)}
+.tile.chosen:nth-child(2){background:var(--accent2);border-color:var(--accent2);box-shadow:4px 4px 0 var(--accent3)}
+.tile.chosen .tile-label,.tile.chosen .tile-sub,.tile.chosen .tile-icon{color:#fff}
 .tile.chosen{background:var(--accent);border-color:var(--accent);box-shadow:4px 4px 0 var(--ink)}
 .tile.chosen .tile-label,.tile.chosen .tile-sub,.tile.chosen .tile-icon{color:#fff}
 .tile-label{font-family:var(--ff-serif);font-size:1.8rem;font-weight:700;line-height:1;color:var(--ink);transition:color .2s}
@@ -138,16 +143,22 @@ input{font-family:inherit}
 .epoch-row.on .epoch-slider-track{background:var(--accent);border-color:var(--accent)}
 .epoch-row.on .epoch-slider-thumb{transform:translateX(16px);border-color:var(--accent)}
 .epoch-row.on .epoch-name{color:var(--ink);font-weight:600}
-
+.epoch-row.on:nth-child(3n+1) .epoch-slider-track{background:var(--accent);border-color:var(--accent)}
+.epoch-row.on:nth-child(3n+1) .epoch-slider-thumb{border-color:var(--accent)}
+.epoch-row.on:nth-child(3n+2) .epoch-slider-track{background:var(--accent2);border-color:var(--accent2)}
+.epoch-row.on:nth-child(3n+2) .epoch-slider-thumb{border-color:var(--accent2)}
+.epoch-row.on:nth-child(3n+3) .epoch-slider-track{background:#A2FA51;border-color:#A2FA51}
+.epoch-row.on:nth-child(3n+3) .epoch-slider-thumb{border-color:#A2FA51}
+  
 .start-btn{
   font-family:var(--ff-sans);font-size:11px;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;
   color:#fff;background:var(--accent);
   border:2px solid var(--accent);padding:.8rem 2.4rem;border-radius:24px;
-  cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;
+  cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s,border-color .2s;
   box-shadow:3px 3px 0 var(--ink);
 }
-.start-btn:hover{background:var(--ink);border-color:var(--ink);transform:translateY(-2px);box-shadow:5px 5px 0 var(--accent)}
+.start-btn:hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-2px);box-shadow:5px 5px 0 var(--accent)}
 
 /* MASONRY MAP */
 .masonry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;width:100%;max-width:820px}
@@ -158,8 +169,13 @@ input{font-family:inherit}
   transition:transform .25s var(--ease),background .2s,box-shadow .2s;
   display:flex;flex-direction:column;gap:6px;
 }
-.masonry-item:hover{transform:translateY(-4px) rotate(-.4deg);background:var(--ink);box-shadow:4px 4px 0 var(--accent)}
-.masonry-item:hover .masonry-item-title,.masonry-item:hover .masonry-item-sub{color:#fff}
+.masonry-item:nth-child(4n+1):hover{transform:translateY(-4px) rotate(-.4deg);background:var(--accent);box-shadow:4px 4px 0 var(--ink)}
+.masonry-item:nth-child(4n+2):hover{transform:translateY(-4px) rotate(.4deg);background:var(--accent2);box-shadow:4px 4px 0 var(--accent4)}
+.masonry-item:nth-child(4n+3):hover{transform:translateY(-4px) rotate(-.3deg);background:var(--accent4);box-shadow:4px 4px 0 var(--accent2)}
+.masonry-item:nth-child(4n+4):hover{transform:translateY(-4px) rotate(.3deg);background:var(--accent3);box-shadow:4px 4px 0 var(--ink)}
+.masonry-item:nth-child(4n+2):hover .masonry-item-title,.masonry-item:nth-child(4n+2):hover .masonry-item-sub,
+.masonry-item:nth-child(4n+3):hover .masonry-item-title,.masonry-item:nth-child(4n+3):hover .masonry-item-sub{color:#fff}
+.masonry-item:nth-child(4n+4):hover .masonry-item-title,.masonry-item:nth-child(4n+4):hover .masonry-item-sub{color:var(--ink)}
 .masonry-item-title{font-family:var(--ff-serif);font-size:1.1rem;font-weight:700;color:var(--ink);line-height:1.2;transition:color .2s}
 .masonry-item-sub{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
 .masonry-item-epoch{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:2px solid var(--accent);padding:2px 8px;border-radius:10px;margin-top:auto;align-self:flex-start}
@@ -265,22 +281,43 @@ input{font-family:inherit}
   position:absolute;
   font-family:var(--ff-sans);
   font-weight:700;
-  color:var(--ink);
+  font-size:12px;
   cursor:pointer;
   user-select:none;
   white-space:nowrap;
-  padding:6px 14px;
+  padding:5px 13px;
   border-radius:20px;
   border:2px solid var(--ink);
   background:var(--bg);
   transition:background .2s, color .2s, box-shadow .15s, transform .15s;
   line-height:1;
+  z-index:8;
 }
-.diag-word:hover{transform:translateY(-2px);box-shadow:3px 3px 0 var(--ink)}
-.diag-word.book-word{font-family:var(--ff-serif);font-size:13px}
-.diag-word.motif-word{font-size:11px;letter-spacing:.03em}
-.diag-word.selected{background:var(--ink);color:var(--bg);box-shadow:3px 3px 0 var(--accent)}
-.diag-word.book-completed{border-width:3px;box-shadow:4px 4px 0 var(--ink)}
+.diag-word:hover{transform:translate(-50%,-50%) translateY(-2px);box-shadow:3px 3px 0 var(--ink)}
+.diag-word.book-word{
+  font-family:var(--ff-serif);
+  font-size:13px;
+  /* obramówka zamiast wypełnienia */
+  background:var(--bg);
+  border-width:3px;
+}
+.diag-word.motif-word{
+  font-size:11px;
+  letter-spacing:.03em;
+  border-style:dashed;
+}
+.diag-word.selected{
+  background:var(--ink);
+  color:var(--bg);
+  box-shadow:3px 3px 0 var(--accent);
+  transform:translate(-50%,-50%) scale(1.05);
+}
+/* lektury zmieniają kolor obramówki i tło (nie tekst) po połączeniu */
+.diag-word.book-completed{
+  border-width:3px;
+  border-style:solid;
+  /* kolor ustawiony inline przez JS */
+}
 
 @media(max-width:640px){
   .tinder-scene{grid-template-columns:1fr;grid-template-rows:auto auto auto}
@@ -599,44 +636,63 @@ function animateSnake(svg,fromEl,toEl,color,onDone){
   const sx=fr.left+fr.width/2, sy=fr.top+fr.height/2;
   const ex=tr.left+tr.width/2, ey=tr.top+tr.height/2;
 
-  // Budujemy punkty trasy: omijamy inne elementy przez waypoints
-  // Prosta trasa z lekkim wężowaniem
-  const segments=[];
-  const STEPS=60;
+  // Zbierz przeszkody (wszystkie inne elementy)
+  const allEls=document.querySelectorAll('#diag-words-layer .diag-word');
+  const obstacles=[];
+  allEls.forEach(el=>{
+    if(el===fromEl||el===toEl) return;
+    const r=el.getBoundingClientRect();
+    obstacles.push({x:r.left-4,y:r.top-4,x2:r.right+4,y2:r.bottom+4});
+  });
+
+  const STEPS=80;
   const dx=ex-sx, dy=ey-sy;
   const dist=Math.hypot(dx,dy);
-  const waves=Math.max(2,Math.floor(dist/120));
-  const amp=18;
+  const nx=-dy/dist, ny=dx/dist;
 
-  for(let i=0;i<=STEPS;i++){
-    const t=i/STEPS;
-    const nx=-dy/dist, ny=dx/dist;
-    const wave=Math.sin(t*Math.PI*waves)*amp*(1-t*.7);
-    segments.push({
-      x:sx+dx*t+nx*wave,
-      y:sy+dy*t+ny*wave
-    });
+  // Spróbuj kilka amplitud i wybierz tę co omija przeszkody najlepiej
+  let bestPoints=null, bestScore=Infinity;
+  for(let waveDir of[-1,1]){
+    for(let amp of[0,30,60,100,150]){
+      const pts=[];
+      for(let i=0;i<=STEPS;i++){
+        const t=i/STEPS;
+        const wave=Math.sin(t*Math.PI)*amp*waveDir;
+        pts.push({x:sx+dx*t+nx*wave,y:sy+dy*t+ny*wave});
+      }
+      // Policz kolizje
+      let hits=0;
+      pts.forEach(p=>{
+        obstacles.forEach(o=>{
+          if(p.x>o.x&&p.x<o.x2&&p.y>o.y&&p.y<o.y2) hits++;
+        });
+      });
+      if(hits<bestScore){bestScore=hits;bestPoints=pts;}
+      if(hits===0) break;
+    }
+    if(bestScore===0) break;
   }
+  const segments=bestPoints;
 
-  // Rysuj segmenty jeden po jednym
+  // SVG path + głowa
   const path=document.createElementNS('http://www.w3.org/2000/svg','path');
   path.setAttribute('fill','none');
   path.setAttribute('stroke',color);
-  path.setAttribute('stroke-width','5');
+  path.setAttribute('stroke-width','4');
   path.setAttribute('stroke-linecap','round');
   path.setAttribute('stroke-linejoin','round');
+  path.setAttribute('opacity','0.85');
   svg.appendChild(path);
 
-  // Głowa węża (kółko)
   const head=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  head.setAttribute('r','7');
+  head.setAttribute('r','6');
   head.setAttribute('fill',color);
   head.setAttribute('stroke','#0a0a0a');
   head.setAttribute('stroke-width','2');
   svg.appendChild(head);
 
   let step=1;
-  const totalDur=800; // ms
+  const totalDur=700;
   const stepDur=totalDur/STEPS;
   let last=performance.now();
 
@@ -646,32 +702,24 @@ function animateSnake(svg,fromEl,toEl,color,onDone){
     if(steps>0){
       step=Math.min(step+steps,STEPS);
       last=now;
-      // buduj d
       let d=`M ${segments[0].x.toFixed(1)} ${segments[0].y.toFixed(1)}`;
-      for(let i=1;i<=step;i++){
-        d+=` L ${segments[i].x.toFixed(1)} ${segments[i].y.toFixed(1)}`;
-      }
+      for(let i=1;i<=step;i++) d+=` L ${segments[i].x.toFixed(1)} ${segments[i].y.toFixed(1)}`;
       path.setAttribute('d',d);
       head.setAttribute('cx',segments[step].x.toFixed(1));
       head.setAttribute('cy',segments[step].y.toFixed(1));
     }
-    if(step<STEPS){
-      requestAnimationFrame(tick);
-    } else {
-      head.remove();
-      if(onDone) onDone(path);
-    }
+    if(step<STEPS) requestAnimationFrame(tick);
+    else{ head.remove(); if(onDone) onDone(path); }
   }
   requestAnimationFrame(tick);
   return path;
 }
 
 window.renderDiagnostic=function(){
-  // Ukryj quiz, pokaż diag shell
   const qEl=document.getElementById('quiz');
   qEl.style.display='none'; qEl.classList.remove('active');
   document.getElementById('diag-shell').classList.add('active');
-  dimBg('none'); // diagnostic ma własne białe tło
+  dimBg('none');
 
   const svg=document.getElementById('diag-canvas-svg');
   svg.innerHTML='';
@@ -683,22 +731,19 @@ window.renderDiagnostic=function(){
   const books=getFilteredBooks();
   const motifs=getFilteredMotifs();
 
-  // Przypisz kolory do lektur
   const bookColorMap={};
   books.forEach((b,i)=>{bookColorMap[b.id]=BOOK_COLORS[i%BOOK_COLORS.length];});
 
-  // Stan
   const state={
     selectedMotifId:null,
     bookColors:bookColorMap,
-    connectedPairs:new Set(), // "bookId|motifId"
-    snakePaths:{}, // "bookId|motifId" -> SVG path element
-    bookMotifCounts:{}, // bookId -> {total, connected}
+    connectedPairs:new Set(),
+    snakePaths:{},
+    bookMotifCounts:{},
     scoredPairs:new Set(),
-    wordEls:{}, // id -> DOM el
+    wordEls:{},
   };
 
-  // Zlicz ile motywów ma każda lektura (spośród filtrowanych)
   const filteredMotifIds=new Set(motifs.map(m=>m.id));
   books.forEach(b=>{
     const total=(b.motifs||[]).filter(mid=>filteredMotifIds.has(mid)).length;
@@ -707,41 +752,68 @@ window.renderDiagnostic=function(){
 
   diagState={rafId:null,state};
 
-  // Układanie elementów
   const W=innerWidth, H=innerHeight;
-  const MARGIN_TOP=60, MARGIN_BOTTOM=120, MARGIN_H=40;
+  const MARGIN_TOP=70, MARGIN_BOTTOM=130, MARGIN_H=24;
   const aW=W-MARGIN_H*2, aH=H-MARGIN_TOP-MARGIN_BOTTOM;
 
-  // Grid layout: rozmieść równomiernie
+  // Najpierw zmierz rozmiary elementów tymczasowo
+  const measureEl=document.createElement('div');
+  measureEl.style.cssText='position:absolute;visibility:hidden;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:12px;padding:6px 14px;border-radius:20px;white-space:nowrap';
+  layer.appendChild(measureEl);
+
   const allItems=[
     ...books.map(b=>({id:b.id,label:b.title,type:'book'})),
     ...motifs.map(m=>({id:m.id,label:m.name,type:'motif'}))
   ];
-  const N=allItems.length;
 
-  // Ułóż w siatce — cols x rows
-  const cols=Math.ceil(Math.sqrt(N*1.6));
-  const rows=Math.ceil(N/cols);
-  const cellW=aW/cols, cellH=aH/rows;
+  // Zmierz każdy element
+  const itemSizes=allItems.map(item=>{
+    measureEl.style.fontSize=item.type==='book'?'13px':'11px';
+    measureEl.textContent=item.label;
+    return{w:measureEl.offsetWidth+4,h:measureEl.offsetHeight+4};
+  });
+  measureEl.remove();
 
-  // Shuffle żeby lektury i motywy były przemieszane
-  const shuffled=[...allItems].sort(()=>Math.random()-.5);
+  // Physics-based placement — iteracyjne odpychanie
+  const PAD=10;
+  const positions=allItems.map((_,i)=>({
+    x:MARGIN_H+Math.random()*aW,
+    y:MARGIN_TOP+Math.random()*aH,
+    w:itemSizes[i].w,
+    h:itemSizes[i].h
+  }));
 
-  shuffled.forEach((item,idx)=>{
-    const col=idx%cols, row=Math.floor(idx/cols);
-    const cx=MARGIN_H+col*cellW+cellW/2;
-    const cy=MARGIN_TOP+row*cellH+cellH/2;
-    // Lekkie losowe przesunięcie
-    const jx=(Math.random()-.5)*cellW*.35;
-    const jy=(Math.random()-.5)*cellH*.35;
-    const x=Math.max(MARGIN_H+10,Math.min(W-MARGIN_H-10,cx+jx));
-    const y=Math.max(MARGIN_TOP+10,Math.min(H-MARGIN_BOTTOM-10,cy+jy));
+  // Kilka iteracji odpychania
+  for(let iter=0;iter<200;iter++){
+    for(let a=0;a<positions.length;a++){
+      for(let b=0;b<positions.length;b++){
+        if(a===b) continue;
+        const pa=positions[a], pb=positions[b];
+        const overlapX=((pa.w+pb.w)/2+PAD)-(Math.abs(pa.x-pb.x));
+        const overlapY=((pa.h+pb.h)/2+PAD)-(Math.abs(pa.y-pb.y));
+        if(overlapX>0&&overlapY>0){
+          const pushX=(overlapX/2+1)*(pa.x<pb.x?-1:1);
+          const pushY=(overlapY/2+1)*(pa.y<pb.y?-1:1);
+          if(Math.abs(overlapX)<Math.abs(overlapY)){
+            pa.x+=pushX*0.5; pb.x-=pushX*0.5;
+          } else {
+            pa.y+=pushY*0.5; pb.y-=pushY*0.5;
+          }
+        }
+      }
+      // Trzymaj w granicach
+      positions[a].x=Math.max(MARGIN_H+positions[a].w/2,Math.min(W-MARGIN_H-positions[a].w/2,positions[a].x));
+      positions[a].y=Math.max(MARGIN_TOP+positions[a].h/2,Math.min(H-MARGIN_BOTTOM-positions[a].h/2,positions[a].y));
+    }
+  }
 
+  allItems.forEach((item,idx)=>{
+    const pos=positions[idx];
     const el=document.createElement('div');
     el.className='diag-word '+(item.type==='book'?'book-word':'motif-word');
     el.textContent=item.label;
-    el.style.left=(x)+'px';
-    el.style.top=(y)+'px';
+    el.style.left=pos.x+'px';
+    el.style.top=pos.y+'px';
     el.style.transform='translate(-50%,-50%)';
 
     if(item.type==='motif'){
@@ -752,6 +824,9 @@ window.renderDiagnostic=function(){
 
     layer.appendChild(el);
     state.wordEls[item.id]=el;
+    // zapisz rozmiar do późniejszego użycia przez węża
+    el._w=itemSizes[idx].w;
+    el._h=itemSizes[idx].h;
   });
 
   requestAnimationFrame(()=>{layer.classList.add('ready');});
