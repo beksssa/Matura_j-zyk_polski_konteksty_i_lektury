@@ -348,8 +348,94 @@ characters: [
     id: "smierc",
     name: "Śmierć",
     description: "Uosobiona śmierć. idk co tu dac jeszcze pomysle o tym",
-    motifs: ["motywsmierci]
+    motifs: ["motywsmierci"]
   },
+  
+  {
+    id: "tadek",
+    name: "Tadeusz Soplica",
+    description: "syn Jacka Soplicy, młody dwudziestoletni mężczyzna, który po ukończeniu edukacji wraca z Wilna do Soplicowa, tutaj wplątuje się w miłosne perypetie z Telimeną, ostatecznie jednak zakochuje się w Zosi, z którą się zaręcza",
+    motifs: ["motywdworku"]
+  },
+
+  {
+    id: "robak",
+    name: "Jacek Soplica",
+    description: "W próbie odkupienia swoich win za zabójstwo Stolnika ukrywa się jako Ksiądz Robak. ",
+    motifs: ["motywprzemiany"]
+  },
+
+  {
+    id: "edyp",
+    name: "Edyp",
+    description: "Syn króla Teb, którego porzucono przez przepowiedznie, w której zabija on ojca i poślubia swoją matkę.",
+    motifs: ["motywfatumprzeznaczenia", "Motyw Przepowiedni"]
+  },
+
+  {
+    id: "dedal",
+    name: "Dedal",
+    description: "Architekt na kreteńskim dworze, ojciec Ikara. Twórca labiryntu minotaura. Tworzy sobie i synowi skrzydła by uciec w wyspy.",
+    motifs: ["motywojca"]
+  },
+
+  {
+    id: "ikar",
+    name: "Ikar",
+    description: "Syn Dedala, podczas ucieczki z Krety leci zbyt blisko słońca co niszczy jego skrzydła.",
+    motifs: ["motywsyna"]
+  },
+
+  {
+    id: "herakles",
+    name: "Herakles",
+    description: "Największy grecki heros, skazany na 12 zadań, które musiał wykonać za odkupienie za zabójstwo swojej rodziny.",
+    motifs: ["motywwinyikary"]
+  },
+
+  {
+    id: "tezeusz",
+    name: "Tezeusz",
+    description: "Heros i król Aten. Słynny za zabicie minotaura.",
+    motifs: [""]
+  },
+
+  {
+    id: "narcyz",
+    name: "Narcyz",
+    description: "Piękny myśliwy, który zakochuje się w odbiciu swojej twarzy na tafli jeziora.",
+    motifs: [""]
+  },
+
+  {
+    id: "prometeusz",
+    name: "Prometeusz",
+    description: "Tytan, który z gliny i boskiego ognia tworzy ludzi.",
+    motifs: ["motywwinyikary"]
+  },
+
+  {
+    id: "syzyf",
+    name: "Syzyf",
+    description: "Grecki władca, ukarany przez zdradzenie sekretu Zeusa na wiecznne wnoszenie głazu na górę",
+    motifs: ["motywwinyikary"]
+  },
+
+  {
+    id: "orfeusz",
+    name: "Orfeusz",
+    description: "Poeta i śpiewak, który wkracza do Hadesu po swoją ukochaną Eurydykę.",
+    motifs: ["motywmilosci",]
+  },
+
+  {
+    id: "konrad",
+    name: "Konrad",
+    description: "Więzień, poeta romantyczny, butny. W więzieniu przechodzi przemianę z Guastawa w Konrada.",
+    motifs: ["motywbohateraromantycznego", ]
+  },
+
+
   ]  
 };   
 
