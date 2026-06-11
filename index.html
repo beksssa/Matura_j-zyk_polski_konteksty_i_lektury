@@ -509,49 +509,87 @@ input{font-family:inherit}
 #diag-canvas-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
 #diag-words-layer{position:absolute;inset:0;z-index:7;pointer-events:none}
 #diag-words-layer.ready{pointer-events:all}
-#diag-controls{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:10px}
-#diag-score{font-family:var(--ff-sans);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--accent);padding:5px 16px;border:2px solid var(--ink);border-radius:20px;box-shadow:2px 2px 0 var(--ink)}
+#diag-controls{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:14px;
+  background:var(--bg);
+  border:2px solid var(--ink);
+  border-radius:28px;
+  padding:8px 18px;
+  box-shadow:3px 3px 0 var(--ink);
+}
+#diag-controls p{
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  font-family:var(--ff-sans);
+  font-weight:700;
+  white-space:nowrap;
+}#diag-score{font-family:var(--ff-sans);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--accent);padding:5px 16px;border:2px solid var(--ink);border-radius:20px;box-shadow:2px 2px 0 var(--ink)}
 
 .diag-word{
   position:absolute;
   font-family:var(--ff-sans);
-  font-weight:700;
-  font-size:12px;
+  font-weight:600;
+  font-size:10px;
   cursor:pointer;
   user-select:none;
   white-space:nowrap;
-  padding:5px 13px;
-  border-radius:20px;
-  border:2px solid var(--ink);
-  background:var(--bg);
-  transition:background .2s, color .2s, box-shadow .15s, transform .15s;
+  padding:4px 10px;
+  border-radius:16px;
+  border:none;
+  background:transparent;
+  color:var(--ink);
+  transition:color .2s, transform .15s;
   line-height:1;
   z-index:8;
+  letter-spacing:.02em;
 }
-.diag-word:hover{transform:translate(-50%,-50%) translateY(-2px);box-shadow:3px 3px 0 var(--ink)}
+.diag-word:hover{
+  transform:translate(-50%,-50%) translateY(-2px);
+  color:var(--accent);
+}
 .diag-word.book-word{
   font-family:var(--ff-serif);
-  font-size:13px;
-  /* obramówka zamiast wypełnienia */
+  font-size:12px;
+  font-weight:700;
+  border:2px solid var(--ink);
   background:var(--bg);
-  border-width:3px;
+  padding:5px 12px;
+  border-radius:20px;
+}
+.diag-word.book-word:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  transform:translate(-50%,-50%) translateY(-2px);
 }
 .diag-word.motif-word{
-  font-size:11px;
+  font-size:10px;
+  font-weight:600;
   letter-spacing:.03em;
-  border-style:dashed;
+  /* bez obramówki */
+  border:none;
+  background:transparent;
 }
 .diag-word.selected{
   background:var(--ink);
-  color:var(--bg);
+  color:var(--bg) !important;
+  border:2px solid var(--ink) !important;
+  border-radius:20px;
   box-shadow:3px 3px 0 var(--accent);
-  transform:translate(-50%,-50%) scale(1.05);
+  transform:translate(-50%,-50%) scale(1.08);
 }
-/* lektury zmieniają kolor obramówki i tło (nie tekst) po połączeniu */
 .diag-word.book-completed{
-  border-width:3px;
+  border-width:2px;
   border-style:solid;
-  /* kolor ustawiony inline przez JS */
 }
 
 @media(max-width:640px){
@@ -656,8 +694,8 @@ input{font-family:inherit}
   <div id="diag-words-layer"></div>
   <div id="diag-controls">
     <div id="diag-score">0 pkt</div>
-    <p style="color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--ff-sans);font-weight:700;text-align:center">Kliknij motyw, potem lekturę</p>
-    <button class="start-btn" onclick="nextTask()" id="diagNextBtn" style="display:none;padding:.65rem 2rem">Dalej →</button>
+    <p>Kliknij motyw, potem lekturę</p>
+    <button class="start-btn" onclick="nextTask()" id="diagNextBtn" style="display:none;padding:.5rem 1.4rem;font-size:10px">Dalej →</button>
   </div>
 </div>
 
@@ -1008,12 +1046,13 @@ window.renderDiagnostic=function(){
   diagState={rafId:null,state};
 
   const W=innerWidth, H=innerHeight;
-  const MARGIN_TOP=70, MARGIN_BOTTOM=130, MARGIN_H=24;
+  // Margines dolny większy — żeby elementy nie chowały się pod kontrolkami
+  const MARGIN_TOP=55, MARGIN_BOTTOM=160, MARGIN_H=20;
   const aW=W-MARGIN_H*2, aH=H-MARGIN_TOP-MARGIN_BOTTOM;
 
-  // Najpierw zmierz rozmiary elementów tymczasowo
+  // Element pomiarowy
   const measureEl=document.createElement('div');
-  measureEl.style.cssText='position:absolute;visibility:hidden;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:12px;padding:6px 14px;border-radius:20px;white-space:nowrap';
+  measureEl.style.cssText='position:absolute;visibility:hidden;font-weight:600;white-space:nowrap';
   layer.appendChild(measureEl);
 
   const allItems=[
@@ -1021,44 +1060,78 @@ window.renderDiagnostic=function(){
     ...motifs.map(m=>({id:m.id,label:m.name,type:'motif'}))
   ];
 
-  // Zmierz każdy element
+  // Zmierz rozmiary — książki mają obramówkę, motywy są mniejsze
   const itemSizes=allItems.map(item=>{
-    measureEl.style.fontSize=item.type==='book'?'13px':'11px';
+    if(item.type==='book'){
+      measureEl.style.fontFamily='"Playfair Display",serif';
+      measureEl.style.fontSize='12px';
+      measureEl.style.padding='5px 12px';
+    } else {
+      measureEl.style.fontFamily='"Space Grotesk",sans-serif';
+      measureEl.style.fontSize='10px';
+      measureEl.style.padding='4px 10px';
+    }
     measureEl.textContent=item.label;
-    return{w:measureEl.offsetWidth+4,h:measureEl.offsetHeight+4};
+    return{w:measureEl.offsetWidth+6,h:measureEl.offsetHeight+4};
   });
   measureEl.remove();
 
-  // Physics-based placement — iteracyjne odpychanie
-  const PAD=10;
-  const positions=allItems.map((_,i)=>({
-    x:MARGIN_H+Math.random()*aW,
-    y:MARGIN_TOP+Math.random()*aH,
-    w:itemSizes[i].w,
-    h:itemSizes[i].h
-  }));
+  // Inteligentne układanie — grid + odpychanie
+  // Najpierw rozmieść w regularnej siatce, potem iteruj odpychanie
+  const N=allItems.length;
+  const cols=Math.ceil(Math.sqrt(N*1.8));
+  const rows=Math.ceil(N/cols);
+  const cellW=aW/cols;
+  const cellH=aH/rows;
 
-  // Kilka iteracji odpychania
-  for(let iter=0;iter<200;iter++){
-    for(let a=0;a<positions.length;a++){
-      for(let b=0;b<positions.length;b++){
-        if(a===b) continue;
+  // Shuffle żeby lektury i motywy były przemieszane
+  const indices=[...Array(N).keys()].sort(()=>Math.random()-.5);
+
+  const positions=new Array(N);
+  indices.forEach((origIdx,shuffleIdx)=>{
+    const col=shuffleIdx%cols;
+    const row=Math.floor(shuffleIdx/cols);
+    // Środek komórki + małe losowe przesunięcie (max 30% komórki)
+    const jx=(Math.random()-.5)*cellW*.3;
+    const jy=(Math.random()-.5)*cellH*.3;
+    positions[origIdx]={
+      x:MARGIN_H+col*cellW+cellW/2+jx,
+      y:MARGIN_TOP+row*cellH+cellH/2+jy,
+      w:itemSizes[origIdx].w,
+      h:itemSizes[origIdx].h
+    };
+  });
+
+  // Iteracyjne odpychanie — więcej iteracji, mniejszy krok
+  const PAD_BOOK=12, PAD_MOTIF=8;
+  for(let iter=0;iter<300;iter++){
+    const progress=iter/300; // 0→1
+    const dampening=1-progress*.6; // maleje z iteracjami
+    for(let a=0;a<N;a++){
+      for(let b=a+1;b<N;b++){
         const pa=positions[a], pb=positions[b];
-        const overlapX=((pa.w+pb.w)/2+PAD)-(Math.abs(pa.x-pb.x));
-        const overlapY=((pa.h+pb.h)/2+PAD)-(Math.abs(pa.y-pb.y));
+        const pad=allItems[a].type==='book'||allItems[b].type==='book'?PAD_BOOK:PAD_MOTIF;
+        const needX=(pa.w+pb.w)/2+pad;
+        const needY=(pa.h+pb.h)/2+pad;
+        const dx=pb.x-pa.x;
+        const dy=pb.y-pa.y;
+        const overlapX=needX-Math.abs(dx);
+        const overlapY=needY-Math.abs(dy);
         if(overlapX>0&&overlapY>0){
-          const pushX=(overlapX/2+1)*(pa.x<pb.x?-1:1);
-          const pushY=(overlapY/2+1)*(pa.y<pb.y?-1:1);
-          if(Math.abs(overlapX)<Math.abs(overlapY)){
-            pa.x+=pushX*0.5; pb.x-=pushX*0.5;
+          // Przesuń wzdłuż osi z mniejszym overlappem
+          if(overlapX<overlapY){
+            const push=(overlapX/2+0.5)*dampening*(dx<0?1:-1);
+            pa.x-=push; pb.x+=push;
           } else {
-            pa.y+=pushY*0.5; pb.y-=pushY*0.5;
+            const push=(overlapY/2+0.5)*dampening*(dy<0?1:-1);
+            pa.y-=push; pb.y+=push;
           }
         }
       }
       // Trzymaj w granicach
-      positions[a].x=Math.max(MARGIN_H+positions[a].w/2,Math.min(W-MARGIN_H-positions[a].w/2,positions[a].x));
-      positions[a].y=Math.max(MARGIN_TOP+positions[a].h/2,Math.min(H-MARGIN_BOTTOM-positions[a].h/2,positions[a].y));
+      const p=positions[a];
+      p.x=Math.max(MARGIN_H+p.w/2,Math.min(W-MARGIN_H-p.w/2,p.x));
+      p.y=Math.max(MARGIN_TOP+p.h/2,Math.min(H-MARGIN_BOTTOM-p.h/2,p.y));
     }
   }
 
@@ -1079,7 +1152,6 @@ window.renderDiagnostic=function(){
 
     layer.appendChild(el);
     state.wordEls[item.id]=el;
-    // zapisz rozmiar do późniejszego użycia przez węża
     el._w=itemSizes[idx].w;
     el._h=itemSizes[idx].h;
   });
