@@ -503,106 +503,348 @@ input{font-family:inherit}
 .profile-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:6px}
 .profile-image-item{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--r);border:2px solid var(--ink)}
 
-/* DIAGNOSTIC */
-#diag-shell{position:fixed;inset:0;display:none;z-index:5;background:var(--bg)}
-#diag-shell.active{display:block}
-#diag-canvas-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
-#diag-words-layer{position:absolute;inset:0;z-index:7;pointer-events:none}
-#diag-words-layer.ready{pointer-events:all}
-#diag-controls{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:10;
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  gap:14px;
-  background:var(--bg);
-  border:2px solid var(--ink);
-  border-radius:28px;
-  padding:8px 18px;
-  box-shadow:3px 3px 0 var(--ink);
-}
-#diag-controls p{
-  font-size:9px;
-  color:var(--muted);
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  font-family:var(--ff-sans);
-  font-weight:700;
-  white-space:nowrap;
-}#diag-score{font-family:var(--ff-sans);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--accent);padding:5px 16px;border:2px solid var(--ink);border-radius:20px;box-shadow:2px 2px 0 var(--ink)}
+/* ══════════════════════════════════════════════════════
+   DIAGNOSTIC — GRID + SNAKE PATHFINDING
+   ══════════════════════════════════════════════════════ */
 
-.diag-word{
-  position:absolute;
-  font-family:var(--ff-sans);
-  font-weight:600;
-  font-size:10px;
-  cursor:pointer;
-  user-select:none;
-  white-space:nowrap;
-  padding:4px 10px;
-  border-radius:16px;
-  border:none;
-  background:transparent;
-  color:var(--ink);
-  transition:color .2s, transform .15s;
-  line-height:1;
-  z-index:8;
-  letter-spacing:.02em;
-}
-.diag-word:hover{
-  transform:translate(-50%,-50%) translateY(-2px);
-  color:var(--accent);
-}
-.diag-word.book-word{
-  font-family:var(--ff-serif);
-  font-size:12px;
-  font-weight:700;
-  border:2px solid var(--ink);
-  background:var(--bg);
-  padding:5px 12px;
-  border-radius:20px;
-}
-.diag-word.book-word:hover{
-  border-color:var(--accent);
-  color:var(--accent);
-  transform:translate(-50%,-50%) translateY(-2px);
-}
-.diag-word.motif-word{
-  font-size:10px;
-  font-weight:600;
-  letter-spacing:.03em;
-  /* bez obramówki */
-  border:none;
-  background:transparent;
-}
-.diag-word.selected{
-  background:var(--ink);
-  color:var(--bg) !important;
-  border:2px solid var(--ink) !important;
-  border-radius:20px;
-  box-shadow:3px 3px 0 var(--accent);
-  transform:translate(-50%,-50%) scale(1.08);
-}
-.diag-word.book-completed{
-  border-width:2px;
-  border-style:solid;
+const BOOK_COLORS = [
+  '#dd2d4a','#f26a8d','#880d1e',
+  '#99d98c','#34a0a4','#40916c',
+  '#c77dff','#5a189a',
+  '#e2711d','#ffb627',
+  '#70e000','#007200',
+  '#ccff33','#ffea00',
+  '#00b4d8','#0077b6',
+  '#f72585','#7209b7',
+  '#fb8500','#023e8a'
+];
+
+let diagState = null;
+
+function stopDiagnostic() {
+  diagState = null;
+  document.getElementById('diag-shell').classList.remove('active');
+  document.getElementById('diag-words-layer').innerHTML = '';
+  document.getElementById('diag-canvas-svg').innerHTML = '';
 }
 
-@media(max-width:640px){
-  .tinder-scene{grid-template-columns:1fr;grid-template-rows:auto auto auto}
-  .tinder-scene .tinder-side:first-child{order:2}
-  .tinder-scene .tinder-center{order:1}
-  .tinder-scene .tinder-side:last-child{order:3}
-  .y2-layout{grid-template-columns:1fr}
-  .hints-3col{grid-template-columns:1fr}
-  .tile-grid{grid-template-columns:1fr}
-  .masonry-grid{grid-template-columns:1fr 1fr}
-  .epoch-list{grid-template-columns:1fr}
+function updateDiagScore() {
+  const el = document.getElementById('diag-score');
+  if (el) el.textContent = score + ' pkt';
 }
+
+/* ── BFS pathfinding na siatce pikseli ── */
+function findSnakePath(svg, fromEl, toEl) {
+  const fr = fromEl.getBoundingClientRect();
+  const tr = toEl.getBoundingClientRect();
+  const sx = Math.round(fr.left + fr.width / 2);
+  const sy = Math.round(fr.top + fr.height / 2);
+  const ex = Math.round(tr.left + tr.width / 2);
+  const ey = Math.round(tr.top + tr.height / 2);
+
+  // Zbierz prostokąty przeszkód (wszystkie inne elementy)
+  const obstacles = [];
+  document.querySelectorAll('#diag-words-layer .diag-word').forEach(el => {
+    if (el === fromEl || el === toEl) return;
+    const r = el.getBoundingClientRect();
+    obstacles.push({
+      x1: Math.floor(r.left) - 6,
+      y1: Math.floor(r.top) - 6,
+      x2: Math.ceil(r.right) + 6,
+      y2: Math.ceil(r.bottom) + 6
+    });
+  });
+
+  // Uproszczony BFS na siatce o rozdzielczości 20px
+  const STEP = 20;
+  const W = Math.ceil(window.innerWidth / STEP);
+  const H = Math.ceil(window.innerHeight / STEP);
+
+  const gx = (px) => Math.round(px / STEP);
+  const gy = (py) => Math.round(py / STEP);
+  const isBlocked = (gX, gY) => {
+    const px = gX * STEP, py = gY * STEP;
+    return obstacles.some(o => px >= o.x1 && px <= o.x2 && py >= o.y1 && py <= o.y2);
+  };
+
+  const startGX = gx(sx), startGY = gy(sy);
+  const endGX = gx(ex), endGY = gy(ey);
+
+  // BFS
+  const visited = new Map();
+  const queue = [[startGX, startGY, null]];
+  visited.set(`${startGX},${startGY}`, null);
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+  let found = false;
+
+  outer: while (queue.length) {
+    const [cx, cy, _] = queue.shift();
+    if (cx === endGX && cy === endGY) { found = true; break; }
+    for (const [dx, dy] of dirs) {
+      const nx = cx + dx, ny = cy + dy;
+      if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+      const key = `${nx},${ny}`;
+      if (visited.has(key)) continue;
+      if (isBlocked(nx, ny)) continue;
+      visited.set(key, [cx, cy]);
+      queue.push([nx, ny, null]);
+      if (nx === endGX && ny === endGY) { found = true; break outer; }
+    }
+  }
+
+  // Odtwórz ścieżkę
+  const gridPath = [];
+  if (found) {
+    let cur = [endGX, endGY];
+    while (cur) {
+      gridPath.unshift(cur);
+      cur = visited.get(`${cur[0]},${cur[1]}`);
+    }
+  } else {
+    // Fallback: linia prosta
+    const steps = Math.max(Math.abs(endGX - startGX), Math.abs(endGY - startGY));
+    for (let i = 0; i <= steps; i++) {
+      const t = steps === 0 ? 0 : i / steps;
+      gridPath.push([
+        Math.round(startGX + (endGX - startGX) * t),
+        Math.round(startGY + (endGY - startGY) * t)
+      ]);
+    }
+  }
+
+  return gridPath.map(([gX, gY]) => [gX * STEP, gY * STEP]);
+}
+
+/* ── Animacja snake'a wzdłuż ścieżki ── */
+function animateSnake(svg, fromEl, toEl, color, onDone) {
+  const pixelPath = findSnakePath(svg, fromEl, toEl);
+  if (pixelPath.length < 2) { if (onDone) onDone(null); return; }
+
+  // Uprość ścieżkę — usuń duplikaty sąsiednie
+  const pts = [pixelPath[0]];
+  for (let i = 1; i < pixelPath.length; i++) {
+    const [px, py] = pts[pts.length - 1];
+    const [cx, cy] = pixelPath[i];
+    if (px !== cx || py !== cy) pts.push(pixelPath[i]);
+  }
+
+  const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  pathEl.setAttribute('fill', 'none');
+  pathEl.setAttribute('stroke', color);
+  pathEl.setAttribute('stroke-width', '4');
+  pathEl.setAttribute('stroke-linecap', 'square');
+  pathEl.setAttribute('stroke-linejoin', 'miter');
+  pathEl.setAttribute('opacity', '0.85');
+  svg.appendChild(pathEl);
+
+  const head = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  head.setAttribute('width', '10');
+  head.setAttribute('height', '10');
+  head.setAttribute('fill', color);
+  head.setAttribute('stroke', '#0a0a0a');
+  head.setAttribute('stroke-width', '2');
+  svg.appendChild(head);
+
+  const totalDur = 600;
+  const stepDur = totalDur / (pts.length - 1);
+  let step = 0;
+  let last = performance.now();
+
+  function tick(now) {
+    const dt = now - last;
+    const newStep = Math.min(Math.floor(step + dt / stepDur), pts.length - 1);
+
+    if (newStep > step) {
+      step = newStep;
+      last = now;
+
+      // Buduj SVG path jako łamaną
+      let d = `M ${pts[0][0]} ${pts[0][1]}`;
+      for (let i = 1; i <= step; i++) {
+        d += ` L ${pts[i][0]} ${pts[i][1]}`;
+      }
+      pathEl.setAttribute('d', d);
+
+      const [hx, hy] = pts[step];
+      head.setAttribute('x', hx - 5);
+      head.setAttribute('y', hy - 5);
+    }
+
+    if (step < pts.length - 1) {
+      requestAnimationFrame(tick);
+    } else {
+      head.remove();
+      if (onDone) onDone(pathEl);
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+/* ── Stała siatka pozycji ── */
+function buildGrid() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const MARGIN_TOP = 60;
+  const MARGIN_BOTTOM = 120;
+  const MARGIN_H = 32;
+
+  const COLS = 11;
+  const ROWS = 11;
+
+  const cellW = (W - MARGIN_H * 2) / COLS;
+  const cellH = (H - MARGIN_TOP - MARGIN_BOTTOM) / ROWS;
+
+  const positions = [];
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      positions.push({
+        x: MARGIN_H + col * cellW + cellW / 2,
+        y: MARGIN_TOP + row * cellH + cellH / 2
+      });
+    }
+  }
+  return positions;
+}
+
+window.renderDiagnostic = function () {
+  const qEl = document.getElementById('quiz');
+  qEl.style.display = 'none'; qEl.classList.remove('active');
+  document.getElementById('diag-shell').classList.add('active');
+  dimBg('none');
+
+  const svg = document.getElementById('diag-canvas-svg');
+  svg.innerHTML = '';
+  const layer = document.getElementById('diag-words-layer');
+  layer.innerHTML = '';
+  document.getElementById('diagNextBtn').style.display = 'inline-block';
+  document.getElementById('diag-score').textContent = '0 pkt';
+
+  const books = getFilteredBooks();
+  const motifs = getFilteredMotifs();
+
+  const bookColorMap = {};
+  books.forEach((b, i) => { bookColorMap[b.id] = BOOK_COLORS[i % BOOK_COLORS.length]; });
+
+  const state = {
+    selectedMotifId: null,
+    bookColors: bookColorMap,
+    connectedPairs: new Set(),
+    scoredPairs: new Set(),
+    wordEls: {},
+    bookMotifCounts: {}
+  };
+
+  const filteredMotifIds = new Set(motifs.map(m => m.id));
+  books.forEach(b => {
+    const total = (b.motifs || []).filter(mid => filteredMotifIds.has(mid)).length;
+    state.bookMotifCounts[b.id] = { total, connected: 0 };
+  });
+
+  diagState = { state };
+
+  // Zbierz wszystkie elementy i przetasuj
+  const allItems = [
+    ...books.map(b => ({ id: b.id, label: b.title, type: 'book' })),
+    ...motifs.map(m => ({ id: m.id, label: m.name, type: 'motif' }))
+  ];
+  const shuffled = shuffle(allItems);
+
+  // Pobierz pozycje siatki i przetasuj je też
+  const gridPositions = buildGrid();
+  const shuffledPositions = shuffle(gridPositions);
+
+  // Przypisz elementy do pozycji
+  shuffled.forEach((item, idx) => {
+    if (idx >= shuffledPositions.length) return; // za dużo elementów — pomijamy nadmiar
+    const pos = shuffledPositions[idx];
+
+    const el = document.createElement('div');
+    el.className = 'diag-word ' + (item.type === 'book' ? 'book-word' : 'motif-word');
+    el.textContent = item.label;
+    el.style.left = pos.x + 'px';
+    el.style.top = pos.y + 'px';
+    el.style.transform = 'translate(-50%, -50%)';
+    el.style.position = 'absolute';
+
+    if (item.type === 'motif') {
+      el.onclick = () => handleMotifClick(item.id, el, state, svg, layer);
+    } else {
+      el.onclick = () => handleBookClick(item.id, el, state, svg, layer);
+    }
+
+    layer.appendChild(el);
+    state.wordEls[item.id] = el;
+  });
+
+  requestAnimationFrame(() => { layer.classList.add('ready'); });
+};
+
+function handleMotifClick(motifId, el, state, svg, layer) {
+  if (state.selectedMotifId && state.selectedMotifId !== motifId) {
+    const prev = state.wordEls[state.selectedMotifId];
+    if (prev) prev.classList.remove('selected');
+  }
+  if (state.selectedMotifId === motifId) {
+    el.classList.remove('selected');
+    state.selectedMotifId = null;
+    return;
+  }
+  state.selectedMotifId = motifId;
+  el.classList.add('selected');
+}
+
+function handleBookClick(bookId, bookEl, state, svg, layer) {
+  if (!state.selectedMotifId) return;
+
+  const motifId = state.selectedMotifId;
+  const pairKey = bookId + '|' + motifId;
+
+  const motifEl = state.wordEls[motifId];
+  if (motifEl) motifEl.classList.remove('selected');
+  state.selectedMotifId = null;
+
+  if (state.connectedPairs.has(pairKey)) return;
+
+  const book = getBookById(bookId);
+  const isCorrect = book && (book.motifs || []).includes(motifId);
+
+  if (!isCorrect) {
+    bookEl.style.outline = '3px solid #FF6320';
+    setTimeout(() => { bookEl.style.outline = ''; }, 500);
+    if (!state.scoredPairs.has(pairKey)) {
+      score -= 50;
+      scoredPairs.add(makePairKey(bookId, motifId));
+      state.scoredPairs.add(pairKey);
+      renderScore(); updateDiagScore();
+    }
+    return;
+  }
+
+  state.connectedPairs.add(pairKey);
+  const color = state.bookColors[bookId];
+
+  if (!state.scoredPairs.has(pairKey)) {
+    score += 100;
+    masteredPairs.add(makePairKey(bookId, motifId));
+    scoredPairs.add(makePairKey(bookId, motifId));
+    state.scoredPairs.add(pairKey);
+    renderScore(); updateDiagScore();
+  }
+
+  bookEl.style.color = color;
+  bookEl.style.borderColor = color;
+
+  state.bookMotifCounts[bookId].connected++;
+  const { total, connected } = state.bookMotifCounts[bookId];
+  if (connected >= total) {
+    bookEl.style.background = color + '22';
+    bookEl.style.boxShadow = `4px 4px 0 ${color}, 7px 7px 0 #0a0a0a`;
+  }
+
+  animateSnake(svg, motifEl, bookEl, color, () => {});
+}
+    
 </style>
 </head>
 <body>
