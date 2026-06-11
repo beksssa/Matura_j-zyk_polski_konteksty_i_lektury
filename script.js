@@ -48,7 +48,7 @@ const data = {
       motifs: ["motywwsi", "motywpracy", "motywmilosci", "motywrodziny", "motywojca", "motywprzyrodynatury", "motywkobiety", "motywtanca"],
       coverEmoji: "🌾", aliases: ["Chłopi Reymonta"],
       characters: ["boryna", "jagna", "antoni"],
-      quotes: [], images: [{ src: "images/lektury/chlopi/Chlopi-plakat-204569-602x802-nobckgr.webp" }]
+      quotes: [], images: [{ src: "images/lektury/chłopi/Chlopi-plakat-204569-602x802-nobckgr.webp" }]
     },
     {
       id: "antygona", title: "Antygona",
