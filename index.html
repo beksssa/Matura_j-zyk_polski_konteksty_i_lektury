@@ -183,7 +183,17 @@ input{font-family:inherit}
   z-index:2;pointer-events:none;
   transform-origin:center center;
 }
-
+.split-intro{
+  font-family:var(--ff-serif);
+  font-size:clamp(1rem,2vw,1.25rem);
+  font-weight:400;
+  color:var(--ink);
+  text-align:center;
+  line-height:1.7;
+  max-width:760px;
+  margin:0 auto 3rem;
+  padding:0 2rem;
+}
 /* TILES — zachowane dla screen-mode */
 /* SPLIT SCREEN START */
 #screen-start.panel{
@@ -572,6 +582,7 @@ input{font-family:inherit}
 
 <div id="app">
   <div id="screen-start" class="panel active">
+  <p class="split-intro">Witaj na naszej stronie! Nauczysz się tutaj rozpoznawać i definiować motywy maturalne na przykładzie lektur, wierszy, postaci i obrazów. Możesz przejść do nauki motywów i lektur, lub do sprawdzenia wiedzy z nauczonego materiału.</p>
   <div class="split-screen">
     <div class="split-half split-left" id="split-learning" onclick="setModeAndAdvance('learning')">
       <div class="split-bg" style="background:var(--accent2)"></div>
@@ -770,8 +781,6 @@ window.goToMenu=function(){
 
 window.setModeAndAdvance=function(m){
   setMode(m);
-  document.getElementById('btn-learning').classList.toggle('chosen',m==='learning');
-  document.getElementById('btn-quiz').classList.toggle('chosen',m==='quiz');
   setTimeout(()=>showPanel('screen-mode'),200);
 };
 
