@@ -524,7 +524,7 @@ let diagState = null;
 function stopDiagnostic() {
   diagState = null;
   document.getElementById('diag-shell').classList.remove('active');
-  document.getElementById('diag-words-layer').innerHTML = '';
+  document.getElementById('s-layer').innerHTML = '';
   document.getElementById('diag-canvas-svg').innerHTML = '';
 }
 
@@ -544,7 +544,7 @@ function findSnakePath(svg, fromEl, toEl) {
 
   // Zbierz prostokąty przeszkód (wszystkie inne elementy)
   const obstacles = [];
-  document.querySelectorAll('#diag-words-layer .diag-word').forEach(el => {
+  document.querySelectorAll('#s-layer .').forEach(el => {
     if (el === fromEl || el === toEl) return;
     const r = el.getBoundingClientRect();
     obstacles.push({
@@ -707,77 +707,140 @@ function buildGrid() {
   return positions;
 }
 
-window.renderDiagnostic = function () {
-  const qEl = document.getElementById('quiz');
-  qEl.style.display = 'none'; qEl.classList.remove('active');
+window.renderDiagnostic=function(){
+  const qEl=document.getElementById('quiz');
+  qEl.style.display='none'; qEl.classList.remove('active');
   document.getElementById('diag-shell').classList.add('active');
   dimBg('none');
 
-  const svg = document.getElementById('diag-canvas-svg');
-  svg.innerHTML = '';
-  const layer = document.getElementById('diag-words-layer');
-  layer.innerHTML = '';
-  document.getElementById('diagNextBtn').style.display = 'inline-block';
-  document.getElementById('diag-score').textContent = '0 pkt';
+  const svg=document.getElementById('diag-canvas-svg');
+  svg.innerHTML='';
+  const layer=document.getElementById('s-layer');
+  layer.innerHTML=''; layer.classList.remove('ready');
+  document.getElementById('diagNextBtn').style.display='inline-block';
+  document.getElementById('diag-score').textContent='0 pkt';
 
-  const books = getFilteredBooks();
-  const motifs = getFilteredMotifs();
+  const books=getFilteredBooks();
+  const motifs=getFilteredMotifs();
+  const N=books.length+motifs.length;
 
-  const bookColorMap = {};
-  books.forEach((b, i) => { bookColorMap[b.id] = BOOK_COLORS[i % BOOK_COLORS.length]; });
+  const bookColorMap={};
+  books.forEach((b,i)=>{bookColorMap[b.id]=BOOK_COLORS[i%BOOK_COLORS.length];});
 
-  const state = {
-    selectedMotifId: null,
-    bookColors: bookColorMap,
-    connectedPairs: new Set(),
-    scoredPairs: new Set(),
-    wordEls: {},
-    bookMotifCounts: {}
+  const state={
+    selectedMotifId:null,
+    bookColors:bookColorMap,
+    connectedPairs:new Set(),
+    bookMotifCounts:{},
+    scoredPairs:new Set(),
+    wordEls:{},
+    gridCells:[], // każda komórka = {x,y,w,h} w pikselach
   };
 
-  const filteredMotifIds = new Set(motifs.map(m => m.id));
-  books.forEach(b => {
-    const total = (b.motifs || []).filter(mid => filteredMotifIds.has(mid)).length;
-    state.bookMotifCounts[b.id] = { total, connected: 0 };
+  const filteredMotifIds=new Set(motifs.map(m=>m.id));
+  books.forEach(b=>{
+    const total=(b.motifs||[]).filter(mid=>filteredMotifIds.has(mid)).length;
+    state.bookMotifCounts[b.id]={total,connected:0};
   });
 
-  diagState = { state };
+  diagState={state};
 
-  // Zbierz wszystkie elementy i przetasuj
-  const allItems = [
-    ...books.map(b => ({ id: b.id, label: b.title, type: 'book' })),
-    ...motifs.map(m => ({ id: m.id, label: m.name, type: 'motif' }))
-  ];
-  const shuffled = shuffle(allItems);
+  // ── Oblicz optymalny grid ──
+  const W=innerWidth, H=innerHeight;
+  const CTRL_H=70; // wysokość paska kontrolnego na dole
+  const PAD_X=14, PAD_Y=50; // margines od krawędzi
+  const availW=W-PAD_X*2;
+  const availH=H-PAD_Y-CTRL_H;
 
-  // Pobierz pozycje siatki i przetasuj je też
-  const gridPositions = buildGrid();
-  const shuffledPositions = shuffle(gridPositions);
+  // Znajdź optymalne COLS i ROWS oraz rozmiar czcionki
+  let bestCols=1,bestRows=N,bestFontBook=8,bestFontMotif=7;
 
-  // Przypisz elementy do pozycji
-  shuffled.forEach((item, idx) => {
-    if (idx >= shuffledPositions.length) return; // za dużo elementów — pomijamy nadmiar
-    const pos = shuffledPositions[idx];
+  for(let cols=4;cols<=20;cols++){
+    const rows=Math.ceil(N/cols);
+    const cellW=availW/cols;
+    const cellH=availH/rows;
 
-    const el = document.createElement('div');
-    el.className = 'diag-word ' + (item.type === 'book' ? 'book-word' : 'motif-word');
-    el.textContent = item.label;
-    el.style.left = pos.x + 'px';
-    el.style.top = pos.y + 'px';
-    el.style.transform = 'translate(-50%, -50%)';
-    el.style.position = 'absolute';
+    // Szacowany rozmiar czcionki — komórka musi pomieścić najdłuższy tekst
+    // Zakładamy że lektury mają ~ok 15 znaków, motywy ~ok 14
+    // Czcionka szeryfowa jest węższa na znak
+    const maxBookLen=Math.max(...books.map(b=>b.title.length),1);
+    const maxMotifLen=Math.max(...motifs.map(m=>m.name.length),1);
 
-    if (item.type === 'motif') {
-      el.onclick = () => handleMotifClick(item.id, el, state, svg, layer);
-    } else {
-      el.onclick = () => handleBookClick(item.id, el, state, svg, layer);
+    // Dobierz czcionkę tak żeby najdłuższy tekst mieścił się w 90% szerokości komórki
+    // Przybliżenie: 1ch ≈ 0.55 * fontSize dla serif, 0.58 * fontSize dla sans
+    const fBook=Math.min(15,Math.floor((cellW*0.88)/(maxBookLen*0.52)));
+    const fMotif=Math.min(13,Math.floor((cellW*0.88)/(maxMotifLen*0.56)));
+
+    // Sprawdź czy wysokość komórki wystarczy
+    const lineH=Math.max(fBook,fMotif)+8; // +padding
+    if(lineH>cellH*0.8) continue;
+
+    // Wybierz konfigurację z największą czcionką (ale min 7px)
+    if(fBook>=7&&fMotif>=6){
+      if(fBook+fMotif>bestFontBook+bestFontMotif||(fBook+fMotif===bestFontBook+bestFontMotif&&rows<bestRows)){
+        bestCols=cols;bestRows=rows;bestFontBook=fBook;bestFontMotif=fMotif;
+      }
     }
+  }
 
+  const cellW=availW/bestCols;
+  const cellH=availH/bestRows;
+
+  // ── Buduj listę komórek ──
+  const allCells=[];
+  for(let r=0;r<bestRows;r++){
+    for(let c=0;c<bestCols;c++){
+      if(allCells.length>=N) break;
+      allCells.push({
+        cx: PAD_X+c*cellW+cellW/2,
+        cy: PAD_Y+r*cellH+cellH/2,
+        col:c, row:r
+      });
+    }
+  }
+
+  // ── Przetasuj komórki — losowe przypisanie pozycji ──
+  const shuffledCells=shuffle([...allCells]);
+
+  // ── Stwórz elementy DOM ──
+  const allItems=[
+    ...books.map(b=>({id:b.id,label:b.title,type:'book'})),
+    ...motifs.map(m=>({id:m.id,label:m.name,type:'motif'}))
+  ];
+  // Przetasuj też kolejność items dla dodatkowej losowości
+  const shuffledItems=shuffle([...allItems]);
+
+  // Mapa: itemId -> komórka (do pathfindingu)
+  const itemCellMap={};
+
+  shuffledItems.forEach((item,idx)=>{
+    const cell=shuffledCells[idx];
+    if(!cell) return;
+    const el=document.createElement('div');
+    el.className='diag-word '+(item.type==='book'?'book-word':'motif-word');
+    el.textContent=item.label;
+    el.style.left=cell.cx+'px';
+    el.style.top=cell.cy+'px';
+    el.style.transform='translate(-50%,-50%)';
+    el.style.fontSize=(item.type==='book'?bestFontBook:bestFontMotif)+'px';
+    // Linie siatki jako pomocnicze — zapisz col/row do elementu
+    el._col=cell.col; el._row=cell.row;
+
+    if(item.type==='motif'){
+      el.onclick=()=>handleMotifClick(item.id,el,state,svg,layer);
+    } else {
+      el.onclick=()=>handleBookClick(item.id,el,state,svg,layer);
+    }
     layer.appendChild(el);
-    state.wordEls[item.id] = el;
+    state.wordEls[item.id]=el;
+    itemCellMap[item.id]={col:cell.col,row:cell.row};
   });
 
-  requestAnimationFrame(() => { layer.classList.add('ready'); });
+  // Zapisz parametry siatki do state (do pathfindingu snake'a)
+  state.grid={cols:bestCols,rows:bestRows,cellW,cellH,padX:PAD_X,padY:PAD_Y};
+  state.itemCellMap=itemCellMap;
+
+  requestAnimationFrame(()=>{layer.classList.add('ready');});
 };
 
 function handleMotifClick(motifId, el, state, svg, layer) {
@@ -1155,7 +1218,7 @@ function stopDiagnostic(){
   if(diagState&&diagState.rafId) cancelAnimationFrame(diagState.rafId);
   diagState=null;
   document.getElementById('diag-shell').classList.remove('active');
-  document.getElementById('diag-words-layer').innerHTML='';
+  document.getElementById('s-layer').innerHTML='';
   document.getElementById('diag-canvas-svg').innerHTML='';
 }
 
@@ -1165,89 +1228,109 @@ function updateDiagScore(){
 }
 
 /* SNAKE ANIMATION — rysuje segment po segmencie wzdłuż ścieżki */
-function animateSnake(svg,fromEl,toEl,color,onDone){
+function animateSnake(svg,fromEl,toEl,color,state,onDone){
+  // Pozycje środków elementów
   const fr=fromEl.getBoundingClientRect();
   const tr=toEl.getBoundingClientRect();
   const sx=fr.left+fr.width/2, sy=fr.top+fr.height/2;
   const ex=tr.left+tr.width/2, ey=tr.top+tr.height/2;
 
-  // Zbierz przeszkody (wszystkie inne elementy)
-  const allEls=document.querySelectorAll('#diag-words-layer .diag-word');
-  const obstacles=[];
-  allEls.forEach(el=>{
+  const g=state.grid;
+  if(!g){
+    // fallback — linia prosta
+    drawSnakePath(svg,[{x:sx,y:sy},{x:ex,y:ey}],color,onDone);
+    return;
+  }
+
+  // BFS na siatce komórek
+  const fromCol=fromEl._col, fromRow=fromEl._row;
+  const toCol=toEl._col, toRow=toEl._row;
+
+  // Mapa zajętych komórek (przeszkody)
+  const occupied=new Set();
+  Object.entries(state.itemCellMap).forEach(([id,cell])=>{
+    const el=state.wordEls[id];
     if(el===fromEl||el===toEl) return;
-    const r=el.getBoundingClientRect();
-    obstacles.push({x:r.left-4,y:r.top-4,x2:r.right+4,y2:r.bottom+4});
+    occupied.add(`${cell.col},${cell.row}`);
   });
 
-  const STEPS=80;
-  const dx=ex-sx, dy=ey-sy;
-  const dist=Math.hypot(dx,dy);
-  const nx=-dy/dist, ny=dx/dist;
+  // BFS
+  const queue=[[fromCol,fromRow,[]]];
+  const visited=new Set([`${fromCol},${fromRow}`]);
+  let foundPath=null;
+  const DIRS=[[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
 
-  // Spróbuj kilka amplitud i wybierz tę co omija przeszkody najlepiej
-  let bestPoints=null, bestScore=Infinity;
-  for(let waveDir of[-1,1]){
-    for(let amp of[0,30,60,100,150]){
-      const pts=[];
-      for(let i=0;i<=STEPS;i++){
-        const t=i/STEPS;
-        const wave=Math.sin(t*Math.PI)*amp*waveDir;
-        pts.push({x:sx+dx*t+nx*wave,y:sy+dy*t+ny*wave});
-      }
-      // Policz kolizje
-      let hits=0;
-      pts.forEach(p=>{
-        obstacles.forEach(o=>{
-          if(p.x>o.x&&p.x<o.x2&&p.y>o.y&&p.y<o.y2) hits++;
-        });
-      });
-      if(hits<bestScore){bestScore=hits;bestPoints=pts;}
-      if(hits===0) break;
+  bfs: while(queue.length){
+    const [c,r,path]=queue.shift();
+    const newPath=[...path,{col:c,row:r}];
+    if(c===toCol&&r===toRow){foundPath=newPath;break;}
+    for(const [dc,dr] of DIRS){
+      const nc=c+dc,nr=r+dr;
+      if(nc<0||nr<0||nc>=g.cols||nr>=g.rows) continue;
+      const key=`${nc},${nr}`;
+      if(visited.has(key)) continue;
+      // Można przejść przez komórkę jeśli nie jest zajęta LUB jest to komórka docelowa
+      if(occupied.has(key)&&!(nc===toCol&&nr===toRow)) continue;
+      visited.add(key);
+      queue.push([nc,nr,newPath]);
     }
-    if(bestScore===0) break;
   }
-  const segments=bestPoints;
 
-  // SVG path + głowa
+  // Konwertuj ścieżkę gridową na piksele
+  let pixelPath;
+  if(foundPath&&foundPath.length>0){
+    pixelPath=foundPath.map(({col,row})=>({
+      x: g.padX+col*g.cellW+g.cellW/2,
+      y: g.padY+row*g.cellH+g.cellH/2
+    }));
+    // Nadpisz pierwszy i ostatni punkt dokładnymi środkami elementów
+    pixelPath[0]={x:sx,y:sy};
+    pixelPath[pixelPath.length-1]={x:ex,y:ey};
+  } else {
+    // Fallback — linia prosta przez kilka punktów
+    pixelPath=[{x:sx,y:sy},{x:(sx+ex)/2,y:(sy+ey)/2},{x:ex,y:ey}];
+  }
+
+  drawSnakePath(svg,pixelPath,color,onDone);
+}
+
+function drawSnakePath(svg,pts,color,onDone){
+  if(pts.length<2){if(onDone) onDone(null);return;}
+
   const path=document.createElementNS('http://www.w3.org/2000/svg','path');
   path.setAttribute('fill','none');
   path.setAttribute('stroke',color);
-  path.setAttribute('stroke-width','4');
-  path.setAttribute('stroke-linecap','round');
-  path.setAttribute('stroke-linejoin','round');
-  path.setAttribute('opacity','0.85');
+  path.setAttribute('stroke-width','3');
+  path.setAttribute('stroke-linecap','square');
+  path.setAttribute('stroke-linejoin','miter');
+  path.setAttribute('opacity','0.9');
   svg.appendChild(path);
 
-  const head=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  head.setAttribute('r','6');
+  const head=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  head.setAttribute('width','8');head.setAttribute('height','8');
   head.setAttribute('fill',color);
-  head.setAttribute('stroke','#0a0a0a');
-  head.setAttribute('stroke-width','2');
+  head.setAttribute('stroke','#0a0a0a');head.setAttribute('stroke-width','1.5');
   svg.appendChild(head);
 
-  let step=1;
-  const totalDur=700;
-  const stepDur=totalDur/STEPS;
-  let last=performance.now();
+  const TOTAL_DUR=Math.min(1200,300+pts.length*18);
+  const stepDur=TOTAL_DUR/(pts.length-1);
+  let step=0, last=performance.now();
 
   function tick(now){
-    const dt=now-last;
-    const steps=Math.floor(dt/stepDur);
-    if(steps>0){
-      step=Math.min(step+steps,STEPS);
-      last=now;
-      let d=`M ${segments[0].x.toFixed(1)} ${segments[0].y.toFixed(1)}`;
-      for(let i=1;i<=step;i++) d+=` L ${segments[i].x.toFixed(1)} ${segments[i].y.toFixed(1)}`;
+    const elapsed=now-last;
+    const newStep=Math.min(Math.floor(elapsed/stepDur),pts.length-1);
+    if(newStep>step){
+      step=newStep;
+      let d=`M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+      for(let i=1;i<=step;i++) d+=` L ${pts[i].x.toFixed(1)} ${pts[i].y.toFixed(1)}`;
       path.setAttribute('d',d);
-      head.setAttribute('cx',segments[step].x.toFixed(1));
-      head.setAttribute('cy',segments[step].y.toFixed(1));
+      head.setAttribute('x',(pts[step].x-4).toFixed(1));
+      head.setAttribute('y',(pts[step].y-4).toFixed(1));
     }
-    if(step<STEPS) requestAnimationFrame(tick);
-    else{ head.remove(); if(onDone) onDone(path); }
+    if(step<pts.length-1) requestAnimationFrame(tick);
+    else{head.remove();if(onDone) onDone(path);}
   }
   requestAnimationFrame(tick);
-  return path;
 }
 
 window.renderDiagnostic=function(){
@@ -1258,7 +1341,7 @@ window.renderDiagnostic=function(){
 
   const svg=document.getElementById('diag-canvas-svg');
   svg.innerHTML='';
-  const layer=document.getElementById('diag-words-layer');
+  const layer=document.getElementById('s-layer');
   layer.innerHTML=''; layer.classList.remove('ready');
   document.getElementById('diagNextBtn').style.display='inline-block';
   document.getElementById('diag-score').textContent='0 pkt';
@@ -1380,7 +1463,7 @@ window.renderDiagnostic=function(){
   allItems.forEach((item,idx)=>{
     const pos=positions[idx];
     const el=document.createElement('div');
-    el.className='diag-word '+(item.type==='book'?'book-word':'motif-word');
+    el.className=' '+(item.type==='book'?'book-word':'motif-word');
     el.textContent=item.label;
     el.style.left=pos.x+'px';
     el.style.top=pos.y+'px';
@@ -1474,7 +1557,7 @@ function handleBookClick(bookId,bookEl,state,svg,layer){
   }
 
   // Animuj snake'a
-  animateSnake(svg,motifEl,bookEl,color,()=>{
+  animateSnake(svg,motifEl,bookEl,color,state,()=>{
     // Po zakończeniu animacji — zostaw trwałą linię
     // (path już w SVG, zostawiamy)
   });
