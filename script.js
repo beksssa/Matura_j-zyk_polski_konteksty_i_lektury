@@ -294,7 +294,7 @@ const data = {
       motifs: ["motywmilosci", "motywsmierci", "motywprzemijania"],
       coverEmoji: "🎻",
       aliases: ["Orfeusz", "Orfeusz i Eurydyka"],
-      characters: [],
+      characters: ["orfeusz"],
       quotes: [],
       images: []
     },
@@ -307,7 +307,7 @@ const data = {
       motifs: ["motywcierpienia", "motywbuntu", "motywprzemijania"],
       coverEmoji: "🪨",
       aliases: ["Syzyf", "Syzyfowa praca"],
-      characters: [],
+      characters: ["syzyf"],
       quotes: [],
       images: []
     },
@@ -320,7 +320,7 @@ const data = {
       motifs: ["motywbuntu", "motywposwiecenia", "motywcierpienia"],
       coverEmoji: "🔥",
       aliases: ["Prometeusz"],
-      characters: [],
+      characters: ["prometeusz"],
       quotes: [],
       images: []
     },
@@ -333,7 +333,7 @@ const data = {
       motifs: ["motywmilosci", "motywsamotnosci", "motywprzemiany"],
       coverEmoji: "🌸",
       aliases: ["Narcyz"],
-      characters: [],
+      characters: ["narcyz"],
       quotes: [],
       images: []
     },
@@ -346,7 +346,7 @@ const data = {
       motifs: ["motywpodrozywedrowki", "motywrycerza", "motywmilosci"],
       coverEmoji: "🧵",
       aliases: ["Tezeusz", "Minotaur"],
-      characters: [],
+      characters: ["tezeusz"],
       quotes: [],
       images: []
     },
@@ -359,7 +359,7 @@ const data = {
       motifs: ["motywpracy", "motywposwiecenia", "motywrycerza"],
       coverEmoji: "🦁",
       aliases: ["Herakles", "Herkules"],
-      characters: [],
+      characters: ["herakles"],
       quotes: [],
       images: []
     },
@@ -372,7 +372,7 @@ const data = {
       motifs: ["motywmarzycielstwa", "motywpodrozywedrowki", "motywprzemiany"],
       coverEmoji: "🕊️",
       aliases: ["Dedal i Ikar"],
-      characters: [],
+      characters: ["dedal", "ikar"],
       quotes: [],
       images: []
     },
@@ -385,7 +385,7 @@ const data = {
       motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary"],
       coverEmoji: "👁️",
       aliases: ["Edyp", "Król Edyp"],
-      characters: [],
+      characters: ["edyp"],
       quotes: [],
       images: []
     },
@@ -450,7 +450,7 @@ const data = {
       motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia"],
       coverEmoji: "🇵🇱",
       aliases: ["Dziady III"],
-      characters: [],
+      characters: ["konrad"],
       quotes: [],
       images: []
     },
@@ -463,7 +463,7 @@ const data = {
       motifs: ["motywpatriotyzmu", "motywobyczajowitradycji", "motywmilosci", "motywprzyrodynatury", "motywdworku"],
       coverEmoji: "🌿",
       aliases: ["Pan Tadeusz Mickiewicz"],
-      characters: [],
+      characters: ["tadek"],
       quotes: [],
       images: []
     }
