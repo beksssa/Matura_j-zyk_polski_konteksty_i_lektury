@@ -1218,9 +1218,9 @@ function openMotifProfile(id){
   document.getElementById('profile-content').innerHTML=`
     <h2 style="font-family:var(--ff-serif);font-size:2.2rem;font-weight:700;margin-bottom:.5rem;color:var(--ink)">🎯 ${escapeHtml(motif.name)}</h2>
     <p style="color:var(--ink-light);font-size:13px;line-height:1.75;margin-bottom:.5rem">${escapeHtml(motif.description||'')}</p>
+    ${renderProfileImage(motif.images,motif.name)}
     ${bookObjs.length?`<div class="profile-section"><h3>Lektury z tym motywem</h3><div class="profile-chip-list">${bookObjs.map(b=>`<span class="profile-chip clickable" onclick="openBookFromProfile('${b.id}')">📚 ${escapeHtml(b.title)}</span>`).join('')}</div></div>`:''}
     ${charObjs.length?`<div class="profile-section"><h3>Bohaterowie z tym motywem</h3><div class="profile-chip-list">${charObjs.map(c=>`<span class="profile-chip clickable" onclick="openCharacterFromProfile('${c.id}')">👤 ${escapeHtml(c.name)}</span>`).join('')}</div></div>`:''}
-    ${renderProfileImage(motif.images,motif.name)}
     <br><button class="start-btn" onclick="returnFromProfile()" style="font-size:10px;padding:.6rem 1.6rem">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
   document.getElementById('menu-btn').classList.add('visible');
 }
