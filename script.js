@@ -887,6 +887,7 @@ function createTaskX(preset=null){
     render(){ renderTaskX(this.data,false); },
     submit(side){
       this.data._chosenSide=side;
+      currentTaskData=clone(this.data);
       const ok=side===this.data.correctSide;
       if(ok){
         score+=25;
@@ -1067,8 +1068,12 @@ function restoreQuizState(snap){
   document.getElementById('quiz-label').textContent='Ćwiczenia';
   if(currentTaskType&&currentTaskData){
     currentTask=createTask(currentTaskType,currentTaskData);
-    currentTask.render();
-    setNextButtonVisible(window.quizAnswered);
+    if(window.quizAnswered && currentTaskType==='X'){
+      renderTaskX(currentTaskData, true);
+} else {
+  currentTask.render();
+}
+setNextButtonVisible(window.quizAnswered);
   } else {
     renderEngineNextTask();
   }
