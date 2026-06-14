@@ -842,140 +842,24 @@ function buildGrid() {
   return positions;
 }
 
-window.renderDiagnostic=function(){
-  const qEl=document.getElementById('quiz');
-  qEl.style.display='none'; qEl.classList.remove('active');
-  document.getElementById('diag-shell').classList.add('active');
-  dimBg('none');
+window.renderDiagnostic = function() {
+  const shell = document.getElementById('diag-shell');
+  shell.innerHTML = '<iframe id="diag-iframe" src="diagnostic_quiz.html" style="border:none;width:100%;height:100%;display:block"></iframe>';
+  shell.classList.add('active');
 
-  const svg=document.getElementById('diag-canvas-svg');
-  svg.innerHTML='';
-  const layer=document.getElementById('s-layer');
-  layer.innerHTML=''; layer.classList.remove('ready');
-  document.getElementById('diagNextBtn').style.display='inline-block';
-  document.getElementById('diag-score').textContent='0 pkt';
-
-  const books=getFilteredBooks();
-  const motifs=getFilteredMotifs();
-  const N=books.length+motifs.length;
-
-  const bookColorMap={};
-  books.forEach((b,i)=>{bookColorMap[b.id]=BOOK_COLORS[i%BOOK_COLORS.length];});
-
-  const state={
-    selectedMotifId:null,
-    bookColors:bookColorMap,
-    connectedPairs:new Set(),
-    bookMotifCounts:{},
-    scoredPairs:new Set(),
-    wordEls:{},
-    gridCells:[], // każda komórka = {x,y,w,h} w pikselach
-  };
-
-  const filteredMotifIds=new Set(motifs.map(m=>m.id));
-  books.forEach(b=>{
-    const total=(b.motifs||[]).filter(mid=>filteredMotifIds.has(mid)).length;
-    state.bookMotifCounts[b.id]={total,connected:0};
-  });
-
-  diagState={state};
-
-  // ── Oblicz optymalny grid ──
-  const W=innerWidth, H=innerHeight;
-  const CTRL_H=70; // wysokość paska kontrolnego na dole
-  const PAD_X=14, PAD_Y=50; // margines od krawędzi
-  const availW=W-PAD_X*2;
-  const availH=H-PAD_Y-CTRL_H;
-
-  // Znajdź optymalne COLS i ROWS oraz rozmiar czcionki
-  let bestCols=1,bestRows=N,bestFontBook=8,bestFontMotif=7;
-
-  for(let cols=4;cols<=20;cols++){
-    const rows=Math.ceil(N/cols);
-    const cellW=availW/cols;
-    const cellH=availH/rows;
-
-    // Szacowany rozmiar czcionki — komórka musi pomieścić najdłuższy tekst
-    // Zakładamy że lektury mają ~ok 15 znaków, motywy ~ok 14
-    // Czcionka szeryfowa jest węższa na znak
-    const maxBookLen=Math.max(...books.map(b=>b.title.length),1);
-    const maxMotifLen=Math.max(...motifs.map(m=>m.name.length),1);
-
-    // Dobierz czcionkę tak żeby najdłuższy tekst mieścił się w 90% szerokości komórki
-    // Przybliżenie: 1ch ≈ 0.55 * fontSize dla serif, 0.58 * fontSize dla sans
-    const fBook=Math.min(15,Math.floor((cellW*0.88)/(maxBookLen*0.52)));
-    const fMotif=Math.min(13,Math.floor((cellW*0.88)/(maxMotifLen*0.56)));
-
-    // Sprawdź czy wysokość komórki wystarczy
-    const lineH=Math.max(fBook,fMotif)+8; // +padding
-    if(lineH>cellH*0.8) continue;
-
-    // Wybierz konfigurację z największą czcionką (ale min 7px)
-    if(fBook>=7&&fMotif>=6){
-      if(fBook+fMotif>bestFontBook+bestFontMotif||(fBook+fMotif===bestFontBook+bestFontMotif&&rows<bestRows)){
-        bestCols=cols;bestRows=rows;bestFontBook=fBook;bestFontMotif=fMotif;
+  document.getElementById('diag-iframe').onload = function() {
+    const win = this.contentWindow;
+    win.initDiagnosticQuiz(getFilteredBooks(), getFilteredMotifs(), {
+      getBookById,
+      onMastered: (bookId, motifId) => masteredPairs.add(makePairKey(bookId, motifId)),
+      onScore: (s) => { score = s; renderScore(); },
+      onFinish: (finalScore) => {
+        score = finalScore;
+        stopDiagnostic();
+        finishDiagnosticAndStartEngine();
       }
-    }
-  }
-
-  const cellW=availW/bestCols;
-  const cellH=availH/bestRows;
-
-  // ── Buduj listę komórek ──
-  const allCells=[];
-  for(let r=0;r<bestRows;r++){
-    for(let c=0;c<bestCols;c++){
-      if(allCells.length>=N) break;
-      allCells.push({
-        cx: PAD_X+c*cellW+cellW/2,
-        cy: PAD_Y+r*cellH+cellH/2,
-        col:c, row:r
-      });
-    }
-  }
-
-  // ── Przetasuj komórki — losowe przypisanie pozycji ──
-  const shuffledCells=shuffle([...allCells]);
-
-  // ── Stwórz elementy DOM ──
-  const allItems=[
-    ...books.map(b=>({id:b.id,label:b.title,type:'book'})),
-    ...motifs.map(m=>({id:m.id,label:m.name,type:'motif'}))
-  ];
-  // Przetasuj też kolejność items dla dodatkowej losowości
-  const shuffledItems=shuffle([...allItems]);
-
-  // Mapa: itemId -> komórka (do pathfindingu)
-  const itemCellMap={};
-
-  shuffledItems.forEach((item,idx)=>{
-    const cell=shuffledCells[idx];
-    if(!cell) return;
-    const el=document.createElement('div');
-    el.className='diag-word '+(item.type==='book'?'book-word':'motif-word');
-    el.textContent=item.label;
-    el.style.left=cell.cx+'px';
-    el.style.top=cell.cy+'px';
-    el.style.transform='translate(-50%,-50%)';
-    el.style.fontSize=(item.type==='book'?bestFontBook:bestFontMotif)+'px';
-    // Linie siatki jako pomocnicze — zapisz col/row do elementu
-    el._col=cell.col; el._row=cell.row;
-
-    if(item.type==='motif'){
-      el.onclick=()=>handleMotifClick(item.id,el,state,svg,layer);
-    } else {
-      el.onclick=()=>handleBookClick(item.id,el,state,svg,layer);
-    }
-    layer.appendChild(el);
-    state.wordEls[item.id]=el;
-    itemCellMap[item.id]={col:cell.col,row:cell.row};
-  });
-
-  // Zapisz parametry siatki do state (do pathfindingu snake'a)
-  state.grid={cols:bestCols,rows:bestRows,cellW,cellH,padX:PAD_X,padY:PAD_Y};
-  state.itemCellMap=itemCellMap;
-
-  requestAnimationFrame(()=>{layer.classList.add('ready');});
+    });
+  };
 };
 
 function handleMotifClick(motifId, el, state, svg, layer) {
@@ -1455,13 +1339,15 @@ const BOOK_COLORS=[
 
 let diagState=null;
 
-function stopDiagnostic(){
-  if(diagState&&diagState.rafId) cancelAnimationFrame(diagState.rafId);
-  diagState=null;
+
+// W stopDiagnostic():
+function stopDiagnostic() {
   document.getElementById('diag-shell').classList.remove('active');
-  document.getElementById('s-layer').innerHTML='';
-  document.getElementById('diag-canvas-svg').innerHTML='';
+  // iframe cleanup
+  const iframe = document.getElementById('diag-iframe');
+  if (iframe) iframe.remove();
 }
+
 
 function updateDiagScore(){
   const el=document.getElementById('diag-score');
