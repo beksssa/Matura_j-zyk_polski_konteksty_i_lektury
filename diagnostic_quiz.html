@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Matura · Diagnostyka</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#BFCBC2;--ink:#0a0a0a;--muted:#6b6b6b;--accent:#FF6320;--accent2:#5E1AF4;--accent3:#A2FA51;
+  --ff-serif:'Playfair Display',Georgia,serif;--ff-sans:'Space Grotesk',sans-serif;
+}
+html,body{width:100%;height:100%;background:var(--bg);font-family:var(--ff-sans);overflow:hidden;touch-action:none;}
+#canvas{display:block;position:fixed;inset:0;cursor:grab;touch-action:none;}
+#canvas.dragging{cursor:grabbing;}
+
+#hud{position:fixed;bottom:0;left:0;right:0;z-index:10;
+  background:rgba(191,203,194,.92);backdrop-filter:blur(8px);
+  border-top:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;gap:12px;flex-wrap:wrap;}
+#score-badge{background:var(--accent);color:#fff;border:2px solid var(--ink);
+  padding:4px 14px;border-radius:14px;font-weight:700;font-size:12px;letter-spacing:.1em;font-family:var(--ff-sans);}
+#hud-info{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-align:center;flex:1;}
+#next-btn{background:var(--accent2);color:#fff;border:2px solid var(--ink);
+  padding:8px 20px;border-radius:18px;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;display:none;box-shadow:2px 2px 0 var(--ink);font-family:var(--ff-sans);}
+#next-btn:hover{background:var(--ink);}
+#legend{display:flex;align-items:center;gap:10px;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;}
+.legend-item{display:flex;align-items:center;gap:4px;}
+.legend-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink);}
+
+#tooltip{position:fixed;z-index:20;background:var(--ink);color:#fff;
+  padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;
+  pointer-events:none;display:none;max-width:200px;line-height:1.4;text-align:center;}
+
+#feedback{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:30;padding:10px 24px;border-radius:24px;font-weight:700;font-size:14px;
+  pointer-events:none;opacity:0;transition:opacity .15s;border:2px solid var(--ink);}
+#feedback.show{opacity:1;}
+#feedback.ok{background:var(--accent3);color:var(--ink);}
+#feedback.bad{background:var(--accent);color:#fff;}
+
+#minimap{position:fixed;bottom:70px;right:16px;z-index:10;
+  width:100px;height:70px;background:rgba(191,203,194,.85);
+  border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;}
+#minimap-canvas{display:block;width:100%;height:100%;}
+#minimap-viewport{position:absolute;border:1.5px solid var(--accent);pointer-events:none;border-radius:2px;}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="hud">
+  <div id="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#A2FA51"></div>Lektura</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D599FB"></div>Motyw</div>
+  </div>
+  <div id="hud-info">Wybierz motyw → kliknij lekturę</div>
+  <div id="score-badge">0 pkt</div>
+  <button id="next-btn" onclick="window.diagFinish&&window.diagFinish()">Dalej → Ćwiczenia</button>
+</div>
+
+<div id="minimap">
+  <canvas id="minimap-canvas" width="100" height="70"></canvas>
+  <div id="minimap-viewport"></div>
+</div>
+
+<div id="tooltip"></div>
+<div id="feedback"></div>
+
+<script>
+const DiagnosticQuiz = (() => {
+  const CELL_PAD_X = 14, CELL_PAD_Y = 10;
+  const BOOK_FONT = 'bold 13px "Playfair Display"';
+  const MOTIF_FONT = '600 11px "Space Grotesk"';
+  const BOOK_COLOR = '#A2FA51', MOTIF_COLOR = '#D599FB';
+  const BOOK_BORDER = '#0a0a0a', MOTIF_BORDER = 'rgba(10,10,10,.5)';
+  const BOOK_RADIUS = 14, MOTIF_RADIUS = 8;
+  const CORRECT_PTS = 100, WRONG_PTS = -50;
+  const WORLD_PAD = 80;
+
+  const SNAKE_COLORS = [
+    '#dd2d4a','#40916c','#5a189a','#e2711d','#007200',
+    '#0077b6','#f72585','#fb8500','#34a0a4','#880d1e',
+    '#99d98c','#c77dff','#ffb627','#00b4d8','#023e8a'
+  ];
+
+  let canvas, ctx, mmCanvas, mmCtx;
+  let nodes = [];
+  let snakes = [];
+  let selectedMotifId = null;
+  let score = 0;
+  let connectedPairs = new Set();
+  let incorrectPairs = new Set();
+  let bookColorMap = {};
+  let bookMotifCounts = {};
+  let vp = {x: 0, y: 0, scale: 1};
+  let worldW = 0, worldH = 0;
+  let isPanning = false;
+  let panStart = {x:0, y:0};
+  let lastTouches = null;
+  let rafId = null;
+  let dirty = true;
+
+  function worldToScreen(wx, wy) {
+    return {x: wx * vp.scale + vp.x, y: wy * vp.scale + vp.y};
+  }
+  function screenToWorld(sx, sy) {
+    return {x: (sx - vp.x) / vp.scale, y: (sy - vp.y) / vp.scale};
+  }
+  function clampViewport() {
+    const cw = canvas.width, ch = canvas.height;
+    const minX = cw - worldW * vp.scale - WORLD_PAD * vp.scale;
+    const maxX = WORLD_PAD * vp.scale;
+    const minY = ch - worldH * vp.scale - WORLD_PAD * vp.scale;
+    const maxY = WORLD_PAD * vp.scale;
+    vp.x = Math.max(minX, Math.min(maxX, vp.x));
+    vp.y = Math.max(minY, Math.min(maxY, vp.y));
+  }
+
+  function buildLayout(books, motifs) {
+    const allItems = [
+      ...books.map(b => ({id: b.id, type: 'book', label: b.title})),
+      ...motifs.map(m => ({id: m.id, type: 'motif', label: m.name}))
+    ];
+    for (let i = allItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+    }
+
+    const offscreen = document.createElement('canvas');
+    const oc = offscreen.getContext('2d');
+    const measured = allItems.map(item => {
+      oc.font = item.type === 'book' ? BOOK_FONT : MOTIF_FONT;
+      const tw = oc.measureText(item.label).width;
+      return {
+        ...item,
+        w: tw + CELL_PAD_X * 2,
+        h: item.type === 'book' ? 32 : 26
+      };
+    });
+
+    const N = measured.length;
+    const targetAspect = 16 / 9;
+    const avgW = measured.reduce((s, n) => s + n.w, 0) / N + 16;
+    const avgH = measured.reduce((s, n) => s + n.h, 0) / N + 16;
+    const totalArea = avgW * avgH * N * 2.2;
+    let cols = Math.round(Math.sqrt(totalArea * targetAspect) / avgW);
+    cols = Math.max(4, Math.min(20, cols));
+
+    const cellW = Math.max(...measured.map(n => n.w)) + 18;
+    const cellH = Math.max(...measured.map(n => n.h)) + 20;
+
+    worldW = cols * cellW;
+    worldH = Math.ceil(N / cols) * cellH;
+
+    nodes = measured.map((item, idx) => {
+      const col = idx % cols, row = Math.floor(idx / cols);
+      const jx = (Math.random() - .5) * cellW * .28;
+      const jy = (Math.random() - .5) * cellH * .28;
+      return {
+        ...item,
+        col, row,
+        x: col * cellW + cellW / 2 + jx + WORLD_PAD,
+        y: row * cellH + cellH / 2 + jy + WORLD_PAD,
+      };
+    });
+
+    worldW += WORLD_PAD * 2;
+    worldH += WORLD_PAD * 2;
+  }
+
+  function resolveOverlaps(iters = 80) {
+    const PAD = 8;
+    for (let it = 0; it < iters; it++) {
+      let moved = false;
+      for (let a = 0; a < nodes.length; a++) {
+        for (let b = a + 1; b < nodes.length; b++) {
+          const na = nodes[a], nb = nodes[b];
+          const minDX = (na.w + nb.w) / 2 + PAD;
+          const minDY = (na.h + nb.h) / 2 + PAD;
+          const dx = nb.x - na.x, dy = nb.y - na.y;
+          const ox = minDX - Math.abs(dx), oy = minDY - Math.abs(dy);
+          if (ox > 0 && oy > 0) {
+            const push = (Math.min(ox, oy) / 2 + .5) * (it < 40 ? 1 : .5);
+            if (ox < oy) {
+              na.x -= dx > 0 ? push : -push;
+              nb.x += dx > 0 ? push : -push;
+            } else {
+              na.y -= dy > 0 ? push : -push;
+              nb.y += dy > 0 ? push : -push;
+            }
+            moved = true;
+          }
+        }
+        const n = nodes[a];
+        n.x = Math.max(WORLD_PAD + n.w/2, Math.min(worldW - WORLD_PAD - n.w/2, n.x));
+        n.y = Math.max(WORLD_PAD + n.h/2, Math.min(worldH - WORLD_PAD - n.h/2, n.y));
+      }
+      if (!moved && it > 20) break;
+    }
+  }
+
+  function bfsPath(fromNode, toNode) {
+    const STEP = 18;
+    const gw = Math.ceil(worldW / STEP) + 2;
+    const gh = Math.ceil(worldH / STEP) + 2;
+    const toG = v => Math.round(v / STEP);
+    const toW = g => g * STEP;
+
+    const blocked = new Set();
+    for (const n of nodes) {
+      if (n === fromNode || n === toNode) continue;
+      const x1 = toG(n.x - n.w/2 - 4), y1 = toG(n.y - n.h/2 - 4);
+      const x2 = toG(n.x + n.w/2 + 4), y2 = toG(n.y + n.h/2 + 4);
+      for (let gx = x1; gx <= x2; gx++)
+        for (let gy = y1; gy <= y2; gy++)
+          blocked.add(gx + ',' + gy);
+    }
+
+    const sx = toG(fromNode.x), sy = toG(fromNode.y);
+    const ex = toG(toNode.x),   ey = toG(toNode.y);
+    const visited = new Map();
+    visited.set(sx+','+sy, null);
+    const queue = [[sx, sy]];
+    const dirs = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+    let found = false;
+
+    outer: while (queue.length) {
+      const [cx, cy] = queue.shift();
+      for (const [dx, dy] of dirs) {
+        const nx = cx+dx, ny = cy+dy;
+        if (nx < 0 || ny < 0 || nx >= gw || ny >= gh) continue;
+        const key = nx+','+ny;
+        if (visited.has(key)) continue;
+        const atTarget = nx === ex && ny === ey;
+        if (!atTarget && blocked.has(key)) continue;
+        visited.set(key, [cx, cy]);
+        if (atTarget) { found = true; break outer; }
+        queue.push([nx, ny]);
+      }
+    }
+
+    if (!found) {
+      return [
+        {x: fromNode.x, y: fromNode.y},
+        {x: (fromNode.x + toNode.x) / 2, y: (fromNode.y + toNode.y) / 2},
+        {x: toNode.x, y: toNode.y}
+      ];
+    }
+
+    const gpts = [];
+    let cur = [ex, ey];
+    while (cur) {
+      gpts.unshift(cur);
+      cur = visited.get(cur[0]+','+cur[1]);
+    }
+
+    const pts = gpts.map(([gx, gy]) => ({x: toW(gx), y: toW(gy)}));
+    if (pts.length > 0) { pts[0].x = fromNode.x; pts[0].y = fromNode.y; }
+    if (pts.length > 1) { pts[pts.length-1].x = toNode.x; pts[pts.length-1].y = toNode.y; }
+    return simplifyPath(pts, 6);
+  }
+
+  function simplifyPath(pts, eps) {
+    if (pts.length <= 2) return pts;
+    let maxD = 0, maxI = 0;
+    const [a, b] = [pts[0], pts[pts.length-1]];
+    const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy);
+    for (let i = 1; i < pts.length-1; i++) {
+      const d = len === 0 ? Math.hypot(pts[i].x-a.x, pts[i].y-a.y)
+        : Math.abs((pts[i].x-a.x)*dy - (pts[i].y-a.y)*dx) / len;
+      if (d > maxD) { maxD = d; maxI = i; }
+    }
+    if (maxD > eps) {
+      const l = simplifyPath(pts.slice(0, maxI+1), eps);
+      const r = simplifyPath(pts.slice(maxI), eps);
+      return [...l.slice(0,-1), ...r];
+    }
+    return [a, b];
+  }
+
+  function addSnake(fromNode, toNode, color) {
+    const pts = bfsPath(fromNode, toNode);
+    const lengths = [0];
+    for (let i = 1; i < pts.length; i++) {
+      lengths.push(lengths[i-1] + Math.hypot(pts[i].x - pts[i-1].x, pts[i].y - pts[i-1].y));
+    }
+    snakes.push({pts, lengths, total: lengths[lengths.length-1], color, progress: 0, done: false});
+  }
+
+  function updateSnakes(dt) {
+    const SPEED = 280;
+    for (const s of snakes) {
+      if (s.done) continue;
+      s.progress = Math.min(s.progress + SPEED * dt / 1000, s.total);
+      if (s.progress >= s.total) s.done = true;
+      dirty = true;
+    }
+  }
+
+  function getSnakePoint(s, dist) {
+    for (let i = 1; i < s.pts.length; i++) {
+      if (s.lengths[i] >= dist) {
+        const t = (dist - s.lengths[i-1]) / (s.lengths[i] - s.lengths[i-1]);
+        return {
+          x: s.pts[i-1].x + (s.pts[i].x - s.pts[i-1].x) * t,
+          y: s.pts[i-1].y + (s.pts[i].y - s.pts[i-1].y) * t,
+        };
+      }
+    }
+    return s.pts[s.pts.length-1];
+  }
+
+  function drawNode(n) {
+    const sx = n.x * vp.scale + vp.x;
+    const sy = n.y * vp.scale + vp.y;
+    const sw = n.w * vp.scale;
+    const sh = n.h * vp.scale;
+
+    // Culling — skip if off screen
+    if (sx + sw/2 < -10 || sx - sw/2 > canvas.width + 10) return;
+    if (sy + sh/2 < -10 || sy - sh/2 > canvas.height + 10) return;
+
+    const r = (n.type === 'book' ? BOOK_RADIUS : MOTIF_RADIUS) * Math.min(vp.scale, 1);
+
+    ctx.save();
+    ctx.beginPath();
+    roundRect(ctx, sx - sw/2, sy - sh/2, sw, sh, r);
+
+    let fill;
+    if (n.type === 'book') {
+      const isDone = bookMotifCounts[n.id] &&
+        bookMotifCounts[n.id].done >= bookMotifCounts[n.id].total;
+      fill = isDone ? bookColorMap[n.id] || BOOK_COLOR : BOOK_COLOR;
+    } else {
+      fill = n.id === selectedMotifId ? '#0a0a0a' : MOTIF_COLOR;
+    }
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    ctx.strokeStyle = n.type === 'book' ? BOOK_BORDER : MOTIF_BORDER;
+    ctx.lineWidth = n.id === selectedMotifId ? 2.5 : 1.5;
+    ctx.stroke();
+
+    if (vp.scale > 0.35) {
+      const fontSize = Math.max(9, Math.min(
+        n.type === 'book' ? 13 : 11,
+        (n.type === 'book' ? 13 : 11) * vp.scale
+      ));
+      ctx.font = n.type === 'book'
+        ? `bold ${fontSize}px "Playfair Display"`
+        : `600 ${fontSize}px "Space Grotesk"`;
+      ctx.fillStyle = n.id === selectedMotifId ? '#fff' : '#0a0a0a';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.beginPath();
+      roundRect(ctx, sx - sw/2 + 2, sy - sh/2 + 2, sw - 4, sh - 4, r);
+      ctx.clip();
+      ctx.fillText(n.label, sx, sy, sw - 8);
+    }
+    ctx.restore();
+  }
+
+  function drawSnake(s) {
+    if (s.progress <= 0) return;
+    ctx.save();
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = 3 * Math.min(vp.scale, 1.5);
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.globalAlpha = .85;
+    ctx.beginPath();
+    const p0 = s.pts[0];
+    ctx.moveTo(p0.x * vp.scale + vp.x, p0.y * vp.scale + vp.y);
+    for (let i = 1; i < s.pts.length; i++) {
+      if (s.lengths[i] > s.progress) {
+        const ep = getSnakePoint(s, s.progress);
+        ctx.lineTo(ep.x * vp.scale + vp.x, ep.y * vp.scale + vp.y);
+        break;
+      }
+      ctx.lineTo(s.pts[i].x * vp.scale + vp.x, s.pts[i].y * vp.scale + vp.y);
+    }
+    ctx.stroke();
+
+    if (!s.done) {
+      const head = getSnakePoint(s, s.progress);
+      ctx.fillStyle = s.color;
+      ctx.strokeStyle = '#0a0a0a';
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 1;
+      ctx.beginPath();
+      ctx.arc(
+        head.x * vp.scale + vp.x,
+        head.y * vp.scale + vp.y,
+        5 * Math.min(vp.scale, 1.5), 0, Math.PI * 2
+      );
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function draw(ts) {
+    rafId = requestAnimationFrame(draw);
+    const now = ts || 0;
+    const dt = Math.min(50, now - (draw._last || now));
+    draw._last = now;
+    updateSnakes(dt);
+    if (!dirty) return;
+    dirty = false;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of snakes) drawSnake(s);
+    for (const n of nodes) drawNode(n);
+    updateMinimap();
+  }
+
+  function roundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.lineTo(x + w - r, y);
+    c.arcTo(x + w, y, x + w, y + r, r);
+    c.lineTo(x + w, y + h - r);
+    c.arcTo(x + w, y + h, x + w - r, y + h, r);
+    c.lineTo(x + r, y + h);
+    c.arcTo(x, y + h, x, y + h - r, r);
+    c.lineTo(x, y + r);
+    c.arcTo(x, y, x + r, y, r);
+    c.closePath();
+  }
+
+  function updateMinimap() {
+    const mmW = mmCanvas.width, mmH = mmCanvas.height;
+    mmCtx.clearRect(0, 0, mmW, mmH);
+    const sc = Math.min(mmW / worldW, mmH / worldH);
+
+    for (const s of snakes) {
+      mmCtx.strokeStyle = s.color;
+      mmCtx.lineWidth = 1;
+      mmCtx.globalAlpha = .7;
+      mmCtx.beginPath();
+      mmCtx.moveTo(s.pts[0].x * sc, s.pts[0].y * sc);
+      for (let i = 1; i < s.pts.length; i++) {
+        if (s.lengths[i] > s.progress) {
+          const ep = getSnakePoint(s, s.progress);
+          mmCtx.lineTo(ep.x * sc, ep.y * sc);
+          break;
+        }
+        mmCtx.lineTo(s.pts[i].x * sc, s.pts[i].y * sc);
+      }
+      mmCtx.stroke();
+      mmCtx.globalAlpha = 1;
+    }
+
+    for (const n of nodes) {
+      mmCtx.fillStyle = n.type === 'book' ? BOOK_COLOR : MOTIF_COLOR;
+      mmCtx.fillRect(n.x * sc - 2, n.y * sc - 1.5, 4, 3);
+    }
+
+    const vpX = (-vp.x / vp.scale) * sc;
+    const vpY = (-vp.y / vp.scale) * sc;
+    const vpW = (canvas.width / vp.scale) * sc;
+    const vpH = ((canvas.height - 62) / vp.scale) * sc;
+    const el = document.getElementById('minimap-viewport');
+    const mm = document.getElementById('minimap');
+    const mmRect = mm.getBoundingClientRect();
+    el.style.left = Math.max(0, vpX) + 'px';
+    el.style.top = Math.max(0, vpY) + 'px';
+    el.style.width = Math.min(mmRect.width, vpW) + 'px';
+    el.style.height = Math.min(mmRect.height, vpH) + 'px';
+  }
+
+  function hitNode(sx, sy) {
+    const w = screenToWorld(sx, sy);
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      const n = nodes[i];
+      if (Math.abs(w.x - n.x) < n.w/2 + 2 && Math.abs(w.y - n.y) < n.h/2 + 2) return n;
+    }
+    return null;
+  }
+
+  function handleClick(sx, sy) {
+    const n = hitNode(sx, sy);
+    if (!n) { deselectMotif(); return; }
+
+    if (n.type === 'motif') {
+      if (selectedMotifId === n.id) deselectMotif();
+      else {
+        selectedMotifId = n.id;
+        dirty = true;
+        showTooltip(n, sx, sy, 'Teraz kliknij lekturę');
+      }
+    } else {
+      if (!selectedMotifId) { showTooltip(n, sx, sy, 'Najpierw wybierz motyw'); return; }
+      const motifNode = nodes.find(x => x.id === selectedMotifId);
+      const pairKey = n.id + '|' + selectedMotifId;
+      const prevSelected = selectedMotifId;
+      deselectMotif();
+
+      if (connectedPairs.has(pairKey)) { showFeedback('Już połączone!', 'ok'); return; }
+
+      const book = window._diagData?.getBookById(n.id);
+      const correct = book && (book.motifs || []).includes(prevSelected);
+
+      if (correct) {
+        connectedPairs.add(pairKey);
+        score += CORRECT_PTS;
+        window._diagData?.onMastered(n.id, prevSelected);
+        bookMotifCounts[n.id].done++;
+        addSnake(motifNode, n, bookColorMap[n.id]);
+        showFeedback('+' + CORRECT_PTS + ' pkt!', 'ok');
+      } else {
+        if (!incorrectPairs.has(pairKey)) {
+          score += WRONG_PTS;
+          incorrectPairs.add(pairKey);
+        }
+        showFeedback(WRONG_PTS + ' pkt', 'bad');
+      }
+      updateScore();
+      dirty = true;
+    }
+  }
+
+  function deselectMotif() { selectedMotifId = null; dirty = true; hideTooltip(); }
+
+  function updateScore() {
+    document.getElementById('score-badge').textContent = score + ' pkt';
+    window._diagData?.onScore(score);
+  }
+
+  let tooltipTimeout;
+  function showTooltip(n, sx, sy, text) {
+    const el = document.getElementById('tooltip');
+    el.textContent = text || n.label;
+    el.style.left = sx + 'px';
+    el.style.top = (sy - 44) + 'px';
+    el.style.display = 'block';
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(hideTooltip, 1800);
+  }
+  function hideTooltip() { document.getElementById('tooltip').style.display = 'none'; }
+
+  let fbTimeout;
+  function showFeedback(text, type) {
+    const el = document.getElementById('feedback');
+    el.textContent = text;
+    el.className = 'show ' + type;
+    clearTimeout(fbTimeout);
+    fbTimeout = setTimeout(() => el.className = '', 1200);
+  }
+
+  function zoomAt(cx, cy, factor) {
+    const newScale = Math.max(.25, Math.min(3, vp.scale * factor));
+    const ratio = newScale / vp.scale;
+    vp.x = cx - (cx - vp.x) * ratio;
+    vp.y = cy - (cy - vp.y) * ratio;
+    vp.scale = newScale;
+    clampViewport();
+    dirty = true;
+  }
+
+  function attachEvents() {
+    let clickStartX, clickStartY, clickStartT, moved;
+
+    canvas.addEventListener('pointerdown', e => {
+      isPanning = false; moved = false;
+      clickStartX = e.clientX; clickStartY = e.clientY;
+      clickStartT = Date.now();
+      panStart = {x: e.clientX - vp.x, y: e.clientY - vp.y};
+      canvas.setPointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener('pointermove', e => {
+      if (!e.buttons) {
+        const n = hitNode(e.clientX, e.clientY);
+        canvas.style.cursor = n ? 'pointer' : 'grab';
+        return;
+      }
+      const dx = e.clientX - clickStartX, dy = e.clientY - clickStartY;
+      if (!isPanning && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) isPanning = true;
+      if (isPanning) {
+        moved = true;
+        canvas.classList.add('dragging');
+        vp.x = e.clientX - panStart.x;
+        vp.y = e.clientY - panStart.y;
+        clampViewport();
+        dirty = true;
+      }
+    });
+
+    canvas.addEventListener('pointerup', e => {
+      canvas.classList.remove('dragging');
+      if (!moved && !isPanning && Date.now() - clickStartT < 400) {
+        handleClick(e.clientX, e.clientY);
+      }
+      isPanning = false; moved = false;
+    });
+
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.12 : 1/1.12);
+    }, {passive: false});
+
+    canvas.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) lastTouches = e.touches;
+    }, {passive: true});
+
+    canvas.addEventListener('touchmove', e => {
+      if (e.touches.length !== 2 || !lastTouches) return;
+      const a = lastTouches, b = e.touches;
+      const dA = Math.hypot(a[0].clientX-a[1].clientX, a[0].clientY-a[1].clientY);
+      const dB = Math.hypot(b[0].clientX-b[1].clientX, b[0].clientY-b[1].clientY);
+      if (dA > 0) {
+        zoomAt(
+          (b[0].clientX + b[1].clientX) / 2,
+          (b[0].clientY + b[1].clientY) / 2,
+          dB / dA
+        );
+      }
+      lastTouches = e.touches;
+    }, {passive: true});
+
+    window.addEventListener('resize', resize);
+  }
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    clampViewport();
+    dirty = true;
+  }
+
+  function init(books, motifs, data) {
+    canvas = document.getElementById('canvas');
+    ctx = canvas.getContext('2d');
+    mmCanvas = document.getElementById('minimap-canvas');
+    mmCtx = mmCanvas.getContext('2d');
+    window._diagData = data;
+
+    books.forEach((b, i) => {
+      bookColorMap[b.id] = SNAKE_COLORS[i % SNAKE_COLORS.length];
+      const filteredMotifIds = new Set(motifs.map(m => m.id));
+      const total = (b.motifs || []).filter(mid => filteredMotifIds.has(mid)).length;
+      bookMotifCounts[b.id] = {total, done: 0};
+    });
+
+    buildLayout(books, motifs);
+    resolveOverlaps(120);
+    resize();
+    attachEvents();
+
+    vp.scale = Math.min(
+      (canvas.width * .85) / worldW,
+      ((canvas.height - 62) * .85) / worldH,
+      1
+    );
+    vp.x = (canvas.width - worldW * vp.scale) / 2;
+    vp.y = ((canvas.height - 62) - worldH * vp.scale) / 2;
+    clampViewport();
+    dirty = true;
+    requestAnimationFrame(draw);
+
+    setTimeout(() => {
+      document.getElementById('next-btn').style.display = 'block';
+    }, 4000);
+  }
+
+  function destroy() {
+    if (rafId) cancelAnimationFrame(rafId);
+    window.removeEventListener('resize', resize);
+    window._diagData = null;
+    nodes = []; snakes = [];
+    score = 0; selectedMotifId = null;
+    connectedPairs = new Set(); incorrectPairs = new Set();
+  }
+
+  return {init, destroy};
+})();
+
+window.initDiagnosticQuiz = function(books, motifs, callbacks) {
+  let _score = 0;
+
+  DiagnosticQuiz.init(books, motifs, {
+    getBookById: callbacks.getBookById,
+    onMastered: (bookId, motifId) => {
+      callbacks.onMastered?.(bookId, motifId);
+    },
+    onScore: (s) => {
+      _score = s;
+      callbacks.onScore?.(s);
+    }
+  });
+
+  window.diagFinish = () => {
+    DiagnosticQuiz.destroy();
+    callbacks.onFinish?.(_score);
+  };
+};
+</script>
+</body>
+</html>
