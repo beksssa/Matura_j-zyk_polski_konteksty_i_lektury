@@ -450,6 +450,39 @@ input{font-family:inherit}
 .masonry-item-sub{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
 .masonry-item-epoch{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:2px solid var(--accent);padding:2px 8px;border-radius:10px;margin-top:auto;align-self:flex-start}
 
+/* MAP TOOLBAR */
+#map-toolbar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:16px;max-width:900px;width:100%;
+}
+#map-search{
+  flex:1;min-width:180px;
+  border:2px solid var(--ink);border-radius:20px;
+  padding:.45rem 1rem .45rem 2.4rem;
+  font-family:var(--ff-sans);font-size:13px;font-weight:500;
+  background:var(--bg);color:var(--ink);outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+#map-search:focus{border-color:var(--accent);box-shadow:2px 2px 0 var(--accent)}
+#map-search-wrap{position:relative;flex:1;min-width:180px}
+#map-search-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  pointer-events:none;opacity:.45;
+}
+.sort-btn{
+  font-family:var(--ff-sans);font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  border:2px solid var(--ink);padding:.4rem 1rem;border-radius:20px;
+  background:var(--bg);color:var(--ink);cursor:pointer;
+  transition:background .15s,color .15s;white-space:nowrap;
+}
+.sort-btn.active{background:var(--ink);color:var(--bg)}
+.sort-btn:hover:not(.active){background:var(--ink);color:var(--bg)}
+#map-count{
+  font-size:10px;font-weight:600;color:var(--muted);
+  letter-spacing:.08em;white-space:nowrap;
+}
+  
 /* QUIZ */
 #quiz{display:none;flex-direction:column;height:100dvh;padding:20px 18px 12px;overflow:hidden;box-sizing:border-box;position:fixed;inset:0;z-index:3;background:transparent}
 #quiz.active{display:flex}
@@ -1402,38 +1435,7 @@ function renderMapItems(){
   }
 }
 
-/* MAP TOOLBAR */
-#map-toolbar{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  margin-bottom:16px;max-width:900px;width:100%;
-}
-#map-search{
-  flex:1;min-width:180px;
-  border:2px solid var(--ink);border-radius:20px;
-  padding:.45rem 1rem .45rem 2.4rem;
-  font-family:var(--ff-sans);font-size:13px;font-weight:500;
-  background:var(--bg);color:var(--ink);outline:none;
-  transition:border-color .15s,box-shadow .15s;
-}
-#map-search:focus{border-color:var(--accent);box-shadow:2px 2px 0 var(--accent)}
-#map-search-wrap{position:relative;flex:1;min-width:180px}
-#map-search-icon{
-  position:absolute;left:10px;top:50%;transform:translateY(-50%);
-  pointer-events:none;opacity:.45;
-}
-.sort-btn{
-  font-family:var(--ff-sans);font-size:10px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
-  border:2px solid var(--ink);padding:.4rem 1rem;border-radius:20px;
-  background:var(--bg);color:var(--ink);cursor:pointer;
-  transition:background .15s,color .15s;white-space:nowrap;
-}
-.sort-btn.active{background:var(--ink);color:var(--bg)}
-.sort-btn:hover:not(.active){background:var(--ink);color:var(--bg)}
-#map-count{
-  font-size:10px;font-weight:600;color:var(--muted);
-  letter-spacing:.08em;white-space:nowrap;
-}
+
   
 /* ══════════════════════════════════════════════════════
    DIAGNOSTIC — NOWY SYSTEM
