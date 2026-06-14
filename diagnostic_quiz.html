@@ -73,7 +73,6 @@ const DiagnosticQuiz = (() => {
   const MOTIF_FONT = `600 ${MOTIF_FONT_SIZE}px "Space Grotesk"`;
 
   // Visual constants
-  const BG_COLOR = '#BFCBC2';       // same as page bg
   const BOOK_BORDER = '#0a0a0a';
   const BOOK_RADIUS = 16;
   const MOTIF_COLOR = '#0a0a0a';    // plain text, no box
@@ -89,6 +88,7 @@ const DiagnosticQuiz = (() => {
   ];
 
   let canvas, ctx, mmCanvas, mmCtx;
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
   let nodes = [];
   let snakes = [];
   let selectedMotifId = null;
@@ -112,7 +112,7 @@ const DiagnosticQuiz = (() => {
   }
 
   function clampViewport() {
-    const cw = canvas.width, ch = canvas.height;
+    const cw = window.innerWidth, ch = window.innerHeight;
     const usableH = ch - HUD_H;
     // allow panning so world fills screen
     const minX = cw  - worldW * vp.scale - WORLD_PAD * vp.scale;
@@ -169,8 +169,9 @@ const DiagnosticQuiz = (() => {
     const cellH = Math.max(...measured.map(m=>m.h)) + GAP_Y;
 
     // Find cols that make world aspect ≈ screen aspect
+    // (cells are much wider than tall, so factor that in too)
     const screenAspect = screenW / screenH;
-    let cols = Math.round(Math.sqrt(N * screenAspect));
+    let cols = Math.round(Math.sqrt(N * screenAspect * (cellH / cellW)));
     cols = Math.max(3, Math.min(Math.ceil(N / 2), cols));
     const rows = Math.ceil(N / cols);
 
@@ -333,8 +334,8 @@ const DiagnosticQuiz = (() => {
     const sh = n.h * vp.scale;
 
     // Frustum cull
-    if (sx + sw/2 < -20 || sx - sw/2 > canvas.width + 20) return;
-    if (sy + sh/2 < -20 || sy - sh/2 > canvas.height + 20) return;
+    if (sx + sw/2 < -20 || sx - sw/2 > window.innerWidth + 20) return;
+    if (sy + sh/2 < -20 || sy - sh/2 > window.innerHeight + 20) return;
 
     if (n.type === 'book') {
       drawBook(n, sx, sy, sw, sh);
@@ -345,27 +346,21 @@ const DiagnosticQuiz = (() => {
 
   function drawBook(n, sx, sy, sw, sh) {
     const r = BOOK_RADIUS * Math.min(vp.scale, 1);
-    const isSelected = false; // books aren't "selected"
-    const snakeCol = bookSnakeColor[n.id]; // color when first connected
+    const snakeCol = bookSnakeColor[n.id]; // border color once first connected
 
     ctx.save();
 
-    // Box fill: bg color normally, snake color when connected
+    // Outline only — no fill
     roundRect(ctx, sx - sw/2, sy - sh/2, sw, sh, r);
-    ctx.fillStyle = snakeCol || BG_COLOR;
-    ctx.fill();
-
-    // Border: always ink
-    ctx.strokeStyle = BOOK_BORDER;
+    ctx.strokeStyle = snakeCol || BOOK_BORDER;
     ctx.lineWidth = snakeCol ? 2.5 * Math.min(vp.scale,1) : 1.5 * Math.min(vp.scale,1);
     ctx.stroke();
 
-    // Text
+    // Text — always ink, regardless of connection state
     if (vp.scale > 0.3) {
       const fontSize = Math.max(8, Math.min(BOOK_FONT_SIZE, BOOK_FONT_SIZE * vp.scale));
       ctx.font = `bold ${fontSize}px "Playfair Display"`;
-      // text colour: white on coloured bg, ink on plain bg
-      ctx.fillStyle = snakeCol ? '#fff' : '#0a0a0a';
+      ctx.fillStyle = '#0a0a0a';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       // clip to box
@@ -447,7 +442,7 @@ const DiagnosticQuiz = (() => {
     updateSnakes(dt);
     if (!dirty) return;
     dirty = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     for (const s of snakes) drawSnake(s);
     for (const n of nodes) drawNode(n);
     updateMinimap();
@@ -502,8 +497,8 @@ const DiagnosticQuiz = (() => {
 
     const vpX = (-vp.x / vp.scale) * sc;
     const vpY = (-vp.y / vp.scale) * sc;
-    const vpW = (canvas.width / vp.scale) * sc;
-    const vpH = ((canvas.height - HUD_H) / vp.scale) * sc;
+    const vpW = (window.innerWidth / vp.scale) * sc;
+    const vpH = ((window.innerHeight - HUD_H) / vp.scale) * sc;
     const el = document.getElementById('minimap-viewport');
     const mmRect = document.getElementById('minimap').getBoundingClientRect();
     el.style.left = Math.max(0, vpX) + 'px';
@@ -671,8 +666,12 @@ const DiagnosticQuiz = (() => {
   }
 
   function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(window.innerWidth * dpr);
+    canvas.height = Math.round(window.innerHeight * dpr);
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     clampViewport();
     dirty = true;
   }
@@ -695,17 +694,16 @@ const DiagnosticQuiz = (() => {
     buildLayout(books, motifs);
     resolveOverlaps(80);
 
-    // resize sets canvas size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // sets canvas size with high-DPI scaling for crisp text
+    resize();
 
     // Fit entire world on screen initially
-    const usableH = canvas.height - HUD_H;
-    const scaleW = (canvas.width  * .92) / worldW;
-    const scaleH = (usableH       * .92) / worldH;
+    const usableH = window.innerHeight - HUD_H;
+    const scaleW = (window.innerWidth * .92) / worldW;
+    const scaleH = (usableH         * .92) / worldH;
     vp.scale = Math.min(scaleW, scaleH, 1.2); // allow slight zoom-in for small datasets
-    vp.x = (canvas.width  - worldW * vp.scale) / 2;
-    vp.y = (usableH       - worldH * vp.scale) / 2;
+    vp.x = (window.innerWidth - worldW * vp.scale) / 2;
+    vp.y = (usableH          - worldH * vp.scale) / 2;
     clampViewport();
 
     attachEvents();
