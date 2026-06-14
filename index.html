@@ -315,6 +315,41 @@ input{font-family:inherit}
 .tile-sub{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
 .tile-icon{font-size:1.4rem;margin-bottom:.2rem;transition:color .2s}
 
+/* LIGHTBOX */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(10,10,10,.88);
+  align-items:center;justify-content:center;
+  cursor:zoom-out;
+}
+#lightbox.open{display:flex}
+#lightbox img{
+  max-width:90vw;max-height:88vh;
+  border-radius:var(--r);border:2px solid var(--ink);
+  object-fit:contain;
+  transform:scale(.92);opacity:0;
+  transition:transform .35s var(--ease),opacity .35s var(--ease);
+  cursor:default;
+}
+#lightbox.open img{transform:scale(1);opacity:1}
+#lightbox-close{
+  position:absolute;top:20px;right:24px;
+  font-size:28px;color:#fff;cursor:pointer;
+  line-height:1;font-weight:300;opacity:.7;
+  transition:opacity .15s;
+}
+#lightbox-close:hover{opacity:1}
+#lightbox-zoom{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;gap:12px;
+}
+#lightbox-zoom button{
+  background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);
+  color:#fff;font-size:20px;width:40px;height:40px;border-radius:50%;
+  cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;
+}
+#lightbox-zoom button:hover{background:rgba(255,255,255,.3)}
+  
 /* EPOCH */
 .epoch-list{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-bottom:2.4rem}
 .epoch-row{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:7px 0;border-bottom:2px solid var(--line);transition:border-color .2s}
@@ -1033,10 +1068,27 @@ function handleBookClick(bookId, bookEl, state, svg, layer) {
     <p class="panel-eyebrow">Krok 3 z 3</p>
     <h1 class="panel-heading">Filtruj<br><em>epoki</em></h1>
     <div class="epoch-list" id="epochFilter"></div>
-    <button class="start-btn" onclick="startApp()">Start →</button>
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
+      <button class="start-btn" onclick="startApp()">Start →</button>
+      <button class="start-btn" onclick="resetEpochs()"
+        style="background:transparent;color:var(--ink);border-color:var(--ink);box-shadow:3px 3px 0 var(--ink)">
+        Wyzeruj epoki
+      </button>
+    </div>
   </div>
 
-  <div id="map" style="display:none;width:100%;max-width:820px">
+  <div id="map" style="display:none;width:100%;max-width:900px">
+    <div id="map-toolbar">
+      <div id="map-search-wrap">
+        <svg id="map-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
+        </svg>
+        <input id="map-search" type="text" placeholder="Szukaj…" oninput="filterMap()" autocomplete="off">
+      </div>
+      <button class="sort-btn" id="sort-default-btn" onclick="setSortMode('default')">Domyślnie</button>
+      <button class="sort-btn" id="sort-alpha-btn" onclick="setSortMode('alpha')">A → Z</button>
+      <span id="map-count"></span>
+    </div>
     <div id="map-masonry" class="masonry-grid"></div>
   </div>
 
@@ -1060,6 +1112,15 @@ function handleBookClick(bookId, bookEl, state, svg, layer) {
   </div>
 </div>
 
+<div id="lightbox" onclick="closeLightbox(event)">
+  <span id="lightbox-close" onclick="closeLightbox()">×</span>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-zoom">
+    <button onclick="lbZoom(-1);event.stopPropagation()" title="Pomniejsz">−</button>
+    <button onclick="lbZoom(1);event.stopPropagation()" title="Powiększ">+</button>
+  </div>
+</div>
+  
 <!-- DIAGNOSTIC OVERLAY -->
 <div id="diag-shell">
   <svg id="diag-canvas-svg"></svg>
@@ -1232,23 +1293,95 @@ window.renderEpochFilter=function(){
   });
 };
 
+window.resetEpochs = function(){
+  activeEpochs.clear();
+  renderEpochFilter();
+};
+  
+/* LIGHTBOX */
+let lbScale = 1;
+window.openLightbox = function(src, alt){
+  lbScale = 1;
+  const img = document.getElementById('lightbox-img');
+  img.src = src; img.alt = alt||'';
+  img.style.transform = 'scale(1)';
+  document.getElementById('lightbox').classList.add('open');
+  document.addEventListener('keydown', lbKey);
+};
+window.closeLightbox = function(e){
+  if(e && e.target === document.getElementById('lightbox-img')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.removeEventListener('keydown', lbKey);
+};
+window.lbZoom = function(dir){
+  lbScale = Math.min(3, Math.max(0.5, lbScale + dir * 0.3));
+  document.getElementById('lightbox-img').style.transform = `scale(${lbScale})`;
+};
+function lbKey(e){ if(e.key==='Escape') closeLightbox(); }
+  
 /* MASONRY MAP */
+let mapSortMode = 'default';
+let mapSearchQuery = '';
+
+window.setSortMode = function(mode){
+  mapSortMode = mode;
+  document.getElementById('sort-default-btn').classList.toggle('active', mode==='default');
+  document.getElementById('sort-alpha-btn').classList.toggle('active', mode==='alpha');
+  renderMapItems();
+};
+
+window.filterMap = function(){
+  mapSearchQuery = document.getElementById('map-search').value;
+  renderMapItems();
+};
+
 function buildMasonryMap(){
-  const grid=document.getElementById('map-masonry');grid.innerHTML='';
-  const items=view==='books'
-    ?getFilteredBooks().map(b=>({id:b.id,label:b.title,type:'book',epoch:b.epoch,desc:b.description,img:b.images?.[0]?.src||null,emoji:b.coverEmoji||'📚'}))
-    :getFilteredMotifs().map(m=>({id:m.id,label:m.name,type:'motif',epoch:'',desc:m.description,img:m.images?.[0]?.src||null,emoji:'🎯'}));
-  
-  // Nieregularne szerokości przez span kolumn — symulacja przez różne padding/rozmiary
-  const sizes=['small','medium','large'];
-  
+  mapSortMode = 'default';
+  mapSearchQuery = '';
+  const searchEl = document.getElementById('map-search');
+  if(searchEl) searchEl.value = '';
+  document.getElementById('sort-default-btn').classList.add('active');
+  document.getElementById('sort-alpha-btn').classList.remove('active');
+  renderMapItems();
+}
+
+function getMapItems(){
+  let items = view==='books'
+    ? getFilteredBooks().map(b=>({id:b.id,label:b.title,type:'book',epoch:b.epoch,desc:b.description,img:b.images?.[0]?.src||null,emoji:b.coverEmoji||'📚'}))
+    : getFilteredMotifs().map(m=>({id:m.id,label:m.name,type:'motif',epoch:'',desc:m.description,img:m.images?.[0]?.src||null,emoji:'🎯'}));
+
+  // Filtrowanie
+  const q = mapSearchQuery.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  if(q){
+    items = items.filter(item => {
+      const label = item.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+      const desc = (item.desc||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+      return label.includes(q) || desc.includes(q);
+    });
+  }
+
+  // Sortowanie
+  if(mapSortMode === 'alpha'){
+    items.sort((a,b) => a.label.localeCompare(b.label, 'pl'));
+  }
+
+  return items;
+}
+
+function renderMapItems(){
+  const items = getMapItems();
+  const grid = document.getElementById('map-masonry');
+  grid.innerHTML = '';
+
+  const countEl = document.getElementById('map-count');
+  if(countEl) countEl.textContent = `${items.length} wyników`;
+
+  const sizes = ['small','medium','large'];
   items.forEach((item,idx)=>{
-    const el=document.createElement('div');
-    const sizeClass=sizes[idx%3];
-    el.className='masonry-item masonry-'+sizeClass;
-    
-    const bgStyle=item.img?`background-image:url('${item.img}')`:'background:var(--ink)';
-    
+    const el = document.createElement('div');
+    const sizeClass = sizes[idx%3];
+    el.className = 'masonry-item masonry-'+sizeClass;
+    const bgStyle = item.img ? `background-image:url('${item.img}')` : 'background:var(--ink)';
     el.innerHTML=`
       <div class="masonry-item-bg" style="${bgStyle}"></div>
       <div class="masonry-item-inner">
@@ -1259,12 +1392,49 @@ function buildMasonryMap(){
       <div class="masonry-item-hover-label">
         <div class="masonry-item-hover-title">${escapeHtml(item.label)}</div>
       </div>`;
-    
     el.onclick=()=>{screenHistory.push('map');if(item.type==='book')openBookProfile(item.id);else openMotifProfile(item.id);};
     grid.appendChild(el);
   });
+
+  // Brak wyników
+  if(!items.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-family:var(--ff-serif);font-size:1.2rem">Nic nie znaleziono 🔍</div>`;
+  }
 }
 
+/* MAP TOOLBAR */
+#map-toolbar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:16px;max-width:900px;width:100%;
+}
+#map-search{
+  flex:1;min-width:180px;
+  border:2px solid var(--ink);border-radius:20px;
+  padding:.45rem 1rem .45rem 2.4rem;
+  font-family:var(--ff-sans);font-size:13px;font-weight:500;
+  background:var(--bg);color:var(--ink);outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+#map-search:focus{border-color:var(--accent);box-shadow:2px 2px 0 var(--accent)}
+#map-search-wrap{position:relative;flex:1;min-width:180px}
+#map-search-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  pointer-events:none;opacity:.45;
+}
+.sort-btn{
+  font-family:var(--ff-sans);font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  border:2px solid var(--ink);padding:.4rem 1rem;border-radius:20px;
+  background:var(--bg);color:var(--ink);cursor:pointer;
+  transition:background .15s,color .15s;white-space:nowrap;
+}
+.sort-btn.active{background:var(--ink);color:var(--bg)}
+.sort-btn:hover:not(.active){background:var(--ink);color:var(--bg)}
+#map-count{
+  font-size:10px;font-weight:600;color:var(--muted);
+  letter-spacing:.08em;white-space:nowrap;
+}
+  
 /* ══════════════════════════════════════════════════════
    DIAGNOSTIC — NOWY SYSTEM
    ══════════════════════════════════════════════════════ */
@@ -1662,7 +1832,13 @@ window.goBackInProfile=window.returnFromProfile;
 function renderProfileImage(images,title){
   if(!images||!images.length) return '';
   const img=images[0];if(!img?.src) return '';
-  return `<div class="profile-section"><h3>Obraz</h3><img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt||title||'')}" style="width:100%;max-width:320px;display:block;border-radius:var(--r);border:2px solid var(--ink);margin-top:6px" onerror="this.parentElement.style.display='none'"></div>`;
+  return `<div class="profile-section"><h3>Obraz</h3>
+    <img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt||title||'')}"
+      style="width:100%;max-width:320px;display:block;border-radius:var(--r);border:2px solid var(--ink);margin-top:6px;cursor:zoom-in;transition:transform .2s"
+      onclick="openLightbox('${escapeHtml(img.src)}','${escapeHtml(img.alt||title||'')}')"
+      onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform=''"
+      onerror="this.parentElement.style.display='none'">
+  </div>`;
 }
 
 function openBookProfile(id){
@@ -1672,11 +1848,27 @@ function openBookProfile(id){
   const motifObjs=(book.motifs||[]).map(getMotifById).filter(Boolean);
   const charObjs=(book.characters||[]).map(getCharacterById).filter(Boolean);
   const quotes=(book.quotes||[]).filter(Boolean);
+
+  // Wyciągnij autora z tytułu (po ostatniej spacji przed nawiasem lub z aliases)
+  const authorAlias = (book.aliases||[]).find(a => a.includes(' '));
+  const authorName = authorAlias
+    ? authorAlias.replace(book.title,'').trim()
+    : '';
+
+  // Pokoloruj nazwy motywów w opisie
+  let desc = escapeHtml(book.description||'');
+  motifObjs.forEach(m => {
+    const escaped = escapeHtml(m.name);
+    desc = desc.replace(new RegExp(escaped,'g'),
+      `<span style="color:#7903C2;font-weight:600">${escaped}</span>`);
+  });
+
   document.getElementById('profile-content').innerHTML=`
-    <h2 style="font-family:var(--ff-serif);font-size:2.2rem;font-weight:700;margin-bottom:.5rem;color:var(--ink)">📚 ${escapeHtml(book.title)}</h2>
-    <p style="color:var(--ink-light);font-size:13px;line-height:1.75;margin-bottom:.5rem">${escapeHtml(book.description||'')}</p>
+    <h2 style="font-family:var(--ff-serif);font-size:2.2rem;font-weight:700;margin-bottom:.3rem;color:var(--ink)">📚 ${escapeHtml(book.title)}</h2>
+    ${authorName ? `<p style="font-size:13px;font-weight:700;color:#5E1AF4;margin-bottom:.8rem;letter-spacing:.02em">${escapeHtml(authorName)}</p>` : ''}
+    <p style="color:var(--ink-light);font-size:13px;line-height:1.75;margin-bottom:.5rem">${desc}</p>
     <div class="profile-section"><h3>Epoka</h3><div class="profile-chip-list"><span class="profile-chip">${escapeHtml(book.epoch||'')}</span></div></div>
-    ${motifObjs.length?`<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjs.map(m=>`<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')">🎯 ${escapeHtml(m.name)}</span>`).join('')}</div></div>`:''}
+    ${motifObjs.length?`<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjs.map(m=>`<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')" style="color:#7903C2;border-color:#7903C2">🎯 ${escapeHtml(m.name)}</span>`).join('')}</div></div>`:''}
     ${charObjs.length?`<div class="profile-section"><h3>Bohaterowie</h3><div class="profile-chip-list">${charObjs.map(c=>`<span class="profile-chip clickable" onclick="openCharacterFromProfile('${c.id}')">👤 ${escapeHtml(c.name)}</span>`).join('')}</div></div>`:''}
     ${quotes.length?`<div class="profile-section"><h3>Cytaty</h3><div style="display:grid;gap:6px">${quotes.map(q=>`<div style="border:2px solid var(--ink);padding:8px 12px;border-radius:var(--r);font-size:13px;color:var(--ink-light)">„${escapeHtml(q)}"</div>`).join('')}</div></div>`:''}
     ${renderProfileImage(book.images,book.title)}
