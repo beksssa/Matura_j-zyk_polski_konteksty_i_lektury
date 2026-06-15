@@ -482,6 +482,413 @@ input{font-family:inherit}
   font-size:10px;font-weight:600;color:var(--muted);
   letter-spacing:.08em;white-space:nowrap;
 }
+
+/* ═══════════════════════════════════════════
+   NOWE PROFILE — canvas + animacje
+═══════════════════════════════════════════ */
+
+/* Kontener profilu z canvasem */
+#profile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--bg);
+}
+#profile.active { display: block; }
+
+/* Canvas węży w tle profilu */
+#profile-snake-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Główny scroll profilu */
+#profile-scroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1;
+  padding: 80px 0 80px;
+  scroll-behavior: smooth;
+}
+
+/* Grid profilu lektury */
+.pf-book-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px;
+  align-items: start;
+}
+.pf-left-col { grid-column: 1; display: flex; flex-direction: column; gap: 16px; }
+.pf-right-col { grid-column: 2; display: flex; flex-direction: column; gap: 16px; }
+.pf-bottom-row { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px; }
+
+/* Profil motywu */
+.pf-motif-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px;
+  align-items: start;
+}
+
+/* Profil bohatera */
+.pf-char-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px;
+  align-items: start;
+}
+
+/* Bloki profilu */
+.pf-block {
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  position: relative;
+  transition: border-color .2s, box-shadow .2s;
+}
+.pf-block-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.pf-block-title {
+  font-family: var(--ff-serif);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.pf-block-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 12px;
+  letter-spacing: .03em;
+}
+.pf-block-epoch {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* Obraz w profilu */
+.pf-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border-radius: var(--r);
+  border: 2px solid var(--ink);
+  cursor: zoom-in;
+  display: block;
+  transition: transform .2s;
+}
+.pf-cover:hover { transform: scale(1.02); }
+.pf-cover-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: #f0ede8;
+  border-radius: var(--r);
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+}
+
+/* Opis z podświetlaniem motywów */
+.pf-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-light);
+}
+.pf-desc-motif-span {
+  color: var(--accent2);
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 1.5px dashed var(--accent2);
+  transition: background .15s, color .15s;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.pf-desc-motif-span:hover,
+.pf-desc-motif-span.pf-hl {
+  background: rgba(94,26,244,.12);
+  color: var(--accent2);
+}
+.pf-desc-motif-span.pf-hl-from-chip {
+  background: rgba(94,26,244,.18);
+  animation: pfFlash .5s ease;
+}
+@keyframes pfFlash {
+  0%,100% { background: rgba(94,26,244,.18); }
+  50%      { background: rgba(94,26,244,.35); }
+}
+
+/* Chipy motywów / lektur / bohaterów */
+.pf-chips { display: flex; flex-direction: column; gap: 8px; }
+.pf-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  padding: 10px 14px;
+  font-family: var(--ff-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--bg);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s, transform .15s, box-shadow .15s;
+  text-align: left;
+  position: relative;
+}
+.pf-chip:hover {
+  background: var(--ink);
+  color: var(--bg);
+  transform: translateX(3px);
+  box-shadow: 3px 3px 0 var(--accent2);
+}
+.pf-chip.pf-chip-motif:hover { box-shadow: 3px 3px 0 var(--accent2); }
+.pf-chip.pf-chip-book:hover  { box-shadow: 3px 3px 0 var(--accent); }
+.pf-chip.pf-chip-char:hover  { box-shadow: 3px 3px 0 var(--accent3); }
+.pf-chip.pf-hl-chip {
+  background: rgba(94,26,244,.1);
+  border-color: var(--accent2);
+  color: var(--accent2);
+  transform: translateX(3px);
+}
+.pf-chip-icon { font-size: 14px; flex-shrink: 0; }
+.pf-chip-arrow {
+  margin-left: auto;
+  opacity: .4;
+  font-size: 14px;
+  transition: opacity .15s, transform .15s;
+}
+.pf-chip:hover .pf-chip-arrow { opacity: 1; transform: translateX(3px); }
+
+/* Animacja przejścia chip → profil (slide z prawej do lewej) */
+@keyframes slideFromRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideFromLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.pf-anim-right { animation: slideFromRight .38s cubic-bezier(.4,0,.2,1) both; }
+.pf-anim-left  { animation: slideFromLeft  .38s cubic-bezier(.4,0,.2,1) both; }
+
+/* Wiersz — blok */
+.pf-poem-block {
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow .2s;
+  background: var(--bg);
+}
+.pf-poem-block:hover { box-shadow: 4px 4px 0 var(--accent2); }
+.pf-poem-header {
+  padding: 14px 18px 10px;
+  border-bottom: 2px solid var(--line);
+}
+.pf-poem-title {
+  font-family: var(--ff-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.pf-poem-author {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.pf-poem-preview {
+  padding: 10px 18px 0;
+  position: relative;
+  max-height: 80px;
+  overflow: hidden;
+}
+.pf-poem-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  background: linear-gradient(transparent, var(--bg));
+}
+.pf-poem-preview-text {
+  font-family: var(--ff-serif);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--ink-light);
+  white-space: pre-wrap;
+}
+.pf-poem-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: background .15s;
+}
+.pf-poem-expand-btn:hover { background: rgba(94,26,244,.07); }
+
+/* Pełny wiersz — tryb "wycentrowany" */
+#pf-poem-fullscreen {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: var(--bg);
+  overflow-y: auto;
+  padding: 60px 40px 80px;
+  animation: slideFromLeft .35s cubic-bezier(.4,0,.2,1) both;
+}
+#pf-poem-fullscreen.active { display: block; }
+.pf-poem-back-btn {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  padding: 6px 14px;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  z-index: 51;
+}
+.pf-poem-back-btn:hover { background: var(--ink); color: var(--bg); }
+.pf-poem-full-title {
+  font-family: var(--ff-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.pf-poem-full-author {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+.pf-poem-full-text {
+  font-family: var(--ff-serif);
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.9;
+  color: var(--ink-light);
+  white-space: pre-wrap;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Nawigacja profilu */
+#profile-back-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(191,203,194,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--line);
+}
+#profile-back-bar.active { display: flex; }
+.pf-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: opacity .2s;
+}
+.pf-back-btn:hover { opacity: .6; }
+.pf-back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform .2s; }
+.pf-back-btn:hover svg { transform: translateX(-3px); }
+.pf-back-title {
+  font-family: var(--ff-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Połączenia węży — punkty kotwiczne (niewidoczne, do obliczeń) */
+.pf-anchor { position: absolute; pointer-events: none; }
+
+/* Węże przychodzące — ukryte dopóki canvas nie narysuje */
+#profile-snake-canvas { opacity: 0; transition: opacity .3s; }
+#profile-snake-canvas.ready { opacity: 1; }
+
+/* Responsywność */
+@media (max-width: 900px) {
+  .pf-book-grid, .pf-motif-grid, .pf-char-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+  .pf-left-col, .pf-right-col, .pf-bottom-row { grid-column: 1; }
+  .pf-book-grid .pf-left-col { order: 2; }
+  .pf-book-grid .pf-right-col { order: 1; }
+  .pf-motif-grid > *:first-child { order: 1; }
+  .pf-motif-grid > *:last-child  { order: 2; }
+}
   
 /* QUIZ */
 #quiz{display:none;flex-direction:column;height:100dvh;padding:20px 18px 12px;overflow:hidden;box-sizing:border-box;position:fixed;inset:0;z-index:3;background:transparent}
@@ -577,21 +984,6 @@ input{font-family:inherit}
 .y2-center{display:flex;flex-direction:column;gap:10px}
 .y2-title{font-family:var(--ff-serif);font-size:1.15rem;font-weight:700;text-align:center;margin:0 0 4px;color:var(--ink)}
 .y1-shell{max-width:560px;margin:0 auto;width:100%}
-
-/* PROFILE */
-#profile{display:none;width:100%;max-width:720px;padding:0 0 60px;animation:profileIn .45s var(--ease) both}
-#profile.active{display:block}
-@keyframes profileIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.profile-section{margin-top:16px;padding-top:16px;border-top:2px solid var(--line);text-align:left}
-.profile-section h3{font-family:var(--ff-sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:700}
-.profile-chip-list{display:flex;flex-wrap:wrap;gap:7px}
-.profile-chip{border:2px solid var(--ink);padding:4px 12px;background:var(--bg);font-size:12px;font-weight:600;color:var(--ink);border-radius:14px;transition:background .15s,color .15s}
-.profile-chip.clickable{cursor:pointer}
-.profile-chip.clickable:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-.profile-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:6px}
-.profile-image-item{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--r);border:2px solid var(--ink)}
-
-
     
 </style>
 </head>
@@ -691,16 +1083,28 @@ input{font-family:inherit}
   </div>
 
   <div id="profile">
+  <canvas id="profile-snake-canvas"></canvas>
+
+  <div id="profile-back-bar">
+    <button class="pf-back-btn" onclick="pfHandleBack()">
+      <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
+      Powrót
+    </button>
+    <div class="pf-back-title" id="pf-back-title"></div>
+    <div style="width:80px"></div>
+  </div>
+
+  <div id="profile-scroll">
     <div id="profile-content"></div>
   </div>
-</div>
 
-<div id="lightbox" onclick="closeLightbox(event)">
-  <span id="lightbox-close" onclick="closeLightbox()">×</span>
-  <img id="lightbox-img" src="" alt="">
-  <div id="lightbox-zoom">
-    <button onclick="lbZoom(-1);event.stopPropagation()" title="Pomniejsz">−</button>
-    <button onclick="lbZoom(1);event.stopPropagation()" title="Powiększ">+</button>
+  <!-- Pełnoekranowy wiersz -->
+  <div id="pf-poem-fullscreen">
+    <button class="pf-poem-back-btn" onclick="closePoemFullscreen()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="10,3 5,8 10,13"/></svg>
+      Wróć do profilu
+    </button>
+    <div id="pf-poem-fullscreen-content"></div>
   </div>
 </div>
   
@@ -1013,29 +1417,34 @@ window.renderDiagnostic = function() {
 /* ══════════════════════════════════════════════════════
    PROFILE
    ══════════════════════════════════════════════════════ */
-window.openBook=function(id){
+window.openBook = function(id) {
   screenHistory.push(currentScreen);
-  if(mode==='quiz') quizSnap=captureQuizState();
-  profileReturnTarget=mode==='quiz'?'quiz':'map';
-  openBookProfile(id);
+  if (mode === 'quiz') quizSnap = captureQuizState();
+  profileReturnTarget = mode === 'quiz' ? 'quiz' : 'map';
+  openBookProfile(id, 'right');
 };
-window.openMotif=function(id){
+window.openMotif = function(id) {
   screenHistory.push(currentScreen);
-  if(mode==='quiz') quizSnap=captureQuizState();
-  profileReturnTarget=mode==='quiz'?'quiz':'map';
-  openMotifProfile(id);
+  if (mode === 'quiz') quizSnap = captureQuizState();
+  profileReturnTarget = mode === 'quiz' ? 'quiz' : 'map';
+  openMotifProfile(id, 'right');
 };
-window.openCharacter=function(id){
+window.openCharacter = function(id) {
   screenHistory.push(currentScreen);
-  if(mode==='quiz') quizSnap=captureQuizState();
-  profileReturnTarget=mode==='quiz'?'quiz':'map';
-  openCharacterProfile(id);
+  if (mode === 'quiz') quizSnap = captureQuizState();
+  profileReturnTarget = mode === 'quiz' ? 'quiz' : 'map';
+  openCharacterProfile(id, 'right');
 };
-window.openBookFromProfile=id=>window.openBook(id);
-window.openMotifFromProfile=id=>window.openMotif(id);
-window.openCharacterFromProfile=id=>window.openCharacter(id);
-window.returnFromProfile=function(){if(!screenHistory.length){goToMenu();return;}handleBack();};
-window.goBackInProfile=window.returnFromProfile;
+window.openBookFromProfile      = id => pfNavigateTo('book', id);
+window.openMotifFromProfile     = id => pfNavigateTo('motif', id);
+window.openCharacterFromProfile = id => pfNavigateTo('char', id);
+window.returnFromProfile = function() {
+  pfStopSnakes();
+  hideProfileEl();
+  if (!screenHistory.length) { goToMenu(); return; }
+  handleBack();
+};
+window.goBackInProfile = window.returnFromProfile;
 
 function renderProfileImage(images,title){
   if(!images||!images.length) return '';
@@ -1049,72 +1458,543 @@ function renderProfileImage(images,title){
   </div>`;
 }
 
-function openBookProfile(id){
-  dimBg('profile');
-  const book=getBookById(id);if(!book) return;
-  showView('profile');
-  const motifObjs=(book.motifs||[]).map(getMotifById).filter(Boolean);
-  const charObjs=(book.characters||[]).map(getCharacterById).filter(Boolean);
-  const quotes=(book.quotes||[]).filter(Boolean);
+/* ══════════════════════════════════════════════════════
+   PROFILE v2 — canvas snakes + hover highlights + animations
+   ══════════════════════════════════════════════════════ */
 
-  // Wyciągnij autora z tytułu (po ostatniej spacji przed nawiasem lub z aliases)
-  const authorAlias = (book.aliases||[]).find(a => a.includes(' '));
-  const authorName = authorAlias
-    ? authorAlias.replace(book.title,'').trim()
-    : '';
+const PF_SNAKE_COLORS = [
+  '#dd2d4a','#40916c','#5a189a','#e2711d','#007200',
+  '#0077b6','#f72585','#fb8500','#34a0a4','#880d1e',
+  '#99d98c','#c77dff','#ffb627','#00b4d8','#023e8a'
+];
 
-  // Pokoloruj nazwy motywów w opisie
-  let desc = escapeHtml(book.description||'');
-  motifObjs.forEach(m => {
-    const escaped = escapeHtml(m.name);
-    desc = desc.replace(new RegExp(escaped,'g'),
-      `<span style="color:#7903C2;font-weight:600">${escaped}</span>`);
+let pfSnakeCanvas = null, pfSnakeCtx = null;
+let pfSnakes = [];
+let pfRafId = null;
+let pfLastTs = null;
+let pfTransitionDir = 'right'; // 'right' = chip→profil, 'left' = bohater/wiersz
+
+// ── Snake engine (uproszczony, bez BFS — proste krzywe Beziera) ──
+function pfAddSnake(fromEl, toEl, color, delay = 0) {
+  const fromR = fromEl.getBoundingClientRect();
+  const toR   = toEl.getBoundingClientRect();
+  const scrollEl = document.getElementById('profile-scroll');
+  const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+
+  const fx = fromR.left + fromR.width / 2;
+  const fy = fromR.top  + fromR.height / 2 + scrollTop;
+  const tx = toR.left   + toR.width  / 2;
+  const ty = toR.top    + toR.height / 2 + scrollTop;
+
+  const dx = tx - fx, dy = ty - fy;
+  const len = Math.hypot(dx, dy);
+
+  // Punkty kontrolne Beziera
+  const cp1x = fx + dx * .35;
+  const cp1y = fy;
+  const cp2x = fx + dx * .65;
+  const cp2y = ty;
+
+  pfSnakes.push({
+    color, delay,
+    p0: {x: fx, y: fy},
+    p1: {x: cp1x, y: cp1y},
+    p2: {x: cp2x, y: cp2y},
+    p3: {x: tx,  y: ty},
+    len,
+    progress: 0,
+    speed: Math.max(300, len * 1.4),
+    done: false,
+    started: false,
+    elapsed: 0
+  });
+}
+
+function pfDrawSnake(s, scrollTop) {
+  if (!pfSnakeCtx) return;
+  const ctx = pfSnakeCtx;
+  const prog = Math.min(s.progress, 1);
+  if (prog <= 0) return;
+
+  ctx.save();
+  ctx.strokeStyle = s.color;
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.globalAlpha = .75;
+
+  // Rysuj częściową krzywą Beziera przez próbkowanie
+  const steps = 40;
+  ctx.beginPath();
+  for (let i = 0; i <= steps * prog; i++) {
+    const t = i / steps;
+    const x = bezier(t, s.p0.x, s.p1.x, s.p2.x, s.p3.x);
+    const y = bezier(t, s.p0.y, s.p1.y, s.p2.y, s.p3.y) - scrollTop;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Głowa węża
+  if (prog < 1) {
+    const t = prog;
+    const hx = bezier(t, s.p0.x, s.p1.x, s.p2.x, s.p3.x);
+    const hy = bezier(t, s.p0.y, s.p1.y, s.p2.y, s.p3.y) - scrollTop;
+    ctx.fillStyle = s.color;
+    ctx.strokeStyle = 'rgba(0,0,0,.3)';
+    ctx.lineWidth = 1.2;
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.arc(hx, hy, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function bezier(t, p0, p1, p2, p3) {
+  const mt = 1 - t;
+  return mt*mt*mt*p0 + 3*mt*mt*t*p1 + 3*mt*t*t*p2 + t*t*t*p3;
+}
+
+function pfLoop(ts) {
+  pfRafId = requestAnimationFrame(pfLoop);
+  const dt = Math.min(50, ts - (pfLastTs || ts)) / 1000;
+  pfLastTs = ts;
+
+  const scrollEl = document.getElementById('profile-scroll');
+  const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+
+  if (!pfSnakeCanvas) return;
+  pfSnakeCtx.clearRect(0, 0, pfSnakeCanvas.width, pfSnakeCanvas.height);
+
+  let allDone = pfSnakes.length > 0;
+  pfSnakes.forEach(s => {
+    s.elapsed += dt;
+    if (s.elapsed < s.delay) { allDone = false; return; }
+    if (!s.started) s.started = true;
+    if (!s.done) {
+      s.progress += dt * (s.speed / s.len);
+      if (s.progress >= 1) { s.progress = 1; s.done = true; }
+      else allDone = false;
+    }
+    pfDrawSnake(s, scrollTop);
   });
 
-  document.getElementById('profile-content').innerHTML=`
-    <h2 style="font-family:var(--ff-serif);font-size:2.2rem;font-weight:700;margin-bottom:.3rem;color:var(--ink)">📚 ${escapeHtml(book.title)}</h2>
-    ${authorName ? `<p style="font-size:13px;font-weight:700;color:#5E1AF4;margin-bottom:.8rem;letter-spacing:.02em">${escapeHtml(authorName)}</p>` : ''}
-    <p style="color:var(--ink-light);font-size:13px;line-height:1.75;margin-bottom:.5rem">${desc}</p>
-    <div class="profile-section"><h3>Epoka</h3><div class="profile-chip-list"><span class="profile-chip">${escapeHtml(book.epoch||'')}</span></div></div>
-    ${motifObjs.length?`<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjs.map(m=>`<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')" style="color:#7903C2;border-color:#7903C2">🎯 ${escapeHtml(m.name)}</span>`).join('')}</div></div>`:''}
-    ${charObjs.length?`<div class="profile-section"><h3>Bohaterowie</h3><div class="profile-chip-list">${charObjs.map(c=>`<span class="profile-chip clickable" onclick="openCharacterFromProfile('${c.id}')">👤 ${escapeHtml(c.name)}</span>`).join('')}</div></div>`:''}
-    ${quotes.length?`<div class="profile-section"><h3>Cytaty</h3><div style="display:grid;gap:6px">${quotes.map(q=>`<div style="border:2px solid var(--ink);padding:8px 12px;border-radius:var(--r);font-size:13px;color:var(--ink-light)">„${escapeHtml(q)}"</div>`).join('')}</div></div>`:''}
-    ${renderProfileImage(book.images,book.title)}
-    <br><button class="start-btn" onclick="returnFromProfile()" style="font-size:10px;padding:.6rem 1.6rem">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
-  document.getElementById('menu-btn').classList.add('visible');
+  if (pfSnakes.length > 0) {
+    pfSnakeCanvas.classList.add('ready');
+  }
 }
 
-function openMotifProfile(id){
+function pfStartSnakes() {
+  if (pfRafId) cancelAnimationFrame(pfRafId);
+  pfSnakes = [];
+  pfLastTs = null;
+  pfRafId = requestAnimationFrame(pfLoop);
+}
+
+function pfStopSnakes() {
+  if (pfRafId) { cancelAnimationFrame(pfRafId); pfRafId = null; }
+  pfSnakes = [];
+  if (pfSnakeCanvas) {
+    pfSnakeCanvas.classList.remove('ready');
+    pfSnakeCtx && pfSnakeCtx.clearRect(0, 0, pfSnakeCanvas.width, pfSnakeCanvas.height);
+  }
+}
+
+function pfResizeCanvas() {
+  if (!pfSnakeCanvas) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  pfSnakeCanvas.width  = window.innerWidth  * dpr;
+  pfSnakeCanvas.height = window.innerHeight * dpr;
+  pfSnakeCanvas.style.width  = window.innerWidth  + 'px';
+  pfSnakeCanvas.style.height = window.innerHeight + 'px';
+  pfSnakeCtx = pfSnakeCanvas.getContext('2d');
+  pfSnakeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// ── Otwieranie profilu ──
+function showProfileEl(animDir = 'right') {
+  const el = document.getElementById('profile');
+  const bar = document.getElementById('profile-back-bar');
+  el.style.display = 'block';
+  el.classList.add('active');
+  const content = document.getElementById('profile-content');
+  content.className = animDir === 'left' ? 'pf-anim-left' : 'pf-anim-right';
+  bar.classList.add('active');
+  pfSnakeCanvas = document.getElementById('profile-snake-canvas');
+  pfResizeCanvas();
+}
+
+function hideProfileEl() {
+  const el = document.getElementById('profile');
+  const bar = document.getElementById('profile-back-bar');
+  el.style.display = 'none';
+  el.classList.remove('active');
+  bar.classList.remove('active');
+  pfStopSnakes();
+  closePoemFullscreen();
+}
+
+// ── Węże sekwencyjne po renderze ──
+function pfScheduleSnakes(pairs) {
+  // pairs: [{fromId, toId, color}]
+  // czekamy aż DOM się wyrenderuje
+  setTimeout(() => {
+    pfStartSnakes();
+    pairs.forEach((pair, idx) => {
+      const fromEl = document.getElementById(pair.fromId);
+      const toEl   = document.getElementById(pair.toId);
+      if (!fromEl || !toEl) return;
+      pfAddSnake(fromEl, toEl, PF_SNAKE_COLORS[idx % PF_SNAKE_COLORS.length], idx * 0.22);
+    });
+  }, 120);
+}
+
+// ── Scroll profilu odświeża węże ──
+function pfAttachScrollRefresh() {
+  const scrollEl = document.getElementById('profile-scroll');
+  if (!scrollEl) return;
+  scrollEl.addEventListener('scroll', () => { /* canvas redrawuje w loop */ });
+}
+
+// ════════════════════════
+//  PROFIL LEKTURY
+// ════════════════════════
+function openBookProfile(id, animDir = 'right') {
+  const book = getBookById(id); if (!book) return;
   dimBg('profile');
-  const motif=getMotifById(id);if(!motif) return;
   showView('profile');
-  const bookObjs=getBooksByMotif(motif.id);
-  const charObjs=getCharactersByMotif(motif.id);
-  document.getElementById('profile-content').innerHTML=`
-    <h2 style="font-family:var(--ff-serif);font-size:2.2rem;font-weight:700;margin-bottom:.5rem;color:var(--ink)">🎯 ${escapeHtml(motif.name)}</h2>
-    <p style="color:var(--ink-light);font-size:13px;line-height:1.75;margin-bottom:.5rem">${escapeHtml(motif.description||'')}</p>
-    ${renderProfileImage(motif.images,motif.name)}
-    ${bookObjs.length?`<div class="profile-section"><h3>Lektury z tym motywem</h3><div class="profile-chip-list">${bookObjs.map(b=>`<span class="profile-chip clickable" onclick="openBookFromProfile('${b.id}')">📚 ${escapeHtml(b.title)}</span>`).join('')}</div></div>`:''}
-    ${charObjs.length?`<div class="profile-section"><h3>Bohaterowie z tym motywem</h3><div class="profile-chip-list">${charObjs.map(c=>`<span class="profile-chip clickable" onclick="openCharacterFromProfile('${c.id}')">👤 ${escapeHtml(c.name)}</span>`).join('')}</div></div>`:''}
-    <br><button class="start-btn" onclick="returnFromProfile()" style="font-size:10px;padding:.6rem 1.6rem">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
   document.getElementById('menu-btn').classList.add('visible');
+  document.getElementById('pf-back-title').textContent = book.title;
+  showProfileEl(animDir);
+  pfAttachScrollRefresh();
+
+  const motifObjs = (book.motifs || []).map(getMotifById).filter(Boolean);
+  const charObjs  = (book.characters || []).map(getCharacterById).filter(Boolean);
+  const imgSrc    = book.images?.[0]?.src || null;
+
+  // Opis z podświetlonymi motywami
+  let descHtml = escapeHtml(book.description || '');
+  motifObjs.forEach(m => {
+    const escaped = escapeHtml(m.name);
+    const re = new RegExp(escaped.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+    descHtml = descHtml.replace(re,
+      `<span class="pf-desc-motif-span" data-motif="${m.id}" onmouseenter="pfHlMotif('${m.id}',true)" onmouseleave="pfHlMotif('${m.id}',false)">${escaped}</span>`);
+  });
+
+  document.getElementById('profile-content').innerHTML = `
+    <div class="pf-book-grid">
+      <!-- LEWA KOLUMNA: okładka -->
+      <div class="pf-left-col">
+        <div class="pf-block" style="padding:0;overflow:hidden" id="pf-anchor-cover">
+          ${imgSrc
+            ? `<img class="pf-cover" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(book.title)}"
+                onclick="openLightbox('${escapeHtml(imgSrc)}','${escapeHtml(book.title)}')"
+                onerror="this.style.display='none'">`
+            : `<div class="pf-cover-placeholder">${escapeHtml(book.coverEmoji||'📚')}</div>`}
+        </div>
+      </div>
+
+      <!-- PRAWA KOLUMNA: info + opis + motywy -->
+      <div class="pf-right-col">
+        <div class="pf-block" id="pf-anchor-info">
+          <div class="pf-block-label">Lektura</div>
+          <div class="pf-block-title">${escapeHtml(book.title)}</div>
+          <div class="pf-block-subtitle">${escapeHtml(book.author||'')}</div>
+          <span class="pf-block-epoch">${escapeHtml(book.epoch||'')}</span>
+          <div class="pf-desc" id="pf-desc-book">${descHtml}</div>
+        </div>
+
+        ${motifObjs.length ? `
+        <div class="pf-block" id="pf-anchor-motifs-block">
+          <div class="pf-block-label">Motywy</div>
+          <div class="pf-chips" id="pf-chips-motifs">
+            ${motifObjs.map((m,i) => `
+              <button class="pf-chip pf-chip-motif"
+                id="pf-chip-motif-${m.id}"
+                onmouseenter="pfHlMotif('${m.id}',true)"
+                onmouseleave="pfHlMotif('${m.id}',false)"
+                onclick="pfNavigateTo('motif','${m.id}')">
+                <span class="pf-chip-icon">🎯</span>
+                <span style="flex:1">${escapeHtml(m.name)}</span>
+                <span class="pf-chip-arrow">→</span>
+              </button>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+
+      <!-- DÓŁ: bohaterowie -->
+      ${charObjs.length ? `
+      <div class="pf-bottom-row" id="pf-anchor-chars-block">
+        <div class="pf-block">
+          <div class="pf-block-label">Bohaterowie</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px" id="pf-chips-chars">
+            ${charObjs.map((c,i) => `
+              <button class="pf-chip pf-chip-char"
+                id="pf-chip-char-${c.id}"
+                onclick="pfNavigateTo('char','${c.id}')">
+                <span class="pf-chip-icon">👤</span>
+                <span style="flex:1">${escapeHtml(c.name)}</span>
+                <span class="pf-chip-arrow">→</span>
+              </button>`).join('')}
+          </div>
+        </div>
+      </div>` : ''}
+    </div>`;
+
+  // Węże: okładka → info, info → motywy, info → bohaterowie
+  const snakePairs = [];
+  snakePairs.push({ fromId: 'pf-anchor-cover', toId: 'pf-anchor-info' });
+  if (motifObjs.length) snakePairs.push({ fromId: 'pf-anchor-info', toId: 'pf-anchor-motifs-block' });
+  if (charObjs.length)  snakePairs.push({ fromId: 'pf-anchor-info', toId: 'pf-anchor-chars-block' });
+  pfScheduleSnakes(snakePairs);
 }
 
-function openCharacterProfile(id){
+// ════════════════════════
+//  PROFIL MOTYWU
+// ════════════════════════
+function openMotifProfile(id, animDir = 'right') {
+  const motif = getMotifById(id); if (!motif) return;
   dimBg('profile');
-  const char=getCharacterById(id);if(!char) return;
   showView('profile');
-  const book=getBookByCharacter(char.id);
-  const motifObjs=(char.motifs||[]).map(getMotifById).filter(Boolean);
-  document.getElementById('profile-content').innerHTML=`
-    <h2 style="font-family:var(--ff-serif);font-size:2.2rem;font-weight:700;margin-bottom:.5rem;color:var(--ink)">👤 ${escapeHtml(char.name)}</h2>
-    <p style="color:var(--ink-light);font-size:13px;line-height:1.75;margin-bottom:.5rem">${escapeHtml(char.description||'')}</p>
-    ${book?`<div class="profile-section"><h3>Lektura</h3><div class="profile-chip-list"><span class="profile-chip clickable" onclick="openBookFromProfile('${book.id}')">📚 ${escapeHtml(book.title)}</span></div></div>`:''}
-    ${motifObjs.length?`<div class="profile-section"><h3>Motywy</h3><div class="profile-chip-list">${motifObjs.map(m=>`<span class="profile-chip clickable" onclick="openMotifFromProfile('${m.id}')">🎯 ${escapeHtml(m.name)}</span>`).join('')}</div></div>`:''}
-    <br><button class="start-btn" onclick="returnFromProfile()" style="font-size:10px;padding:.6rem 1.6rem">⬅ ${profileReturnTarget==='quiz'?'Powrót do ćwiczeń':'Powrót'}</button>`;
   document.getElementById('menu-btn').classList.add('visible');
+  document.getElementById('pf-back-title').textContent = motif.name;
+  showProfileEl(animDir);
+  pfAttachScrollRefresh();
+
+  const bookObjs = getBooksByMotif(motif.id);
+  const charObjs = getCharactersByMotif(motif.id);
+  const imgSrc   = motif.images?.[0]?.src || null;
+  const poems    = (motif.poems || []).filter(Boolean);
+
+  document.getElementById('profile-content').innerHTML = `
+    <div class="pf-motif-grid">
+      <!-- LEWA: opis + obraz + wiersz -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="pf-block" id="pf-anchor-motif-info">
+          <div class="pf-block-label">Motyw</div>
+          <div class="pf-block-title">${escapeHtml(motif.name)}</div>
+          <div class="pf-desc" style="margin-top:8px">${escapeHtml(motif.description||'')}</div>
+        </div>
+
+        ${imgSrc ? `
+        <div class="pf-block" style="padding:0;overflow:hidden" id="pf-anchor-motif-img">
+          <img class="pf-cover" style="aspect-ratio:4/3"
+            src="${escapeHtml(imgSrc)}" alt="${escapeHtml(motif.name)}"
+            onclick="openLightbox('${escapeHtml(imgSrc)}','${escapeHtml(motif.name)}')"
+            onerror="this.parentElement.style.display='none'">
+        </div>` : ''}
+
+        ${poems.length ? poems.map((poem, pi) => `
+        <div class="pf-poem-block" id="pf-poem-${pi}" onclick="pfPoemExpand(${pi})">
+          <div class="pf-poem-header">
+            <div class="pf-poem-title">${escapeHtml(poem.title||'Wiersz')}</div>
+            <div class="pf-poem-author">${escapeHtml(poem.author||'')}</div>
+          </div>
+          <div class="pf-poem-preview" id="pf-poem-preview-${pi}">
+            <div class="pf-poem-preview-text" id="pf-poem-preview-text-${pi}">Ładowanie…</div>
+          </div>
+          <button class="pf-poem-expand-btn">
+            ▼ Rozwiń wiersz
+          </button>
+        </div>`).join('') : ''}
+      </div>
+
+      <!-- PRAWA: lektury + bohaterowie -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        ${bookObjs.length ? `
+        <div class="pf-block" id="pf-anchor-motif-books">
+          <div class="pf-block-label">Lektury z tym motywem</div>
+          <div class="pf-chips">
+            ${bookObjs.map(b => `
+              <button class="pf-chip pf-chip-book"
+                onclick="pfNavigateTo('book','${b.id}')">
+                <span class="pf-chip-icon">📚</span>
+                <span style="flex:1">${escapeHtml(b.title)}</span>
+                <span class="pf-chip-arrow">→</span>
+              </button>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${charObjs.length ? `
+        <div class="pf-block" id="pf-anchor-motif-chars">
+          <div class="pf-block-label">Bohaterowie z tym motywem</div>
+          <div class="pf-chips">
+            ${charObjs.map(c => `
+              <button class="pf-chip pf-chip-char"
+                onclick="pfNavigateTo('char','${c.id}')">
+                <span class="pf-chip-icon">👤</span>
+                <span style="flex:1">${escapeHtml(c.name)}</span>
+                <span class="pf-chip-arrow">→</span>
+              </button>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+
+  // Ładuj wiersze
+  poems.forEach((poem, pi) => {
+    if (poem.src) {
+      fetch(poem.src)
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(txt => {
+          const el = document.getElementById(`pf-poem-preview-text-${pi}`);
+          if (el) {
+            const lines = txt.split('\n').filter(l => l.trim()).slice(0, 4).join('\n');
+            el.textContent = lines;
+            // Zapisz pełny tekst na bloku
+            const block = document.getElementById(`pf-poem-${pi}`);
+            if (block) block.dataset.fullText = txt;
+            block.dataset.title  = poem.title  || 'Wiersz';
+            block.dataset.author = poem.author || '';
+          }
+        })
+        .catch(() => {
+          const el = document.getElementById(`pf-poem-preview-text-${pi}`);
+          if (el) el.textContent = '(nie udało się załadować tekstu)';
+        });
+    }
+  });
+
+  // Węże
+  const snakePairs = [];
+  snakePairs.push({ fromId: 'pf-anchor-motif-info', toId: 'pf-anchor-motif-books' });
+  if (imgSrc) snakePairs.push({ fromId: 'pf-anchor-motif-info', toId: 'pf-anchor-motif-img' });
+  if (charObjs.length) snakePairs.push({ fromId: 'pf-anchor-motif-books', toId: 'pf-anchor-motif-chars' });
+  pfScheduleSnakes(snakePairs);
 }
 
+// ════════════════════════
+//  PROFIL BOHATERA
+// ════════════════════════
+function openCharacterProfile(id, animDir = 'right') {
+  const char = getCharacterById(id); if (!char) return;
+  const book  = getBookByCharacter(char.id);
+  dimBg('profile');
+  showView('profile');
+  document.getElementById('menu-btn').classList.add('visible');
+  document.getElementById('pf-back-title').textContent = char.name;
+  showProfileEl(animDir);
+  pfAttachScrollRefresh();
+
+  const motifObjs = (char.motifs || []).map(getMotifById).filter(Boolean);
+
+  document.getElementById('profile-content').innerHTML = `
+    <div class="pf-char-grid">
+      <!-- LEWA: opis -->
+      <div class="pf-block" id="pf-anchor-char-info">
+        <div class="pf-block-label">Bohater</div>
+        <div class="pf-block-title">${escapeHtml(char.name)}</div>
+        ${book ? `<div class="pf-block-subtitle">z: ${escapeHtml(book.title)}</div>` : ''}
+        <div class="pf-desc" style="margin-top:10px">${escapeHtml(char.description||'')}</div>
+      </div>
+
+      <!-- PRAWA: lektura + motywy -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        ${book ? `
+        <div class="pf-block" id="pf-anchor-char-book">
+          <div class="pf-block-label">Lektura</div>
+          <div class="pf-chips">
+            <button class="pf-chip pf-chip-book"
+              onclick="pfNavigateTo('book','${book.id}')">
+              <span class="pf-chip-icon">📚</span>
+              <span style="flex:1">${escapeHtml(book.title)}</span>
+              <span class="pf-chip-arrow">→</span>
+            </button>
+          </div>
+        </div>` : ''}
+
+        ${motifObjs.length ? `
+        <div class="pf-block" id="pf-anchor-char-motifs">
+          <div class="pf-block-label">Motywy</div>
+          <div class="pf-chips">
+            ${motifObjs.map(m => `
+              <button class="pf-chip pf-chip-motif"
+                onclick="pfNavigateTo('motif','${m.id}')">
+                <span class="pf-chip-icon">🎯</span>
+                <span style="flex:1">${escapeHtml(m.name)}</span>
+                <span class="pf-chip-arrow">→</span>
+              </button>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+
+  // Węże
+  const snakePairs = [];
+  if (book)            snakePairs.push({ fromId: 'pf-anchor-char-info', toId: 'pf-anchor-char-book' });
+  if (motifObjs.length) snakePairs.push({ fromId: 'pf-anchor-char-info', toId: 'pf-anchor-char-motifs' });
+  pfScheduleSnakes(snakePairs);
+}
+
+// ════════════════════════
+//  NAWIGACJA PROFILI
+// ════════════════════════
+function pfNavigateTo(type, id) {
+  pfStopSnakes();
+  closePoemFullscreen();
+  // Chip → profil: slide z prawej do lewej (→ element przyciągamy)
+  if (type === 'book')  openBookProfile(id, 'right');
+  if (type === 'motif') openMotifProfile(id, 'right');
+  if (type === 'char')  openCharacterProfile(id, 'right');
+}
+
+function pfHandleBack() {
+  pfStopSnakes();
+  closePoemFullscreen();
+  // deleguj do głównego systemu nawigacji
+  handleBack();
+}
+
+// ════════════════════════
+//  HOVER — motyw ↔ opis
+// ════════════════════════
+function pfHlMotif(motifId, on) {
+  // podświetl span w opisie
+  document.querySelectorAll(`.pf-desc-motif-span[data-motif="${motifId}"]`).forEach(el => {
+    el.classList.toggle('pf-hl', on);
+  });
+  // podświetl chip
+  const chip = document.getElementById(`pf-chip-motif-${motifId}`);
+  if (chip) chip.classList.toggle('pf-hl-chip', on);
+}
+
+// ════════════════════════
+//  WIERSZ — rozwinięcie
+// ════════════════════════
+function pfPoemExpand(idx) {
+  const block = document.getElementById(`pf-poem-${idx}`);
+  if (!block) return;
+  const fullText = block.dataset.fullText;
+  const title    = block.dataset.title  || 'Wiersz';
+  const author   = block.dataset.author || '';
+
+  const fs = document.getElementById('pf-poem-fullscreen');
+  const fc = document.getElementById('pf-poem-fullscreen-content');
+  if (!fs || !fc) return;
+
+  fc.innerHTML = `
+    <div class="pf-poem-full-title">${escapeHtml(title)}</div>
+    <div class="pf-poem-full-author">${escapeHtml(author)}</div>
+    <div class="pf-poem-full-text">${escapeHtml(fullText || 'Brak tekstu.')}</div>`;
+
+  fs.classList.add('active');
+  // scroll do góry wiersza
+  fs.scrollTop = 0;
+}
+
+function closePoemFullscreen() {
+  const fs = document.getElementById('pf-poem-fullscreen');
+  if (fs) fs.classList.remove('active');
+}
+
+// ════════════════════════
+//  RESIZE CANVAS
+// ════════════════════════
+window.addEventListener('resize', () => {
+  if (pfSnakeCanvas) pfResizeCanvas();
+});
 /* ══════════════════════════════════════════════════════
    TASK RENDERS
    ══════════════════════════════════════════════════════ */
