@@ -24,444 +24,984 @@ const ENGINE_TASK_TYPES = ["X","Y1","Y2"];
 //  DATA
 // ═══════════════════════════════════════════════════════
 const data = {
-  books: [
-    {
-      id: "wesele", title: "Wesele",
-      description: "Dramat Stanisława Wyspiańskiego ukazujący niemoc polskiego społeczeństwa niezdolnego do zrywu narodowego, w którym symboliczne zjawy obnażają wewnętrzne lęki i marzenia bohaterów. Motyw buntu pojawia się w pragnieniu walki o niepodległość, które ostatecznie zostaje uśpione. Motyw tańca — tytułowe wesele i chocholi taniec — symbolizuje marazm i bezwład zbiorowy. Motyw artysty ukazany jest przez inteligencję fascynującą się wsią bez prawdziwego jej rozumienia. Motyw wsi pokazuje przepaść między wyidealizowanym obrazem chłopstwa a jego rzeczywistością. Motyw patriotyzmu wybrzmiewa w wizji walki o niepodległość, której nie udaje się zrealizować. Motyw konfliktu pokoleń i klas społecznych przenika całą strukturę dramatu.",
-      epoch: "młoda polska",
-      motifs: ["motywbuntu", "motywtanca", "motywartysty", "motywwsi", "motywpatriotyzmu", "motywkonfliktupokolen", "motywpolskiipolakow"],
-      coverEmoji: "🎭", aliases: ["Wesele Wyspiańskiego"],
-      characters: ["chochol", "poeta", "mlody", "gospodarz"],
-      quotes: [], images: [{ src: "images/lektury/wesele/wesele_okładka.png" }]
+
+books: [
+  {
+    id: "wesele", title: "Wesele", author: "Stanisław Wyspiański",
+    description: "Dramat ukazujący niemoc polskiego społeczeństwa niezdolnego do zrywu narodowego, w którym symboliczne zjawy obnażają wewnętrzne lęki i marzenia bohaterów.",
+    epoch: "młoda polska",
+    motifs: ["motywbuntu", "motywtanca", "motywartysty", "motywwsi", "motywpatriotyzmu", "motywkonfliktupokolen", "motywpolskiipolakow"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu pojawia się w pragnieniu walki o niepodległość, które ostatecznie zostaje uśpione.",
+      motywtanca: "Motyw tańca — tytułowe wesele i chocholi taniec — symbolizuje marazm i bezwład zbiorowy.",
+      motywartysty: "Motyw artysty ukazany jest przez inteligencję fascynującą się wsią bez prawdziwego jej rozumienia.",
+      motywwsi: "Motyw wsi pokazuje przepaść między wyidealizowanym obrazem chłopstwa a jego rzeczywistością.",
+      motywpatriotyzmu: "Motyw patriotyzmu wybrzmiewa w wizji walki o niepodległość, której nie udaje się zrealizować.",
+      motywkonfliktupokolen: "Motyw konfliktu pokoleń i klas społecznych przenika całą strukturę dramatu.",
+      motywpolskiipolakow: "Refleksja nad tożsamością narodową ukazana przez krakowską inteligencję fascynującą się i jednocześnie nierozumiejącą ludu."
     },
-    {
-      id: "chlopi", title: "Chłopi",
-      description: "Epopeja chłopska Władysława Reymonta ukazująca życie wsi Lipce podporządkowane rytmowi natury, pracy i odwiecznej tradycji. Motyw wsi jest centralny — wieś jawi się jako świat rządzący się własnymi surowymi prawami. Motyw pracy ukazuje trud codziennego życia chłopów jako fundament ich egzystencji. Motyw miłości przejawia się w namiętnym i zakazanym uczuciu między Jagną a Antkiem. Motyw rodziny pokazuje skomplikowane relacje w rodzinie Borynów. Motyw ojca widoczny jest w postaci Macieja Boryny — patriarchy rządzącego gospodarstwem twardą ręką. Motyw przyrody i natury przenika całą narrację, wyznaczając rytm życia i śmierci.",
-      epoch: "młoda polska",
-      motifs: ["motywwsi", "motywpracy", "motywmilosci", "motywrodziny", "motywojca", "motywprzyrodynatury", "motywkobiety", "motywtanca"],
-      coverEmoji: "🌾", aliases: ["Chłopi Reymonta"],
-      characters: ["boryna", "jagna", "antoni"],
-      quotes: [], images: [{ src: "images/lektury/chłopi/Chlopi-plakat-204569-602x802-nobckgr.webp" }]
+    coverEmoji: "🎭", aliases: ["Wesele Wyspiańskiego"],
+    characters: ["chochol", "poeta", "mlody", "gospodarz"],
+    quotes: [], images: [{ src: "images/lektury/wesele/wesele_okładka.png" }]
+  },
+  {
+    id: "chlopi", title: "Chłopi", author: "Władysław Reymont",
+    description: "Epopeja chłopska ukazująca życie wsi Lipce podporządkowane rytmowi natury, pracy i odwiecznej tradycji.",
+    epoch: "młoda polska",
+    motifs: ["motywwsi", "motywpracy", "motywmilosci", "motywrodziny", "motywojca", "motywprzyrodynatury", "motywkobiety", "motywtanca"],
+    motifDescriptions: {
+      motywwsi: "Motyw wsi jest centralny — wieś jawi się jako świat rządzący się własnymi surowymi prawami.",
+      motywpracy: "Motyw pracy ukazuje trud codziennego życia chłopów jako fundament ich egzystencji.",
+      motywmilosci: "Motyw miłości przejawia się w namiętnym i zakazanym uczuciu między Jagną a Antkiem.",
+      motywrodziny: "Motyw rodziny pokazuje skomplikowane relacje w rodzinie Borynów.",
+      motywojca: "Motyw ojca widoczny jest w postaci Macieja Boryny — patriarchy rządzącego gospodarstwem twardą ręką.",
+      motywprzyrodynatury: "Motyw przyrody i natury przenika całą narrację, wyznaczając rytm życia i śmierci.",
+      motywkobiety: "Motyw kobiety ukazany jest przez postać Jagny — tragicznej i zmysłowej, padającej ofiarą ostracyzmu społeczności wiejskiej.",
+      motywtanca: "Motyw tańca pojawia się jako element obyczajowości wiejskiej, odzwierciedlający rytm zbiorowego życia."
     },
-    {
-      id: "antygona", title: "Antygona",
-      description: "Tragedia Sofoklesa ukazująca nierozwiązywalny konflikt między prawem boskim a ludzkim, w którym bohaterka ginie, pozostając wierna własnemu sumieniu. Motyw buntu uosabia Antygona, która wbrew rozkazowi króla postanawia pochować brata. Motyw fatum i przeznaczenia ciąży nad całym rodem Edypa, prowadząc do nieuchronnej katastrofy. Motyw władcy widoczny jest w postaci Kreona, którego pycha niszczy jego rodzinę. Motyw śmierci przenika dramat od początku — śmierć Polinika uruchamia całą tragedię. Motyw konfliktu pokazuje starcie dwóch równorzędnych racji: boskiej i państwowej. Motyw poświęcenia wyraża się w gotowości Antygony do oddania życia za wyższe wartości.",
-      epoch: "antyk",
-      motifs: ["motywbuntu", "motywfatumprzeznaczenia", "motywwladcy", "motywsmierci", "motywkonfliktu", "motywposwiecenia", "motywwladzy"],
-      coverEmoji: "🏛️", aliases: ["Antygona Sofoklesa"],
-      characters: ["antygona", "kreon", "ismena"],
-      quotes: [], images: [{ src: "images/lektury/antygona/productGfx_824_500_500.jpg" }]
+    coverEmoji: "🌾", aliases: ["Chłopi Reymonta"],
+    characters: ["boryna", "jagna", "antoni"],
+    quotes: [], images: [{ src: "images/lektury/chłopi/Chlopi-plakat-204569-602x802-nobckgr.webp" }]
+  },
+  {
+    id: "antygona", title: "Antygona", author: "Sofokles",
+    description: "Tragedia ukazująca nierozwiązywalny konflikt między prawem boskim a ludzkim, w którym bohaterka ginie, pozostając wierna własnemu sumieniu.",
+    epoch: "antyk",
+    motifs: ["motywbuntu", "motywfatumprzeznaczenia", "motywwladcy", "motywsmierci", "motywkonfliktu", "motywposwiecenia", "motywwladzy"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu uosabia Antygona, która wbrew rozkazowi króla postanawia pochować brata.",
+      motywfatumprzeznaczenia: "Motyw fatum i przeznaczenia ciąży nad całym rodem Edypa, prowadząc do nieuchronnej katastrofy.",
+      motywwladcy: "Motyw władcy widoczny jest w postaci Kreona, którego pycha niszczy jego rodzinę.",
+      motywsmierci: "Motyw śmierci przenika dramat od początku — śmierć Polinika uruchamia całą tragedię.",
+      motywkonfliktu: "Motyw konfliktu pokazuje starcie dwóch równorzędnych racji: boskiej i państwowej.",
+      motywposwiecenia: "Motyw poświęcenia wyraża się w gotowości Antygony do oddania życia za wyższe wartości.",
+      motywwladzy: "Motyw władzy ukazany jest przez postawę Kreona, którego absolutna i pyszna władza prowadzi do katastrofy."
     },
-    {
-      id: "tango", title: "Tango",
-      description: "Dramat Sławomira Mrożka ukazujący upadek tradycyjnych wartości i zwycięstwo prymitywnej siły nad intelektem i porządkiem. Motyw buntu przejawia się paradoksalnie — Artur buntuje się przeciwko anarchii własnej rodziny, próbując przywrócić dawny ład. Motyw rodziny ukazuje zdegenerowaną strukturę, w której rodzice odrzucili wszelkie normy i autorytet. Motyw konfliktu pokoleń stanowi oś dramatu — młody Artur pragnie porządku, którego jego rodzice się wyrzekli. Motyw tradycji i obyczajów jest obecny jako wartość, o którą walczy i którą przegrywa główny bohater. Motyw władzy kończy się jej przejęciem przez prymitywnego Edka. Motyw Polski i Polaków pojawia się jako groteska na temat narodowych wad i niemożności reform.",
-      epoch: "współczesność",
-      motifs: ["motywbuntu", "motywrodziny", "motywkonfliktupokolen", "motywobyczajowitradycji", "motywwladzy", "motywpolskiipolakow", "motywkonfliktu"],
-      coverEmoji: "🪑", aliases: ["Tango Mrożka"],
-      characters: ["artur", "edek"],
-      quotes: [], images: [{ src: "images/lektury/tango/plakat-spektakl-Tango-2025.jpg" }]
+    coverEmoji: "🏛️", aliases: ["Antygona Sofoklesa"],
+    characters: ["antygona", "kreon", "ismena"],
+    quotes: [], images: [{ src: "images/lektury/antygona/productGfx_824_500_500.jpg" }]
+  },
+  {
+    id: "tango", title: "Tango", author: "Sławomir Mrożek",
+    description: "Dramat ukazujący upadek tradycyjnych wartości i zwycięstwo prymitywnej siły nad intelektem i porządkiem.",
+    epoch: "współczesność",
+    motifs: ["motywbuntu", "motywrodziny", "motywkonfliktupokolen", "motywobyczajowitradycji", "motywwladzy", "motywpolskiipolakow", "motywkonfliktu"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu przejawia się paradoksalnie — Artur buntuje się przeciwko anarchii własnej rodziny, próbując przywrócić dawny ład.",
+      motywrodziny: "Motyw rodziny ukazuje zdegenerowaną strukturę, w której rodzice odrzucili wszelkie normy i autorytet.",
+      motywkonfliktupokolen: "Motyw konfliktu pokoleń stanowi oś dramatu — młody Artur pragnie porządku, którego jego rodzice się wyrzekli.",
+      motywobyczajowitradycji: "Motyw tradycji i obyczajów jest obecny jako wartość, o którą walczy i którą przegrywa główny bohater.",
+      motywwladzy: "Motyw władzy kończy się jej przejęciem przez prymitywnego Edka.",
+      motywpolskiipolakow: "Motyw Polski i Polaków pojawia się jako groteska na temat narodowych wad i niemożności reform.",
+      motywkonfliktu: "Motyw konfliktu ujawnia się w starciu racjonalnego porządku Artura z anarchią rodziców i brutalnością Edka."
     },
-    {
-      id: "magbet", title: "Makbet",
-      description: "Tragedia Szekspira ukazująca destrukcyjną siłę ambicji, która popycha człowieka do zbrodni i prowadzi do całkowitego rozpadu jego psychiki. Motyw zbrodni jest centralny — morderstwo Dunkana otwiera spiralę kolejnych zabójstw. Motyw władzy ukazuje, jak pragnienie panowania niszczy człowieczeństwo bohatera. Motyw przepowiedni uruchamia całą akcję — słowa czarownic stają się samospełniającą się przepowiednią. Motyw fatum i przeznaczenia przenika los Makbeta, który nie może uciec przed przepowiednią. Motyw szaleństwa dotyka Lady Makbet, którą wyrzuty sumienia doprowadzają do obłędu. Motyw winy i kary domyka tragedię — Makbet ponosi karę za swoje zbrodnie. Motyw spisku towarzyszy planowaniu i wykonaniu każdego morderstwa.",
-      epoch: "renesans",
-      motifs: ["motywzbrodni", "motywwladzy", "motywprzepowiedni", "motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywspisku", "motywzla"],
-      coverEmoji: "👑", aliases: ["Macbeth", "Makbet Szekspira"],
-      characters: ["makbet", "lmakbet"],
-      quotes: [], images: [{ src: "images/lektury/magbet/4e4421b6b18d205ec1e82cb4bb61ad53.jpg" }]
+    coverEmoji: "🪑", aliases: ["Tango Mrożka"],
+    characters: ["artur", "edek"],
+    quotes: [], images: [{ src: "images/lektury/tango/plakat-spektakl-Tango-2025.jpg" }]
+  },
+  {
+    id: "magbet", title: "Makbet", author: "William Szekspir",
+    description: "Tragedia ukazująca destrukcyjną siłę ambicji, która popycha człowieka do zbrodni i prowadzi do całkowitego rozpadu jego psychiki.",
+    epoch: "renesans",
+    motifs: ["motywzbrodni", "motywwladzy", "motywprzepowiedni", "motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywspisku", "motywzla"],
+    motifDescriptions: {
+      motywzbrodni: "Motyw zbrodni jest centralny — morderstwo Dunkana otwiera spiralę kolejnych zabójstw.",
+      motywwladzy: "Motyw władzy ukazuje, jak pragnienie panowania niszczy człowieczeństwo bohatera.",
+      motywprzepowiedni: "Motyw przepowiedni uruchamia całą akcję — słowa czarownic stają się samospełniającą się przepowiednią.",
+      motywfatumprzeznaczenia: "Motyw fatum i przeznaczenia przenika los Makbeta, który nie może uciec przed przepowiednią.",
+      motywszalenstwa: "Motyw szaleństwa dotyka Lady Makbet, którą wyrzuty sumienia doprowadzają do obłędu.",
+      motywwinyikary: "Motyw winy i kary domyka tragedię — Makbet ponosi karę za swoje zbrodnie.",
+      motywspisku: "Motyw spisku towarzyszy planowaniu i wykonaniu każdego morderstwa.",
+      motywzla: "Motyw zła ukazany jest przez czarownice oraz postępującą degenerację moralną głównych bohaterów."
     },
-    {
-      id: "zbrodniaikara", title: "Zbrodnia i kara",
-      description: "Powieść psychologiczna Dostojewskiego śledząca upadek i odkupienie człowieka, który morderstwem chce udowodnić swoją wyższość nad zwykłymi ludźmi. Motyw zbrodni i motyw winy i kary są ze sobą nierozerwalnie splecione — Raskolnikow nie może uciec przed własnym sumieniem. Motyw biedy ukazuje środowisko petersburskiej nędzy jako tło moralnego upadku bohatera. Motyw miasta — Petersburg jawi się jako przestrzeń alienacji i moralnego zepsucia. Motyw miłości przejawia się w relacji Raskolnikowa z Sonią, która prowadzi go ku odkupieniu. Motyw poświęcenia uosabia Sonia, która wyrzeka się własnego dobra dla rodziny i ukochanego. Motyw przemiany zamyka powieść — bohater przez cierpienie dochodzi do duchowego odrodzenia.",
-      epoch: "pozytywizm",
-      motifs: ["motywzbrodni", "motywwinyikary", "motywbiedy", "motywmiasta", "motywmilosci", "motywposwiecenia", "motywprzemiany", "motywszalenstwa"],
-      coverEmoji: "🕯️", aliases: ["Zbrodnia i Kara", "Zbrodnia i kara Dostojewskiego"],
-      characters: ["raskolnikow", "sonia"],
-      quotes: [], images: [{ src: "images/lektury/zbrodnia i kara/1198.-ZBRODNIA_i_KARA.jpg" }]
+    coverEmoji: "👑", aliases: ["Macbeth", "Makbet Szekspira"],
+    characters: ["makbet", "lmakbet"],
+    quotes: [], images: [{ src: "images/lektury/magbet/4e4421b6b18d205ec1e82cb4bb61ad53.jpg" }]
+  },
+  {
+    id: "zbrodniaikara", title: "Zbrodnia i kara", author: "Fiodor Dostojewski",
+    description: "Powieść psychologiczna śledząca upadek i odkupienie człowieka, który morderstwem chce udowodnić swoją wyższość nad zwykłymi ludźmi.",
+    epoch: "pozytywizm",
+    motifs: ["motywzbrodni", "motywwinyikary", "motywbiedy", "motywmiasta", "motywmilosci", "motywposwiecenia", "motywprzemiany", "motywszalenstwa"],
+    motifDescriptions: {
+      motywzbrodni: "Motyw zbrodni i motyw winy i kary są ze sobą nierozerwalnie splecione — Raskolnikow nie może uciec przed własnym sumieniem.",
+      motywwinyikary: "Motyw winy i kary ukazuje, jak wyrzuty sumienia stają się dla Raskolnikowa karą cięższą niż wyrok sądowy.",
+      motywbiedy: "Motyw biedy ukazuje środowisko petersburskiej nędzy jako tło moralnego upadku bohatera.",
+      motywmiasta: "Motyw miasta — Petersburg jawi się jako przestrzeń alienacji i moralnego zepsucia.",
+      motywmilosci: "Motyw miłości przejawia się w relacji Raskolnikowa z Sonią, która prowadzi go ku odkupieniu.",
+      motywposwiecenia: "Motyw poświęcenia uosabia Sonia, która wyrzeka się własnego dobra dla rodziny i ukochanego.",
+      motywprzemiany: "Motyw przemiany zamyka powieść — bohater przez cierpienie dochodzi do duchowego odrodzenia.",
+      motywszalenstwa: "Motyw szaleństwa ukazany jest przez gorączkowy stan Raskolnikowa po popełnieniu zbrodni."
     },
-    {
-      id: "innyswiat", title: "Inny świat",
-      description: "Autobiograficzny reportaż Gustawa Herlinga-Grudzińskiego będący świadectwem pobytu w sowieckim łagrze, gdzie system totalitarny testuje granice człowieczeństwa. Motyw totalitaryzmu ukazuje mechanizmy sowieckiego systemu, który niszczy jednostkę fizycznie i psychicznie. Motyw cierpienia przenika każdą stronę — głód, zimno i praca ponad siły są codziennością więźniów. Motyw wolności objawia się przez jej całkowite pozbawienie i tęsknotę za nią. Motyw poświęcenia i solidarności między więźniami bywa jedynym ratunkiem dla człowieczeństwa. Motyw zła ukazuje system obozowy jako wcielenie zorganizowanego zła. Motyw samotności dotyka każdego więźnia odizolowanego od bliskich i normalnego świata.",
-      epoch: "współczesność",
-      motifs: ["motywtotalitaryzmu", "motywcierpienia", "motywwolnosci", "motywposwiecenia", "motywzla", "motywsamotnosci"],
-      coverEmoji: "⛓️", aliases: ["Inny Świat Herlinga-Grudzińskiego"],
-      characters: [],
-      quotes: [], images: [{ src: "images/lektury/inny świat/images (2).jpeg" }]
+    coverEmoji: "🕯️", aliases: ["Zbrodnia i Kara", "Zbrodnia i kara Dostojewskiego"],
+    characters: ["raskolnikow", "sonia"],
+    quotes: [], images: [{ src: "images/lektury/zbrodnia i kara/1198.-ZBRODNIA_i_KARA.jpg" }]
+  },
+  {
+    id: "innyswiat", title: "Inny świat", author: "Gustaw Herling-Grudziński",
+    description: "Autobiograficzny reportaż będący świadectwem pobytu w sowieckim łagrze, gdzie system totalitarny testuje granice człowieczeństwa.",
+    epoch: "współczesność",
+    motifs: ["motywtotalitaryzmu", "motywcierpienia", "motywwolnosci", "motywposwiecenia", "motywzla", "motywsamotnosci"],
+    motifDescriptions: {
+      motywtotalitaryzmu: "Motyw totalitaryzmu ukazuje mechanizmy sowieckiego systemu, który niszczy jednostkę fizycznie i psychicznie.",
+      motywcierpienia: "Motyw cierpienia przenika każdą stronę — głód, zimno i praca ponad siły są codziennością więźniów.",
+      motywwolnosci: "Motyw wolności objawia się przez jej całkowite pozbawienie i tęsknotę za nią.",
+      motywposwiecenia: "Motyw poświęcenia i solidarności między więźniami bywa jedynym ratunkiem dla człowieczeństwa.",
+      motywzla: "Motyw zła ukazuje system obozowy jako wcielenie zorganizowanego zła.",
+      motywsamotnosci: "Motyw samotności dotyka każdego więźnia odizolowanego od bliskich i normalnego świata."
     },
-    {
-      id: "1984", title: "Rok 1984",
-      description: "Antyutopia George'a Orwella ukazująca totalitarne państwo Oceania, w którym Partia kontroluje każdy aspekt życia obywateli, włącznie z myślami i uczuciami. Motyw totalitaryzmu jest centralny — Partia stosuje inwigilację, nowomowę i przepisywanie historii jako narzędzia kontroli. Motyw buntu przejawia się w próbie Winstona zachowania własnej tożsamości i podjęcia walki z systemem. Motyw miłości między Winstonem a Julią staje się aktem oporu wobec Partii zakazującej prawdziwych uczuć. Motyw wolności ukazany jest przez jej całkowity brak i marzenie o świecie bez Wielkiego Brata. Motyw władzy analizuje mechanizmy utrzymywania absolutnej kontroli nad społeczeństwem. Motyw zdrady — O'Brien zdradza Winstona — ostatecznie łamie bohatera.",
-      epoch: "współczesność",
-      motifs: ["motywtotalitaryzmu", "motywbuntu", "motywmilosci", "motywwolnosci", "motywwladzy", "motywzdrady"],
-      coverEmoji: "📕", aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
-      characters: ["winston", "brat"],
-      quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
+    coverEmoji: "⛓️", aliases: ["Inny Świat Herlinga-Grudzińskiego"],
+    characters: [],
+    quotes: [], images: [{ src: "images/lektury/inny świat/images (2).jpeg" }]
+  },
+  {
+    id: "1984", title: "Rok 1984", author: "George Orwell",
+    description: "Antyutopia ukazująca totalitarne państwo Oceania, w którym Partia kontroluje każdy aspekt życia obywateli, włącznie z myślami i uczuciami.",
+    epoch: "współczesność",
+    motifs: ["motywtotalitaryzmu", "motywbuntu", "motywmilosci", "motywwolnosci", "motywwladzy", "motywzdrady"],
+    motifDescriptions: {
+      motywtotalitaryzmu: "Motyw totalitaryzmu jest centralny — Partia stosuje inwigilację, nowomowę i przepisywanie historii jako narzędzia kontroli.",
+      motywbuntu: "Motyw buntu przejawia się w próbie Winstona zachowania własnej tożsamości i podjęcia walki z systemem.",
+      motywmilosci: "Motyw miłości między Winstonem a Julią staje się aktem oporu wobec Partii zakazującej prawdziwych uczuć.",
+      motywwolnosci: "Motyw wolności ukazany jest przez jej całkowity brak i marzenie o świecie bez Wielkiego Brata.",
+      motywwladzy: "Motyw władzy analizuje mechanizmy utrzymywania absolutnej kontroli nad społeczeństwem.",
+      motywzdrady: "Motyw zdrady — O'Brien zdradza Winstona — ostatecznie łamie bohatera."
     },
-    {
-      id: "skapiec", title: "Skąpiec",
-      description: "Komedia Moliera ukazująca obraz człowieka opętanego żądzą pieniądza, której skutkiem jest zniszczenie relacji rodzinnych i społecznych. Motyw pieniądza jest osią całej komedii — Harpagon przedkłada majątek nad szczęście własnych dzieci. Motyw rodziny ukazuje, jak skąpstwo niszczy więzi — ojciec staje się wrogiem własnych dzieci. Motyw konfliktu pokoleń przejawia się w starciu Harpagona z dziećmi pragnącymi miłości i normalnego życia. Motyw miłości pojawia się jako wartość, której pieniądz nie jest w stanie zastąpić. Motyw mieszczaństwa portretuje środowisko paryskiej klasy średniej i jej obsesję na punkcie majątku.",
-      epoch: "barok",
-      motifs: ["motywpieniadza", "motywrodziny", "motywkonfliktupokolen", "motywmilosci", "motywmieszczanstwa"],
-      coverEmoji: "💰", aliases: ["Skąpiec Moliera"],
-      characters: ["harpagon"],
-      quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    coverEmoji: "📕", aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
+    characters: ["winston", "brat"],
+    quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
+  },
+  {
+    id: "skapiec", title: "Skąpiec", author: "Molier",
+    description: "Komedia ukazująca obraz człowieka opętanego żądzą pieniądza, której skutkiem jest zniszczenie relacji rodzinnych i społecznych.",
+    epoch: "barok",
+    motifs: ["motywpieniadza", "motywrodziny", "motywkonfliktupokolen", "motywmilosci", "motywmieszczanstwa"],
+    motifDescriptions: {
+      motywpieniadza: "Motyw pieniądza jest osią całej komedii — Harpagon przedkłada majątek nad szczęście własnych dzieci.",
+      motywrodziny: "Motyw rodziny ukazuje, jak skąpstwo niszczy więzi — ojciec staje się wrogiem własnych dzieci.",
+      motywkonfliktupokolen: "Motyw konfliktu pokoleń przejawia się w starciu Harpagona z dziećmi pragnącymi miłości i normalnego życia.",
+      motywmilosci: "Motyw miłości pojawia się jako wartość, której pieniądz nie jest w stanie zastąpić.",
+      motywmieszczanstwa: "Motyw mieszczaństwa portretuje środowisko paryskiej klasy średniej i jej obsesję na punkcie majątku."
     },
-    {
-      id: "lalka", title: "Lalka",
-      description: "Powieść Bolesława Prusa ukazująca przekrój społeczeństwa polskiego epoki pozytywizmu przez pryzmat losów kupca Wokulskiego, który poświęca wszystko dla nieosiągalnej miłości. Motyw miłości — obsesyjna miłość Wokulskiego do Izabeli Łęckiej — jest motorem całej fabuły. Motyw kariery ukazuje drogę bohatera od ubogiego studenta do zamożnego kupca. Motyw arystokracji portretuje zdegenerowaną szlachtę niezdolną do pracy i pogardzającą ludźmi niższego stanu. Motyw filantropii przejawia się w działalności Wokulskiego na rzecz ubogich. Motyw mieszczaństwa i pracy pokazuje nową warstwę społeczną jako rzeczywistą siłę napędową kraju. Motyw przemijania dotyka Rzeckiego — starego idealisty, który nie rozumie nowego świata.",
-      epoch: "pozytywizm",
-      motifs: ["motywmilosci", "motywkariery", "motywarystokracji", "motywfilantropii", "motywmieszczanstwa", "motywpracy", "motywprzemijania", "motywkobiety"],
-      coverEmoji: "🪆", aliases: ["Lalka Prusa"],
-      characters: ["wokulski", "rzecki", "lecka"],
-      quotes: [], images: [{ src: "images/lektury/lalka/2823.jpg" }]
+    coverEmoji: "💰", aliases: ["Skąpiec Moliera"],
+    characters: ["harpagon"],
+    quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+  },
+  {
+    id: "lalka", title: "Lalka", author: "Bolesław Prus",
+    description: "Powieść ukazująca przekrój społeczeństwa polskiego epoki pozytywizmu przez pryzmat losów kupca Wokulskiego, który poświęca wszystko dla nieosiągalnej miłości.",
+    epoch: "pozytywizm",
+    motifs: ["motywmilosci", "motywkariery", "motywarystokracji", "motywfilantropii", "motywmieszczanstwa", "motywpracy", "motywprzemijania", "motywkobiety"],
+    motifDescriptions: {
+      motywmilosci: "Motyw miłości — obsesyjna miłość Wokulskiego do Izabeli Łęckiej — jest motorem całej fabuły.",
+      motywkariery: "Motyw kariery ukazuje drogę bohatera od ubogiego studenta do zamożnego kupca.",
+      motywarystokracji: "Motyw arystokracji portretuje zdegenerowaną szlachtę niezdolną do pracy i pogardzającą ludźmi niższego stanu.",
+      motywfilantropii: "Motyw filantropii przejawia się w działalności Wokulskiego na rzecz ubogich.",
+      motywmieszczanstwa: "Motyw mieszczaństwa i pracy pokazuje nową warstwę społeczną jako rzeczywistą siłę napędową kraju.",
+      motywpracy: "Motyw pracy ukazany jest jako fundament nowej, mieszczańskiej siły społecznej w przeciwieństwie do arystokracji.",
+      motywprzemijania: "Motyw przemijania dotyka Rzeckiego — starego idealisty, który nie rozumie nowego świata.",
+      motywkobiety: "Motyw kobiety ukazany jest przez postać Izabeli Łęckiej — pięknej, lecz próżnej i instrumentalnie traktującej uczucia."
     },
-    {
-      id: "potop", title: "Potop",
-      description: "Powieść historyczna Henryka Sienkiewicza ukazująca czasy potopu szwedzkiego i moralną przemianę awanturnika Kmicica w bohatera walczącego za ojczyznę. Motyw patriotyzmu jest centralny — walka ze Szwedami staje się testem miłości do ojczyzny. Motyw przemiany ukazuje drogę Kmicica od człowieka skłóconego z prawem do bohatera narodowego. Motyw rycerza uosabia Wołodyjowski — wzór honoru, odwagi i wierności ideałom. Motyw miłości — uczucie Kmicica do Oleńki — mobilizuje go do zmiany i walki o honor. Motyw zdrady pojawia się jako pokusa, której niektórzy bohaterowie ulegają, stając po stronie Szwedów. Motyw wiary i Boga przenika postawę bohaterów, którzy widzą wojnę jako sprawę religijną.",
-      epoch: "pozytywizm",
-      motifs: ["motywpatriotyzmu", "motywprzemiany", "motywrycerza", "motywmilosci", "motywzdrady", "motywboga", "motywwojny"],
-      coverEmoji: "⚔️", aliases: ["Potop Sienkiewicza"],
-      characters: ["kmicic", "michal"],
-      quotes: [], images: [{ src: "images/lektury/potop/potop.jpg" }]
+    coverEmoji: "🪆", aliases: ["Lalka Prusa"],
+    characters: ["wokulski", "rzecki", "lecka"],
+    quotes: [], images: [{ src: "images/lektury/lalka/2823.jpg" }]
+  },
+  {
+    id: "potop", title: "Potop", author: "Henryk Sienkiewicz",
+    description: "Powieść historyczna ukazująca czasy potopu szwedzkiego i moralną przemianę awanturnika Kmicica w bohatera walczącego za ojczyznę.",
+    epoch: "pozytywizm",
+    motifs: ["motywpatriotyzmu", "motywprzemiany", "motywrycerza", "motywmilosci", "motywzdrady", "motywboga", "motywwojny"],
+    motifDescriptions: {
+      motywpatriotyzmu: "Motyw patriotyzmu jest centralny — walka ze Szwedami staje się testem miłości do ojczyzny.",
+      motywprzemiany: "Motyw przemiany ukazuje drogę Kmicica od człowieka skłóconego z prawem do bohatera narodowego.",
+      motywrycerza: "Motyw rycerza uosabia Wołodyjowski — wzór honoru, odwagi i wierności ideałom.",
+      motywmilosci: "Motyw miłości — uczucie Kmicica do Oleńki — mobilizuje go do zmiany i walki o honor.",
+      motywzdrady: "Motyw zdrady pojawia się jako pokusa, której niektórzy bohaterowie ulegają, stając po stronie Szwedów.",
+      motywboga: "Motyw wiary i Boga przenika postawę bohaterów, którzy widzą wojnę jako sprawę religijną.",
+      motywwojny: "Motyw wojny ukazany jest jako próba charakterów i okazja do moralnego odrodzenia bohaterów."
     },
-    {
-      id: "przedwiosnie", title: "Przedwiośnie",
-      description: "Powieść Stefana Żeromskiego ukazująca rozterki ideowe młodego Polaka powracającego do odrodzonej ojczyzny i zderzającego się z brutalną rzeczywistością społeczną. Motyw przemiany ukazuje ewolucję Cezarego Baryki od człowieka bez tożsamości do kogoś, kto musi wybrać swoją drogę. Motyw rewolucji kusi bohatera ideą radykalnej zmiany, którą widział w Baku. Motyw buntu przejawia się w niezgodzie Cezarego na niesprawiedliwość społeczną odrodzonej Polski. Motyw ojca — Seweryn Baryka wpaja synowi ideę szklanych domów i miłość do Polski. Motyw patriotyzmu jest problematyczny — Polska nie spełnia idealnych wyobrażeń bohatera. Motyw konfliktu społecznego ukazuje przepaść między biedotą a uprzywilejowanymi.",
-      epoch: "młoda polska",
-      motifs: ["motywprzemiany", "motywrewolucji", "motywbuntu", "motywojca", "motywpatriotyzmu", "motywkonfliktu", "motywbiedy"],
-      coverEmoji: "🌱", aliases: ["Przedwiośnie Żeromskiego"],
-      characters: ["baryka", "starybaryka"],
-      quotes: [], images: [{ src: "images/lektury/przedwiosnie/przedwiosnie.jpg" }]
+    coverEmoji: "⚔️", aliases: ["Potop Sienkiewicza"],
+    characters: ["kmicic", "michal"],
+    quotes: [], images: [{ src: "images/lektury/potop/potop.jpg" }]
+  },
+  {
+    id: "przedwiosnie", title: "Przedwiośnie", author: "Stefan Żeromski",
+    description: "Powieść ukazująca rozterki ideowe młodego Polaka powracającego do odrodzonej ojczyzny i zderzającego się z brutalną rzeczywistością społeczną.",
+    epoch: "młoda polska",
+    motifs: ["motywprzemiany", "motywrewolucji", "motywbuntu", "motywojca", "motywpatriotyzmu", "motywkonfliktu", "motywbiedy"],
+    motifDescriptions: {
+      motywprzemiany: "Motyw przemiany ukazuje ewolucję Cezarego Baryki od człowieka bez tożsamości do kogoś, kto musi wybrać swoją drogę.",
+      motywrewolucji: "Motyw rewolucji kusi bohatera ideą radykalnej zmiany, którą widział w Baku.",
+      motywbuntu: "Motyw buntu przejawia się w niezgodzie Cezarego na niesprawiedliwość społeczną odrodzonej Polski.",
+      motywojca: "Motyw ojca — Seweryn Baryka wpaja synowi ideę szklanych domów i miłość do Polski.",
+      motywpatriotyzmu: "Motyw patriotyzmu jest problematyczny — Polska nie spełnia idealnych wyobrażeń bohatera.",
+      motywkonfliktu: "Motyw konfliktu społecznego ukazuje przepaść między biedotą a uprzywilejowanymi.",
+      motywbiedy: "Motyw biedy widoczny jest między innymi w obrazie dzielnicy żydowskiej i nędzy odrodzonej Polski."
     },
-    {
-      id: "ferdydurke", title: "Ferdydurke",
-      description: "Groteskowa powieść Witolda Gombrowicza o zniewoleniu człowieka przez społeczne formy i role, którym nie jest w stanie się oprzeć. Motyw buntu przejawia się w desperackiej próbie Józia wyrwania się z narzucanych mu przez społeczeństwo masek. Motyw szkoły ukazuje edukację jako instytucję produkującą niedojrzałość i konformizm. Motyw domu — stancja Młodziaków i wieś Miętusa — to kolejne przestrzenie, w których bohater konfrontuje się z różnymi formami zniewolenia. Motyw dworku portretuje polską szlachtę i jej przywiązanie do tradycji jako kolejną pułapkę. Motyw konfliktu pokoleń widoczny jest w relacjach między nauczycielami a uczniami. Motyw przemiany jest pozorny — bohater zmienia otoczenie, ale nie może uciec przed Formą.",
-      epoch: "współczesność",
-      motifs: ["motywbuntu", "motywszkoly", "motywdomu", "motywdworku", "motywkonfliktupokolen", "motywprzemiany", "motywszlachty"],
-      coverEmoji: "🎭", aliases: ["Ferdydurke Gombrowicza"],
-      characters: ["jozek", "mietus"],
-      quotes: [], images: [{ src: "images/lektury/ferdydurke/ferdydurke.jpg" }]
+    coverEmoji: "🌱", aliases: ["Przedwiośnie Żeromskiego"],
+    characters: ["baryka", "starybaryka"],
+    quotes: [], images: [{ src: "images/lektury/przedwiosnie/przedwiosnie.jpg" }]
+  },
+  {
+    id: "ferdydurke", title: "Ferdydurke", author: "Witold Gombrowicz",
+    description: "Groteskowa powieść o zniewoleniu człowieka przez społeczne formy i role, którym nie jest w stanie się oprzeć.",
+    epoch: "współczesność",
+    motifs: ["motywbuntu", "motywszkoly", "motywdomu", "motywdworku", "motywkonfliktupokolen", "motywprzemiany", "motywszlachty"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu przejawia się w desperackiej próbie Józia wyrwania się z narzucanych mu przez społeczeństwo masek.",
+      motywszkoly: "Motyw szkoły ukazuje edukację jako instytucję produkującą niedojrzałość i konformizm.",
+      motywdomu: "Motyw domu — stancja Młodziaków i wieś Miętusa — to kolejne przestrzenie, w których bohater konfrontuje się z różnymi formami zniewolenia.",
+      motywdworku: "Motyw dworku portretuje polską szlachtę i jej przywiązanie do tradycji jako kolejną pułapkę.",
+      motywkonfliktupokolen: "Motyw konfliktu pokoleń widoczny jest w relacjach między nauczycielami a uczniami.",
+      motywprzemiany: "Motyw przemiany jest pozorny — bohater zmienia otoczenie, ale nie może uciec przed Formą.",
+      motywszlachty: "Motyw szlachty ukazany jest przez świat dworku jako kolejna forma społeczna, w którą Józio zostaje wtłoczony."
     },
-    {
-      id: "gaz", title: "Proszę państwa do gazu",
-      description: "Opowiadanie Tadeusza Borowskiego ukazujące rzeczywistość obozu koncentracyjnego z perspektywy więźnia funkcyjnego, w której dehumanizacja staje się warunkiem przeżycia. Motyw wojny i zbrodni ukazuje obóz jako skrajny wyraz bestialstwa wojennego. Motyw cierpienia jest wszechobecny — śmierć i ból stają się codziennością, wobec której bohater musi stać się obojętny. Motyw zła — system obozowy jako wcielenie zorganizowanego, biurokratycznego zła. Motyw przemiany człowieka ukazuje, jak ekstremalny system niszczy moralność i człowieczeństwo. Motyw samotności — każdy więzień jest sam wobec machiny zagłady.",
-      epoch: "współczesność",
-      motifs: ["motywwojny", "motywzbrodni", "motywcierpienia", "motywzla", "motywprzemiany", "motywsamotnosci"],
-      coverEmoji: "🔥", aliases: ["Proszę państwa do gazu Borowskiego"],
-      characters: [],
-      quotes: [], images: [{ src: "images/lektury/gaz/gaz.jpg" }]
+    coverEmoji: "🎭", aliases: ["Ferdydurke Gombrowicza"],
+    characters: ["jozek", "mietus"],
+    quotes: [], images: [{ src: "images/lektury/ferdydurke/ferdydurke.jpg" }]
+  },
+  {
+    id: "gaz", title: "Proszę państwa do gazu", author: "Tadeusz Borowski",
+    description: "Opowiadanie ukazujące rzeczywistość obozu koncentracyjnego z perspektywy więźnia funkcyjnego, w której dehumanizacja staje się warunkiem przeżycia.",
+    epoch: "współczesność",
+    motifs: ["motywwojny", "motywzbrodni", "motywcierpienia", "motywzla", "motywprzemiany", "motywsamotnosci"],
+    motifDescriptions: {
+      motywwojny: "Motyw wojny i zbrodni ukazuje obóz jako skrajny wyraz bestialstwa wojennego.",
+      motywzbrodni: "Motyw zbrodni ujawnia się w systemowym, zorganizowanym mordowaniu jako codzienności obozu.",
+      motywcierpienia: "Motyw cierpienia jest wszechobecny — śmierć i ból stają się codziennością, wobec której bohater musi stać się obojętny.",
+      motywzla: "Motyw zła — system obozowy jako wcielenie zorganizowanego, biurokratycznego zła.",
+      motywprzemiany: "Motyw przemiany człowieka ukazuje, jak ekstremalny system niszczy moralność i człowieczeństwo.",
+      motywsamotnosci: "Motyw samotności — każdy więzień jest sam wobec machiny zagłady."
     },
-    {
-      id: "getto", title: "Zdążyć przed Panem Bogiem",
-      description: "Reportaż Hanny Krall oparty na rozmowach z Markiem Edelmanem, ostatnim dowódcą powstania w getcie warszawskim, ukazujący granice człowieczeństwa w ekstremalnych warunkach. Motyw buntu — powstanie w getcie jako świadomy wybór śmierci z bronią w ręku zamiast biernej zagłady. Motyw śmierci przenika każdą rozmowę — lekarz i powstaniec nieustannie obcują ze śmiercią. Motyw poświęcenia ukazuje gotowość do oddania życia za godność i symbolicznie — za pozostałych. Motyw Żyda jest centralny — tożsamość żydowska i jej zagłada stanowią oś narracji. Motyw boga i sensu cierpienia pojawia się w filozoficznych refleksjach Edelmana. Motyw wojny ukazuje mechanizmy eksterminacji i heroicznego oporu.",
-      epoch: "współczesność",
-      motifs: ["motywbuntu", "motywsmierci", "motywposwiecenia", "motywzyda", "motywboga", "motywwojny"],
-      coverEmoji: "✡️", aliases: ["Zdążyć przed Panem Bogiem Krall"],
-      characters: [],
-      quotes: [], images: [{ src: "images/lektury/getto/getto.jpg" }]
+    coverEmoji: "🔥", aliases: ["Proszę państwa do gazu Borowskiego"],
+    characters: [],
+    quotes: [], images: [{ src: "images/lektury/gaz/gaz.jpg" }]
+  },
+  {
+    id: "getto", title: "Zdążyć przed Panem Bogiem", author: "Hanna Krall",
+    description: "Reportaż oparty na rozmowach z Markiem Edelmanem, ostatnim dowódcą powstania w getcie warszawskim, ukazujący granice człowieczeństwa w ekstremalnych warunkach.",
+    epoch: "współczesność",
+    motifs: ["motywbuntu", "motywsmierci", "motywposwiecenia", "motywzyda", "motywboga", "motywwojny"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu — powstanie w getcie jako świadomy wybór śmierci z bronią w ręku zamiast biernej zagłady.",
+      motywsmierci: "Motyw śmierci przenika każdą rozmowę — lekarz i powstaniec nieustannie obcują ze śmiercią.",
+      motywposwiecenia: "Motyw poświęcenia ukazuje gotowość do oddania życia za godność i symbolicznie — za pozostałych.",
+      motywzyda: "Motyw Żyda jest centralny — tożsamość żydowska i jej zagłada stanowią oś narracji.",
+      motywboga: "Motyw boga i sensu cierpienia pojawia się w filozoficznych refleksjach Edelmana.",
+      motywwojny: "Motyw wojny ukazuje mechanizmy eksterminacji i heroicznego oporu."
     },
-    {
-      id: "dzuma", title: "Dżuma",
-      description: "Powieść Alberta Camusa ukazująca epidemię dżumy w algierskim Oranie jako alegorię zła, wobec którego człowiek musi dokonać moralnego wyboru. Motyw poświęcenia jest centralny — doktor Rieux i jego towarzysze rezygnują z osobistego szczęścia, by walczyć z epidemią. Motyw przyjaźni łączy bohaterów walczących ramię w ramię ze wspólnym wrogiem. Motyw cierpienia ukazuje masową śmierć i ból jako doświadczenie zbiorowe. Motyw boga i sensu cierpienia — postać księdza Paneloux pyta, dlaczego Bóg dopuszcza takie nieszczęście. Motyw buntu — postawa Rieux jest buntem przeciwko złu, nawet bez nadziei na ostateczne zwycięstwo. Motyw śmierci nieustannie towarzyszy postaciom, kształtując ich wybory moralne.",
-      epoch: "współczesność",
-      motifs: ["motywposwiecenia", "motywprzyjazni", "motywcierpienia", "motywboga", "motywbuntu", "motywsmierci"],
-      coverEmoji: "🦠", aliases: ["Dżuma Camusa"],
-      characters: ["rieux"],
-      quotes: [], images: [{ src: "images/lektury/dzuma/dzuma.jpg" }]
+    coverEmoji: "✡️", aliases: ["Zdążyć przed Panem Bogiem Krall"],
+    characters: [],
+    quotes: [], images: [{ src: "images/lektury/getto/getto.jpg" }]
+  },
+  {
+    id: "dzuma", title: "Dżuma", author: "Albert Camus",
+    description: "Powieść ukazująca epidemię dżumy w algierskim Oranie jako alegorię zła, wobec którego człowiek musi dokonać moralnego wyboru.",
+    epoch: "współczesność",
+    motifs: ["motywposwiecenia", "motywprzyjazni", "motywcierpienia", "motywboga", "motywbuntu", "motywsmierci"],
+    motifDescriptions: {
+      motywposwiecenia: "Motyw poświęcenia jest centralny — doktor Rieux i jego towarzysze rezygnują z osobistego szczęścia, by walczyć z epidemią.",
+      motywprzyjazni: "Motyw przyjaźni łączy bohaterów walczących ramię w ramię ze wspólnym wrogiem.",
+      motywcierpienia: "Motyw cierpienia ukazuje masową śmierć i ból jako doświadczenie zbiorowe.",
+      motywboga: "Motyw boga i sensu cierpienia — postać księdza Paneloux pyta, dlaczego Bóg dopuszcza takie nieszczęście.",
+      motywbuntu: "Motyw buntu — postawa Rieux jest buntem przeciwko złu, nawet bez nadziei na ostateczne zwycięstwo.",
+      motywsmierci: "Motyw śmierci nieustannie towarzyszy postaciom, kształtując ich wybory moralne."
     },
-    {
-      id: "edek", title: "Górą Edek",
-      description: "Dramat Miroslava Srnki ukazujący zderzenie inteligencji z prymitywną siłą w przestrzeni postkomunistycznej rzeczywistości. Motyw władzy — Edek zdobywa władzę nie przez intelekt, lecz przez brutalną siłę i bezczelność. Motyw konfliktu pokoleń ukazuje starcie starych wartości z nową, cyniczną rzeczywistością. Motyw Polski i Polaków pojawia się jako refleksja nad kondycją społeczeństwa po transformacji.",
-      epoch: "współczesność",
-      motifs: ["motywwladzy", "motywkonfliktupokolen", "motywpolskiipolakow"],
-      coverEmoji: "👊", aliases: ["Górą Edek"],
-      characters: [],
-      quotes: [], images: [{ src: "images/lektury/edek/edek.jpg" }]
+    coverEmoji: "🦠", aliases: ["Dżuma Camusa"],
+    characters: ["rieux"],
+    quotes: [], images: [{ src: "images/lektury/dzuma/dzuma.jpg" }]
+  },
+  {
+    id: "edek", title: "Górą Edek", author: "Marek Nowakowski",
+    description: "Dramat ukazujący zderzenie inteligencji z prymitywną siłą w przestrzeni postkomunistycznej rzeczywistości.",
+    epoch: "współczesność",
+    motifs: ["motywwladzy", "motywkonfliktupokolen", "motywpolskiipolakow"],
+    motifDescriptions: {
+      motywwladzy: "Motyw władzy — Edek zdobywa władzę nie przez intelekt, lecz przez brutalną siłę i bezczelność.",
+      motywkonfliktupokolen: "Motyw konfliktu pokoleń ukazuje starcie starych wartości z nową, cyniczną rzeczywistością.",
+      motywpolskiipolakow: "Motyw Polski i Polaków pojawia się jako refleksja nad kondycją społeczeństwa po transformacji."
     },
-    {
-      id: "miejsce", title: "Miejsce",
-      description: "Opowiadanie Sławomira Mrożka eksplorujące absurd i groteską codzienności oraz pytanie o to, jak człowiek odnajduje swoje miejsce w świecie. Motyw tożsamości i przynależności przenika narrację. Motyw konfliktu społecznego ujawnia się w zderzeniu jednostki z otaczającą ją rzeczywistością.",
-      epoch: "współczesność",
-      motifs: ["motywkonfliktu", "motywsamotnosci"],
-      coverEmoji: "📍", aliases: ["Miejsce Mrożka"],
-      characters: [],
-      quotes: [], images: [{ src: "images/lektury/miejsce/miejsce.jpg" }]
+    coverEmoji: "👊", aliases: ["Górą Edek"],
+    characters: [],
+    quotes: [], images: [{ src: "images/lektury/edek/edek.jpg" }]
+  },
+  {
+    id: "miejsce", title: "Miejsce", author: "Sławomir Mrożek",
+    description: "Opowiadanie eksplorujące absurd i groteskę codzienności oraz pytanie o to, jak człowiek odnajduje swoje miejsce w świecie.",
+    epoch: "współczesność",
+    motifs: ["motywkonfliktu", "motywsamotnosci"],
+    motifDescriptions: {
+      motywkonfliktu: "Motyw konfliktu społecznego ujawnia się w zderzeniu jednostki z otaczającą ją rzeczywistością.",
+      motywsamotnosci: "Motyw tożsamości i przynależności przenika narrację, ukazując osamotnienie jednostki poszukującej swojego miejsca."
     },
-    {
-      id: "andrews", title: "Profesor Andrews w Warszawie",
-      description: "Opowiadanie Olgi Tokarczuk ukazujące zderzenie zachodniej wrażliwości z postkomunistyczną Warszawą lat dziewięćdziesiątych. Motyw podróży i wędrówki — profesor Andrews przemierza Warszawę, odkrywając jej chaos i specyficzny rytm. Motyw miasta ukazuje Warszawę jako przestrzeń obcości i fascynacji zarazem. Motyw konfliktu kultur ujawnia się w zderzeniu porządku akademickiego świata Zachodu z polską rzeczywistością.",
-      epoch: "współczesność",
-      motifs: ["motywpodrozywedrowki", "motywmiasta", "motywkonfliktu"],
-      coverEmoji: "🏙️", aliases: ["Profesor Andrews w Warszawie Tokarczuk"],
-      characters: [],
-      quotes: [], images: [{ src: "images/lektury/andrews/andrews.jpg" }]
+    coverEmoji: "📍", aliases: ["Miejsce Mrożka"],
+    characters: [],
+    quotes: [], images: [{ src: "images/lektury/miejsce/miejsce.jpg" }]
+  },
+  {
+    id: "andrews", title: "Profesor Andrews w Warszawie", author: "Olga Tokarczuk",
+    description: "Opowiadanie ukazujące zderzenie zachodniej wrażliwości z postkomunistyczną Warszawą lat dziewięćdziesiątych.",
+    epoch: "współczesność",
+    motifs: ["motywpodrozywedrowki", "motywmiasta", "motywkonfliktu"],
+    motifDescriptions: {
+      motywpodrozywedrowki: "Motyw podróży i wędrówki — profesor Andrews przemierza Warszawę, odkrywając jej chaos i specyficzny rytm.",
+      motywmiasta: "Motyw miasta ukazuje Warszawę jako przestrzeń obcości i fascynacji zarazem.",
+      motywkonfliktu: "Motyw konfliktu kultur ujawnia się w zderzeniu porządku akademickiego świata Zachodu z polską rzeczywistością."
     },
-    {
-      id: "iliada", title: "Iliada",
-      description: "Epos Homera ukazujący ostatni rok wojny trojańskiej, w którym bohaterowie stają wobec odwiecznych pytań o honor, śmierć i sens walki. Motyw wojny jest centralny — Iliada to opowieść o wojnie jako przestrzeni zarówno chwały, jak i tragedii. Motyw patriotyzmu uosabia Hektor, który walczy w obronie Troi i swojej rodziny. Motyw fatum i przeznaczenia ciąży nad bohaterami — bogowie ingerują w los ludzi. Motyw śmierci nieustannie towarzyszy bohaterom, którzy godzą się z nią jako nieuchronną ceną chwały. Motyw honoru i rycerza widoczny jest w kodeksie postępowania wojowników. Motyw zemsty uruchamia kluczowe wątki — zemsta Achillesa za śmierć Patroklosa.",
-      epoch: "antyk",
-      motifs: ["motywwojny", "motywpatriotyzmu", "motywfatumprzeznaczenia", "motywsmierci", "motywrycerza", "motywzemsty"],
-      coverEmoji: "🛡️", aliases: ["Iliada Homera"],
-      characters: ["hektor", "parys", "achilles"],
-      quotes: [], images: [{ src: "images/lektury/iliada/iliada.jpg" }]
+    coverEmoji: "🏙️", aliases: ["Profesor Andrews w Warszawie Tokarczuk"],
+    characters: [],
+    quotes: [], images: [{ src: "images/lektury/andrews/andrews.jpg" }]
+  },
+  {
+    id: "iliada", title: "Iliada", author: "Homer",
+    description: "Epos ukazujący ostatni rok wojny trojańskiej, w którym bohaterowie stają wobec odwiecznych pytań o honor, śmierć i sens walki.",
+    epoch: "antyk",
+    motifs: ["motywwojny", "motywpatriotyzmu", "motywfatumprzeznaczenia", "motywsmierci", "motywrycerza", "motywzemsty"],
+    motifDescriptions: {
+      motywwojny: "Motyw wojny jest centralny — Iliada to opowieść o wojnie jako przestrzeni zarówno chwały, jak i tragedii.",
+      motywpatriotyzmu: "Motyw patriotyzmu uosabia Hektor, który walczy w obronie Troi i swojej rodziny.",
+      motywfatumprzeznaczenia: "Motyw fatum i przeznaczenia ciąży nad bohaterami — bogowie ingerują w los ludzi.",
+      motywsmierci: "Motyw śmierci nieustannie towarzyszy bohaterom, którzy godzą się z nią jako nieuchronną ceną chwały.",
+      motywrycerza: "Motyw honoru i rycerza widoczny jest w kodeksie postępowania wojowników.",
+      motywzemsty: "Motyw zemsty uruchamia kluczowe wątki — zemsta Achillesa za śmierć Patroklosa."
     },
-    {
-      id: "polikarp", title: "Rozmowa Mistrza Polikarpa ze Śmiercią",
-      description: "Średniowieczny utwór dydaktyczny ukazujący dialog uczonego ze spersonifikowaną Śmiercią, będący refleksją nad przemijaniem i równością wszystkich ludzi wobec śmierci. Motyw śmierci jest absolutnie centralny — Śmierć jako postać rozmawia z człowiekiem i objaśnia swą nieuchronną władzę. Motyw przemijania ukazuje nietrwałość życia i wszystkiego, co ziemskie. Motyw ucznia i mistrza przejawia się w dydaktycznym charakterze dialogu. Motyw boga — rozmowa ze Śmiercią jest jednocześnie refleksją nad Bożym porządkiem świata. Motyw równości wobec śmierci — Śmierć zabiera bogatych i biednych, możnych i prostych.",
-      epoch: "średniowiecze",
-      motifs: ["motywsmierci", "motywprzemijania", "motywuczniaimistrza", "motywboga"],
-      coverEmoji: "💀", aliases: ["Rozmowa Mistrza Polikarpa ze Śmiercią"],
-      characters: ["polikarp", "smierc"],
-      quotes: [], images: [{ src: "images/lektury/polikarp/polikarp.jpg" }]
+    coverEmoji: "🛡️", aliases: ["Iliada Homera"],
+    characters: ["hektor", "parys", "achilles"],
+    quotes: [], images: [{ src: "images/lektury/iliada/iliada.jpg" }]
+  },
+  {
+    id: "polikarp", title: "Rozmowa Mistrza Polikarpa ze Śmiercią", author: "anonim",
+    description: "Średniowieczny utwór dydaktyczny ukazujący dialog uczonego ze spersonifikowaną Śmiercią, będący refleksją nad przemijaniem i równością wszystkich ludzi wobec śmierci.",
+    epoch: "średniowiecze",
+    motifs: ["motywsmierci", "motywprzemijania", "motywuczniaimistrza", "motywboga"],
+    motifDescriptions: {
+      motywsmierci: "Motyw śmierci jest absolutnie centralny — Śmierć jako postać rozmawia z człowiekiem i objaśnia swą nieuchronną władzę.",
+      motywprzemijania: "Motyw przemijania ukazuje nietrwałość życia i wszystkiego, co ziemskie.",
+      motywuczniaimistrza: "Motyw ucznia i mistrza przejawia się w dydaktycznym charakterze dialogu.",
+      motywboga: "Motyw boga — rozmowa ze Śmiercią jest jednocześnie refleksją nad Bożym porządkiem świata."
     },
-    {
-      id: "genesis",
-      title: "Księga Rodzaju",
-      description: "Księga Rodzaju opisuje stworzenie świata, początki ludzkości oraz pierwsze relacje człowieka z Bogiem. Motyw Boga ukazuje akt stworzenia i ustanowienie porządku świata jako fundament istnienia człowieka. Motyw rodziny ujawnia się w historiach pierwszych ludzi i ich potomków, pokazując narodziny więzi i konfliktów międzyludzkich.",
-      epoch: "starożytność",
-      motifs: ["motywboga", "motywrodziny"],
-      coverEmoji: "📖",
-      aliases: ["Genesis", "Biblia Księga Rodzaju"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "💀", aliases: ["Rozmowa Mistrza Polikarpa ze Śmiercią"],
+    characters: ["polikarp", "smierc"],
+    quotes: [], images: [{ src: "images/lektury/polikarp/polikarp.jpg" }]
+  },
+  {
+    id: "genesis", title: "Księga Rodzaju", author: "anonim (Biblia)",
+    description: "Opisuje stworzenie świata, początki ludzkości oraz pierwsze relacje człowieka z Bogiem.",
+    epoch: "starożytność",
+    motifs: ["motywboga", "motywrodziny"],
+    motifDescriptions: {
+      motywboga: "Motyw Boga ukazuje akt stworzenia i ustanowienie porządku świata jako fundament istnienia człowieka.",
+      motywrodziny: "Motyw rodziny ujawnia się w historiach pierwszych ludzi i ich potomków, pokazując narodziny więzi i konfliktów międzyludzkich."
     },
-    
-    {
-      id: "job",
-      title: "Księga Hioba",
-      description: "Księga Hioba przedstawia historię sprawiedliwego człowieka wystawionego na próbę cierpienia i utraty wszystkiego, co posiada. Motyw cierpienia ukazuje ból niewinnego człowieka i pytanie o sens bólu. Motyw Boga pokazuje relację człowieka z absolutem i próbę zrozumienia boskiej sprawiedliwości. Motyw winy i kary zostaje zakwestionowany poprzez los niewinnego Hioba.",
-      epoch: "starożytność",
-      motifs: ["motywcierpienia", "motywboga", "motywwinyikary"],
-      coverEmoji: "🕊️",
-      aliases: ["Hiob", "Księga Hioba Biblia"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "📖",
+    aliases: ["Genesis", "Biblia Księga Rodzaju"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "job", title: "Księga Hioba", author: "anonim (Biblia)",
+    description: "Przedstawia historię sprawiedliwego człowieka wystawionego na próbę cierpienia i utraty wszystkiego, co posiada.",
+    epoch: "starożytność",
+    motifs: ["motywcierpienia", "motywboga", "motywwinyikary"],
+    motifDescriptions: {
+      motywcierpienia: "Motyw cierpienia ukazuje ból niewinnego człowieka i pytanie o sens bólu.",
+      motywboga: "Motyw Boga pokazuje relację człowieka z absolutem i próbę zrozumienia boskiej sprawiedliwości.",
+      motywwinyikary: "Motyw winy i kary zostaje zakwestionowany poprzez los niewinnego Hioba."
     },
-    
-    {
-      id: "ecclesiastes",
-      title: "Księga Koheleta",
-      description: "Księga Koheleta jest refleksją nad sensem życia, jego ulotnością i nieuchronnym przemijaniem wszystkiego, co ludzkie. Motyw przemijania ukazuje marność i nietrwałość ludzkich działań oraz dóbr. Motyw Boga wskazuje na poszukiwanie sensu istnienia w relacji z absolutem.",
-      epoch: "starożytność",
-      motifs: ["motywprzemijania", "motywboga"],
-      coverEmoji: "⏳",
-      aliases: ["Kohelet", "Eklezjastes"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🕊️",
+    aliases: ["Hiob", "Księga Hioba Biblia"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "ecclesiastes", title: "Księga Koheleta", author: "anonim (Biblia)",
+    description: "Refleksja nad sensem życia, jego ulotnością i nieuchronnym przemijaniem wszystkiego, co ludzkie.",
+    epoch: "starożytność",
+    motifs: ["motywprzemijania", "motywboga"],
+    motifDescriptions: {
+      motywprzemijania: "Motyw przemijania ukazuje marność i nietrwałość ludzkich działań oraz dóbr.",
+      motywboga: "Motyw Boga wskazuje na poszukiwanie sensu istnienia w relacji z absolutem."
     },
-    
-    {
-      id: "psalms",
-      title: "Księga Psalmów",
-      description: "Księga Psalmów to zbiór modlitw, hymnów i lamentacji wyrażających pełne spektrum ludzkich emocji wobec Boga. Motyw Boga ukazuje bliską relację człowieka z absolutem poprzez modlitwę i uwielbienie. Motyw cierpienia pojawia się w lamentacjach i prośbach o ratunek w sytuacjach granicznych.",
-      epoch: "starożytność",
-      motifs: ["motywboga", "motywcierpienia"],
-      coverEmoji: "🎶",
-      aliases: ["Psalmy", "Psalterz"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "⏳",
+    aliases: ["Kohelet", "Eklezjastes"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "psalms", title: "Księga Psalmów", author: "anonim (Biblia)",
+    description: "Zbiór modlitw, hymnów i lamentacji wyrażających pełne spektrum ludzkich emocji wobec Boga.",
+    epoch: "starożytność",
+    motifs: ["motywboga", "motywcierpienia"],
+    motifDescriptions: {
+      motywboga: "Motyw Boga ukazuje bliską relację człowieka z absolutem poprzez modlitwę i uwielbienie.",
+      motywcierpienia: "Motyw cierpienia pojawia się w lamentacjach i prośbach o ratunek w sytuacjach granicznych."
     },
-    
-    {
-      id: "apocalypse_john",
-      title: "Apokalipsa św. Jana",
-      description: "Apokalipsa św. Jana przedstawia wizję końca świata, ostatecznej walki dobra ze złem oraz triumfu boskiego porządku. Motyw Boga ukazuje ostateczne zwycięstwo absolutu nad chaosem. Motyw zła przedstawia destrukcyjne siły działające przeciwko światu. Motyw wojny ujawnia się jako kosmiczny konflikt sił duchowych. Motyw władzy ukazuje sąd i ustanowienie nowego porządku.",
-      epoch: "starożytność",
-      motifs: ["motywboga", "motywzla", "motywwojny", "motywwladzy"],
-      coverEmoji: "🔥",
-      aliases: ["Apokalipsa", "Apokalipsa Jana"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🎶",
+    aliases: ["Psalmy", "Psalterz"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "apocalypse_john", title: "Apokalipsa św. Jana", author: "anonim (Biblia)",
+    description: "Przedstawia wizję końca świata, ostatecznej walki dobra ze złem oraz triumfu boskiego porządku.",
+    epoch: "starożytność",
+    motifs: ["motywboga", "motywzla", "motywwojny", "motywwladzy"],
+    motifDescriptions: {
+      motywboga: "Motyw Boga ukazuje ostateczne zwycięstwo absolutu nad chaosem.",
+      motywzla: "Motyw zła przedstawia destrukcyjne siły działające przeciwko światu.",
+      motywwojny: "Motyw wojny ujawnia się jako kosmiczny konflikt sił duchowych.",
+      motywwladzy: "Motyw władzy ukazuje sąd i ustanowienie nowego porządku."
     },
-    
-    {
-      id: "orpheus",
-      title: "Mit o Orfeuszu i Eurydyce",
-      description: "Mit opowiada o Orfeuszu, który schodzi do świata zmarłych, by odzyskać ukochaną Eurydykę, lecz traci ją przez własne zwątpienie. Motyw miłości ukazuje siłę uczucia przekraczającego granice życia i śmierci. Motyw śmierci przedstawia nieodwracalność losu i granicę między światami. Motyw przemijania podkreśla kruchość ludzkiego szczęścia.",
-      epoch: "starożytność",
-      motifs: ["motywmilosci", "motywsmierci", "motywprzemijania"],
-      coverEmoji: "🎻",
-      aliases: ["Orfeusz", "Orfeusz i Eurydyka"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🔥",
+    aliases: ["Apokalipsa", "Apokalipsa Jana"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "orpheus", title: "Mit o Orfeuszu i Eurydyce", author: "mit grecki",
+    description: "Mit opowiada o Orfeuszu, który schodzi do świata zmarłych, by odzyskać ukochaną Eurydykę, lecz traci ją przez własne zwątpienie.",
+    epoch: "starożytność",
+    motifs: ["motywmilosci", "motywsmierci", "motywprzemijania"],
+    motifDescriptions: {
+      motywmilosci: "Motyw miłości ukazuje siłę uczucia przekraczającego granice życia i śmierci.",
+      motywsmierci: "Motyw śmierci przedstawia nieodwracalność losu i granicę między światami.",
+      motywprzemijania: "Motyw przemijania podkreśla kruchość ludzkiego szczęścia."
     },
-    
-    {
-      id: "sisyphus",
-      title: "Mit o Syzyfie",
-      description: "Mit o Syzyfie przedstawia karę wiecznego wtaczania głazu pod górę, który zawsze spada tuż przed celem. Motyw cierpienia ukazuje absurdalny i niekończący się wysiłek jednostki. Motyw buntu ujawnia się w próbie sprytu i sprzeciwie wobec bogów. Motyw przemijania podkreśla cykliczność i bezsens powtarzalnego losu.",
-      epoch: "starożytność",
-      motifs: ["motywcierpienia", "motywbuntu", "motywprzemijania"],
-      coverEmoji: "🪨",
-      aliases: ["Syzyf", "Syzyfowa praca"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🎻",
+    aliases: ["Orfeusz", "Orfeusz i Eurydyka"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "sisyphus", title: "Mit o Syzyfie", author: "mit grecki",
+    description: "Przedstawia karę wiecznego wtaczania głazu pod górę, który zawsze spada tuż przed celem.",
+    epoch: "starożytność",
+    motifs: ["motywcierpienia", "motywbuntu", "motywprzemijania"],
+    motifDescriptions: {
+      motywcierpienia: "Motyw cierpienia ukazuje absurdalny i niekończący się wysiłek jednostki.",
+      motywbuntu: "Motyw buntu ujawnia się w próbie sprytu i sprzeciwie wobec bogów.",
+      motywprzemijania: "Motyw przemijania podkreśla cykliczność i bezsens powtarzalnego losu."
     },
-    
-    {
-      id: "prometheus",
-      title: "Mit o Prometeuszu",
-      description: "Mit o Prometeuszu opowiada o tytanie, który stworzył lub wspierał ludzi i został za to surowo ukarany przez bogów. Motyw buntu ukazuje sprzeciw wobec boskiego porządku. Motyw poświęcenia przedstawia oddanie dobra ludzkości kosztem własnego cierpienia. Motyw cierpienia ujawnia wieczną karę jako konsekwencję sprzeciwu wobec władzy.",
-      epoch: "starożytność",
-      motifs: ["motywbuntu", "motywposwiecenia", "motywcierpienia"],
-      coverEmoji: "🔥",
-      aliases: ["Prometeusz"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🪨",
+    aliases: ["Syzyf", "Syzyfowa praca"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "prometheus", title: "Mit o Prometeuszu", author: "mit grecki",
+    description: "Mit o tytanie, który stworzył lub wspierał ludzi i został za to surowo ukarany przez bogów.",
+    epoch: "starożytność",
+    motifs: ["motywbuntu", "motywposwiecenia", "motywcierpienia"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu ukazuje sprzeciw wobec boskiego porządku.",
+      motywposwiecenia: "Motyw poświęcenia przedstawia oddanie dobra ludzkości kosztem własnego cierpienia.",
+      motywcierpienia: "Motyw cierpienia ujawnia wieczną karę jako konsekwencję sprzeciwu wobec władzy."
     },
-    
-    {
-      id: "narcissus",
-      title: "Mit o Narcyzie",
-      description: "Mit o Narcyzie przedstawia młodzieńca zakochanego we własnym odbiciu, który nie potrafi oderwać się od siebie samego. Motyw miłości ukazuje uczucie skierowane ku własnej osobie jako formę destrukcji. Motyw samotności pokazuje całkowite wyobcowanie jednostki. Motyw przemiany ujawnia się w przemianie Narcyza w kwiat.",
-      epoch: "starożytność",
-      motifs: ["motywmilosci", "motywsamotnosci", "motywprzemiany"],
-      coverEmoji: "🌸",
-      aliases: ["Narcyz"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🔥",
+    aliases: ["Prometeusz"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "narcissus", title: "Mit o Narcyzie", author: "mit grecki",
+    description: "Mit o młodzieńcu zakochanym we własnym odbiciu, który nie potrafi oderwać się od siebie samego.",
+    epoch: "starożytność",
+    motifs: ["motywmilosci", "motywsamotnosci", "motywprzemiany"],
+    motifDescriptions: {
+      motywmilosci: "Motyw miłości ukazuje uczucie skierowane ku własnej osobie jako formę destrukcji.",
+      motywsamotnosci: "Motyw samotności pokazuje całkowite wyobcowanie jednostki.",
+      motywprzemiany: "Motyw przemiany ujawnia się w przemianie Narcyza w kwiat."
     },
-    
-    {
-      id: "theseus",
-      title: "Mit o Tezeuszu",
-      description: "Mit o Tezeuszu opowiada o herosie, który pokonuje Minotaura i odnajduje drogę z labiryntu dzięki pomocy Ariadny. Motyw podróży i wędrówki ukazuje drogę bohatera przez nieznane i niebezpieczne przestrzenie. Motyw rycerza przedstawia odwagę i heroizm jednostki. Motyw miłości pojawia się w relacji z Ariadną jako element prowadzący do zwycięstwa.",
-      epoch: "starożytność",
-      motifs: ["motywpodrozywedrowki", "motywrycerza", "motywmilosci"],
-      coverEmoji: "🧵",
-      aliases: ["Tezeusz", "Minotaur"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🌸",
+    aliases: ["Narcyz"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "theseus", title: "Mit o Tezeuszu", author: "mit grecki",
+    description: "Mit o herosie, który pokonuje Minotaura i odnajduje drogę z labiryntu dzięki pomocy Ariadny.",
+    epoch: "starożytność",
+    motifs: ["motywpodrozywedrowki", "motywrycerza", "motywmilosci"],
+    motifDescriptions: {
+      motywpodrozywedrowki: "Motyw podróży i wędrówki ukazuje drogę bohatera przez nieznane i niebezpieczne przestrzenie.",
+      motywrycerza: "Motyw rycerza przedstawia odwagę i heroizm jednostki.",
+      motywmilosci: "Motyw miłości pojawia się w relacji z Ariadną jako element prowadzący do zwycięstwa."
     },
-    
-    {
-      id: "heracles",
-      title: "Mit o Heraklesie",
-      description: "Mit o Heraklesie przedstawia bohatera wykonującego dwanaście prac jako pokutę i drogę do oczyszczenia. Motyw pracy ukazuje wysiłek i próbę przekroczenia ludzkich ograniczeń. Motyw poświęcenia ujawnia cenę heroizmu i cierpienia. Motyw rycerza pokazuje idealizację siły i odwagi.",
-      epoch: "starożytność",
-      motifs: ["motywpracy", "motywposwiecenia", "motywrycerza"],
-      coverEmoji: "🦁",
-      aliases: ["Herakles", "Herkules"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🧵",
+    aliases: ["Tezeusz", "Minotaur"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "heracles", title: "Mit o Heraklesie", author: "mit grecki",
+    description: "Mit przedstawia bohatera wykonującego dwanaście prac jako pokutę i drogę do oczyszczenia.",
+    epoch: "starożytność",
+    motifs: ["motywpracy", "motywposwiecenia", "motywrycerza"],
+    motifDescriptions: {
+      motywpracy: "Motyw pracy ukazuje wysiłek i próbę przekroczenia ludzkich ograniczeń.",
+      motywposwiecenia: "Motyw poświęcenia ujawnia cenę heroizmu i cierpienia.",
+      motywrycerza: "Motyw rycerza pokazuje idealizację siły i odwagi."
     },
-    
-    {
-      id: "daedalus_icarus",
-      title: "Mit o Dedalu i Ikarze",
-      description: "Mit opowiada o ucieczce Dedala i Ikara z Krety przy użyciu skrzydeł, zakończonej tragicznym upadkiem Ikara. Motyw marzycielstwa ukazuje dążenie do przekraczania granic ludzkich możliwości. Motyw podróży i wędrówki przedstawia ucieczkę jako drogę ku wolności. Motyw przemiany ujawnia dojrzewanie i konsekwencje wyborów.",
-      epoch: "starożytność",
-      motifs: ["motywmarzycielstwa", "motywpodrozywedrowki", "motywprzemiany"],
-      coverEmoji: "🕊️",
-      aliases: ["Dedal i Ikar"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🦁",
+    aliases: ["Herakles", "Herkules"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "daedalus_icarus", title: "Mit o Dedalu i Ikarze", author: "mit grecki",
+    description: "Mit opowiada o ucieczce Dedala i Ikara z Krety przy użyciu skrzydeł, zakończonej tragicznym upadkiem Ikara.",
+    epoch: "starożytność",
+    motifs: ["motywmarzycielstwa", "motywpodrozywedrowki", "motywprzemiany"],
+    motifDescriptions: {
+      motywmarzycielstwa: "Motyw marzycielstwa ukazuje dążenie do przekraczania granic ludzkich możliwości.",
+      motywpodrozywedrowki: "Motyw podróży i wędrówki przedstawia ucieczkę jako drogę ku wolności.",
+      motywprzemiany: "Motyw przemiany ujawnia dojrzewanie i konsekwencje wyborów."
     },
-    
-    {
-      id: "oedipus",
-      title: "Mit o Edypie",
-      description: "Mit o Edypie opowiada o królu, który nieświadomie spełnia tragiczną przepowiednię o zabiciu ojca i poślubieniu matki. Motyw fatum/przeznaczenia ukazuje nieuchronność losu człowieka. Motyw szaleństwa przedstawia rozpad tożsamości i psychiczne załamanie bohatera. Motyw winy i kary ukazuje konsekwencje czynów niezależnych od świadomości.",
-      epoch: "starożytność",
-      motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary"],
-      coverEmoji: "👁️",
-      aliases: ["Edyp", "Król Edyp"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🕊️",
+    aliases: ["Dedal i Ikar"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "oedipus", title: "Mit o Edypie", author: "mit grecki",
+    description: "Mit o królu, który nieświadomie spełnia tragiczną przepowiednię o zabiciu ojca i poślubieniu matki.",
+    epoch: "starożytność",
+    motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary"],
+    motifDescriptions: {
+      motywfatumprzeznaczenia: "Motyw fatum/przeznaczenia ukazuje nieuchronność losu człowieka.",
+      motywszalenstwa: "Motyw szaleństwa przedstawia rozpad tożsamości i psychiczne załamanie bohatera.",
+      motywwinyikary: "Motyw winy i kary ukazuje konsekwencje czynów niezależnych od świadomości."
     },
-    
-    {
-      id: "trojan_war",
-      title: "Wojna trojańska",
-      description: "Wojna trojańska przedstawia wieloletni konflikt między Grekami a Troją wywołany porwaniem Heleny. Motyw wojny ukazuje destrukcyjny wpływ konfliktu na jednostki i społeczeństwa. Motyw patriotyzmu przedstawia walkę o honor i ojczyznę. Motyw zdrady ujawnia konsekwencje nielojalności. Motyw zemsty napędza działania bohaterów po obu stronach konfliktu.",
-      epoch: "starożytność",
-      motifs: ["motywwojny", "motywpatriotyzmu", "motywzdrady", "motywzemsty"],
-      coverEmoji: "⚔️",
-      aliases: ["Iliada", "wojna o Troję"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "👁️",
+    aliases: ["Edyp", "Król Edyp"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "trojan_war", title: "Wojna trojańska", author: "mit grecki",
+    description: "Przedstawia wieloletni konflikt między Grekami a Troją wywołany porwaniem Heleny.",
+    epoch: "starożytność",
+    motifs: ["motywwojny", "motywpatriotyzmu", "motywzdrady", "motywzemsty"],
+    motifDescriptions: {
+      motywwojny: "Motyw wojny ukazuje destrukcyjny wpływ konfliktu na jednostki i społeczeństwa.",
+      motywpatriotyzmu: "Motyw patriotyzmu przedstawia walkę o honor i ojczyznę.",
+      motywzdrady: "Motyw zdrady ujawnia konsekwencje nielojalności.",
+      motywzemsty: "Motyw zemsty napędza działania bohaterów po obu stronach konfliktu."
     },
-    
-    {
-      id: "lament_swietokrzyski",
-      title: "Lament świętokrzyski",
-      description: "Lament świętokrzyski to średniowieczny monolog Matki Boskiej opłakującej mękę i śmierć Chrystusa. Motyw matki ukazuje cierpienie rodzicielskie i bezradność wobec losu dziecka. Motyw cierpienia przedstawia ból emocjonalny i duchowy. Motyw Boga ujawnia religijny wymiar tragedii.",
-      epoch: "średniowiecze",
-      motifs: ["motywmatki", "motywcierpienia", "motywboga"],
-      coverEmoji: "💔",
-      aliases: ["Posłuchajcie bracia miła"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "⚔️",
+    aliases: ["Iliada", "wojna o Troję"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "lament_swietokrzyski", title: "Lament świętokrzyski", author: "anonim",
+    description: "Średniowieczny monolog Matki Boskiej opłakującej mękę i śmierć Chrystusa.",
+    epoch: "średniowiecze",
+    motifs: ["motywmatki", "motywcierpienia", "motywboga"],
+    motifDescriptions: {
+      motywmatki: "Motyw matki ukazuje cierpienie rodzicielskie i bezradność wobec losu dziecka.",
+      motywcierpienia: "Motyw cierpienia przedstawia ból emocjonalny i duchowy.",
+      motywboga: "Motyw Boga ujawnia religijny wymiar tragedii."
     },
-    
-    {
-      id: "roland",
-      title: "Pieśń o Rolandzie",
-      description: "Pieśń o Rolandzie to średniowieczny epos rycerski opisujący bohaterską śmierć Rolanda w walce z Saracenami. Motyw rycerza ukazuje ideał honoru i odwagi. Motyw patriotyzmu przedstawia lojalność wobec władcy i ojczyzny. Motyw poświęcenia ujawnia gotowość do śmierci za wartości. Motyw wojny pokazuje brutalność konfliktu.",
-      epoch: "średniowiecze",
-      motifs: ["motywrycerza", "motywpatriotyzmu", "motywposwiecenia", "motywwojny"],
-      coverEmoji: "🛡️",
-      aliases: ["Roland"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "💔",
+    aliases: ["Posłuchajcie bracia miła"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "roland", title: "Pieśń o Rolandzie", author: "anonim",
+    description: "Średniowieczny epos rycerski opisujący bohaterską śmierć Rolanda w walce z Saracenami.",
+    epoch: "średniowiecze",
+    motifs: ["motywrycerza", "motywpatriotyzmu", "motywposwiecenia", "motywwojny"],
+    motifDescriptions: {
+      motywrycerza: "Motyw rycerza ukazuje ideał honoru i odwagi.",
+      motywpatriotyzmu: "Motyw patriotyzmu przedstawia lojalność wobec władcy i ojczyzny.",
+      motywposwiecenia: "Motyw poświęcenia ujawnia gotowość do śmierci za wartości.",
+      motywwojny: "Motyw wojny pokazuje brutalność konfliktu."
     },
-    
-    {
-      id: "dziady_ii",
-      title: "Dziady cz. II",
-      description: "Dziady cz. II przedstawiają obrzęd wywoływania duchów i kontaktu ze światem zmarłych. Motyw winy i kary ukazuje konsekwencje moralne czynów po śmierci. Motyw Boga pojawia się jako element porządku metafizycznego. Motyw śmierci podkreśla granicę między światem żywych i umarłych.",
-      epoch: "romantyzm",
-      motifs: ["motywwinyikary", "motywboga", "motywsmierci"],
-      coverEmoji: "🕯️",
-      aliases: ["Dziady II"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🛡️",
+    aliases: ["Roland"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "dziady_ii", title: "Dziady cz. II", author: "Adam Mickiewicz",
+    description: "Przedstawiają obrzęd wywoływania duchów i kontaktu ze światem zmarłych.",
+    epoch: "romantyzm",
+    motifs: ["motywwinyikary", "motywboga", "motywsmierci"],
+    motifDescriptions: {
+      motywwinyikary: "Motyw winy i kary ukazuje konsekwencje moralne czynów po śmierci.",
+      motywboga: "Motyw Boga pojawia się jako element porządku metafizycznego.",
+      motywsmierci: "Motyw śmierci podkreśla granicę między światem żywych i umarłych."
     },
-    
-    {
-      id: "dziady_iii",
-      title: "Dziady cz. III",
-      description: "Dziady cz. III ukazują walkę jednostki i narodu z opresyjną władzą zaborcy. Motyw buntu przedstawia sprzeciw wobec tyranii. Motyw patriotyzmu ukazuje cierpienie i poświęcenie Polaków. Motyw władzy pokazuje mechanizmy opresji. Motyw cierpienia ujawnia doświadczenie zesłania i represji.",
-      epoch: "romantyzm",
-      motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia"],
-      coverEmoji: "🇵🇱",
-      aliases: ["Dziady III"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🕯️",
+    aliases: ["Dziady II"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "dziady_iii", title: "Dziady cz. III", author: "Adam Mickiewicz",
+    description: "Ukazują walkę jednostki i narodu z opresyjną władzą zaborcy.",
+    epoch: "romantyzm",
+    motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia"],
+    motifDescriptions: {
+      motywbuntu: "Motyw buntu przedstawia sprzeciw wobec tyranii — uosobiony m.in. w postawie Konrada wobec Boga.",
+      motywpatriotyzmu: "Motyw patriotyzmu ukazuje cierpienie i poświęcenie Polaków.",
+      motywwladzy: "Motyw władzy pokazuje mechanizmy opresji zaborcy.",
+      motywcierpienia: "Motyw cierpienia ujawnia doświadczenie zesłania i represji."
     },
-    
-    {
-      id: "pan_tadeusz",
-      title: "Pan Tadeusz",
-      description: "Pan Tadeusz przedstawia historię szlacheckiego Soplicowa i konfliktów oraz pojednania jego mieszkańców. Motyw patriotyzmu ukazuje tęsknotę za ojczyzną i nadzieję na jej odrodzenie. Motyw tradycji i obyczajów przedstawia świat szlachty i jego rytuały. Motyw miłości ukazuje relacje bohaterów jako siłę jednoczącą. Motyw natury ukazuje harmonię świata przyrody i człowieka. Motyw dworku idealizuje życie szlacheckie.",
-      epoch: "romantyzm",
-      motifs: ["motywpatriotyzmu", "motywobyczajowitradycji", "motywmilosci", "motywprzyrodynatury", "motywdworku"],
-      coverEmoji: "🌿",
-      aliases: ["Pan Tadeusz Mickiewicz"],
-      characters: [],
-      quotes: [],
-      images: []
+    coverEmoji: "🇵🇱",
+    aliases: ["Dziady III"],
+    characters: [], quotes: [], images: []
+  },
+  {
+    id: "pan_tadeusz", title: "Pan Tadeusz", author: "Adam Mickiewicz",
+    description: "Przedstawia historię szlacheckiego Soplicowa i konfliktów oraz pojednania jego mieszkańców.",
+    epoch: "romantyzm",
+    motifs: ["motywpatriotyzmu", "motywobyczajowitradycji", "motywmilosci", "motywprzyrodynatury", "motywdworku"],
+    motifDescriptions: {
+      motywpatriotyzmu: "Motyw patriotyzmu ukazuje tęsknotę za ojczyzną i nadzieję na jej odrodzenie.",
+      motywobyczajowitradycji: "Motyw tradycji i obyczajów przedstawia świat szlachty i jego rytuały.",
+      motywmilosci: "Motyw miłości ukazuje relacje bohaterów jako siłę jednoczącą.",
+      motywprzyrodynatury: "Motyw natury ukazuje harmonię świata przyrody i człowieka.",
+      motywdworku: "Motyw dworku idealizuje życie szlacheckie w Soplicowie."
+    },
+    coverEmoji: "🌿",
+    aliases: ["Pan Tadeusz Mickiewicz"],
+    characters: [], quotes: [], images: []
+  }
+],
+  
+  characters: [
+  {
+    id: "chochol", name: "Chochoł",
+    description: "Symbol marazmu narodowego i uśpienia społeczeństwa polskiego. Pojawia się jako zjawa na weselu i prowadzi chocholi taniec — symbol narodowego letargu i niemożności działania.",
+    motifs: ["motywtanca", "motywpolskiipolakow", "motywbuntu"],
+    motifDescriptions: {
+      motywtanca: "Prowadzi chocholi taniec — symbol uśpienia i niemocy zbiorowej.",
+      motywpolskiipolakow: "Uosabia narodowy letarg i niemożność zbiorowego działania Polaków.",
+      motywbuntu: "Symbolizuje stłumiony, nigdy niezrealizowany zryw do walki o niepodległość."
     }
-    
-  ],
+  },
+  {
+    id: "poeta", name: "Poeta",
+    description: "Krakowski inteligent obecny na weselu, negatywnie nastawiony do chłopomanii. Nawiedza go zjawa Rycerza, która budzi w nim chwilową nadzieję i chęć walki o niepodległość — ta jednak znika wraz z nadejściem poranka.",
+    motifs: ["motywartysty", "motywpatriotyzmu", "motywbuntu"],
+    motifDescriptions: {
+      motywartysty: "Jako krakowski inteligent reprezentuje dekadenckiego, bezsilnego artystę-marzyciela.",
+      motywpatriotyzmu: "Pod wpływem zjawy Rycerza budzi się w nim chwilowa chęć walki o niepodległość.",
+      motywbuntu: "Jego porywu do buntu wygasa wraz z nadejściem poranka, ukazując bezsilność czynu."
+    }
+  },
+  {
+    id: "mlody", name: "Pan Młody",
+    description: "Krakowski artysta, który bierze chłopkę za żonę. Idealizuje wieś i życie chłopskie, nie mając o nich żadnego pojęcia — uosabia powierzchowną fascynację ludu.",
+    motifs: ["motywartysty", "motywwsi"],
+    motifDescriptions: {
+      motywartysty: "Jako artysta-inteligent uosabia powierzchowną fascynację ludem bez prawdziwego jego zrozumienia.",
+      motywwsi: "Idealizuje wieś i życie chłopskie, nie mając o nich żadnego rzeczywistego pojęcia."
+    }
+  },
+  {
+    id: "gospodarz", name: "Gospodarz",
+    description: "Artysta od dawna mieszkający na wsi. Nawiedza go zjawa Wernyhory, który każe mu zebrać chłopów do walki i wręcza złoty róg. Gospodarz przekazuje go Jaśkowi, który go gubi — motyw straconej szansy na zryw narodowy.",
+    motifs: ["motywpatriotyzmu", "motywpolskiipolakow"],
+    motifDescriptions: {
+      motywpatriotyzmu: "Otrzymuje od Wernyhory złoty róg jako wezwanie do zbrojnego zrywu o niepodległość.",
+      motywpolskiipolakow: "Uosabia postać, która miała zjednoczyć naród do walki, lecz zawodzi — symbol narodowej niemocy."
+    }
+  },
+  {
+    id: "antygona", name: "Antygona",
+    description: "Córka Edypa, siostra Eteokla i Polinika. Staje przed tragiczną decyzją: posłuchać rozkazu króla i nie pochować Polinika, czy postąpić zgodnie z prawem boskim i oddać bratu należny mu pogrzeb. Wybiera prawo boskie, płacąc za to życiem.",
+    motifs: ["motywbuntu", "motywposwiecenia", "motywfatumprzeznaczenia"],
+    motifDescriptions: {
+      motywbuntu: "Wbrew rozkazowi króla postanawia pochować brata, sprzeciwiając się prawu ludzkiemu.",
+      motywposwiecenia: "Płaci życiem za wierność prawu boskiemu i obowiązkowi wobec rodziny.",
+      motywfatumprzeznaczenia: "Jako córka Edypa dziedziczy tragiczne fatum ciążące nad całym rodem."
+    }
+  },
+  {
+    id: "kreon", name: "Kreon",
+    description: "Król Teb, który zakazuje pochowania Polinika uznając go za zdrajcę ojczyzny. Nie przyjmuje żadnych sprzeciwów, a jego upór i pycha prowadzą do śmierci syna, żony i bratanicy.",
+    motifs: ["motywwladcy", "motywwladzy", "motywkonfliktu"],
+    motifDescriptions: {
+      motywwladcy: "Jako król Teb wydaje bezwzględny zakaz pochowania Polinika, kierując się racją stanu.",
+      motywwladzy: "Jego absolutna i pyszna władza nie przyjmuje sprzeciwu, co prowadzi do tragedii.",
+      motywkonfliktu: "Jego upór wywołuje nierozwiązywalny konflikt prawa boskiego z ludzkim, kosztujący mu rodzinę."
+    }
+  },
+  {
+    id: "ismena", name: "Ismena",
+    description: "Siostra Antygony. Rozumie racje siostry, lecz boi się konsekwencji złamania królewskiego rozkazu i odmawia udziału w pochówku. Uosabia postawę uległości wobec prawa państwowego.",
+    motifs: ["motywkonfliktu"],
+    motifDescriptions: {
+      motywkonfliktu: "Uosabia postawę uległości wobec prawa państwowego, w przeciwieństwie do buntu Antygony."
+    }
+  },
+  {
+    id: "raskolnikow", name: "Raskolnikow",
+    description: "Student przekonany o własnej wyjątkowości, który morderstwem lichwiarki próbuje udowodnić swoją teorię nadczłowieka — że wielkie jednostki mają prawo przekraczać moralne granice. Jednak nie jest w stanie udźwignąć ciężaru winy.",
+    motifs: ["motywzbrodni", "motywwinyikary", "motywmiasta", "motywbiedy", "motywszalenstwa"],
+    motifDescriptions: {
+      motywzbrodni: "Popełnia morderstwo lichwiarki, by udowodnić swoją teorię nadczłowieka.",
+      motywwinyikary: "Nie jest w stanie udźwignąć ciężaru winy, co staje się jego prawdziwą karą.",
+      motywmiasta: "Jego upadek rozgrywa się w duszącej, alienującej atmosferze Petersburga.",
+      motywbiedy: "Studencka nędza i petersburska bieda są tłem jego moralnego załamania.",
+      motywszalenstwa: "Po zbrodni popada w gorączkowy, na granicy szaleństwa stan psychiczny."
+    }
+  },
+  {
+    id: "sonia", name: "Sonia Marmieładowa",
+    description: "Młoda dziewczyna zmuszona do prostytucji, by utrzymać rodzinę. Głęboko wierząca, symbolizuje miłosierdzie i przebaczenie. Zakochuje się w Raskolnikowie i towarzyszy mu na zesłaniu, będąc katalizatorem jego przemiany.",
+    motifs: ["motywmilosci", "motywposwiecenia", "motywboga"],
+    motifDescriptions: {
+      motywmilosci: "Jej miłość do Raskolnikowa staje się siłą prowadzącą go do odkupienia.",
+      motywposwiecenia: "Zmuszona do prostytucji, poświęca się dla utrzymania rodziny.",
+      motywboga: "Głęboka wiara religijna jest źródłem jej miłosierdzia i przebaczenia."
+    }
+  },
+  {
+    id: "makbet", name: "Makbet",
+    description: "Dzielny rycerz i kuzyn króla Dunkana. Po usłyszeniu przepowiedni czarownic budzi się w nim żądza władzy. Podstępem morduje króla i przejmuje tron, po czym wpada w spiralę kolejnych zbrodni, nękany strachem i wyrzutami sumienia.",
+    motifs: ["motywfatumprzeznaczenia", "motywprzepowiedni", "motywwladzy", "motywspisku", "motywzbrodni", "motywwinyikary"],
+    motifDescriptions: {
+      motywfatumprzeznaczenia: "Wierzy, że przepowiednia czarownic wyznacza jego nieuchronny los.",
+      motywprzepowiedni: "Słowa czarownic budzą w nim żądzę władzy i uruchamiają całą tragedię.",
+      motywwladzy: "Pragnienie panowania popycha go do zbrodni i niszczy jego człowieczeństwo.",
+      motywspisku: "Wraz z żoną planuje i przeprowadza spisek na życie króla Dunkana.",
+      motywzbrodni: "Morderstwo Dunkana otwiera spiralę kolejnych zbrodni, które popełnia.",
+      motywwinyikary: "Nękany strachem i wyrzutami sumienia, ostatecznie ponosi karę za swoje zbrodnie."
+    }
+  },
+  {
+    id: "lmakbet", name: "Lady Makbet",
+    description: "Żona Makbeta, która obmyśla plan zabójstwa Dunkana i nakłania do niego męża. Zimna i bezwzględna na początku, stopniowo traci kontrolę nad umysłem — lunatykuje i ostatecznie popada w obłęd z powodu wyrzutów sumienia.",
+    motifs: ["motywkobiety", "motywszalenstwa", "motywspisku", "motywwinyikary"],
+    motifDescriptions: {
+      motywkobiety: "Reprezentuje obraz kobiety zimnej, ambitnej i bezwzględnej w dążeniu do władzy.",
+      motywszalenstwa: "Lunatykuje i popada w obłęd pod wpływem narastających wyrzutów sumienia.",
+      motywspisku: "Obmyśla plan zabójstwa Dunkana i nakłania do niego męża.",
+      motywwinyikary: "Wyrzuty sumienia za udział w zbrodni doprowadzają ją do szaleństwa."
+    }
+  },
+  {
+    id: "artur", name: "Artur",
+    description: "Młody student, syn Stomila i Eleonory. Paradoksalnie buntuje się przeciwko anarchii rodziny, pragnąc przywrócić tradycyjne wartości i porządek. Jego próba kończy się klęską — władzę przejmuje prymitywny Edek.",
+    motifs: ["motywbuntu", "motywobyczajowitradycji", "motywrodziny", "motywkonfliktupokolen"],
+    motifDescriptions: {
+      motywbuntu: "Paradoksalnie buntuje się przeciwko anarchii rodziny, chcąc przywrócić porządek.",
+      motywobyczajowitradycji: "Pragnie przywrócić tradycyjne wartości, które jego rodzice odrzucili.",
+      motywrodziny: "Jego próba uporządkowania zdegenerowanej rodziny kończy się klęską.",
+      motywkonfliktupokolen: "Reprezentuje pokolenie pragnące porządku w opozycji do rodziców, którzy go odrzucili."
+    }
+  },
+  {
+    id: "edek", name: "Edek",
+    description: "Nieuczony i pozbawiony zasad kochanek matki Artura. Uznawany przez Stomila za reprezentanta prawdziwego, autentycznego życia. Triumfuje nad intelektualizmem Artura, ukazując zwycięstwo brutalnej siły nad rozumem.",
+    motifs: ["motywwladzy", "motywpolskiipolakow"],
+    motifDescriptions: {
+      motywwladzy: "Przejmuje władzę dzięki brutalnej sile i bezczelności, triumfując nad intelektem Artura.",
+      motywpolskiipolakow: "Symbolizuje zwycięstwo prymitywizmu jako groteskową diagnozę kondycji społeczeństwa."
+    }
+  },
+  {
+    id: "winston", name: "Winston Smith",
+    description: "Pracownik Ministerstwa Prawdy, który potajemnie buntuje się przeciwko reżimowi Partii. Prowadzi pamiętnik, nawiązuje zakazany romans z Julią i szuka kontaktu z opozycją. Zostaje schwytany, złamany i przeprogramowany przez system.",
+    motifs: ["motywbuntu", "motywwolnosci", "motywmilosci"],
+    motifDescriptions: {
+      motywbuntu: "Potajemnie sprzeciwia się reżimowi Partii, prowadząc pamiętnik i szukając kontaktu z opozycją.",
+      motywwolnosci: "Marzy o wolności od totalnej kontroli, choć system ostatecznie go łamie.",
+      motywmilosci: "Zakazany romans z Julią staje się dla niego aktem oporu wobec Partii."
+    }
+  },
+  {
+    id: "brat", name: "Wielki Brat",
+    description: "Tajemniczy, prawdopodobnie fikcyjny przywódca Oceanii. Jego wizerunek jest wszechobecny — symbolizuje absolutną, bezosobową władzę Partii. Samo jego istnienie jest niepewne, co czyni go jeszcze potężniejszym narzędziem kontroli.",
+    motifs: ["motywtotalitaryzmu", "motywwladzy"],
+    motifDescriptions: {
+      motywtotalitaryzmu: "Jego wszechobecny wizerunek jest narzędziem totalnej inwigilacji i kontroli społeczeństwa.",
+      motywwladzy: "Symbolizuje absolutną, bezosobową władzę Partii, której realność jest niepewna."
+    }
+  },
+  {
+    id: "harpagon", name: "Harpagon",
+    description: "Bogaty paryski mieszczanin i lichwiarz, opętany obsesją gromadzenia pieniędzy. Skąpstwo rządzi każdą jego decyzją — sprzeciwia się małżeństwom dzieci, które nie przynoszą mu zysku, i przedkłada szkatułkę ze złotem nad szczęście rodziny.",
+    motifs: ["motywpieniadza", "motywrodziny", "motywmieszczanstwa"],
+    motifDescriptions: {
+      motywpieniadza: "Opętany obsesją gromadzenia pieniędzy, przedkłada szkatułkę ze złotem nad szczęście rodziny.",
+      motywrodziny: "Jego skąpstwo niszczy relacje rodzinne — sprzeciwia się małżeństwom dzieci bez korzyści majątkowej.",
+      motywmieszczanstwa: "Jako bogaty paryski mieszczanin i lichwiarz uosabia obsesję klasy mieszczańskiej na punkcie majątku."
+    }
+  },
+  {
+    id: "wokulski", name: "Stanisław Wokulski",
+    description: "Zamożny kupiec, który dorobił się majątku handlem. Zakochany bez wzajemności w arystokratce Izabeli Łęckiej, podporządkowuje jej temu uczuciu całe życie. Jednocześnie prowadzi działalność filantropijną na rzecz ubogich.",
+    motifs: ["motywmilosci", "motywfilantropii", "motywkariery", "motywmieszczanstwa"],
+    motifDescriptions: {
+      motywmilosci: "Niespełniona miłość do Izabeli Łęckiej staje się obsesją, której podporządkowuje całe życie.",
+      motywfilantropii: "Prowadzi działalność filantropijną na rzecz ubogich, łącząc pragmatyzm z idealizmem.",
+      motywkariery: "Jego droga od skromnego pochodzenia do zamożnego kupca ukazuje pozytywistyczny ideał kariery.",
+      motywmieszczanstwa: "Jako zamożny kupiec reprezentuje nową, mieszczańską siłę napędową społeczeństwa."
+    }
+  },
+  {
+    id: "rzecki", name: "Ignacy Rzecki",
+    description: "Starszy przyjaciel i pracownik Wokulskiego, prowadzący sklep. Wierny ideałom napoleońskim i dawnym wartościom, prowadzi pamiętnik będący kroniką epoki. Uosabia człowieka, który nie odnajduje się w nowej rzeczywistości.",
+    motifs: ["motywstarosci", "motywmieszczanstwa", "motywprzemijania"],
+    motifDescriptions: {
+      motywstarosci: "Jako starszy człowiek wierny dawnym ideałom nie odnajduje się w nowej rzeczywistości.",
+      motywmieszczanstwa: "Jako pracownik sklepu Wokulskiego reprezentuje skromne, pracowite mieszczaństwo.",
+      motywprzemijania: "Jego pamiętnik staje się kroniką mijającej epoki i jego własnego, przemijającego świata wartości."
+    }
+  },
+  {
+    id: "lecka", name: "Izabela Łęcka",
+    description: "Piękna arystokratka ze zubożałej rodziny. Powierzchownie interesuje się sztuką i kulturą, traktuje Wokulskiego instrumentalnie. Jej postawa uosabia degenerację i próżność klasy szlacheckiej niezdolnej do adaptacji.",
+    motifs: ["motywkobiety", "motywarystokracji"],
+    motifDescriptions: {
+      motywkobiety: "Uosabia obraz kobiety próżnej, traktującej miłość i mężczyzn instrumentalnie.",
+      motywarystokracji: "Jako arystokratka ze zubożałej rodziny reprezentuje degenerację i próżność swojej klasy."
+    }
+  },
+  {
+    id: "kmicic", name: "Andrzej Kmicic",
+    description: "Młody szlachcic zaręczony z Oleńką Billewiczówną. Z początku awanturnik skłonny do przemocy, przechodzi głęboką przemianę moralną — pod przybranym nazwiskiem Babinicz walczy za ojczyznę i odzyskuje honor.",
+    motifs: ["motywprzemiany", "motywpatriotyzmu", "motywmilosci", "motywrycerza"],
+    motifDescriptions: {
+      motywprzemiany: "Przechodzi głęboką przemianę moralną od awanturnika do bohatera narodowego.",
+      motywpatriotyzmu: "Pod przybranym nazwiskiem Babinicz walczy za ojczyznę, dowodząc swojej przemiany.",
+      motywmilosci: "Miłość do Oleńki mobilizuje go do zmiany i odzyskania honoru.",
+      motywrycerza: "Odzyskuje rycerski honor poprzez bohaterską walkę za ojczyznę."
+    }
+  },
+  {
+    id: "michal", name: "Michał Wołodyjowski",
+    description: "Legendarny polski pułkownik, wzór rycerskich cnót. Uczciwy, skromny i niezrównany w walce. Całkowicie oddany obronie ojczyzny przed Szwedami, Turkami i Tatarami. Ginie bohaterską śmiercią, wysadzając twierdzę.",
+    motifs: ["motywpatriotyzmu", "motywrycerza", "motywposwiecenia"],
+    motifDescriptions: {
+      motywpatriotyzmu: "Całkowicie oddany obronie ojczyzny przed Szwedami, Turkami i Tatarami.",
+      motywrycerza: "Wzór rycerskich cnót — uczciwy, skromny i niezrównany w walce.",
+      motywposwiecenia: "Ginie bohaterską śmiercią, wysadzając twierdzę w obronie ojczyzny."
+    }
+  },
+  {
+    id: "baryka", name: "Cezary Baryka",
+    description: "Syn polskiego urzędnika, wychowany w Baku. Po odzyskaniu przez Polskę niepodległości wraca do kraju i zderza się z brutalną rzeczywistością społeczną, rozdarty między ideałami ojca, ideami rewolucji a polskim patriotyzmem.",
+    motifs: ["motywprzemiany", "motywbuntu", "motywrewolucji", "motywpatriotyzmu"],
+    motifDescriptions: {
+      motywprzemiany: "Przechodzi ewolucję od człowieka bez tożsamości do kogoś, kto musi wybrać własną drogę.",
+      motywbuntu: "Wyraża niezgodę na niesprawiedliwość społeczną odrodzonej Polski.",
+      motywrewolucji: "Kuszony jest ideą radykalnej zmiany społecznej, którą widział w Baku.",
+      motywpatriotyzmu: "Rozdarty jest między ideałami ojca o Polsce a rzeczywistością, która nie spełnia jego wyobrażeń."
+    }
+  },
+  {
+    id: "starybaryka", name: "Seweryn Baryka",
+    description: "Ojciec Cezarego, carski urzędnik. Głęboki patriota, który przez lata na obczyźnie idealizuje Polskę i opowiada synowi o kraju szklanych domów. Umiera w drodze do ojczyzny, nie doczekawszy powrotu.",
+    motifs: ["motywojca", "motywpatriotyzmu", "motywmarzycielstwa"],
+    motifDescriptions: {
+      motywojca: "Jako ojciec wpaja synowi ideę szklanych domów i miłość do Polski.",
+      motywpatriotyzmu: "Przez lata na obczyźnie idealizuje ojczyznę, choć nie doczekuje powrotu do niej.",
+      motywmarzycielstwa: "Jego wizja kraju szklanych domów jest idealistycznym marzeniem o odrodzonej Polsce."
+    }
+  },
+  {
+    id: "jozek", name: "Józio Kowalski",
+    description: "Trzydziestoletni mężczyzna, który za sprawą profesora Pimki zostaje cofnięty do roli szesnastolatka i odesłany do szkoły. Wędruje przez kolejne środowiska — szkołę, stancję Młodziaków, wieś — wszędzie konfrontując się z narzucanymi mu rolami społecznymi.",
+    motifs: ["motywbuntu", "motywszkoly", "motywdomu", "motywdworku", "motywpodrozywedrowki"],
+    motifDescriptions: {
+      motywbuntu: "Desperacko próbuje wyrwać się z narzucanych mu przez społeczeństwo masek i ról.",
+      motywszkoly: "Zostaje cofnięty do roli ucznia, doświadczając edukacji jako narzędzia infantylizacji.",
+      motywdomu: "Stancja Młodziaków staje się kolejną przestrzenią, w której konfrontuje się z formami zniewolenia.",
+      motywdworku: "Na wsi Miętusa konfrontuje się z dworkiem jako kolejną pułapką społecznej formy.",
+      motywpodrozywedrowki: "Wędruje przez kolejne środowiska — szkołę, stancję, wieś — szukając ucieczki od narzuconych ról."
+    }
+  },
+  {
+    id: "mietus", name: "Miętus",
+    description: "Kolega Józia ze szkoły, przedstawiciel grupy chłopców starających się udowodnić swoją dorosłość przez wulgarność i prymitywizm. Marzy o autentycznym kontakcie z prostym człowiekiem — chłopem — co realizuje w groteskowy sposób.",
+    motifs: ["motywszkoly", "motywdworku", "motywbuntu"],
+    motifDescriptions: {
+      motywszkoly: "Jako uczeń próbuje udowodnić dorosłość przez wulgarność i prymitywizm.",
+      motywdworku: "Marzy o autentycznym kontakcie z chłopem, co realizuje na wsi w groteskowy sposób.",
+      motywbuntu: "Jego dążenie do autentyczności jest formą buntu przeciwko sztuczności form społecznych."
+    }
+  },
+  {
+    id: "rieux", name: "Bernard Rieux",
+    description: "Lekarz mieszkający w Oranie, który od pierwszych objawów epidemii poświęca się walce z dżumą. Oddziela osobiste uczucia od obowiązku zawodowego. Uosabia postawę aktywnego humanizmu — działania pomimo braku pewności sensu.",
+    motifs: ["motywposwiecenia", "motywprzyjazni", "motywbuntu", "motywsmierci"],
+    motifDescriptions: {
+      motywposwiecenia: "Od pierwszych objawów epidemii poświęca się walce z dżumą, rezygnując z osobistego szczęścia.",
+      motywprzyjazni: "Walczy ramię w ramię z towarzyszami zjednoczonymi wspólnym wrogiem.",
+      motywbuntu: "Jego postawa jest aktywnym buntem wobec zła, nawet bez nadziei na zwycięstwo.",
+      motywsmierci: "Codzienne obcowanie ze śmiercią pacjentów kształtuje jego wybory moralne."
+    }
+  },
+  {
+    id: "boryna", name: "Maciej Boryna",
+    description: "Najbogatszy chłop w Lipcach, twardy i pracowity gospodarz. Poślubia młodą Jagnę, kierując się w dużej mierze interesem. Patriarcha rządzący rodziną żelazną ręką, co rodzi konflikt z synem Antkiem.",
+    motifs: ["motywojca", "motywpracy", "motywwsi"],
+    motifDescriptions: {
+      motywojca: "Jako patriarcha rządzi rodziną żelazną ręką, co rodzi konflikt z synem Antkiem.",
+      motywpracy: "Jako najbogatszy gospodarz w Lipcach uosabia twardą pracę jako fundament pozycji w społeczności.",
+      motywwsi: "Jako najbogatszy chłop reprezentuje surowe prawa rządzące światem wsi."
+    }
+  },
+  {
+    id: "jagna", name: "Jagna",
+    description: "Młoda, piękna chłopka wydana za bogatego Borynę wbrew własnym uczuciom. Wchodzi w romans z Antkiem i innymi mężczyznami ze wsi. Staje się ofiarą społecznego ostracyzmu — zostaje wygoniona ze wsi przez tę samą społeczność, która ją pożądała.",
+    motifs: ["motywkobiety", "motywmilosci", "motywwsi"],
+    motifDescriptions: {
+      motywkobiety: "Jako tragiczna, zmysłowa kobieta staje się ofiarą społecznego ostracyzmu wsi.",
+      motywmilosci: "Wchodzi w zakazany romans z Antkiem, sprzeciwiając się małżeństwu z interesu.",
+      motywwsi: "Zostaje wygoniona przez społeczność wiejską, która wcześniej jej pożądała — obraz surowości obyczajów wsi."
+    }
+  },
+  {
+    id: "antoni", name: "Antoni Boryna",
+    description: "Syn Macieja, pracowity i porywczy. Czuje się niesprawiedliwie traktowany przez ojca w kwestii dziedziczenia ziemi. Wchodzi w zakazany romans z Jagną, żoną ojca, co staje się źródłem rodzinnego konfliktu.",
+    motifs: ["motywsyna", "motywmilosci", "motywkonfliktu"],
+    motifDescriptions: {
+      motywsyna: "Czuje się niesprawiedliwie traktowany przez ojca w kwestii dziedziczenia ziemi.",
+      motywmilosci: "Wchodzi w namiętny, zakazany romans z Jagną, żoną własnego ojca.",
+      motywkonfliktu: "Jego romans z Jagną staje się źródłem głębokiego konfliktu rodzinnego z ojcem."
+    }
+  },
+  {
+    id: "hektor", name: "Hektor",
+    description: "Najstarszy syn króla Priama, najdzielniejszy wojownik Troi. Walczy w obronie ojczyzny i rodziny, choć przeczuwa własną śmierć. Uosabia ideał rycerza, który spełnia obowiązek nawet wobec nieuchronnej klęski.",
+    motifs: ["motywpatriotyzmu", "motywrycerza", "motywfatumprzeznaczenia", "motywsmierci"],
+    motifDescriptions: {
+      motywpatriotyzmu: "Walczy w obronie Troi i swojej rodziny do samego końca.",
+      motywrycerza: "Uosabia ideał rycerza, który spełnia obowiązek nawet wobec nieuchronnej klęski.",
+      motywfatumprzeznaczenia: "Przeczuwa własną śmierć, lecz nie ucieka przed przeznaczeniem.",
+      motywsmierci: "Godzi się ze śmiercią jako nieuchronną ceną obrony honoru i ojczyzny."
+    }
+  },
+  {
+    id: "parys", name: "Parys",
+    description: "Młodszy syn Priama. Porywa Helenę ze Sparty, wywołując tym samym wojnę trojańską. Piękny, lecz pozbawiony odwagi — w przeciwieństwie do Hektora unika bezpośredniej walki.",
+    motifs: ["motywmilosci", "motywwojny"],
+    motifDescriptions: {
+      motywmilosci: "Jego namiętna miłość do Heleny ma charakter egoistyczny i niszczący.",
+      motywwojny: "Porwanie Heleny przez Parysa staje się bezpośrednią przyczyną wojny trojańskiej."
+    }
+  },
+  {
+    id: "achilles", name: "Achilles",
+    description: "Najsłynniejszy grecki heros, niemal niepokonany w walce. Świadomie wybiera krótkie lecz pełne chwały życie zamiast długiego spokojnego istnienia. Po śmierci przyjaciela Patroklosa wraca do boju, by pomścić go i zabić Hektora.",
+    motifs: ["motywzemsty", "motywrycerza", "motywfatumprzeznaczenia"],
+    motifDescriptions: {
+      motywzemsty: "Po śmierci Patroklosa wraca do boju, by go pomścić, zabijając Hektora.",
+      motywrycerza: "Jako niemal niepokonany heros uosabia rycerski ideał gwałtownej walki o sławę.",
+      motywfatumprzeznaczenia: "Świadomie wybiera krótkie, pełne chwały życie, znając swoje przeznaczenie."
+    }
+  },
+  {
+    id: "polikarp", name: "Mistrz Polikarp",
+    description: "Uczony teolog, który prosi Boga o możliwość ujrzenia Śmierci. W rozmowie z nią dowiaduje się o nieuchronności i równości śmierci wobec wszystkich — bogatych i biednych, możnych i prostych.",
+    motifs: ["motywuczniaimistrza", "motywsmierci", "motywboga"],
+    motifDescriptions: {
+      motywuczniaimistrza: "Jako uczony szuka mądrości, lecz wobec Śmierci sam staje się uczniem.",
+      motywsmierci: "W rozmowie ze Śmiercią dowiaduje się o jej nieuchronności i demokratyczności.",
+      motywboga: "Prosi Boga o możliwość ujrzenia Śmierci, co staje się początkiem dydaktycznego dialogu."
+    }
+  },
+  {
+    id: "smierc", name: "Śmierć",
+    description: "Spersonifikowana Śmierć — pojawia się przed Mistrzem Polikarpem jako rozkładające się ciało kobiety z kosą. Głosi nieuchronność i demokratyczność śmierci, która nie oszczędza nikogo bez względu na stan i majątek.",
+    motifs: ["motywsmierci", "motywprzemijania"],
+    motifDescriptions: {
+      motywsmierci: "Głosi nieuchronność i demokratyczność śmierci, niezależną od stanu i majątku.",
+      motywprzemijania: "Jako rozkładające się ciało symbolizuje nietrwałość i przemijanie wszystkiego, co ziemskie."
+    }
+  }
+],
 
   motifs: [
     { id: "motywsmierci", name: "Motyw Śmierci", description: "Nieuchronność kresu życia i refleksja nad sensem istnienia", books: ["antygona", "getto", "dzuma", "iliada", "polikarp"], aliases: ["śmierć", "smierc", "motyw śmierci", "motyw smierci"], images: [{ src: "images/motywy/smierc/smierc-marata-david.jpg" }], poems: [] },
@@ -534,213 +1074,6 @@ const data = {
     { id: "motywzbrodni", name: "Motyw Zbrodni", description: "Przekroczenie norm moralnych i jego konsekwencje", books: ["magbet", "zbrodniaikara", "gaz"], aliases: ["zbrodnia", "motyw zbrodni", "przestępstwo", "przestepstwo"], images: [{ src: "images/motywy/zbrodnia/pierre_paul_prudhon-jpg.jpg" }], poems: [] },
     { id: "motywzdrady", name: "Motyw Zdrady", description: "Złamanie lojalności wobec bliskich, idei lub ojczyzny", books: ["1984", "potop"], aliases: ["zdrada", "motyw zdrady", "nielojalność", "nielojalnosc"], images: [{ src: "images/motywy/zdrada/DoVFE8egCJ7xf03wXkXAPEb9puV8AzDk.jpeg" }], poems: [] },
     { id: "motywzemsty", name: "Motyw Zemsty", description: "Pragnienie odwetu prowadzące do konfliktu i destrukcji", books: ["iliada"], aliases: ["zemsta", "motyw zemsty", "odwet"], images: [{ src: "images/motywy/zemsta/artemisia-gentileschi_judyta-holofernes.jpg" }], poems: [] },
-  ],
-
-  characters: [
-    {
-      id: "chochol",
-      name: "Chochoł",
-      description: "Symbol marazmu narodowego i uśpienia społeczeństwa polskiego. Pojawia się jako zjawa na weselu i prowadzi chocholi taniec — symbol narodowego letargu i niemożności działania.",
-      motifs: ["motywtanca", "motywpolskiipolakow", "motywbuntu"]
-    },
-    {
-      id: "poeta",
-      name: "Poeta",
-      description: "Krakowski inteligent obecny na weselu, negatywnie nastawiony do chłopomanii. Nawiedza go zjawa Rycerza, która budzi w nim chwilową nadzieję i chęć walki o niepodległość — ta jednak znika wraz z nadejściem poranka.",
-      motifs: ["motywartysty", "motywpatriotyzmu", "motywbuntu"]
-    },
-    {
-      id: "mlody",
-      name: "Pan Młody",
-      description: "Krakowski artysta, który bierze chłopkę za żonę. Idealizuje wieś i życie chłopskie, nie mając o nich żadnego pojęcia — uosabia powierzchowną fascynację ludu.",
-      motifs: ["motywartysty", "motywwsi"]
-    },
-    {
-      id: "gospodarz",
-      name: "Gospodarz",
-      description: "Artysta od dawna mieszkający na wsi. Nawiedza go zjawa Wernyhory, który każe mu zebrać chłopów do walki i wręcza złoty róg. Gospodarz przekazuje go Jaśkowi, który go gubi — motyw straconej szansy na zryw narodowy.",
-      motifs: ["motywpatriotyzmu", "motywpolskiipolakow"]
-    },
-    {
-      id: "antygona",
-      name: "Antygona",
-      description: "Córka Edypa, siostra Eteokla i Polinika. Staje przed tragiczną decyzją: posłuchać rozkazu króla i nie pochować Polinika, czy postąpić zgodnie z prawem boskim i oddać bratu należny mu pogrzeb. Wybiera prawo boskie, płacąc za to życiem.",
-      motifs: ["motywbuntu", "motywposwiecenia", "motywfatumprzeznaczenia"]
-    },
-    {
-      id: "kreon",
-      name: "Kreon",
-      description: "Król Teb, który zakazuje pochowania Polinika uznając go za zdrajcę ojczyzny. Nie przyjmuje żadnych sprzeciwów, a jego upór i pycha prowadzą do śmierci syna, żony i bratanicy.",
-      motifs: ["motywwladcy", "motywwladzy", "motywkonfliktu"]
-    },
-    {
-      id: "ismena",
-      name: "Ismena",
-      description: "Siostra Antygony. Rozumie racje siostry, lecz boi się konsekwencji złamania królewskiego rozkazu i odmawia udziału w pochówku. Uosabia postawę uległości wobec prawa państwowego.",
-      motifs: ["motywkonfliktu"]
-    },
-    {
-      id: "raskolnikow",
-      name: "Raskolnikow",
-      description: "Student przekonany o własnej wyjątkowości, który morderstwem lichwiarki próbuje udowodnić swoją teorię nadczłowieka — że wielkie jednostki mają prawo przekraczać moralne granice. Jednak nie jest w stanie udźwignąć ciężaru winy.",
-      motifs: ["motywzbrodni", "motywwinyikary", "motywmiasta", "motywbiedy", "motywszalenstwa"]
-    },
-    {
-      id: "sonia",
-      name: "Sonia Marmieładowa",
-      description: "Młoda dziewczyna zmuszona do prostytucji, by utrzymać rodzinę. Głęboko wierząca, symbolizuje miłosierdzie i przebaczenie. Zakochuje się w Raskolnikowie i towarzyszy mu na zesłaniu, będąc katalizatorem jego przemiany.",
-      motifs: ["motywmilosci", "motywposwiecenia", "motywboga"]
-    },
-    {
-      id: "makbet",
-      name: "Makbet",
-      description: "Dzielny rycerz i kuzyn króla Dunkana. Po usłyszeniu przepowiedni czarownic budzi się w nim żądza władzy. Podstępem morduje króla i przejmuje tron, po czym wpada w spiralę kolejnych zbrodni, nękany strachem i wyrzutami sumienia.",
-      motifs: ["motywfatumprzeznaczenia", "motywprzepowiedni", "motywwladzy", "motywspisku", "motywzbrodni", "motywwinyikary"]
-    },
-    {
-      id: "lmakbet",
-      name: "Lady Makbet",
-      description: "Żona Makbeta, która obmyśla plan zabójstwa Dunkana i nakłania do niego męża. Zimna i bezwzględna na początku, stopniowo traci kontrolę nad umysłem — lunatykuje i ostatecznie popada w obłęd z powodu wyrzutów sumienia.",
-      motifs: ["motywkobiety", "motywszalenstwa", "motywspisku", "motywwinyikary"]
-    },
-    {
-      id: "artur",
-      name: "Artur",
-      description: "Młody student, syn Stomila i Eleonory. Paradoksalnie buntuje się przeciwko anarchii rodziny, pragnąc przywrócić tradycyjne wartości i porządek. Jego próba kończy się klęską — władzę przejmuje prymitywny Edek.",
-      motifs: ["motywbuntu", "motywobyczajowitradycji", "motywrodziny", "motywkonfliktupokolen"]
-    },
-    {
-      id: "edek",
-      name: "Edek",
-      description: "Nieuczony i pozbawiony zasad kochanek matki Artura. Uznawany przez Stomila za reprezentanta prawdziwego, autentycznego życia. Triumfuje nad intelektualizmem Artura, ukazując zwycięstwo brutalnej siły nad rozumem.",
-      motifs: ["motywwladzy", "motywpolskiipolakow"]
-    },
-    {
-      id: "winston",
-      name: "Winston Smith",
-      description: "Pracownik Ministerstwa Prawdy, który potajemnie buntuje się przeciwko reżimowi Partii. Prowadzi pamiętnik, nawiązuje zakazany romans z Julią i szuka kontaktu z opozycją. Zostaje schwytany, złamany i przeprogramowany przez system.",
-      motifs: ["motywbuntu", "motywwolnosci", "motywmilosci"]
-    },
-    {
-      id: "brat",
-      name: "Wielki Brat",
-      description: "Tajemniczy, prawdopodobnie fikcyjny przywódca Oceanii. Jego wizerunek jest wszechobecny — symbolizuje absolutną, bezosobową władzę Partii. Samo jego istnienie jest niepewne, co czyni go jeszcze potężniejszym narzędziem kontroli.",
-      motifs: ["motywtotalitaryzmu", "motywwladzy"]
-    },
-    {
-      id: "harpagon",
-      name: "Harpagon",
-      description: "Bogaty paryski mieszczanin i lichwiarz, opętany obsesją gromadzenia pieniędzy. Skąpstwo rządzi każdą jego decyzją — sprzeciwia się małżeństwom dzieci, które nie przynoszą mu zysku, i przedkłada szkatułkę ze złotem nad szczęście rodziny.",
-      motifs: ["motywpieniadza", "motywrodziny", "motywmieszczanstwa"]
-    },
-    {
-      id: "wokulski",
-      name: "Stanisław Wokulski",
-      description: "Zamożny kupiec, który dorobił się majątku handlem. Zakochany bez wzajemności w arystokratce Izabeli Łęckiej, podporządkowuje jej temu uczuciu całe życie. Jednocześnie prowadzi działalność filantropijną na rzecz ubogich.",
-      motifs: ["motywmilosci", "motywfilantropii", "motywkariery", "motywmieszczanstwa"]
-    },
-    {
-      id: "rzecki",
-      name: "Ignacy Rzecki",
-      description: "Starszy przyjaciel i pracownik Wokulskiego, prowadzący sklep. Wierny ideałom napoleońskim i dawnym wartościom, prowadzi pamiętnik będący kroniką epoki. Uosabia człowieka, który nie odnajduje się w nowej rzeczywistości.",
-      motifs: ["motywstarosci", "motywmieszczanstwa", "motywprzemijania"]
-    },
-    {
-      id: "lecka",
-      name: "Izabela Łęcka",
-      description: "Piękna arystokratka ze zubożałej rodziny. Powierzchownie interesuje się sztuką i kulturą, traktuje Wokulskiego instrumentalnie. Jej postawa uosabia degenerację i próżność klasy szlacheckiej niezdolnej do adaptacji.",
-      motifs: ["motywkobiety", "motywarystokracji"]
-    },
-    {
-      id: "kmicic",
-      name: "Andrzej Kmicic",
-      description: "Młody szlachcic zaręczony z Oleńką Billewiczówną. Z początku awanturnik skłonny do przemocy, przechodzi głęboką przemianę moralną — pod przybranym nazwiskiem Babinicz walczy za ojczyznę i odzyskuje honor.",
-      motifs: ["motywprzemiany", "motywpatriotyzmu", "motywmilosci", "motywrycerza"]
-    },
-    {
-      id: "michal",
-      name: "Michał Wołodyjowski",
-      description: "Legendarny polski pułkownik, wzór rycerskich cnót. Uczciwy, skromny i niezrównany w walce. Całkowicie oddany obronie ojczyzny przed Szwedami, Turkami i Tatarami. Ginie bohaterską śmiercią, wysadzając twierdzę.",
-      motifs: ["motywpatriotyzmu", "motywrycerza", "motywposwiecenia"]
-    },
-    {
-      id: "baryka",
-      name: "Cezary Baryka",
-      description: "Syn polskiego urzędnika, wychowany w Baku. Po odzyskaniu przez Polskę niepodległości wraca do kraju i zderzа się z brutalną rzeczywistością społeczną, rozdarty między ideałami ojca, ideami rewolucji a polskim patriotyzmem.",
-      motifs: ["motywprzemiany", "motywbuntu", "motywrewolucji", "motywpatriotyzmu"]
-    },
-    {
-      id: "starybaryka",
-      name: "Seweryn Baryka",
-      description: "Ojciec Cezarego, carski urzędnik. Głęboki patriota, który przez lata na obczyźnie idealizuje Polskę i opowiada synowi o kraju szklanych domów. Umiera w drodze do ojczyzny, nie doczekawszy powrotu.",
-      motifs: ["motywojca", "motywpatriotyzmu", "motywmarzycielstwa"]
-    },
-    {
-      id: "jozek",
-      name: "Józio Kowalski",
-      description: "Trzydziestoletni mężczyzna, który za sprawą profesora Pimki zostaje cofnięty do roli szesnastolatka i odesłany do szkoły. Wędruje przez kolejne środowiska — szkołę, stancję Młodziaków, wieś — wszędzie konfrontując się z narzucanymi mu rolami społecznymi.",
-      motifs: ["motywbuntu", "motywszkoly", "motywdomu", "motywdworku", "motywpodrozywedrowki"]
-    },
-    {
-      id: "mietus",
-      name: "Miętus",
-      description: "Kolega Józia ze szkoły, przedstawiciel grupy chłopców starających się udowodnić swoją dorosłość przez wulgarność i prymitywizm. Marzy o autentycznym kontakcie z prostym człowiekiem — chłopem — co realizuje w groteskowy sposób.",
-      motifs: ["motywszkoly", "motywdworku", "motywbuntu"]
-    },
-    {
-      id: "rieux",
-      name: "Bernard Rieux",
-      description: "Lekarz mieszkający w Oranie, który od pierwszych objawów epidemii poświęca się walce z dżumą. Oddziela osobiste uczucia od obowiązku zawodowego. Uosabia postawę aktywnego humanizmu — działania pomimo braku pewności sensu.",
-      motifs: ["motywposwiecenia", "motywprzyjazni", "motywbuntu", "motywsmierci"]
-    },
-    {
-      id: "boryna",
-      name: "Maciej Boryna",
-      description: "Najbogatszy chłop w Lipcach, twardy i pracowity gospodarz. Poślubia młodą Jagnę, kierując się w dużej mierze interesem. Patriarcha rządzący rodziną żelazną ręką, co rodzi konflikt z synem Antkiem.",
-      motifs: ["motywojca", "motywpracy", "motywwsi"]
-    },
-    {
-      id: "jagna",
-      name: "Jagna",
-      description: "Młoda, piękna chłopka wydana za bogatego Borynę wbrew własnym uczuciom. Wchodzi w romans z Antkiem i innymi mężczyznami ze wsi. Staje się ofiarą społecznego ostracyzmu — zostaje wygoniona ze wsi przez tę samą społeczność, która ją pożądała.",
-      motifs: ["motywkobiety", "motywmilosci", "motywwsi"]
-    },
-    {
-      id: "antoni",
-      name: "Antoni Boryna",
-      description: "Syn Macieja, pracowity i porywczy. Czuje się niesprawiedliwie traktowany przez ojca w kwestii dziedziczenia ziemi. Wchodzi w zakazany romans z Jagną, żoną ojca, co staje się źródłem rodzinnego konfliktu.",
-      motifs: ["motywsyna", "motywmilosci", "motywkonfliktu"]
-    },
-    {
-      id: "hektor",
-      name: "Hektor",
-      description: "Najstarszy syn króla Priama, najdzielniejszy wojownik Troi. Walczy w obronie ojczyzny i rodziny, choć przeczuwa własną śmierć. Uosabia ideał rycerza, który spełnia obowiązek nawet wobec nieuchronnej klęski.",
-      motifs: ["motywpatriotyzmu", "motywrycerza", "motywfatumprzeznaczenia", "motywsmierci"]
-    },
-    {
-      id: "parys",
-      name: "Parys",
-      description: "Młodszy syn Priama. Porywa Helenę ze Sparty, wywołując tym samym wojnę trojańską. Piękny, lecz pozbawiony odwagi — w przeciwieństwie do Hektora unika bezpośredniej walki.",
-      motifs: ["motywmilosci", "motywwojny"]
-    },
-    {
-      id: "achilles",
-      name: "Achilles",
-      description: "Najsłynniejszy grecki heros, niemal niepokonany w walce. Świadomie wybiera krótkie lecz pełne chwały życie zamiast długiego spokojnego istnienia. Po śmierci przyjaciela Patroklosa wraca do boju, by pomścić go i zabić Hektora.",
-      motifs: ["motywzemsty", "motywrycerza", "motywfatumprzeznaczenia"]
-    },
-    {
-      id: "polikarp",
-      name: "Mistrz Polikarp",
-      description: "Uczony teolog, który prosi Boga o możliwość ujrzenia Śmierci. W rozmowie z nią dowiaduje się o nieuchronności i równości śmierci wobec wszystkich — bogatych i biednych, możnych i prostych.",
-      motifs: ["motywuczniaimistrza", "motywsmierci", "motywboga"]
-    },
-    {
-      id: "smierc",
-      name: "Śmierć",
-      description: "Spersonifikowana Śmierć — pojawia się przed Mistrzem Polikarpem jako rozkładające się ciało kobiety z kosą. Głosi nieuchronność i demokratyczność śmierci, która nie oszczędza nikogo bez względu na stan i majątek.",
-      motifs: ["motywsmierci", "motywprzemijania"]
-    },
   ]
 };
 
