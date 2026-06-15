@@ -304,8 +304,9 @@ input{font-family:inherit}
 .tile-icon{font-size:1.4rem;margin-bottom:.2rem;transition:color .2s}
 
 /* LIGHTBOX */
+/* LIGHTBOX */
 #lightbox{
-  display:none;position:fixed;inset:0;z-index:999;
+  display:none;position:fixed;inset:0;z-index:9999;
   background:rgba(10,10,10,.88);
   align-items:center;justify-content:center;
   cursor:zoom-out;
@@ -334,7 +335,8 @@ input{font-family:inherit}
 #lightbox-zoom button{
   background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);
   color:#fff;font-size:20px;width:40px;height:40px;border-radius:50%;
-  cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;
+  display:flex;align-items:center;justify-content:center;
 }
 #lightbox-zoom button:hover{background:rgba(255,255,255,.3)}
   
@@ -914,8 +916,7 @@ input{font-family:inherit}
 .task-feedback.bad{color:var(--accent)}
 
 .cover-visual{width:100%;min-height:110px;background:#f0ede8;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:var(--r);border:2px solid var(--ink)}
-.cover-visual img{width:100%;height:100%;object-fit:cover;display:block}
-.cover-emoji{font-size:44px;line-height:1}
+.cover-visual img{width:100%;height:100%;object-fit:contain;background:#f0ede8;display:block}.cover-emoji{font-size:44px;line-height:1}
 .y2-layout{display:grid;grid-template-columns:150px 1fr 150px;gap:12px;align-items:start;max-width:680px;margin:0 auto;width:100%}
 .y2-cover-col{display:flex;flex-direction:column;align-items:center;gap:6px}
 .y2-cover-col .cover-visual{width:100%;min-height:90px;max-height:140px}
@@ -923,7 +924,173 @@ input{font-family:inherit}
 .y2-center{display:flex;flex-direction:column;gap:10px}
 .y2-title{font-family:var(--ff-serif);font-size:1.15rem;font-weight:700;text-align:center;margin:0 0 4px;color:var(--ink)}
 .y1-shell{max-width:560px;margin:0 auto;width:100%}
-    
+
+/* ══════════════════════
+   MOBILE FIXES
+══════════════════════ */
+
+/* ── Profil lektury — mobile: jedna kolumna, opis nie ucieka ── */
+@media (max-width: 700px) {
+
+  /* Profil — pełnoekranowy scroll */
+  #profile-scroll {
+    padding: 70px 0 40px;
+  }
+
+  /* Gridy → jedna kolumna */
+  .pf-book-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    gap: 14px;
+  }
+  .pf-left-col, .pf-right-col {
+    grid-column: 1;
+  }
+  /* Na mobile: najpierw info, potem okładka */
+  .pf-left-col  { order: 2; }
+  .pf-right-col { order: 1; }
+
+  .pf-motif-grid, .pf-char-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    gap: 14px;
+  }
+
+  .pf-page-header {
+    padding: 0 16px 16px;
+  }
+  .pf-page-title {
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+  }
+
+  /* Okładka — mniejsza na mobile */
+  .pf-cover-wrap {
+    max-height: 55vw;
+    min-height: 120px;
+  }
+
+  /* Bloki — mniejszy padding */
+  .pf-block {
+    padding: 14px 16px;
+  }
+
+  /* Chipy — pełna szerokość na mobile */
+  .pf-chip {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  /* Pasek nawigacji profilu */
+  #profile-back-bar {
+    padding: 10px 14px;
+  }
+  .pf-back-title {
+    font-size: .85rem;
+    max-width: 45vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Quiz — header nie nachodzi ── */
+  #quiz {
+    padding: 12px 12px 8px;
+  }
+  #quiz-header {
+    gap: 6px;
+    padding-bottom: .6rem;
+    margin-bottom: .6rem;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  #quiz-label {
+    font-size: .9rem;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #quiz-header-right {
+    flex-shrink: 0;
+    gap: 6px;
+  }
+  #score {
+    font-size: 9px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  #nextBtn {
+    font-size: 9px;
+    padding: .4rem .9rem;
+    white-space: nowrap;
+  }
+
+  /* ── Tinder (X) — karta wyśrodkowana ── */
+  .tinder-scene {
+    grid-template-columns: 1fr 140px 1fr;
+    gap: 8px;
+  }
+  .tinder-card-x {
+    width: 140px;
+  }
+
+  /* ── Y2 — nie ucieka w prawo ── */
+  .y2-layout {
+    grid-template-columns: 100px 1fr 100px;
+    gap: 8px;
+    max-width: 100%;
+    padding: 0;
+  }
+  .y2-cover-col .cover-visual {
+    min-height: 70px;
+    max-height: 100px;
+  }
+  /* Zdjęcia w Y2 — object-fit: contain jak karta X */
+  .cover-visual img {
+    object-fit: contain;
+    background: #f0ede8;
+  }
+  .y2-title {
+    font-size: 1rem;
+  }
+  .y2-center {
+    gap: 6px;
+    min-width: 0;
+  }
+  .hints-3col {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .open-task-input {
+    font-size: 13px;
+    padding: 9px 11px;
+  }
+  .open-task-actions button {
+    font-size: 9px;
+    padding: .55rem 1.2rem;
+  }
+
+  /* ── Learn more box — nie nachodzi na quiz ── */
+  #learn-more-box {
+    margin-bottom: 6px;
+    padding: 8px 12px;
+  }
+  .lmb-title { font-size: .95rem; }
+}
+
+/* ── Bardzo wąskie (< 380px) ── */
+@media (max-width: 380px) {
+  .tinder-scene {
+    grid-template-columns: 1fr 120px 1fr;
+  }
+  .tinder-card-x { width: 120px; }
+  .y2-layout {
+    grid-template-columns: 80px 1fr 80px;
+  }
+  .pf-page-title { font-size: 1.5rem; }
+}
+  
 </style>
 </head>
 <body>
@@ -1050,7 +1217,15 @@ input{font-family:inherit}
 <!-- DIAGNOSTIC OVERLAY -->
 <div id="diag-shell"></div>
 
-
+<!-- przed </body> -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <span id="lightbox-close" onclick="closeLightbox()">×</span>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-zoom">
+    <button onclick="lbZoom(-1);event.stopPropagation()" title="Pomniejsz">−</button>
+    <button onclick="lbZoom(1);event.stopPropagation()" title="Powiększ">+</button>
+  </div>
+</div>
   
 <script src="script.js"></script>
 <script>
