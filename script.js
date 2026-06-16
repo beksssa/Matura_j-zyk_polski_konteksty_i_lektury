@@ -606,7 +606,7 @@ books: [
     },
     coverEmoji: "🛡️",
     aliases: ["Roland"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/roland/1280px-Mort_de_Roland.jpg"}]
   },
   {
     id: "dziady_ii", title: "Dziady cz. II", author: "Adam Mickiewicz",
