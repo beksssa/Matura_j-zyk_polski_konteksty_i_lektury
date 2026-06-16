@@ -506,7 +506,7 @@ books: [
     },
     coverEmoji: "🌸",
     aliases: ["Narcyz"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/larcyz/Narciso.webp"}]
   },
   {
     id: "theseus", title: "Mit o Tezeuszu", author: "mit grecki",
