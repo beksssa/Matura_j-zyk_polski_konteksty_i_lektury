@@ -336,7 +336,7 @@ books: [
     },
     coverEmoji: "📍", aliases: ["Miejsce Mrożka"],
     characters: [],
-    quotes: [], images: [{ src: "images/lektury/miejsce/miejsce.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/miejsce/1280px-Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg" }]
   },
   {
     id: "andrews", title: "Profesor Andrews w Warszawie", author: "Olga Tokarczuk",
