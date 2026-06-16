@@ -562,7 +562,7 @@ books: [
     },
     coverEmoji: "👁️",
     aliases: ["Edyp", "Król Edyp"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/edyp/1280px-Oedipus_at_Colonus.jpg"}]
   },
   {
     id: "trojan_war", title: "Wojna trojańska", author: "mit grecki",
