@@ -382,7 +382,7 @@ books: [
     },
     coverEmoji: "💀", aliases: ["Rozmowa Mistrza Polikarpa ze Śmiercią"],
     characters: ["polikarp", "smierc"],
-    quotes: [], images: [{ src: "images/lektury/polikarp/polikarp.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/smierc/Knm25VGp4wC2iGPCMkfKuqKp49THLJ2Q.jpg" }]
   },
   {
     id: "genesis", title: "Księga Rodzaju", author: "anonim (Biblia)",
