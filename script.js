@@ -240,7 +240,7 @@ books: [
     },
     coverEmoji: "🌱", aliases: ["Przedwiośnie Żeromskiego"],
     characters: ["baryka", "starybaryka"],
-    quotes: [], images: [{ src: "images/lektury/przedwiosnie/przedwiosnie.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/przedwiosnie/homework_przedwiosnie.webp" }]
   },
   {
     id: "ferdydurke", title: "Ferdydurke", author: "Witold Gombrowicz",
