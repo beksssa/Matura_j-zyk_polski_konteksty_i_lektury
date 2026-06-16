@@ -478,7 +478,7 @@ books: [
     },
     coverEmoji: "🪨",
     aliases: ["Syzyf", "Syzyfowa praca"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: ["images/lektury/syzyf/960px-Sisyphus_by_von_Stuck.jpg"]
   },
   {
     id: "prometheus", title: "Mit o Prometeuszu", author: "mit grecki",
