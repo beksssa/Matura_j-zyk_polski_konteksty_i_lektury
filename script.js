@@ -409,7 +409,7 @@ books: [
     },
     coverEmoji: "🕊️",
     aliases: ["Hiob", "Księga Hioba Biblia"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/hiob/500px-Georges_de_La_Tour_044.jpg"}]
   },
   {
     id: "ecclesiastes", title: "Księga Koheleta", author: "anonim (Biblia)",
