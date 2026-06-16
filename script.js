@@ -651,7 +651,7 @@ books: [
     },
     coverEmoji: "🌿",
     aliases: ["Pan Tadeusz Mickiewicz"],
-    characters: [], quotes: [], images: [{}]
+    characters: [], quotes: [], images: [{src: "images/lektury/pantadeusz/pan-tadeusz-b-iext196983010.jpg"}]
   }
 ],
   
