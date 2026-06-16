@@ -395,7 +395,7 @@ books: [
     },
     coverEmoji: "📖",
     aliases: ["Genesis", "Biblia Księga Rodzaju"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/rodzaju/1280px-Michelangelo_-_Creation_of_Adam_(cropped).jpg"}]
   },
   {
     id: "job", title: "Księga Hioba", author: "anonim (Biblia)",
