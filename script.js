@@ -185,7 +185,7 @@ books: [
     },
     coverEmoji: "💰", aliases: ["Skąpiec Moliera"],
     characters: ["harpagon"],
-    quotes: [], images: [{ src: "images/lektury/skapiec/PLAKAT SKAPIEC_mały do NETA.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/skapiec/646830-Skapiec.jpg" }]
   },
   {
     id: "lalka", title: "Lalka", author: "Bolesław Prus",
