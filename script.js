@@ -350,7 +350,7 @@ books: [
     },
     coverEmoji: "🏙️", aliases: ["Profesor Andrews w Warszawie Tokarczuk"],
     characters: [],
-    quotes: [], images: [{ src: "images/lektury/andrews/andrews.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/profesor/556095913_24652931134361531_5571859735269832879_n.jpg" }]
   },
   {
     id: "iliada", title: "Iliada", author: "Homer",
