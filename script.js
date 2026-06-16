@@ -275,7 +275,7 @@ books: [
     },
     coverEmoji: "🔥", aliases: ["Proszę państwa do gazu Borowskiego"],
     characters: [],
-    quotes: [], images: [{ src: "images/lektury/gaz/gaz.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/gaz/965798-352x500.jpg" }]
   },
   {
     id: "getto", title: "Zdążyć przed Panem Bogiem", author: "Hanna Krall",
