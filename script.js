@@ -222,7 +222,7 @@ books: [
     },
     coverEmoji: "⚔️", aliases: ["Potop Sienkiewicza"],
     characters: ["kmicic", "michal"],
-    quotes: [], images: [{ src: "images/lektury/potop/potop.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/potop/p_lipinski_potop.webp" }]
   },
   {
     id: "przedwiosnie", title: "Przedwiośnie", author: "Stefan Żeromski",
