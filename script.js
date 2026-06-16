@@ -492,7 +492,7 @@ books: [
     },
     coverEmoji: "🔥",
     aliases: ["Prometeusz"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/prometeusz/500px-Peter_Paul_Rubens,_Flemish_(active_Italy,_Antwerp,_and_England)_-_Prometheus_Bound_-_Google_Art_Project.jpg"}]
   },
   {
     id: "narcissus", title: "Mit o Narcyzie", author: "mit grecki",
