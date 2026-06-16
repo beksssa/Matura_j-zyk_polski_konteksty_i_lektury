@@ -323,7 +323,7 @@ books: [
     },
     coverEmoji: "👊", aliases: ["Górą Edek"],
     characters: [],
-    quotes: [], images: [{ src: "images/lektury/edek/edek.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/edek/512_gora-edek---streszczenie-i-problematyka.webp" }]
   },
   {
     id: "miejsce", title: "Miejsce", author: "Sławomir Mrożek",
