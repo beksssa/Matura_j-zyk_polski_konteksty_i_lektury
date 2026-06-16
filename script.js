@@ -422,7 +422,7 @@ books: [
     },
     coverEmoji: "⏳",
     aliases: ["Kohelet", "Eklezjastes"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/kohelet/vanitas_hu1d904c93f19f5860f179989053ef50a4_847863_700x0_resize_q75_box.jpg"}]
   },
   {
     id: "psalms", title: "Księga Psalmów", author: "anonim (Biblia)",
