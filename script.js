@@ -548,7 +548,7 @@ books: [
     },
     coverEmoji: "🕊️",
     aliases: ["Dedal i Ikar"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/ikar/1280px-Gowy-icaro-prado.jpg"}]
   },
   {
     id: "oedipus", title: "Mit o Edypie", author: "mit grecki",
