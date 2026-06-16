@@ -309,7 +309,7 @@ books: [
     },
     coverEmoji: "🦠", aliases: ["Dżuma Camusa"],
     characters: ["rieux"],
-    quotes: [], images: [{ src: "images/lektury/dzuma/dzuma.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/dzuma/h5gweayi6rbn0.jpg" }]
   },
   {
     id: "edek", title: "Górą Edek", author: "Marek Nowakowski",
@@ -478,7 +478,7 @@ books: [
     },
     coverEmoji: "🪨",
     aliases: ["Syzyf", "Syzyfowa praca"],
-    characters: [], quotes: [], images: ["images/lektury/syzyf/960px-Sisyphus_by_von_Stuck.jpg"]
+    characters: [], quotes: [], images: [{src: "images/lektury/syzyf/960px-Sisyphus_by_von_Stuck.jpg"}]
   },
   {
     id: "prometheus", title: "Mit o Prometeuszu", author: "mit grecki",
