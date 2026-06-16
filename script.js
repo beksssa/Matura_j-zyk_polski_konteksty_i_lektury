@@ -577,7 +577,7 @@ books: [
     },
     coverEmoji: "⚔️",
     aliases: ["Iliada", "wojna o Troję"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/trojanska/1280px-Giovanni_Domenico_Tiepolo_-_The_Procession_of_the_Trojan_Horse_in_Troy_-_WGA22382.jpg"}]
   },
   {
     id: "lament_swietokrzyski", title: "Lament świętokrzyski", author: "anonim",
