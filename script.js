@@ -435,7 +435,7 @@ books: [
     },
     coverEmoji: "🎶",
     aliases: ["Psalmy", "Psalterz"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/psalmy/'King_David',_painting_by_Giovanni_Francesco_Barbieri_(il_Guercino)_c._1768.jpg"}]
   },
   {
     id: "apocalypse_john", title: "Apokalipsa św. Jana", author: "anonim (Biblia)",
