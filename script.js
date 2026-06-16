@@ -591,7 +591,7 @@ books: [
     },
     coverEmoji: "💔",
     aliases: ["Posłuchajcie bracia miła"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/lament/Rogier_van_der_Weyden_017.jpg"}]
   },
   {
     id: "roland", title: "Pieśń o Rolandzie", author: "anonim",
