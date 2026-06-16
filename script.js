@@ -534,7 +534,7 @@ books: [
     },
     coverEmoji: "🦁",
     aliases: ["Herakles", "Herkules"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/herakles/AdolfSchmidt_Herkules_besiegt_die_goldbekrönte_Hirschkuh.jpg"}]
   },
   {
     id: "daedalus_icarus", title: "Mit o Dedalu i Ikarze", author: "mit grecki",
