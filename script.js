@@ -367,7 +367,7 @@ books: [
     },
     coverEmoji: "🛡️", aliases: ["Iliada Homera"],
     characters: ["hektor", "parys", "achilles"],
-    quotes: [], images: [{ src: "images/lektury/iliada/iliada.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/illiada/images (1).jpeg" }]
   },
   {
     id: "polikarp", title: "Rozmowa Mistrza Polikarpa ze Śmiercią", author: "anonim",
