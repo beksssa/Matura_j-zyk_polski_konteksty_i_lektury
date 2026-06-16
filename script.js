@@ -464,7 +464,7 @@ books: [
     },
     coverEmoji: "🎻",
     aliases: ["Orfeusz", "Orfeusz i Eurydyka"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/orfeusz/1280px-Orpheus_and_Eurydice_by_Peter_Paul_Rubens.jpg"}]
   },
   {
     id: "sisyphus", title: "Mit o Syzyfie", author: "mit grecki",
