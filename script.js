@@ -635,7 +635,7 @@ books: [
     },
     coverEmoji: "🇵🇱",
     aliases: ["Dziady III"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/dziady3/960px-Polish_Prometheus_1831.png"}]
   },
   {
     id: "pan_tadeusz", title: "Pan Tadeusz", author: "Adam Mickiewicz",
@@ -651,7 +651,7 @@ books: [
     },
     coverEmoji: "🌿",
     aliases: ["Pan Tadeusz Mickiewicz"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{}]
   }
 ],
   
