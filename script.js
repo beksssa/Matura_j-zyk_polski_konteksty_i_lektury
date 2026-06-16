@@ -620,7 +620,7 @@ books: [
     },
     coverEmoji: "🕯️",
     aliases: ["Dziady II"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/dziady2/Adam_Mickiewicz_-_Dziady_część_I_II_i_IV_p053.png"}]
   },
   {
     id: "dziady_iii", title: "Dziady cz. III", author: "Adam Mickiewicz",
