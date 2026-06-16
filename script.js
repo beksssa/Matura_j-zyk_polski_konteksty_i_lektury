@@ -520,7 +520,7 @@ books: [
     },
     coverEmoji: "🧵",
     aliases: ["Tezeusz", "Minotaur"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/tezeusz/Giuseppe_Cammarano_-_Theseus_and_the_Minotaur_by_Giuseppe_Cammarano_-_(MeisterDrucke-1101240).jpg"}]
   },
   {
     id: "heracles", title: "Mit o Heraklesie", author: "mit grecki",
