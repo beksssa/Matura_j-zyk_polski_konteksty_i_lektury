@@ -450,7 +450,7 @@ books: [
     },
     coverEmoji: "🔥",
     aliases: ["Apokalipsa", "Apokalipsa Jana"],
-    characters: [], quotes: [], images: []
+    characters: [], quotes: [], images: [{src: "images/lektury/apokalipsa/1280px-Das_Jüngste_Gericht_(Memling).jpg"}]
   },
   {
     id: "orpheus", title: "Mit o Orfeuszu i Eurydyce", author: "mit grecki",
