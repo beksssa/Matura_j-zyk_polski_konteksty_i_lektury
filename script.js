@@ -292,7 +292,7 @@ books: [
     },
     coverEmoji: "✡️", aliases: ["Zdążyć przed Panem Bogiem Krall"],
     characters: [],
-    quotes: [], images: [{ src: "images/lektury/getto/getto.jpg" }]
+    quotes: [], images: [{ src: "images/lektury/getto/antykwariatkw664zdazyc-przed-panem-bogiem.jpg" }]
   },
   {
     id: "dzuma", title: "Dżuma", author: "Albert Camus",
