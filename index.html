@@ -55,6 +55,35 @@ input{font-family:inherit}
   padding:2rem 1.5rem;
 }
 
+#bc-wrap {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+#bc-menu-btn {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: .4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  background: transparent;
+  white-space: nowrap;
+  display: none;        /* ← domyślnie ukryty */
+}
+#bc-menu-btn.visible { display: block; }
+#bc-menu-btn:hover { background: var(--ink); color: var(--bg); }
+  
 /* TOP NAV */
 #top-nav {
   position: fixed;
@@ -170,20 +199,20 @@ input{font-family:inherit}
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--ink);
-  border: 2px solid var(--ink);
-  padding: .4rem 1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background .15s, color .15s;
   background: transparent;
+  border: none;
+  padding: .4rem 0;
+  cursor: pointer;
   white-space: nowrap;
   display: none;
   align-items: center;
   gap: 6px;
   align-self: center;
+  opacity: .75;
+  transition: opacity .15s;
 }
 #bc-back-btn.visible { display: flex; }
-#bc-back-btn:hover { background: var(--ink); color: var(--bg); }
+#bc-back-btn:hover { opacity: 1; }
 
 /* DROPDOWN */
 #bc-dropdown {
@@ -1539,8 +1568,17 @@ function bcScrollDown() {
 function bcClick(index) {
   const item = bcTrail[index];
   if (!item) return;
+  // Najpierw schowaj wszystko
+  hideAllViews();
+  hideProfileEl();
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active','exit'));
+  dimBg('none');
+  document.getElementById('end-quiz-btn').classList.remove('visible');
+  screenHistory = [];
+  // Wyczyść trail do tego punktu
   bcTruncateFrom(index);
   bcClose();
+  // Wywołaj funkcję nawigacyjną
   item.fn();
 }
   
@@ -1619,9 +1657,12 @@ function hideAllViews(){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active','exit'));
 }
 
-function updateBackBtn(){
+function updateBackBtn() {
   const backBtn = document.getElementById('bc-back-btn');
-  if (backBtn) backBtn.classList.toggle('visible', screenHistory.length > 0);
+  const menuBtn = document.getElementById('bc-menu-btn');
+  const onStart = currentScreen === 'screen-start';
+  if (backBtn) backBtn.classList.toggle('visible', screenHistory.length > 0 && !onStart);
+  if (menuBtn) menuBtn.classList.toggle('visible', !onStart);
   bcRender();
 }
 
@@ -1802,7 +1843,10 @@ function renderMapItems(){
       <div class="masonry-item-hover-label">
         <div class="masonry-item-hover-title">${escapeHtml(item.label)}</div>
       </div>`;
-    el.onclick=()=>{screenHistory.push('map');if(item.type==='book')openBookProfile(item.id);else openMotifProfile(item.id);};
+    el.onclick = () => {
+      if (item.type === 'book') window.openBook(item.id);
+      else window.openMotif(item.id);
+    };
     grid.appendChild(el);
   });
 
@@ -2070,8 +2114,6 @@ function pfResizeCanvas() {
 function showProfileEl(animDir = 'right') {
   const el = document.getElementById('profile');
   const bar = document.getElementById('profile-back-bar');
-  // Ukryj globalny back-btn — profil ma własny
-  document.getElementById('back-btn').classList.remove('visible');
   el.style.display = 'block';
   el.classList.add('active');
   const content = document.getElementById('profile-content');
@@ -2081,7 +2123,6 @@ function showProfileEl(animDir = 'right') {
   pfResizeCanvas();
 }
 
-// I w hideProfileEl — przywróć back-btn jeśli historia niepusta
 function hideProfileEl() {
   const el = document.getElementById('profile');
   const bar = document.getElementById('profile-back-bar');
@@ -2090,10 +2131,6 @@ function hideProfileEl() {
   bar.classList.remove('active');
   pfStopSnakes();
   closePoemFullscreen();
-  // Przywróć globalny back-btn
-  if (screenHistory.length > 0) {
-    document.getElementById('back-btn').classList.add('visible');
-  }
 }
 
 // ── Węże sekwencyjne po renderze ──
@@ -2118,9 +2155,7 @@ function pfAttachScrollRefresh() {
   scrollEl.addEventListener('scroll', () => { /* canvas redrawuje w loop */ });
 }
 
-// ════════════════════════
-//  PROFIL LEKTURY
-// ════════════════════════
+
 // ════════════════════════
 //  PROFIL LEKTURY
 // ════════════════════════
@@ -2128,7 +2163,6 @@ function openBookProfile(id, animDir = 'right') {
   const book = getBookById(id); if (!book) return;
   dimBg('profile');
   showView('profile');
-  document.getElementById('menu-btn').classList.add('visible');
   document.getElementById('pf-back-title').textContent = book.title;
   showProfileEl(animDir);
   pfAttachScrollRefresh();
@@ -2172,7 +2206,7 @@ function openBookProfile(id, animDir = 'right') {
             ${charObjs.map(c => `
               <button class="pf-chip pf-chip-char"
                 id="pf-chip-char-${c.id}"
-                onclick="pfNavigateTo('char','${c.id}')">
+                onclick="openCharacterFromProfile('${c.id}')">
                 <span class="pf-chip-icon">👤</span>
                 ${escapeHtml(c.name)}
                 <span class="pf-chip-arrow">→</span>
@@ -2197,7 +2231,7 @@ function openBookProfile(id, animDir = 'right') {
                 id="pf-chip-motif-${m.id}"
                 onmouseenter="pfHlMotif('${m.id}',true)"
                 onmouseleave="pfHlMotif('${m.id}',false)"
-                onclick="pfNavigateTo('motif','${m.id}')">
+                onclick="openMotifFromProfile('${m.id}')">
                 <span class="pf-chip-icon">🎯</span>
                 ${escapeHtml(m.name)}
                 <span class="pf-chip-arrow">→</span>
@@ -2223,7 +2257,6 @@ function openMotifProfile(id, animDir = 'right') {
   const motif = getMotifById(id); if (!motif) return;
   dimBg('profile');
   showView('profile');
-  document.getElementById('menu-btn').classList.add('visible');
   document.getElementById('pf-back-title').textContent = motif.name;
   showProfileEl(animDir);
   pfAttachScrollRefresh();
@@ -2275,7 +2308,7 @@ function openMotifProfile(id, animDir = 'right') {
           <div class="pf-chips-wrap">
             ${bookObjs.map(b => `
               <button class="pf-chip pf-chip-book"
-                onclick="pfNavigateTo('book','${b.id}')">
+                onclick="openBookFromProfile('${b.id}')">
                 <span class="pf-chip-icon">📚</span>
                 ${escapeHtml(b.title)}
                 <span class="pf-chip-arrow">→</span>
@@ -2289,7 +2322,7 @@ function openMotifProfile(id, animDir = 'right') {
           <div class="pf-chips-wrap">
             ${charObjs.map(c => `
               <button class="pf-chip pf-chip-char"
-                onclick="pfNavigateTo('char','${c.id}')">
+                onclick="openCharacterFromProfile('${c.id}')">
                 <span class="pf-chip-icon">👤</span>
                 ${escapeHtml(c.name)}
                 <span class="pf-chip-arrow">→</span>
@@ -2333,7 +2366,6 @@ function openCharacterProfile(id, animDir = 'right') {
   const book  = getBookByCharacter(char.id);
   dimBg('profile');
   showView('profile');
-  document.getElementById('menu-btn').classList.add('visible');
   document.getElementById('pf-back-title').textContent = char.name;
   showProfileEl(animDir);
   pfAttachScrollRefresh();
@@ -2364,7 +2396,7 @@ function openCharacterProfile(id, animDir = 'right') {
           <div class="pf-block-label">Lektura</div>
           <div class="pf-chips-wrap">
             <button class="pf-chip pf-chip-book"
-              onclick="pfNavigateTo('book','${book.id}')">
+              onclick="openBookFromProfile('${book.id}')">
               <span class="pf-chip-icon">📚</span>
               ${escapeHtml(book.title)}
               <span class="pf-chip-arrow">→</span>
@@ -2381,7 +2413,7 @@ function openCharacterProfile(id, animDir = 'right') {
               return `
               <div style="display:flex;flex-direction:column;gap:4px">
                 <button class="pf-chip pf-chip-motif"
-                  onclick="pfNavigateTo('motif','${m.id}')">
+                  onclick="openMotifFromProfile('${m.id}')">
                   <span class="pf-chip-icon">🎯</span>
                   ${escapeHtml(m.name)}
                   <span class="pf-chip-arrow">→</span>
@@ -2684,6 +2716,7 @@ document.addEventListener('keydown',e=>{
 
 dimBg('none');
 renderEpochFilter();
+updateBackBtn();
 </script>
 </body>
 </html>
