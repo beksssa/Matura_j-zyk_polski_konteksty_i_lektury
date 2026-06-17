@@ -56,7 +56,7 @@ const data = {
       id: "tango", title: "Tango",
       description: "Dramat Sławomira Mrożka ukazujący upadek tradycyjnych wartości i zwycięstwo prymitywnej siły nad intelektem i porządkiem. Motyw buntu przejawia się paradoksalnie — Artur buntuje się przeciwko anarchii własnej rodziny, próbując przywrócić dawny ład. Motyw rodziny ukazuje zdegenerowaną strukturę, w której rodzice odrzucili wszelkie normy i autorytet. Motyw konfliktu pokoleń stanowi oś dramatu — młody Artur pragnie porządku, którego jego rodzice się wyrzekli. Motyw tradycji i obyczajów jest obecny jako wartość, o którą walczy i którą przegrywa główny bohater. Motyw władzy kończy się jej przejęciem przez prymitywnego Edka. Motyw Polski i Polaków pojawia się jako groteska na temat narodowych wad i niemożności reform.",
       epoch: "współczesność",
-      motifs: ["motywbuntu", "motywrodziny", "motywkonfliktupokolen", "motywobyczajowitradycji", "motywwladzy", "motywpolskiipolakow", "motywkonfliktu", "motywmieszczanstwa"],
+      motifs: ["motywbuntu", "motywrodziny", "motywkonfliktupokolen", "motywobyczajowitradycji", "motywwladzy", "motywpolskiipolakow", "motywkonfliktu", "motywmieszczanstwa", "motywdomu"],
       coverEmoji: "🪑", aliases: ["Tango Mrożka"],
       characters: ["artur", "edek"],
       quotes: [], images: [{ src: "images/lektury/tango/plakat-spektakl-Tango-2025.jpg" }]
@@ -65,7 +65,7 @@ const data = {
       id: "magbet", title: "Makbet",
       description: "Tragedia Szekspira ukazująca destrukcyjną siłę ambicji, która popycha człowieka do zbrodni i prowadzi do całkowitego rozpadu jego psychiki. Motyw zbrodni jest centralny — morderstwo Dunkana otwiera spiralę kolejnych zabójstw. Motyw władzy ukazuje, jak pragnienie panowania niszczy człowieczeństwo bohatera. Motyw przepowiedni uruchamia całą akcję — słowa czarownic stają się samospełniającą się przepowiednią. Motyw fatum i przeznaczenia przenika los Makbeta, który nie może uciec przed przepowiednią. Motyw szaleństwa dotyka Lady Makbet, którą wyrzuty sumienia doprowadzają do obłędu. Motyw winy i kary domyka tragedię — Makbet ponosi karę za swoje zbrodnie. Motyw spisku towarzyszy planowaniu i wykonaniu każdego morderstwa.",
       epoch: "renesans",
-      motifs: ["motywzbrodni", "motywwladzy", "motywprzepowiedni", "motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywspisku", "motywzla"],
+      motifs: ["motywzbrodni", "motywwladzy", "motywprzepowiedni", "motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywspisku", "motywzla", "motywwladcy", "motywzdrady"],
       coverEmoji: "👑", aliases: ["Macbeth", "Makbet Szekspira"],
       characters: ["makbet", "lmakbet"],
       quotes: [], images: [{ src: "images/lektury/magbet/4e4421b6b18d205ec1e82cb4bb61ad53.jpg" }]
@@ -92,7 +92,7 @@ const data = {
       id: "1984", title: "Rok 1984",
       description: "Antyutopia George'a Orwella ukazująca totalitarne państwo Oceania, w którym Partia kontroluje każdy aspekt życia obywateli, włącznie z myślami i uczuciami. Motyw totalitaryzmu jest centralny — Partia stosuje inwigilację, nowomowę i przepisywanie historii jako narzędzia kontroli. Motyw buntu przejawia się w próbie Winstona zachowania własnej tożsamości i podjęcia walki z systemem. Motyw miłości między Winstonem a Julią staje się aktem oporu wobec Partii zakazującej prawdziwych uczuć. Motyw wolności ukazany jest przez jej całkowity brak i marzenie o świecie bez Wielkiego Brata. Motyw władzy analizuje mechanizmy utrzymywania absolutnej kontroli nad społeczeństwem. Motyw zdrady — O'Brien zdradza Winstona — ostatecznie łamie bohatera.",
       epoch: "współczesność",
-      motifs: ["motywtotalitaryzmu", "motywbuntu", "motywmilosci", "motywwolnosci", "motywwladzy", "motywzdrady"],
+      motifs: ["motywtotalitaryzmu", "motywbuntu", "motywmilosci", "motywwolnosci", "motywwladzy", "motywzdrady", "motywspisku"],
       coverEmoji: "📕", aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
       characters: ["winston", "brat"],
       quotes: [], images: [{ src: "images/lektury/1984/il_1080xN.5882175820_6how.webp" }]
@@ -110,7 +110,7 @@ const data = {
       id: "lalka", title: "Lalka",
       description: "Powieść Bolesława Prusa ukazująca przekrój społeczeństwa polskiego epoki pozytywizmu przez pryzmat losów kupca Wokulskiego, który poświęca wszystko dla nieosiągalnej miłości. Motyw miłości — obsesyjna miłość Wokulskiego do Izabeli Łęckiej — jest motorem całej fabuły. Motyw kariery ukazuje drogę bohatera od ubogiego studenta do zamożnego kupca. Motyw arystokracji portretuje zdegenerowaną szlachtę niezdolną do pracy i pogardzającą ludźmi niższego stanu. Motyw filantropii przejawia się w działalności Wokulskiego na rzecz ubogich. Motyw mieszczaństwa i pracy pokazuje nową warstwę społeczną jako rzeczywistą siłę napędową kraju. Motyw przemijania dotyka Rzeckiego — starego idealisty, który nie rozumie nowego świata.",
       epoch: "pozytywizm",
-      motifs: ["motywmilosci", "motywkariery", "motywarystokracji", "motywfilantropii", "motywmieszczanstwa", "motywpracy", "motywprzemijania", "motywkobiety", "motywbiedy", "motywzyda"],
+      motifs: ["motywmilosci", "motywkariery", "motywarystokracji", "motywfilantropii", "motywmieszczanstwa", "motywpracy", "motywprzemijania", "motywkobiety", "motywbiedy", "motywzyda", "motywmiasta", "motywpolskiipolakow", "motywpieniadza"],
       coverEmoji: "🪆", aliases: ["Lalka Prusa"],
       characters: ["wokulski", "rzecki", "lecka"],
       quotes: [], images: [{ src: "images/lektury/lalka/2823.jpg" }]
@@ -128,7 +128,7 @@ const data = {
       id: "przedwiosnie", title: "Przedwiośnie",
       description: "Powieść Stefana Żeromskiego ukazująca rozterki ideowe młodego Polaka powracającego do odrodzonej ojczyzny i zderzającego się z brutalną rzeczywistością społeczną. Motyw przemiany ukazuje ewolucję Cezarego Baryki od człowieka bez tożsamości do kogoś, kto musi wybrać swoją drogę. Motyw rewolucji kusi bohatera ideą radykalnej zmiany, którą widział w Baku. Motyw buntu przejawia się w niezgodzie Cezarego na niesprawiedliwość społeczną odrodzonej Polski. Motyw ojca — Seweryn Baryka wpaja synowi ideę szklanych domów i miłość do Polski. Motyw patriotyzmu jest problematyczny — Polska nie spełnia idealnych wyobrażeń bohatera. Motyw konfliktu społecznego ukazuje przepaść między biedotą a uprzywilejowanymi.",
       epoch: "młoda polska",
-      motifs: ["motywprzemiany", "motywrewolucji", "motywbuntu", "motywojca", "motywpatriotyzmu", "motywkonfliktu", "motywbiedy", "motywpolskiipolakow"],
+      motifs: ["motywprzemiany", "motywrewolucji", "motywbuntu", "motywojca", "motywpatriotyzmu", "motywkonfliktu", "motywbiedy", "motywpolskiipolakow", "motywprzyjazni", "motywwojny"],
       coverEmoji: "🌱", aliases: ["Przedwiośnie Żeromskiego"],
       characters: ["baryka", "starybaryka"],
       quotes: [], images: [{ src: "images/lektury/przedwiosnie/przedwiosnie.jpg" }]
@@ -146,7 +146,7 @@ const data = {
       id: "gaz", title: "Proszę państwa do gazu",
       description: "Opowiadanie Tadeusza Borowskiego ukazujące rzeczywistość obozu koncentracyjnego z perspektywy więźnia funkcyjnego, w której dehumanizacja staje się warunkiem przeżycia. Motyw wojny i zbrodni ukazuje obóz jako skrajny wyraz bestialstwa wojennego. Motyw cierpienia jest wszechobecny — śmierć i ból stają się codziennością, wobec której bohater musi stać się obojętny. Motyw zła — system obozowy jako wcielenie zorganizowanego, biurokratycznego zła. Motyw przemiany człowieka ukazuje, jak ekstremalny system niszczy moralność i człowieczeństwo. Motyw samotności — każdy więzień jest sam wobec machiny zagłady.",
       epoch: "współczesność",
-      motifs: ["motywwojny", "motywzbrodni", "motywcierpienia", "motywzla", "motywprzemiany", "motywsamotnosci"],
+      motifs: ["motywwojny", "motywzbrodni", "motywcierpienia", "motywzla", "motywprzemiany", "motywsamotnosci", "motywsmierci"],
       coverEmoji: "🔥", aliases: ["Proszę państwa do gazu Borowskiego"],
       characters: [],
       quotes: [], images: [{ src: "images/lektury/gaz/gaz.jpg" }]
@@ -375,7 +375,7 @@ const data = {
       title: "Mit o Edypie",
       description: "Mit o Edypie opowiada o królu, który nieświadomie spełnia tragiczną przepowiednię o zabiciu ojca i poślubieniu matki. Motyw fatum/przeznaczenia ukazuje nieuchronność losu człowieka. Motyw szaleństwa przedstawia rozpad tożsamości i psychiczne załamanie bohatera. Motyw winy i kary ukazuje konsekwencje czynów niezależnych od świadomości.",
       epoch: "starożytność",
-      motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary"],
+      motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywprzepowiedni"],
       coverEmoji: "👁️",
       aliases: ["Edyp", "Król Edyp"],
       characters: [],
@@ -440,7 +440,7 @@ const data = {
       title: "Dziady cz. III",
       description: "Dziady cz. III ukazują walkę jednostki i narodu z opresyjną władzą zaborcy. Motyw buntu przedstawia sprzeciw wobec tyranii. Motyw patriotyzmu ukazuje cierpienie i poświęcenie Polaków. Motyw władzy pokazuje mechanizmy opresji. Motyw cierpienia ujawnia doświadczenie zesłania i represji.",
       epoch: "romantyzm",
-      motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia", "motywprzemiany"],
+      motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia", "motywprzemiany", "motywwolnosci"],
       coverEmoji: "🇵🇱",
       aliases: ["Dziady III"],
       characters: [],
