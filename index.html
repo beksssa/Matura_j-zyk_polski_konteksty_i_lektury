@@ -2085,7 +2085,6 @@ function showProfileEl(animDir = 'right') {
   el.classList.add('active');
   const content = document.getElementById('profile-content');
   content.className = animDir === 'left' ? 'pf-anim-left' : 'pf-anim-right';
-  bar.classList.add('active');
   pfSnakeCanvas = document.getElementById('profile-snake-canvas');
   pfResizeCanvas();
 }
@@ -2094,7 +2093,6 @@ function hideProfileEl() {
   const el = document.getElementById('profile');
   el.style.display = 'none';
   el.classList.remove('active');
-  bar.classList.remove('active');
   pfStopSnakes();
   closePoemFullscreen();
 }
