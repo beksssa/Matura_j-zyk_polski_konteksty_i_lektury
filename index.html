@@ -55,20 +55,210 @@ input{font-family:inherit}
   padding:2rem 1.5rem;
 }
 
-/* BACK BTN */
-
-#top-controls{position:fixed;top:24px;right:24px;z-index:200;display:flex;gap:10px;align-items:center}
-.top-btn{
-  font-family:var(--ff-sans);font-size:10px;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink);border:2px solid var(--ink);
-  padding:.4rem 1rem;border-radius:20px;cursor:pointer;
-  transition:background .15s,color .15s;
-  background:transparent;
-  display:none;
+/* TOP NAV */
+#top-nav {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.top-btn.visible{display:block}
-.top-btn:hover{background:var(--ink);color:var(--bg)}
+
+#back-btn {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: .4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  background: transparent;
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+#back-btn.visible { display: flex; }
+#back-btn:hover { background: var(--ink); color: var(--bg); }
+#back-btn svg { display: none; }
+
+#top-controls {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 200;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.top-btn {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: .4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  background: transparent;
+  display: none;
+}
+.top-btn.visible { display: block; }
+.top-btn:hover { background: var(--ink); color: var(--bg); }
+
+/* BREADCRUMB */
+#bc-wrap {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+#bc-menu-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+#bc-menu-btn {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: .4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  background: transparent;
+  white-space: nowrap;
+}
+#bc-menu-btn:hover { background: var(--ink); color: var(--bg); }
+
+#bc-toggle-btn {
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+  padding: 0;
+  transition: opacity .15s;
+  display: none;
+}
+#bc-toggle-btn:hover { opacity: .55; }
+#bc-toggle-btn.visible { display: block; }
+
+#bc-back-btn {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: .4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  background: transparent;
+  white-space: nowrap;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+}
+#bc-back-btn.visible { display: flex; }
+#bc-back-btn:hover { background: var(--ink); color: var(--bg); }
+
+/* DROPDOWN */
+#bc-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  min-width: 200px;
+  max-width: 260px;
+  box-shadow: 4px 4px 0 var(--ink);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+#bc-dropdown.open { display: flex; }
+
+.bc-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.bc-item-label {
+  width: 100%;
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bc-item-label:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+.bc-arrow {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1;
+  pointer-events: none;
+  padding: 1px 0;
+}
+.bc-dots {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  padding: 4px 0;
+  letter-spacing: .05em;
+}
+
+.bc-scroll-btn {
+  width: 100%;
+  font-size: 13px;
+  color: var(--ink);
+  background: rgba(10,10,10,.05);
+  border: none;
+  border-top: 2px solid var(--line);
+  padding: 5px 0;
+  cursor: pointer;
+  transition: background .12s;
+  line-height: 1;
+}
+.bc-scroll-btn:first-child {
+  border-top: none;
+  border-bottom: 2px solid var(--line);
+}
+.bc-scroll-btn:hover { background: rgba(10,10,10,.12); }
 
 /* PANELS */
 .panel{
@@ -1096,13 +1286,16 @@ input{font-family:inherit}
 <body>
 <canvas id="bg-canvas"></canvas>
 
-<button id="back-btn" onclick="handleBack()">
-  <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
-  <span>Powrót</span>
-</button>
+<div id="bc-wrap">
+  <div id="bc-menu-col">
+    <button id="bc-menu-btn" onclick="goToMenu()">Menu</button>
+    <button id="bc-toggle-btn" onclick="bcToggle()">∨</button>
+    <div id="bc-dropdown"></div>
+  </div>
+  <button id="bc-back-btn" onclick="handleBack()">↩ Powrót</button>
+</div>
 
 <div id="top-controls">
-  <button class="top-btn" id="menu-btn" onclick="goToMenu()">Menu</button>
   <button class="top-btn" id="end-quiz-btn" onclick="goToMenu()">Zakończ</button>
 </div>
 
@@ -1229,6 +1422,128 @@ input{font-family:inherit}
   
 <script src="script.js"></script>
 <script>
+
+/* ══════════════════════════════════════════════════════
+   BREADCRUMB SYSTEM
+   ══════════════════════════════════════════════════════ */
+
+const BC_MAX_VISIBLE = 6;
+let bcTrail = [];       // [{label, fn}]
+let bcOffset = 0;       // ile od dołu przewinięto
+let bcOpen = false;
+
+function bcPush(label, fn) {
+  bcTrail.push({ label, fn });
+  bcOffset = 0;
+  bcRender();
+}
+
+function bcTruncateFrom(index) {
+  // usuń wszystko od index włącznie (kliknięto element, zeruj "niższe warstwy")
+  bcTrail = bcTrail.slice(0, index);
+  bcOffset = 0;
+  bcRender();
+}
+
+function bcClear() {
+  bcTrail = [];
+  bcOffset = 0;
+  bcOpen = false;
+  bcRender();
+}
+
+function bcToggle() {
+  bcOpen = !bcOpen;
+  document.getElementById('bc-dropdown').classList.toggle('open', bcOpen);
+  document.getElementById('bc-toggle-btn').textContent = bcOpen ? '∧' : '∨';
+}
+
+function bcClose() {
+  bcOpen = false;
+  const dd = document.getElementById('bc-dropdown');
+  if (dd) dd.classList.remove('open');
+  const tb = document.getElementById('bc-toggle-btn');
+  if (tb) tb.textContent = '∨';
+}
+
+function bcRender() {
+  const toggleBtn = document.getElementById('bc-toggle-btn');
+  const backBtn   = document.getElementById('bc-back-btn');
+  const dd        = document.getElementById('bc-dropdown');
+  if (!toggleBtn || !dd) return;
+
+  const hasItems = bcTrail.length > 0;
+  toggleBtn.classList.toggle('visible', hasItems);
+  backBtn.classList.toggle('visible', hasItems);
+
+  // Zbuduj widok
+  const total = bcTrail.length;
+  // Clamp offset
+  const maxOffset = Math.max(0, total - BC_MAX_VISIBLE);
+  bcOffset = Math.max(0, Math.min(bcOffset, maxOffset));
+
+  // Indeksy do wyświetlenia (od dołu: newest last)
+  // wyświetlamy od (total - BC_MAX_VISIBLE - bcOffset) do (total - bcOffset)
+  const viewEnd   = total - bcOffset;                       // exclusive
+  const viewStart = Math.max(0, viewEnd - BC_MAX_VISIBLE);  // inclusive
+
+  const canScrollUp   = viewStart > 0;
+  const canScrollDown = viewEnd < total;
+
+  let html = '';
+
+  // Scroll up button
+  if (canScrollUp) {
+    html += `<button class="bc-scroll-btn" onclick="bcScrollUp()">∧</button>`;
+  }
+
+  // Dots top
+  if (canScrollUp) {
+    html += `<div class="bc-dots">…</div>`;
+  }
+
+  for (let i = viewStart; i < viewEnd; i++) {
+    const item = bcTrail[i];
+    const isLast = (i === viewEnd - 1);
+    html += `<div class="bc-item">`;
+    html += `<div class="bc-item-label" onclick="bcClick(${i})">${escapeHtml(item.label)}</div>`;
+    if (!isLast) html += `<div class="bc-arrow">↓</div>`;
+    html += `</div>`;
+  }
+
+  // Dots bottom
+  if (canScrollDown) {
+    html += `<div class="bc-dots">…</div>`;
+  }
+
+  // Scroll down button
+  if (canScrollDown) {
+    html += `<button class="bc-scroll-btn" onclick="bcScrollDown()">∨</button>`;
+  }
+
+  dd.innerHTML = html;
+
+  if (!hasItems) bcClose();
+}
+
+function bcScrollUp() {
+  bcOffset = Math.min(bcOffset + 1, Math.max(0, bcTrail.length - BC_MAX_VISIBLE));
+  bcRender();
+}
+
+function bcScrollDown() {
+  bcOffset = Math.max(0, bcOffset - 1);
+  bcRender();
+}
+
+function bcClick(index) {
+  const item = bcTrail[index];
+  if (!item) return;
+  bcTruncateFrom(index);
+  bcClose();
+  item.fn();
+}
+  
 /* ══════════════════════════════════════════════════════
    UI CONTROLLER
    ══════════════════════════════════════════════════════ */
@@ -1305,7 +1620,9 @@ function hideAllViews(){
 }
 
 function updateBackBtn(){
-  document.getElementById('back-btn').classList.toggle('visible',screenHistory.length>0);
+  const backBtn = document.getElementById('bc-back-btn');
+  if (backBtn) backBtn.classList.toggle('visible', screenHistory.length > 0);
+  bcRender();
 }
 
 window.handleBack=function(){
@@ -1319,55 +1636,55 @@ window.handleBack=function(){
     const el=document.getElementById(prev);
     if(el){el.classList.add('active');currentScreen=prev;}
     dimBg('none');
-    document.getElementById('menu-btn').classList.remove('visible');
     document.getElementById('end-quiz-btn').classList.remove('visible');
   } else if(prev==='map'){
     showView('map');dimBg('none');
-    document.getElementById('menu-btn').classList.add('visible');
     document.getElementById('end-quiz-btn').classList.remove('visible');
   } else if(prev==='quiz'){
     showView('quiz');dimBg('heavy');
-    document.getElementById('menu-btn').classList.remove('visible');
     document.getElementById('end-quiz-btn').classList.add('visible');
     if(quizSnap) restoreQuizState(quizSnap);
   }
 };
 
-window.goToMenu=function(){
-  screenHistory=[];
-  stopDiagnostic();hideLearnMoreBox();hideAllViews();dimBg('none');
+window.goToMenu = function(){
+  screenHistory = [];
+  stopDiagnostic(); hideLearnMoreBox(); hideAllViews(); dimBg('none');
   document.getElementById('screen-start').classList.add('active');
-  currentScreen='screen-start';
-  document.getElementById('btn-learning').classList.remove('chosen');
-  document.getElementById('btn-quiz').classList.remove('chosen');
-  document.getElementById('menu-btn').classList.remove('visible');
+  currentScreen = 'screen-start';
   document.getElementById('end-quiz-btn').classList.remove('visible');
   updateBackBtn();
+  bcClear();
 };
 
-window.setModeAndAdvance=function(m){
+window.setModeAndAdvance = function(m){
   setMode(m);
-  setTimeout(()=>showPanel('screen-mode'),200);
+  bcClear();
+  bcPush(m === 'learning' ? 'Nauka' : 'Ćwiczenia', () => {
+    setModeAndAdvance(m);
+  });
+  setTimeout(() => showPanel('screen-mode'), 200);
 };
 
-window.setViewAndAdvance=function(v){
+window.setViewAndAdvance = function(v){
   setView(v);
-  document.getElementById('btn-books').classList.toggle('chosen',v==='books');
-  document.getElementById('btn-motifs').classList.toggle('chosen',v==='motifs');
-  setTimeout(()=>{showPanel('screen-epoch');renderEpochFilter();},200);
+  document.getElementById('btn-books').classList.toggle('chosen', v === 'books');
+  document.getElementById('btn-motifs').classList.toggle('chosen', v === 'motifs');
+  bcPush(v === 'books' ? 'Lektury' : 'Motywy', () => {
+    setViewAndAdvance(v);
+  });
+  setTimeout(() => { showPanel('screen-epoch'); renderEpochFilter(); }, 200);
 };
 
-window.startApp=function(){
+window.startApp = function(){
   screenHistory.push(currentScreen);
   hideAllViews();
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active','exit'));
-  if(mode==='learning'){
-    dimBg('none');showView('map');buildMasonryMap();
-    document.getElementById('menu-btn').classList.add('visible');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active','exit'));
+  if (mode === 'learning'){
+    dimBg('none'); showView('map'); buildMasonryMap();
     document.getElementById('end-quiz-btn').classList.remove('visible');
   } else {
-    dimBg('heavy');showView('quiz');
-    document.getElementById('menu-btn').classList.remove('visible');
+    dimBg('heavy'); showView('quiz');
     document.getElementById('end-quiz-btn').classList.add('visible');
     startQuiz();
   }
@@ -1531,27 +1848,48 @@ window.renderDiagnostic = function() {
 /* ══════════════════════════════════════════════════════
    PROFILE
    ══════════════════════════════════════════════════════ */
-window.openBook = function(id) {
+window.openBook = function(id){
+  const book = getBookById(id); if (!book) return;
   screenHistory.push(currentScreen);
   if (mode === 'quiz') quizSnap = captureQuizState();
   profileReturnTarget = mode === 'quiz' ? 'quiz' : 'map';
+  bcPush(book.title, () => { openBookProfile(id); });
   openBookProfile(id, 'right');
 };
-window.openMotif = function(id) {
+  
+window.openMotif = function(id){
+  const motif = getMotifById(id); if (!motif) return;
   screenHistory.push(currentScreen);
   if (mode === 'quiz') quizSnap = captureQuizState();
   profileReturnTarget = mode === 'quiz' ? 'quiz' : 'map';
+  bcPush(motif.name, () => { openMotifProfile(id); });
   openMotifProfile(id, 'right');
 };
-window.openCharacter = function(id) {
+  
+window.openCharacter = function(id){
+  const char = getCharacterById(id); if (!char) return;
   screenHistory.push(currentScreen);
   if (mode === 'quiz') quizSnap = captureQuizState();
   profileReturnTarget = mode === 'quiz' ? 'quiz' : 'map';
+  bcPush(char.name, () => { openCharacterProfile(id); });
   openCharacterProfile(id, 'right');
 };
-window.openBookFromProfile      = id => pfNavigateTo('book', id);
-window.openMotifFromProfile     = id => pfNavigateTo('motif', id);
-window.openCharacterFromProfile = id => pfNavigateTo('char', id);
+  
+window.openBookFromProfile = function(id){
+  const book = getBookById(id); if (!book) return;
+  bcPush(book.title, () => { openBookProfile(id); });
+  pfNavigateTo('book', id);
+};
+window.openMotifFromProfile = function(id){
+  const motif = getMotifById(id); if (!motif) return;
+  bcPush(motif.name, () => { openMotifProfile(id); });
+  pfNavigateTo('motif', id);
+};
+window.openCharacterFromProfile = function(id){
+  const char = getCharacterById(id); if (!char) return;
+  bcPush(char.name, () => { openCharacterProfile(id); });
+  pfNavigateTo('char', id);
+};
 window.returnFromProfile = function() {
   pfStopSnakes();
   hideProfileEl();
