@@ -1005,30 +1005,6 @@ input{font-family:inherit}
 .pf-poem-full-text   { font-family: var(--ff-serif); font-size: 15px; font-style: italic; line-height: 1.9; color: var(--ink-light); white-space: pre-wrap; max-width: 600px; margin: 0 auto; }
 
 /* ── Pasek nawigacji profilu ── */
-#profile-back-bar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 200;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 24px;
-  background: rgba(191,203,194,.92);
-  backdrop-filter: blur(8px);
-  border-bottom: 2px solid var(--line);
-}
-#profile-back-bar.active { display: flex; }
-.pf-back-btn {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 10px; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--ink); cursor: pointer;
-  background: none; border: none; transition: opacity .2s;
-}
-.pf-back-btn:hover { opacity: .6; }
-.pf-back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform .2s; }
-.pf-back-btn:hover svg { transform: translateX(-3px); }
-.pf-back-title { font-family: var(--ff-serif); font-size: 1rem; font-weight: 700; color: var(--ink); }
 
 /* ── Opis motywu bohatera z sekcjami ── */
 .pf-char-motif-desc {
@@ -1413,14 +1389,6 @@ input{font-family:inherit}
   <div id="profile">
   <canvas id="profile-snake-canvas"></canvas>
 
-  <div id="profile-back-bar">
-    <button class="pf-back-btn" onclick="pfHandleBack()">
-      <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
-      Powrót
-    </button>
-    <div class="pf-back-title" id="pf-back-title"></div>
-    <div style="width:80px"></div>
-  </div>
 
   <div id="profile-scroll">
     <div id="profile-content"></div>
@@ -2113,7 +2081,6 @@ function pfResizeCanvas() {
 // ── Otwieranie profilu ── (zastąp całą funkcję showProfileEl)
 function showProfileEl(animDir = 'right') {
   const el = document.getElementById('profile');
-  const bar = document.getElementById('profile-back-bar');
   el.style.display = 'block';
   el.classList.add('active');
   const content = document.getElementById('profile-content');
@@ -2125,7 +2092,6 @@ function showProfileEl(animDir = 'right') {
 
 function hideProfileEl() {
   const el = document.getElementById('profile');
-  const bar = document.getElementById('profile-back-bar');
   el.style.display = 'none';
   el.classList.remove('active');
   bar.classList.remove('active');
@@ -2163,7 +2129,6 @@ function openBookProfile(id, animDir = 'right') {
   const book = getBookById(id); if (!book) return;
   dimBg('profile');
   showView('profile');
-  document.getElementById('pf-back-title').textContent = book.title;
   showProfileEl(animDir);
   pfAttachScrollRefresh();
 
@@ -2257,7 +2222,6 @@ function openMotifProfile(id, animDir = 'right') {
   const motif = getMotifById(id); if (!motif) return;
   dimBg('profile');
   showView('profile');
-  document.getElementById('pf-back-title').textContent = motif.name;
   showProfileEl(animDir);
   pfAttachScrollRefresh();
 
@@ -2366,7 +2330,6 @@ function openCharacterProfile(id, animDir = 'right') {
   const book  = getBookByCharacter(char.id);
   dimBg('profile');
   showView('profile');
-  document.getElementById('pf-back-title').textContent = char.name;
   showProfileEl(animDir);
   pfAttachScrollRefresh();
 
