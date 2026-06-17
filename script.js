@@ -85,7 +85,7 @@ books: [
     id: "tango", title: "Tango", author: "Sławomir Mrożek",
     description: "Dramat ukazujący upadek tradycyjnych wartości i zwycięstwo prymitywnej siły nad intelektem i porządkiem.",
     epoch: "współczesność",
-    motifs: ["motywbuntu", "motywrodziny", "motywkonfliktupokolen", "motywobyczajowitradycji", "motywwladzy", "motywpolskiipolakow", "motywkonfliktu"],
+    motifs: ["motywbuntu", "motywrodziny", "motywkonfliktupokolen", "motywobyczajowitradycji", "motywwladzy", "motywpolskiipolakow", "motywkonfliktu", "motywpolskiipolakow", "motywkonfliktu", "motywdomu"],
     motifDescriptions: {
       motywbuntu: "Motyw buntu przejawia się paradoksalnie — Artur buntuje się przeciwko anarchii własnej rodziny, próbując przywrócić dawny ład.",
       motywrodziny: "Motyw rodziny ukazuje zdegenerowaną strukturę, w której rodzice odrzucili wszelkie normy i autorytet.",
@@ -93,7 +93,8 @@ books: [
       motywobyczajowitradycji: "Motyw tradycji i obyczajów jest obecny jako wartość, o którą walczy i którą przegrywa główny bohater.",
       motywwladzy: "Motyw władzy kończy się jej przejęciem przez prymitywnego Edka.",
       motywpolskiipolakow: "Motyw Polski i Polaków pojawia się jako groteska na temat narodowych wad i niemożności reform.",
-      motywkonfliktu: "Motyw konfliktu ujawnia się w starciu racjonalnego porządku Artura z anarchią rodziców i brutalnością Edka."
+      motywkonfliktu: "Motyw konfliktu ujawnia się w starciu racjonalnego porządku Artura z anarchią rodziców i brutalnością Edka.",
+      motywdomu: "Motyw domu przejawią się w obrazie relacji między mieszkańcami mieszkania w którym dzieje się akcja."
     },
     coverEmoji: "🪑", aliases: ["Tango Mrożka"],
     characters: ["artur", "edek"],
@@ -103,7 +104,7 @@ books: [
     id: "magbet", title: "Makbet", author: "William Szekspir",
     description: "Tragedia ukazująca destrukcyjną siłę ambicji, która popycha człowieka do zbrodni i prowadzi do całkowitego rozpadu jego psychiki.",
     epoch: "renesans",
-    motifs: ["motywzbrodni", "motywwladzy", "motywprzepowiedni", "motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywspisku", "motywzla"],
+    motifs: ["motywzbrodni", "motywwladzy", "motywprzepowiedni", "motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywspisku", "motywzla", "motywwladcy", "motywzdrady"],
     motifDescriptions: {
       motywzbrodni: "Motyw zbrodni jest centralny — morderstwo Dunkana otwiera spiralę kolejnych zabójstw.",
       motywwladzy: "Motyw władzy ukazuje, jak pragnienie panowania niszczy człowieczeństwo bohatera.",
@@ -112,7 +113,9 @@ books: [
       motywszalenstwa: "Motyw szaleństwa dotyka Lady Makbet, którą wyrzuty sumienia doprowadzają do obłędu.",
       motywwinyikary: "Motyw winy i kary domyka tragedię — Makbet ponosi karę za swoje zbrodnie.",
       motywspisku: "Motyw spisku towarzyszy planowaniu i wykonaniu każdego morderstwa.",
-      motywzla: "Motyw zła ukazany jest przez czarownice oraz postępującą degenerację moralną głównych bohaterów."
+      motywzla: "Motyw zła ukazany jest przez czarownice oraz postępującą degenerację moralną głównych bohaterów.",
+      motywwladcy: "Motyw władcy ujawnia się przez pokazanie okrytnych rządów Makbeta.",
+      motywzdrady: "Motyw zdrady wiąże się ze zdradą której dokonuje Makbet na swoim królu Dunkanie, podstępem go zabijając."
     },
     coverEmoji: "👑", aliases: ["Macbeth", "Makbet Szekspira"],
     characters: ["makbet", "lmakbet"],
@@ -158,14 +161,15 @@ books: [
     id: "1984", title: "Rok 1984", author: "George Orwell",
     description: "Antyutopia ukazująca totalitarne państwo Oceania, w którym Partia kontroluje każdy aspekt życia obywateli, włącznie z myślami i uczuciami.",
     epoch: "współczesność",
-    motifs: ["motywtotalitaryzmu", "motywbuntu", "motywmilosci", "motywwolnosci", "motywwladzy", "motywzdrady"],
+    motifs: ["motywtotalitaryzmu", "motywbuntu", "motywmilosci", "motywwolnosci", "motywwladzy", "motywzdrady", "motywspisku"],
     motifDescriptions: {
       motywtotalitaryzmu: "Motyw totalitaryzmu jest centralny — Partia stosuje inwigilację, nowomowę i przepisywanie historii jako narzędzia kontroli.",
       motywbuntu: "Motyw buntu przejawia się w próbie Winstona zachowania własnej tożsamości i podjęcia walki z systemem.",
       motywmilosci: "Motyw miłości między Winstonem a Julią staje się aktem oporu wobec Partii zakazującej prawdziwych uczuć.",
       motywwolnosci: "Motyw wolności ukazany jest przez jej całkowity brak i marzenie o świecie bez Wielkiego Brata.",
       motywwladzy: "Motyw władzy analizuje mechanizmy utrzymywania absolutnej kontroli nad społeczeństwem.",
-      motywzdrady: "Motyw zdrady — O'Brien zdradza Winstona — ostatecznie łamie bohatera."
+      motywzdrady: "Motyw zdrady — O'Brien zdradza Winstona — ostatecznie łamie bohatera.",
+      motywspisku: "Motyw spiski wiąże się z chęcią Winstona do oporu przed reżimem i dołączeniem do ruchu oporu."
     },
     coverEmoji: "📕", aliases: ["1984", "Rok tysiąc dziewięćset osiemdziesiąty czwarty"],
     characters: ["winston", "brat"],
@@ -191,7 +195,7 @@ books: [
     id: "lalka", title: "Lalka", author: "Bolesław Prus",
     description: "Powieść ukazująca przekrój społeczeństwa polskiego epoki pozytywizmu przez pryzmat losów kupca Wokulskiego, który poświęca wszystko dla nieosiągalnej miłości.",
     epoch: "pozytywizm",
-    motifs: ["motywmilosci", "motywkariery", "motywarystokracji", "motywfilantropii", "motywmieszczanstwa", "motywpracy", "motywprzemijania", "motywkobiety"],
+    motifs: ["motywmilosci", "motywkariery", "motywarystokracji", "motywfilantropii", "motywmieszczanstwa", "motywpracy", "motywprzemijania", "motywkobiety", "motywbiedy", "motywzyda", "motywmiasta", "motywpolskiipolakow", "motywpieniadza"],
     motifDescriptions: {
       motywmilosci: "Motyw miłości — obsesyjna miłość Wokulskiego do Izabeli Łęckiej — jest motorem całej fabuły.",
       motywkariery: "Motyw kariery ukazuje drogę bohatera od ubogiego studenta do zamożnego kupca.",
@@ -200,7 +204,12 @@ books: [
       motywmieszczanstwa: "Motyw mieszczaństwa i pracy pokazuje nową warstwę społeczną jako rzeczywistą siłę napędową kraju.",
       motywpracy: "Motyw pracy ukazany jest jako fundament nowej, mieszczańskiej siły społecznej w przeciwieństwie do arystokracji.",
       motywprzemijania: "Motyw przemijania dotyka Rzeckiego — starego idealisty, który nie rozumie nowego świata.",
-      motywkobiety: "Motyw kobiety ukazany jest przez postać Izabeli Łęckiej — pięknej, lecz próżnej i instrumentalnie traktującej uczucia."
+      motywkobiety: "Motyw kobiety ukazany jest przez postać Izabeli Łęckiej — pięknej, lecz próżnej i instrumentalnie traktującej uczucia.",
+      motywbiedy: "Motyw biedy przedstawiony jest w ukazaniu przez Prusa Powiśla i jej mieszkańców — najbiedniejszej dzielnicy Warszawy.",
+      motywzyda: "Motyw żyda objawia się przez postać Doktora Szumana, oraz jego rozmów z Ignacym Rzeckim o antysemityzmie.",
+      motywmiasta: "W powieści z niezwykłą dokładnością pokazana jest Warszawa XIX wieku, wraz z jej mieszkańcami, polityką i najstrojami społecznymi.",
+      motywpolskiipolakow: "Prus pokazuje w powieści szeroki przekrój polskiego społeczeństwa, od najbiedniejszych mieszkańców Powiśla do niezywkle zamożnej arystokracji.",
+      motywpieniadza: "Motyw pieniądza przedstawiony jest przez ukazanie mocy jaką pieniądze mają nad ludźmi i co są w stanie dla nich zrobić."
     },
     coverEmoji: "🪆", aliases: ["Lalka Prusa"],
     characters: ["wokulski", "rzecki", "lecka"],
@@ -210,7 +219,7 @@ books: [
     id: "potop", title: "Potop", author: "Henryk Sienkiewicz",
     description: "Powieść historyczna ukazująca czasy potopu szwedzkiego i moralną przemianę awanturnika Kmicica w bohatera walczącego za ojczyznę.",
     epoch: "pozytywizm",
-    motifs: ["motywpatriotyzmu", "motywprzemiany", "motywrycerza", "motywmilosci", "motywzdrady", "motywboga", "motywwojny"],
+    motifs: ["motywpatriotyzmu", "motywprzemiany", "motywrycerza", "motywmilosci", "motywzdrady", "motywboga", "motywwojny", "motywszlachty"],
     motifDescriptions: {
       motywpatriotyzmu: "Motyw patriotyzmu jest centralny — walka ze Szwedami staje się testem miłości do ojczyzny.",
       motywprzemiany: "Motyw przemiany ukazuje drogę Kmicica od człowieka skłóconego z prawem do bohatera narodowego.",
@@ -218,7 +227,8 @@ books: [
       motywmilosci: "Motyw miłości — uczucie Kmicica do Oleńki — mobilizuje go do zmiany i walki o honor.",
       motywzdrady: "Motyw zdrady pojawia się jako pokusa, której niektórzy bohaterowie ulegają, stając po stronie Szwedów.",
       motywboga: "Motyw wiary i Boga przenika postawę bohaterów, którzy widzą wojnę jako sprawę religijną.",
-      motywwojny: "Motyw wojny ukazany jest jako próba charakterów i okazja do moralnego odrodzenia bohaterów."
+      motywwojny: "Motyw wojny ukazany jest jako próba charakterów i okazja do moralnego odrodzenia bohaterów.",
+      motywszlachty: "Motyw szlachty pojawia się w charakterystyce różnych członków tej klasy społecznej, od szlachetnego Wołodyjowskiego do zdradzieckiego Radziwiła."
     },
     coverEmoji: "⚔️", aliases: ["Potop Sienkiewicza"],
     characters: ["kmicic", "michal"],
@@ -228,7 +238,7 @@ books: [
     id: "przedwiosnie", title: "Przedwiośnie", author: "Stefan Żeromski",
     description: "Powieść ukazująca rozterki ideowe młodego Polaka powracającego do odrodzonej ojczyzny i zderzającego się z brutalną rzeczywistością społeczną.",
     epoch: "młoda polska",
-    motifs: ["motywprzemiany", "motywrewolucji", "motywbuntu", "motywojca", "motywpatriotyzmu", "motywkonfliktu", "motywbiedy"],
+    motifs: ["motywprzemiany", "motywrewolucji", "motywbuntu", "motywojca", "motywpatriotyzmu", "motywkonfliktu", "motywbiedy", "motywprzyjazni", "motywwojny"],
     motifDescriptions: {
       motywprzemiany: "Motyw przemiany ukazuje ewolucję Cezarego Baryki od człowieka bez tożsamości do kogoś, kto musi wybrać swoją drogę.",
       motywrewolucji: "Motyw rewolucji kusi bohatera ideą radykalnej zmiany, którą widział w Baku.",
@@ -236,7 +246,9 @@ books: [
       motywojca: "Motyw ojca — Seweryn Baryka wpaja synowi ideę szklanych domów i miłość do Polski.",
       motywpatriotyzmu: "Motyw patriotyzmu jest problematyczny — Polska nie spełnia idealnych wyobrażeń bohatera.",
       motywkonfliktu: "Motyw konfliktu społecznego ukazuje przepaść między biedotą a uprzywilejowanymi.",
-      motywbiedy: "Motyw biedy widoczny jest między innymi w obrazie dzielnicy żydowskiej i nędzy odrodzonej Polski."
+      motywbiedy: "Motyw biedy widoczny jest między innymi w obrazie dzielnicy żydowskiej i nędzy odrodzonej Polski.",
+      motywprzyjazni: "Motyw przyjaźni ukazany jest przez przyjaźń Cezarego z Hipolitem Wielosławskim.",
+      motywwojny: "Przedwiośnie ukazuje wojnę Polsko-Bolszewicką i atmosferę narodu w sytuacji zagrożenia państwa."
     },
     coverEmoji: "🌱", aliases: ["Przedwiośnie Żeromskiego"],
     characters: ["baryka", "starybaryka"],
@@ -264,14 +276,15 @@ books: [
     id: "gaz", title: "Proszę państwa do gazu", author: "Tadeusz Borowski",
     description: "Opowiadanie ukazujące rzeczywistość obozu koncentracyjnego z perspektywy więźnia funkcyjnego, w której dehumanizacja staje się warunkiem przeżycia.",
     epoch: "współczesność",
-    motifs: ["motywwojny", "motywzbrodni", "motywcierpienia", "motywzla", "motywprzemiany", "motywsamotnosci"],
+    motifs: ["motywwojny", "motywzbrodni", "motywcierpienia", "motywzla", "motywprzemiany", "motywsamotnosci", "motywsmierci"],
     motifDescriptions: {
       motywwojny: "Motyw wojny i zbrodni ukazuje obóz jako skrajny wyraz bestialstwa wojennego.",
       motywzbrodni: "Motyw zbrodni ujawnia się w systemowym, zorganizowanym mordowaniu jako codzienności obozu.",
       motywcierpienia: "Motyw cierpienia jest wszechobecny — śmierć i ból stają się codziennością, wobec której bohater musi stać się obojętny.",
       motywzla: "Motyw zła — system obozowy jako wcielenie zorganizowanego, biurokratycznego zła.",
       motywprzemiany: "Motyw przemiany człowieka ukazuje, jak ekstremalny system niszczy moralność i człowieczeństwo.",
-      motywsamotnosci: "Motyw samotności — każdy więzień jest sam wobec machiny zagłady."
+      motywsamotnosci: "Motyw samotności — każdy więzień jest sam wobec machiny zagłady.",
+      motywsmierci: "Motyw śmierci ujawia się przez nastawienie jakie podejmują mieszkańcy obozu wobec wszechobecnego ogromu śmierci."
     },
     coverEmoji: "🔥", aliases: ["Proszę państwa do gazu Borowskiego"],
     characters: [],
@@ -298,14 +311,15 @@ books: [
     id: "dzuma", title: "Dżuma", author: "Albert Camus",
     description: "Powieść ukazująca epidemię dżumy w algierskim Oranie jako alegorię zła, wobec którego człowiek musi dokonać moralnego wyboru.",
     epoch: "współczesność",
-    motifs: ["motywposwiecenia", "motywprzyjazni", "motywcierpienia", "motywboga", "motywbuntu", "motywsmierci"],
+    motifs: ["motywposwiecenia", "motywprzyjazni", "motywcierpienia", "motywboga", "motywbuntu", "motywsmierci", "motywzla"],
     motifDescriptions: {
       motywposwiecenia: "Motyw poświęcenia jest centralny — doktor Rieux i jego towarzysze rezygnują z osobistego szczęścia, by walczyć z epidemią.",
       motywprzyjazni: "Motyw przyjaźni łączy bohaterów walczących ramię w ramię ze wspólnym wrogiem.",
       motywcierpienia: "Motyw cierpienia ukazuje masową śmierć i ból jako doświadczenie zbiorowe.",
       motywboga: "Motyw boga i sensu cierpienia — postać księdza Paneloux pyta, dlaczego Bóg dopuszcza takie nieszczęście.",
       motywbuntu: "Motyw buntu — postawa Rieux jest buntem przeciwko złu, nawet bez nadziei na ostateczne zwycięstwo.",
-      motywsmierci: "Motyw śmierci nieustannie towarzyszy postaciom, kształtując ich wybory moralne."
+      motywsmierci: "Motyw śmierci nieustannie towarzyszy postaciom, kształtując ich wybory moralne.",
+      motywzla: "Przez ukazanie zarazy Camus ukazuje reakcje różnych ludzi na wszechogarniające zło."
     },
     coverEmoji: "🦠", aliases: ["Dżuma Camusa"],
     characters: ["rieux"],
@@ -388,10 +402,13 @@ books: [
     id: "genesis", title: "Księga Rodzaju", author: "anonim (Biblia)",
     description: "Opisuje stworzenie świata, początki ludzkości oraz pierwsze relacje człowieka z Bogiem.",
     epoch: "starożytność",
-    motifs: ["motywboga", "motywrodziny"],
+    motifs: ["motywboga", "motywrodziny", "motywszczesciaarkadii", "motywwinyikary", "motywszatana"],
     motifDescriptions: {
       motywboga: "Motyw Boga ukazuje akt stworzenia i ustanowienie porządku świata jako fundament istnienia człowieka.",
-      motywrodziny: "Motyw rodziny ujawnia się w historiach pierwszych ludzi i ich potomków, pokazując narodziny więzi i konfliktów międzyludzkich."
+      motywrodziny: "Motyw rodziny ujawnia się w historiach pierwszych ludzi i ich potomków, pokazując narodziny więzi i konfliktów międzyludzkich.",
+      motywszczesciaarkadii: "Motyw szczęścia i arkadii pokazan jest przez obraz raju w którym żyli Adam i Ewa przed zjedzeniem zakazanego owocu.",
+      motywwinyikary: "Motyw winy i kary ujawnia się w karze którą Bóg wymierza Adamowi i Ewie po zjedzeniu zakazanego owocu.",
+      motywszatana: "Motyw szatana ujawnia się w postaci węża, który kusi Ewę do złamania rozkazu Boga."
     },
     coverEmoji: "📖",
     aliases: ["Genesis", "Biblia Księga Rodzaju"],
@@ -441,12 +458,13 @@ books: [
     id: "apocalypse_john", title: "Apokalipsa św. Jana", author: "anonim (Biblia)",
     description: "Przedstawia wizję końca świata, ostatecznej walki dobra ze złem oraz triumfu boskiego porządku.",
     epoch: "starożytność",
-    motifs: ["motywboga", "motywzla", "motywwojny", "motywwladzy"],
+    motifs: ["motywboga", "motywzla", "motywwojny", "motywwladzy", "motywszatana"],
     motifDescriptions: {
       motywboga: "Motyw Boga ukazuje ostateczne zwycięstwo absolutu nad chaosem.",
       motywzla: "Motyw zła przedstawia destrukcyjne siły działające przeciwko światu.",
       motywwojny: "Motyw wojny ujawnia się jako kosmiczny konflikt sił duchowych.",
-      motywwladzy: "Motyw władzy ukazuje sąd i ustanowienie nowego porządku."
+      motywwladzy: "Motyw władzy ukazuje sąd i ustanowienie nowego porządku.",
+      motywszatana: "Szatan ukazany jest w Apokalipsie jako ostateczne źródło zła, które zostanie jednak pokonane."
     },
     coverEmoji: "🔥",
     aliases: ["Apokalipsa", "Apokalipsa Jana"],
@@ -554,11 +572,12 @@ books: [
     id: "oedipus", title: "Mit o Edypie", author: "mit grecki",
     description: "Mit o królu, który nieświadomie spełnia tragiczną przepowiednię o zabiciu ojca i poślubieniu matki.",
     epoch: "starożytność",
-    motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary"],
+    motifs: ["motywfatumprzeznaczenia", "motywszalenstwa", "motywwinyikary", "motywprzepowiedni"],
     motifDescriptions: {
       motywfatumprzeznaczenia: "Motyw fatum/przeznaczenia ukazuje nieuchronność losu człowieka.",
       motywszalenstwa: "Motyw szaleństwa przedstawia rozpad tożsamości i psychiczne załamanie bohatera.",
-      motywwinyikary: "Motyw winy i kary ukazuje konsekwencje czynów niezależnych od świadomości."
+      motywwinyikary: "Motyw winy i kary ukazuje konsekwencje czynów niezależnych od świadomości.",
+      motywprzepowiedni: "Motyw przepowiedni ukazuje wagę jaką antyczni Grecy przykładali do przepowiedni"
     },
     coverEmoji: "👁️",
     aliases: ["Edyp", "Król Edyp"],
@@ -612,11 +631,12 @@ books: [
     id: "dziady_ii", title: "Dziady cz. II", author: "Adam Mickiewicz",
     description: "Przedstawiają obrzęd wywoływania duchów i kontaktu ze światem zmarłych.",
     epoch: "romantyzm",
-    motifs: ["motywwinyikary", "motywboga", "motywsmierci"],
+    motifs: ["motywwinyikary", "motywboga", "motywsmierci", "motywobyczajowitradycji"],
     motifDescriptions: {
       motywwinyikary: "Motyw winy i kary ukazuje konsekwencje moralne czynów po śmierci.",
       motywboga: "Motyw Boga pojawia się jako element porządku metafizycznego.",
-      motywsmierci: "Motyw śmierci podkreśla granicę między światem żywych i umarłych."
+      motywsmierci: "Motyw śmierci podkreśla granicę między światem żywych i umarłych.",
+      motywobyczajowitradycji: "Część II dziadów ukazuje ludowy obrzęd, łączący pogańskie tradycje z chrześcijańską moralnością."
     },
     coverEmoji: "🕯️",
     aliases: ["Dziady II"],
@@ -626,12 +646,14 @@ books: [
     id: "dziady_iii", title: "Dziady cz. III", author: "Adam Mickiewicz",
     description: "Ukazują walkę jednostki i narodu z opresyjną władzą zaborcy.",
     epoch: "romantyzm",
-    motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia"],
+    motifs: ["motywbuntu", "motywpatriotyzmu", "motywwladzy", "motywcierpienia", "motywprzemiany", "motywwolnosci"],
     motifDescriptions: {
       motywbuntu: "Motyw buntu przedstawia sprzeciw wobec tyranii — uosobiony m.in. w postawie Konrada wobec Boga.",
       motywpatriotyzmu: "Motyw patriotyzmu ukazuje cierpienie i poświęcenie Polaków.",
       motywwladzy: "Motyw władzy pokazuje mechanizmy opresji zaborcy.",
-      motywcierpienia: "Motyw cierpienia ujawnia doświadczenie zesłania i represji."
+      motywcierpienia: "Motyw cierpienia ujawnia doświadczenie zesłania i represji.",
+      motywprzemiany: "Motyw przemiany ukazany jest w transformacji Konrada z Gustawa.",
+      motywwolnosci: "Motyw wolności ujawia się w rozmowach więźniów Wileńskiego więzienia, w których opowiadają o tęsknocie za rodzinami i wolnością."
     },
     coverEmoji: "🇵🇱",
     aliases: ["Dziady III"],
@@ -641,13 +663,15 @@ books: [
     id: "pan_tadeusz", title: "Pan Tadeusz", author: "Adam Mickiewicz",
     description: "Przedstawia historię szlacheckiego Soplicowa i konfliktów oraz pojednania jego mieszkańców.",
     epoch: "romantyzm",
-    motifs: ["motywpatriotyzmu", "motywobyczajowitradycji", "motywmilosci", "motywprzyrodynatury", "motywdworku"],
+    motifs: ["motywpatriotyzmu", "motywobyczajowitradycji", "motywmilosci", "motywprzyrodynatury", "motywdworku", "motywszlachty", "motywprzemiany"],
     motifDescriptions: {
       motywpatriotyzmu: "Motyw patriotyzmu ukazuje tęsknotę za ojczyzną i nadzieję na jej odrodzenie.",
       motywobyczajowitradycji: "Motyw tradycji i obyczajów przedstawia świat szlachty i jego rytuały.",
       motywmilosci: "Motyw miłości ukazuje relacje bohaterów jako siłę jednoczącą.",
       motywprzyrodynatury: "Motyw natury ukazuje harmonię świata przyrody i człowieka.",
-      motywdworku: "Motyw dworku idealizuje życie szlacheckie w Soplicowie."
+      motywdworku: "Motyw dworku idealizuje życie szlacheckie w Soplicowie.",
+      motywszlachty: "Motyw szlachty przedstawia codzienne życie i obyczaje polskiej szlachty.",
+      motywprzemiany: "Motyw przemiany ujawia się w postaci Jacka Soplicy, który wstępuje do zakonu aby odkupić swoje winy."
     },
     coverEmoji: "🌿",
     aliases: ["Pan Tadeusz Mickiewicz"],
