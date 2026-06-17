@@ -1232,15 +1232,16 @@ input{font-family:inherit}
 
   /* ── Y2 — nie ucieka w prawo ── */
   .y2-layout {
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-columns: 180px 1fr 180px;
     gap: 8px;
     max-width: 100%;
     padding: 0;
   }
-  .y2-cover-col .cover-visual {
-    min-height: 70px;
-    max-height: 100px;
-  }
+
+.y2-cover-col .cover-visual {
+    min-height: 180px;
+    max-height: 250px;
+}
   /* Zdjęcia w Y2 — object-fit: contain jak karta X */
   .cover-visual img {
     object-fit: contain;
