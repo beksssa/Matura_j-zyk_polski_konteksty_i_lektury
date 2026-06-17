@@ -1004,7 +1004,8 @@ books: [
 ],
 
   motifs: [
-    { id: "motywsmierci", name: "Motyw Śmierci", description: "Nieuchronność kresu życia i refleksja nad sensem istnienia", books: ["antygona", "getto", "dzuma", "iliada", "polikarp"], aliases: ["śmierć", "smierc", "motyw śmierci", "motyw smierci"], images: [{ src: "images/motywy/smierc/smierc-marata-david.jpg" }], poems: [] },
+    { id: "motywsmierci", name: "Motyw Śmierci", description: "Nieuchronność kresu życia i refleksja nad sensem istnienia", books: ["antygona", "getto", "dzuma", "iliada", "polikarp"], aliases: ["śmierć", "smierc", "motyw śmierci", "motyw smierci"], images: [{ src: "images/motywy/smierc/smierc-marata-david.jpg" }], poems: [{ author: "Horacy", title: "exegi monumentum", src: "images/motywy/artysta/Horacy_exegi_monumentum.txt" },
+    { author: "Przerwa Tetmajer", title: "Eviva larte", src: "images/motywy/artysta/Przerwa-Tetmajer_Eviva_larte.txt" }] },
     { id: "motywzyda", name: "Motyw Żyda", description: "Obraz mniejszości żydowskiej oraz problem uprzedzeń i asymilacji", books: ["getto"], aliases: ["żyd", "zyd", "motyw żyda", "motyw zyda"], images: [{ src: "images/motywy//zyda/images (2).jpg" }], poems: [] },
     { id: "motywartysty", name: "Motyw Artysty", description: "Wyjątkowość twórcy i konflikt między sztuką a społeczeństwem", books: ["wesele"], aliases: ["artysta", "motyw artysty", "twórca", "tworca"], images: [{ src: "images/motywy/artysta/panny_dworskie-jpg.jpg" }], poems: [] },
     { id: "motywarystokracji", name: "Motyw Arystokracji", description: "Krytyka uprzywilejowanych warstw i ich oderwania od rzeczywistości", books: ["lalka"], aliases: ["arystokracja", "motyw arystokracji", "arystokraci"], images: [{ src: "images/motywy/arystokracja/Portret holenderskiego patrycjusza.jpg" }], poems: [] },
