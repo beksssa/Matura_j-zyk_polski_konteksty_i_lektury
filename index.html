@@ -218,11 +218,11 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 /* Body padding aby treść nie chowała się pod belką */
 body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 @media(max-width:700px){
-  :root{ --bar-h:var(--bar-h-mobile); --bar-pad:12px; };
-  #quiz {
-    padding-top: calc(var(--bar-h-mobile) + 12px);
-  }
+  :root{ --bar-h:var(--bar-h-mobile); --bar-pad:12px; }
 }
+  #quiz {
+    padding: calc(var(--bar-h-mobile) + 12px) 12px 8px;
+  }
 
   
   
@@ -1026,8 +1026,16 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
   text-align:center;margin-bottom:.8rem;
 }
 
-#quiz-content{display: flex;  align-items: center;   justify-content: center; flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:center;min-height:0}
-  
+#quiz-content{
+  flex:1;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:0;
+  width:100%;
+}  
 #diag-shell{position:fixed;inset:0;display:none;z-index:5;background:var(--bg)}
 #diag-shell.active{display:block}
 
@@ -1040,8 +1048,18 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 .lmb-sub{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
 /* TINDER */
-.tinder-scene{justify-items: center;display:grid;grid-template-columns:1fr 200px 1fr;align-items:center;gap:16px;max-width:680px;margin:0 auto;width:100%;padding:8px 0}
-
+.tinder-scene{
+  display:grid;
+  grid-template-columns:1fr 200px 1fr;
+  align-items:center;
+  justify-items:center;
+  gap:16px;
+  width:100%;
+  max-width:680px;
+  margin:0 auto;
+  padding:8px 0;
+  box-sizing:border-box;
+}
 .tinder-side{display:flex;flex-direction:column;align-items:center;gap:8px}
 .tinder-side-label{font-family:var(--ff-sans);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
 .tinder-choice{border:2px solid var(--ink);padding:1rem .9rem;text-align:center;font-family:var(--ff-serif);font-size:1rem;font-weight:700;color:var(--ink);background:var(--bg);cursor:pointer;transition:background .15s,border-color .2s,transform .15s,box-shadow .2s;line-height:1.4;width:100%;border-radius:var(--r)}
