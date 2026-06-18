@@ -145,10 +145,9 @@ input{font-family:inherit}
   padding:6px var(--bar-pad);
   transform:translateY(-100%);
   transition:transform .3s var(--ease);
-  overflow:hidden;
+  overflow:visible;
 }
 #upperbar.visible{ transform:translateY(0); }
-#upperbar.has-secondary{ height:auto; }
 
 .bar-left,.bar-center,.bar-right{
   display:flex;align-items:center;gap:calc(8px * var(--bar-scale));
@@ -156,18 +155,11 @@ input{font-family:inherit}
   flex-shrink:1;
 }
 .bar-left{ flex:0 1 auto; position:relative; }
-.bar-center{ display:none; }
+.bar-center{ display:none; flex:1 1 auto; justify-content:center; }
+.bar-center.visible{ display:flex; }
 .bar-right{ flex:0 1 auto; }
 
-.bar-secondary{
-  width:100%;
-  display:none;
-  align-items:center;justify-content:center;gap:10px;
-  padding:10px 0 14px;
-  flex-wrap:wrap;
-  border-top:2px solid var(--ink);
-}
-.bar-secondary.visible{ display:flex; }
+
 
 .bar-pill{
   font-family:var(--ff-sans);
@@ -190,6 +182,7 @@ input{font-family:inherit}
 .bar-pill.visible{ display:inline-flex;align-items:center;gap:6px; }
 .bar-pill:hover{ background:var(--ink); color:var(--bg); }
 .bar-pill.active{ background:var(--ink); color:var(--bg); }
+.bar-pill.bar-hidden{ display:none !important; }
 .bar-pill.accent{ background:var(--accent); border-color:var(--accent); color:#fff; }
 .bar-pill.accent:hover{ background:var(--ink); border-color:var(--ink); }
 
@@ -202,31 +195,30 @@ input{font-family:inherit}
 }
 .bar-score.visible{ display:inline-block; }
 
-.bar-search-wrap{ position:relative;min-width:140px;max-width:240px;flex:1 1 auto; }
-.bar-search-icon{ position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.45; }
+.bar-search-wrap{ position:relative;min-width:90px;max-width:220px;flex:1 1 auto; }.bar-search-icon{ position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.45; }
 .bar-search{
-  width:100%;border:2px solid var(--ink);border-radius:20px;
-  padding:.4rem 1rem .4rem 2.2rem;
-  font-family:var(--ff-sans);font-size:12px;font-weight:500;
+  width:100%;border:calc(2px * var(--bar-scale)) solid var(--ink);border-radius:20px;
+  padding:calc(.4rem * var(--bar-scale)) calc(1rem * var(--bar-scale)) calc(.4rem * var(--bar-scale)) calc(2.2rem * var(--bar-scale));
+  font-family:var(--ff-sans);font-size:calc(12px * var(--bar-scale));font-weight:500;
   background:var(--bg);color:var(--ink);outline:none;
   transition:border-color .15s,box-shadow .15s;
 }
 .bar-search:focus{ border-color:var(--accent);box-shadow:2px 2px 0 var(--accent); }
 
 .bar-count{
-  font-size:9px;font-weight:600;color:var(--muted);
+  font-size:calc(9px * var(--bar-scale));font-weight:600;color:var(--muted);
   letter-spacing:.08em;white-space:nowrap;
+  flex-shrink:0;
+  transition:opacity .15s, visibility .15s;
 }
+.bar-count.bar-hidden{ display:none; }
 
 /* Body padding aby treść nie chowała się pod belką */
 body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
-body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); }
-
+/* Body padding aby treść nie chowała się pod belką */
+body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 @media(max-width:700px){
   :root{ --bar-h:var(--bar-h-mobile); --bar-pad:12px; }
-  .bar-pill{ font-size:9px;padding:.35rem .8rem; }
-  .bar-score{ font-size:9px;padding:.35rem .8rem; }
-  .bar-search-wrap{ min-width:100px; }
 }
   
 /* DROPDOWN */
@@ -1288,12 +1280,13 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #f0ede8;
 }
 
-.cover-visual img {
+.y2-cover-col .cover-visual img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
 }
   .y2-title {
@@ -1620,22 +1613,21 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
     <div id="bc-dropdown"></div>
     <button class="bar-pill" id="bc-back-btn" onclick="handleBack()">↩ Powrót</button>
   </div>
-  <div class="bar-center" id="bar-center"></div>
-  <div class="bar-right">
-    <button class="bar-pill accent" id="end-quiz-btn" onclick="goToMenu()">Zakończ</button>
-    <span class="bar-score" id="score">0 pkt</span>
-    <button class="bar-pill accent" id="nextBtn" onclick="nextTask()">Dalej →</button>
-  </div>
-  <div class="bar-secondary" id="bar-secondary">
-    <div class="bar-search-wrap">
+  <div class="bar-center" id="bar-center">
+    <div class="bar-search-wrap" id="bar-search-wrap">
       <svg class="bar-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
       </svg>
       <input id="map-search" class="bar-search" type="text" placeholder="Szukaj…" oninput="filterMap()" autocomplete="off">
     </div>
-    <button class="bar-pill visible" id="sort-default-btn" onclick="setSortMode('default')">Domyślnie</button>
-    <button class="bar-pill visible" id="sort-alpha-btn" onclick="setSortMode('alpha')">A → Z</button>
+    <button class="bar-pill" id="sort-default-btn" onclick="setSortMode('default')">Domyślnie</button>
+    <button class="bar-pill" id="sort-alpha-btn" onclick="setSortMode('alpha')">A → Z</button>
     <span class="bar-count" id="map-count"></span>
+  </div>
+  <div class="bar-right">
+    <button class="bar-pill accent" id="end-quiz-btn" onclick="goToMenu()">Zakończ</button>
+    <span class="bar-score" id="score">0 pkt</span>
+    <button class="bar-pill accent" id="nextBtn" onclick="nextTask()">Dalej →</button>
   </div>
 </div>
 
@@ -1876,6 +1868,7 @@ function bcClick(index) {
   dimBg('none');
   document.getElementById('end-quiz-btn').classList.remove('visible');
   screenHistory = [];
+  currentScreen = 'screen-start';
   // Wyczyść trail do tego punktu
   bcTruncateFrom(index);
   bcClose();
@@ -1976,19 +1969,18 @@ function updateUpperbar(){
   const isMap = currentScreen === 'map';
   const isQuiz = currentScreen === 'quiz';
 
-  document.getElementById('bar-secondary').classList.toggle('visible', isMap);
-  bar.classList.toggle('has-secondary', isMap);
+  document.getElementById('bar-center').classList.toggle('visible', isMap);
 
   document.getElementById('end-quiz-btn').classList.toggle('visible', isQuiz);
   document.getElementById('score').classList.toggle('visible', isQuiz);
   // nextBtn visibility zostaje pod kontrolą setNextButtonVisible() — nie nadpisujemy go tu
 
   document.body.classList.toggle('has-upperbar', !onStart);
-  document.body.classList.toggle('has-upperbar-secondary', isMap);
 
   requestAnimationFrame(scaleUpperbar);
 }
 
+/* ── Skalowanie paska górnego, żeby wszystko mieściło się w jednym rzędzie ── */
 /* ── Skalowanie paska górnego, żeby wszystko mieściło się w jednym rzędzie ── */
 function scaleUpperbar(){
   const bar = document.getElementById('upperbar');
@@ -1996,23 +1988,42 @@ function scaleUpperbar(){
 
   const left = document.querySelector('#upperbar .bar-left');
   const right = document.querySelector('#upperbar .bar-right');
+  const center = document.querySelector('#upperbar .bar-center');
   if(!left || !right) return;
 
-  // reset do pełnej skali przed pomiarem
+  const mapCount = document.getElementById('map-count');
+  const sortDefaultBtn = document.getElementById('sort-default-btn');
+  const sortAlphaBtn = document.getElementById('sort-alpha-btn');
+
+  // reset: pełna skala + wszystko z powrotem widoczne (jeśli bar-center jest aktywny)
   bar.style.setProperty('--bar-scale', '1');
+  if(mapCount) mapCount.classList.remove('bar-hidden');
+  if(sortDefaultBtn) sortDefaultBtn.classList.remove('bar-hidden');
+  if(sortAlphaBtn) sortAlphaBtn.classList.remove('bar-hidden');
 
   // poczekaj jedną ramkę żeby layout się przeliczył po resetcie
   requestAnimationFrame(()=>{
     const available = bar.clientWidth - 24; // odejmujemy padding boczny
-    let scale = 1;
-    const fits = () => (left.scrollWidth + right.scrollWidth) <= available;
+    const totalWidth = () => left.scrollWidth + (center ? center.scrollWidth : 0) + right.scrollWidth;
+    const fits = () => totalWidth() <= available;
 
-    // zmniejszamy skalę krok po kroku aż się zmieści, z dolnym limitem 0.55
+    // KROK 1: zmniejszamy skalę krok po kroku aż się zmieści, z dolnym limitem 0.55
+    let scale = 1;
     let guard = 0;
     while(!fits() && scale > 0.55 && guard < 40){
       scale -= 0.03;
       bar.style.setProperty('--bar-scale', scale.toFixed(2));
       guard++;
+    }
+
+    // KROK 2: jeśli mimo minimalnej skali wciąż się nie mieści — chowamy elementy
+    // w kolejności priorytetu: najpierw licznik wyników, potem przyciski sortowania
+    if(!fits() && mapCount){
+      mapCount.classList.add('bar-hidden');
+    }
+    if(!fits() && sortDefaultBtn && sortAlphaBtn){
+      sortDefaultBtn.classList.add('bar-hidden');
+      sortAlphaBtn.classList.add('bar-hidden');
     }
   });
 }
