@@ -145,7 +145,7 @@ input{font-family:inherit}
   display:flex;align-items:center;gap:8px;
   min-width:0;
 }
-.bar-left{ flex:0 0 auto; }
+.bar-left{ flex:0 0 auto; position:relative; }
 .bar-center{ flex:1 1 auto; justify-content:center; min-width:0; }
 .bar-right{ flex:0 0 auto; }
 
@@ -219,19 +219,26 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
 /* DROPDOWN */
 #bc-dropdown {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 8px);
   left: 0;
   background: var(--bg);
   border: 2px solid var(--ink);
   border-radius: var(--r);
   min-width: 200px;
   max-width: 260px;
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--accent2);
   overflow: hidden;
   display: none;
   flex-direction: column;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
 }
-#bc-dropdown.open { display: flex; }
+#bc-dropdown.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
 
 .bc-item {
   display: flex;
