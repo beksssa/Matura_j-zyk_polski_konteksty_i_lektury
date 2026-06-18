@@ -1386,7 +1386,7 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
     <div class="epoch-list" id="epochFilter"></div>
     <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
       <button class="start-btn" onclick="startApp()">Start →</button>
-      <button class="start-btn" onclick="resetEpochs()"
+      <button class="start-btn" id="reset-epochs-btn" onclick="resetEpochs()"
         style="background:transparent;color:var(--ink);border-color:var(--ink);box-shadow:3px 3px 0 var(--ink)">
         Wyzeruj epoki
       </button>
@@ -1722,7 +1722,8 @@ window.setViewAndAdvance = function(v){
   bcPush(v === 'books' ? 'Lektury' : 'Motywy', () => {
     setViewAndAdvance(v);
   });
-  setTimeout(() => { showPanel('screen-epoch'); renderEpochFilter(); }, 200);
+  epochsBtnLastAction = "none";
+  setTimeout(() => { showPanel('screen-epoch'); renderEpochFilter(); updateResetEpochsBtnLabel(); }, 200);
 };
 
 window.startApp = function(){
@@ -1753,9 +1754,22 @@ window.renderEpochFilter=function(){
 };
 
 window.resetEpochs = function(){
-  activeEpochs.clear();
+  if(epochsBtnLastAction === "cleared"){
+    epochs.forEach(e => activeEpochs.add(e));
+    epochsBtnLastAction = "selected";
+  } else {
+    activeEpochs.clear();
+    epochsBtnLastAction = "cleared";
+  }
   renderEpochFilter();
+  updateResetEpochsBtnLabel();
 };
+
+function updateResetEpochsBtnLabel(){
+  const btn = document.getElementById('reset-epochs-btn');
+  if(!btn) return;
+  btn.textContent = epochsBtnLastAction === "cleared" ? "Zaznacz wszystkie epoki" : "Wyzeruj epoki";
+}
   
 /* LIGHTBOX */
 let lbScale = 1;
