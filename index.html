@@ -826,12 +826,14 @@ input{font-family:inherit}
   cursor: zoom-in;
   position: relative;
 }
+/* NA TO: */
 .pf-cover-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Teraz zdjęcie wypełni ramkę */
-  object-position: center;  display: block;
-  transition: transform .25s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ZMIENIONE: Teraz zdjęcie wypełni całą ramkę */
+    object-position: center; /* Opcjonalnie: wyśrodkowuje zdjęcie */
+    display: block;
+    transition: transform .25s;
 }
 .pf-cover-wrap:hover img { transform: scale(1.03); }
 .pf-cover-placeholder {
