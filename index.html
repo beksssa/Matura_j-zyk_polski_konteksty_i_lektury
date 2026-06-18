@@ -2558,7 +2558,7 @@ function openBookProfile(id, animDir = 'right') {
   if (motifObjs.length) snakePairs.push({ fromId: 'pf-anchor-info', toId: 'pf-anchor-motifs-block' });
   if (charObjs.length)  snakePairs.push({ fromId: 'pf-anchor-cover', toId: 'pf-anchor-chars-block' });
   pfScheduleSnakes(snakePairs);
-  fiszkaTabUpdate(mode === 'quiz', 'book', id);
+  fiszkaTabUpdate(mode === 'learning', 'book', id);
 }
 
 // ════════════════════════
@@ -2666,7 +2666,7 @@ function openMotifProfile(id, animDir = 'right') {
   if (imgSrc) snakePairs.push({ fromId: 'pf-anchor-motif-info', toId: 'pf-anchor-motif-img' });
   if (charObjs.length) snakePairs.push({ fromId: 'pf-anchor-motif-books', toId: 'pf-anchor-motif-chars' });
   pfScheduleSnakes(snakePairs);
-  fiszkaTabUpdate(mode === 'quiz', 'motif', id);
+  fiszkaTabUpdate(mode === 'learning', 'motif', id);
 }
 
 // ════════════════════════
@@ -2742,6 +2742,7 @@ function openCharacterProfile(id, animDir = 'right') {
   if (book)             snakePairs.push({ fromId: 'pf-anchor-char-header', toId: 'pf-anchor-char-book' });
   if (motifObjs.length) snakePairs.push({ fromId: 'pf-anchor-char-info',   toId: 'pf-anchor-char-motifs' });
   pfScheduleSnakes(snakePairs);
+  fiszkaTabUpdate(false);
 }
 
 // ════════════════════════
@@ -3040,7 +3041,7 @@ let fiszkaState = null;
 function fiszkaPanelOpen() {
   const panel = document.getElementById('fiszka-panel');
   panel.classList.add('open');
-  if (!fiszkaState || fiszkaState._needsRebuild) fiszkaRender();
+  fiszkaRender();
 }
 
 function fiszkaPanelClose() {
