@@ -27,6 +27,12 @@
   --ff-sans:'Space Grotesk',sans-serif;
   --ease:cubic-bezier(.4,0,.2,1);
   --r:8px;
+  --bar-h:56px;
+  --bar-h-mobile:48px;
+  --bar-pad:16px;
+  --bar-label-size:10px;
+  --bar-label-weight:700;
+  --bar-label-tracking:.1em;
 }
 
 html,body{
@@ -55,110 +61,14 @@ input{font-family:inherit}
   padding:2rem 1.5rem;
 }
 
-#bc-wrap {
-  position: fixed;
-  top: 16px;
-  left: 20px;
-  z-index: 200;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-#bc-menu-btn {
-  font-family: var(--ff-sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  padding: .4rem 1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  background: transparent;
-  white-space: nowrap;
-  display: none;        /* ← domyślnie ukryty */
-}
-#bc-menu-btn.visible { display: block; }
-#bc-menu-btn:hover { background: var(--ink); color: var(--bg); }
   
 /* TOP NAV */
-#top-nav {
-  position: fixed;
-  top: 16px;
-  left: 20px;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#back-btn {
-  font-family: var(--ff-sans);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  padding: .4rem 1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  background: transparent;
-  display: none;
-  align-items: center;
-  gap: 6px;
-}
-#back-btn.visible { display: flex; }
-#back-btn:hover { background: var(--ink); color: var(--bg); }
-#back-btn svg { display: none; }
-
-#top-controls {
-  position: fixed;
-  top: 16px;
-  right: 20px;
-  z-index: 200;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.top-btn {
-  font-family: var(--ff-sans);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  padding: .4rem 1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  background: transparent;
-  display: none;
-}
-.top-btn.visible { display: block; }
-.top-btn:hover { background: var(--ink); color: var(--bg); }
-
 /* BREADCRUMB */
 #bc-wrap {
-  position: fixed;
-  top: 16px;
-  left: 20px;
-  z-index: 200;
+  position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-#bc-menu-col {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
 }
 
 #bc-menu-btn {
@@ -177,6 +87,8 @@ input{font-family:inherit}
   white-space: nowrap;
 }
 #bc-menu-btn:hover { background: var(--ink); color: var(--bg); }
+  
+/* BREADCRUMB */
 
 #bc-toggle-btn {
   font-size: 13px;
@@ -190,30 +102,120 @@ input{font-family:inherit}
   display: none;
 }
 #bc-toggle-btn:hover { opacity: .55; }
-#bc-toggle-btn.visible { display: block; }
 
 #bc-back-btn {
   font-family: var(--ff-sans);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--ink);
   background: transparent;
-  border: none;
-  padding: .4rem 0;
+  border: 2px solid var(--ink);
+  padding: .4rem 1rem;
+  border-radius: 20px;
   cursor: pointer;
   white-space: nowrap;
   display: none;
   align-items: center;
   gap: 6px;
-  align-self: center;
-  opacity: .75;
-  transition: opacity .15s;
+  transition: background .15s, color .15s;
 }
 #bc-back-btn.visible { display: flex; }
-#bc-back-btn:hover { opacity: 1; }
+#bc-back-btn:hover { background: var(--ink); color: var(--bg); }
 
+/* ═══════════════════════════════════════
+   UPPERBAR — wspólny system
+═══════════════════════════════════════ */
+#upperbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:var(--bar-h);
+  background:var(--bg);
+  border-bottom:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+  padding:0 var(--bar-pad);
+  transform:translateY(-100%);
+  transition:transform .3s var(--ease);
+}
+#upperbar.visible{ transform:translateY(0); }
+#upperbar.has-secondary{ height:auto; flex-wrap:wrap; padding-bottom:10px; }
+
+.bar-left,.bar-center,.bar-right{
+  display:flex;align-items:center;gap:8px;
+  min-width:0;
+}
+.bar-left{ flex:0 0 auto; }
+.bar-center{ flex:1 1 auto; justify-content:center; min-width:0; }
+.bar-right{ flex:0 0 auto; }
+
+.bar-secondary{
+  width:100%;
+  display:none;
+  align-items:center;justify-content:center;gap:10px;
+  padding:0 0 10px;
+  flex-wrap:wrap;
+}
+.bar-secondary.visible{ display:flex; }
+
+.bar-pill{
+  font-family:var(--ff-sans);
+  font-size:var(--bar-label-size);
+  font-weight:var(--bar-label-weight);
+  letter-spacing:var(--bar-label-tracking);
+  text-transform:uppercase;
+  color:var(--ink);
+  border:2px solid var(--ink);
+  padding:.4rem 1rem;
+  border-radius:20px;
+  cursor:pointer;
+  background:transparent;
+  white-space:nowrap;
+  transition:background .15s,color .15s;
+  display:none;
+}
+.bar-pill.visible{ display:inline-flex;align-items:center;gap:6px; }
+.bar-pill:hover{ background:var(--ink); color:var(--bg); }
+.bar-pill.active{ background:var(--ink); color:var(--bg); }
+.bar-pill.accent{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.bar-pill.accent:hover{ background:var(--ink); border-color:var(--ink); }
+
+.bar-score{
+  font-family:var(--ff-sans);font-size:var(--bar-label-size);font-weight:700;
+  letter-spacing:var(--bar-label-tracking);text-transform:uppercase;
+  color:#fff;background:var(--accent);
+  padding:.4rem 1rem;border-radius:20px;border:2px solid var(--ink);
+  white-space:nowrap;display:none;
+}
+.bar-score.visible{ display:inline-block; }
+
+.bar-search-wrap{ position:relative;min-width:140px;max-width:240px;flex:1 1 auto; }
+.bar-search-icon{ position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.45; }
+.bar-search{
+  width:100%;border:2px solid var(--ink);border-radius:20px;
+  padding:.4rem 1rem .4rem 2.2rem;
+  font-family:var(--ff-sans);font-size:12px;font-weight:500;
+  background:var(--bg);color:var(--ink);outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.bar-search:focus{ border-color:var(--accent);box-shadow:2px 2px 0 var(--accent); }
+
+.bar-count{
+  font-size:9px;font-weight:600;color:var(--muted);
+  letter-spacing:.08em;white-space:nowrap;
+}
+
+/* Body padding aby treść nie chowała się pod belką */
+body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
+body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); }
+
+@media(max-width:700px){
+  :root{ --bar-h:var(--bar-h-mobile); --bar-pad:12px; }
+  .bar-pill{ font-size:9px;padding:.35rem .8rem; }
+  .bar-score{ font-size:9px;padding:.35rem .8rem; }
+  .bar-search-wrap{ min-width:100px; }
+}
+  
 /* DROPDOWN */
 #bc-dropdown {
   position: absolute;
@@ -660,37 +662,7 @@ input{font-family:inherit}
 .masonry-item-epoch{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:2px solid var(--accent);padding:2px 8px;border-radius:10px;margin-top:auto;align-self:flex-start}
 
 /* MAP TOOLBAR */
-#map-toolbar{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  margin-bottom:16px;max-width:900px;width:100%;
-}
-#map-search{
-  flex:1;min-width:180px;
-  border:2px solid var(--ink);border-radius:20px;
-  padding:.45rem 1rem .45rem 2.4rem;
-  font-family:var(--ff-sans);font-size:13px;font-weight:500;
-  background:var(--bg);color:var(--ink);outline:none;
-  transition:border-color .15s,box-shadow .15s;
-}
-#map-search:focus{border-color:var(--accent);box-shadow:2px 2px 0 var(--accent)}
-#map-search-wrap{position:relative;flex:1;min-width:180px}
-#map-search-icon{
-  position:absolute;left:10px;top:50%;transform:translateY(-50%);
-  pointer-events:none;opacity:.45;
-}
-.sort-btn{
-  font-family:var(--ff-sans);font-size:10px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
-  border:2px solid var(--ink);padding:.4rem 1rem;border-radius:20px;
-  background:var(--bg);color:var(--ink);cursor:pointer;
-  transition:background .15s,color .15s;white-space:nowrap;
-}
-.sort-btn.active{background:var(--ink);color:var(--bg)}
-.sort-btn:hover:not(.active){background:var(--ink);color:var(--bg)}
-#map-count{
-  font-size:10px;font-weight:600;color:var(--muted);
-  letter-spacing:.08em;white-space:nowrap;
-}
+
 
 /* ═══════════════════════════════════════════
    NOWE PROFILE — canvas + animacje
@@ -1031,14 +1003,13 @@ input{font-family:inherit}
 /* QUIZ */
 #quiz{display:none;flex-direction:column;height:100dvh;padding:20px 18px 12px;overflow:hidden;box-sizing:border-box;position:fixed;inset:0;z-index:3;background:transparent}
 #quiz.active{display:flex}
-#quiz-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:2px solid var(--ink)}
-#quiz-label{font-family:var(--ff-serif);font-size:1.1rem;font-weight:700;color:var(--ink)}
-#quiz-header-right{display:flex;align-items:center;gap:10px;margin-left:auto}
-#score{font-family:var(--ff-sans);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--accent);padding:4px 12px;border-radius:14px;border:2px solid var(--ink)}
-#nextBtn{font-family:var(--ff-sans);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--accent2);border:2px solid var(--ink);padding:.5rem 1.3rem;border-radius:18px;cursor:pointer;transition:background .18s,transform .12s;display:none;box-shadow:2px 2px 0 var(--ink)}
-#nextBtn:hover{background:var(--ink);transform:translateY(-1px)}
-#quiz-content{flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.quiz-label-standalone{
+  font-family:var(--ff-serif);font-size:1.1rem;font-weight:700;color:var(--ink);
+  text-align:center;margin-bottom:.8rem;
+}
 
+#quiz-content{flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:center;min-height:0}
+  
 #diag-shell{position:fixed;inset:0;display:none;z-index:5;background:var(--bg)}
 #diag-shell.active{display:block}
 
@@ -1326,19 +1297,33 @@ input{font-family:inherit}
 <body>
 <canvas id="bg-canvas"></canvas>
 
-<div id="bc-wrap">
-  <div id="bc-menu-col">
-    <button id="bc-menu-btn" onclick="goToMenu()">Menu</button>
+<div id="upperbar">
+  <div class="bar-left">
+    <button class="bar-pill" id="bc-menu-btn" onclick="goToMenu()">Menu</button>
     <button id="bc-toggle-btn" onclick="bcToggle()">∨</button>
     <div id="bc-dropdown"></div>
+    <button class="bar-pill" id="bc-back-btn" onclick="handleBack()">↩ Powrót</button>
   </div>
-  <button id="bc-back-btn" onclick="handleBack()">↩ Powrót</button>
+  <div class="bar-center" id="bar-center"></div>
+  <div class="bar-right">
+    <button class="bar-pill accent" id="end-quiz-btn" onclick="goToMenu()">Zakończ</button>
+    <span class="bar-score" id="score">0 pkt</span>
+    <button class="bar-pill accent" id="nextBtn" onclick="nextTask()">Dalej →</button>
+  </div>
+  <div class="bar-secondary" id="bar-secondary">
+    <div class="bar-search-wrap">
+      <svg class="bar-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
+      </svg>
+      <input id="map-search" class="bar-search" type="text" placeholder="Szukaj…" oninput="filterMap()" autocomplete="off">
+    </div>
+    <button class="bar-pill visible" id="sort-default-btn" onclick="setSortMode('default')">Domyślnie</button>
+    <button class="bar-pill visible" id="sort-alpha-btn" onclick="setSortMode('alpha')">A → Z</button>
+    <span class="bar-count" id="map-count"></span>
+  </div>
 </div>
 
-<div id="top-controls">
-  <button class="top-btn" id="end-quiz-btn" onclick="goToMenu()">Zakończ</button>
-</div>
-
+  
 <div id="app">
   <div id="screen-start" class="panel active">
   <p class="split-intro">Witaj na naszej stronie! Nauczysz się tutaj rozpoznawać i definiować motywy maturalne na przykładzie lektur, wierszy, postaci i obrazów. Możesz przejść do nauki motywów i lektur lub do sprawdzenia wiedzy z nauczonego materiału.</p>
@@ -1391,29 +1376,12 @@ input{font-family:inherit}
     </div>
   </div>
 
-  <div id="map" style="display:none;width:100%;max-width:900px">
-    <div id="map-toolbar">
-      <div id="map-search-wrap">
-        <svg id="map-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
-        </svg>
-        <input id="map-search" type="text" placeholder="Szukaj…" oninput="filterMap()" autocomplete="off">
-      </div>
-      <button class="sort-btn" id="sort-default-btn" onclick="setSortMode('default')">Domyślnie</button>
-      <button class="sort-btn" id="sort-alpha-btn" onclick="setSortMode('alpha')">A → Z</button>
-      <span id="map-count"></span>
-    </div>
+<div id="map" style="display:none;width:100%;max-width:900px">
     <div id="map-masonry" class="masonry-grid"></div>
   </div>
 
-  <div id="quiz">
-    <div id="quiz-header">
-      <h2 id="quiz-label">Diagnostyka</h2>
-      <div id="quiz-header-right">
-        <span id="score">0 pkt</span>
-        <button id="nextBtn" onclick="nextTask()">Dalej →</button>
-      </div>
-    </div>
+<div id="quiz">
+    <h2 id="quiz-label" class="quiz-label-standalone">Diagnostyka</h2>
     <div id="learn-more-box" onclick="handleLearnMore()">
       <div class="lmb-title" id="lmb-title">—</div>
       <div class="lmb-sub">Dowiedz się więcej →</div>
@@ -1641,7 +1609,7 @@ function showPanel(id,push=true){
     if(p.classList.contains('active')){p.classList.add('exit');p.classList.remove('active');setTimeout(()=>p.classList.remove('exit'),650);}
   });
   const el=document.getElementById(id);
-  if(el) setTimeout(()=>{el.classList.add('active');currentScreen=id;},130);
+  if(el) setTimeout(()=>{el.classList.add('active');currentScreen=id;updateBackBtn();},130);
   updateBackBtn();
 }
 
@@ -1667,6 +1635,26 @@ function updateBackBtn() {
   if (backBtn) backBtn.classList.toggle('visible', screenHistory.length > 0 && !onStart);
   if (menuBtn) menuBtn.classList.toggle('visible', !onStart);
   bcRender();
+  updateUpperbar();
+}
+
+function updateUpperbar(){
+  const bar = document.getElementById('upperbar');
+  const onStart = ['screen-start','screen-mode','screen-epoch'].includes(currentScreen);
+  bar.classList.toggle('visible', !onStart);
+
+  const isMap = currentScreen === 'map';
+  const isQuiz = currentScreen === 'quiz';
+
+  document.getElementById('bar-secondary').classList.toggle('visible', isMap);
+  bar.classList.toggle('has-secondary', isMap);
+
+  document.getElementById('end-quiz-btn').classList.toggle('visible', isQuiz);
+  document.getElementById('score').classList.toggle('visible', isQuiz);
+  // nextBtn visibility zostaje pod kontrolą setNextButtonVisible() — nie nadpisujemy go tu
+
+  document.body.classList.toggle('has-upperbar', !onStart);
+  document.body.classList.toggle('has-upperbar-secondary', isMap);
 }
 
 window.handleBack=function(){
