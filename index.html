@@ -33,6 +33,7 @@
   --bar-label-size:10px;
   --bar-label-weight:700;
   --bar-label-tracking:.1em;
+  --bar-scale: 1;
 }
 
 html,body{
@@ -136,27 +137,27 @@ input{font-family:inherit}
 ═══════════════════════════════════════ */
 #upperbar{
   position:fixed;top:0;left:0;right:0;z-index:200;
-  height:var(--bar-h);
+  min-height:var(--bar-h);
   background:var(--bg);
   border-bottom:2px solid var(--ink);
-  display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
-  gap:12px;
-  padding:0 var(--bar-pad);
+  display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;
+  gap:8px;
+  padding:6px var(--bar-pad);
   transform:translateY(-100%);
   transition:transform .3s var(--ease);
+  overflow:hidden;
 }
 #upperbar.visible{ transform:translateY(0); }
 #upperbar.has-secondary{ height:auto; }
 
 .bar-left,.bar-center,.bar-right{
-  display:flex;align-items:center;gap:8px;
+  display:flex;align-items:center;gap:calc(8px * var(--bar-scale));
   min-width:0;
-  height:var(--bar-h);
-  flex-shrink:0;
+  flex-shrink:1;
 }
-.bar-left{ flex:0 0 auto; position:relative; }
+.bar-left{ flex:0 1 auto; position:relative; }
 .bar-center{ display:none; }
-.bar-right{ flex:0 0 auto; }
+.bar-right{ flex:0 1 auto; }
 
 .bar-secondary{
   width:100%;
@@ -170,20 +171,22 @@ input{font-family:inherit}
 
 .bar-pill{
   font-family:var(--ff-sans);
-  font-size:var(--bar-label-size);
+  font-size:calc(var(--bar-label-size) * var(--bar-scale));
   font-weight:var(--bar-label-weight);
   letter-spacing:var(--bar-label-tracking);
   text-transform:uppercase;
   color:var(--ink);
-  border:2px solid var(--ink);
-  padding:.4rem 1rem;
+  border:calc(2px * var(--bar-scale)) solid var(--ink);
+  padding:calc(.4rem * var(--bar-scale)) calc(1rem * var(--bar-scale));
   border-radius:20px;
   cursor:pointer;
   background:transparent;
   white-space:nowrap;
   transition:background .15s,color .15s;
   display:none;
+  flex-shrink:0;
 }
+  
 .bar-pill.visible{ display:inline-flex;align-items:center;gap:6px; }
 .bar-pill:hover{ background:var(--ink); color:var(--bg); }
 .bar-pill.active{ background:var(--ink); color:var(--bg); }
@@ -191,11 +194,11 @@ input{font-family:inherit}
 .bar-pill.accent:hover{ background:var(--ink); border-color:var(--ink); }
 
 .bar-score{
-  font-family:var(--ff-sans);font-size:var(--bar-label-size);font-weight:700;
+  font-family:var(--ff-sans);font-size:calc(var(--bar-label-size) * var(--bar-scale));font-weight:700;
   letter-spacing:var(--bar-label-tracking);text-transform:uppercase;
   color:#fff;background:var(--accent);
-  padding:.4rem 1rem;border-radius:20px;border:2px solid var(--ink);
-  white-space:nowrap;display:none;
+  padding:calc(.4rem * var(--bar-scale)) calc(1rem * var(--bar-scale));border-radius:20px;border:calc(2px * var(--bar-scale)) solid var(--ink);
+  white-space:nowrap;display:none;flex-shrink:0;
 }
 .bar-score.visible{ display:inline-block; }
 
@@ -1061,15 +1064,28 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
 
 @media(max-width:600px){
   .tinder-scene{
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 8px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:stretch;
+    justify-content:center;
+    gap:12px;
   }
+  .tinder-scene > div:nth-child(2){
+    order:1;
+    width:100%;
+    display:flex;
+    justify-content:center;
+  }
+  .tinder-scene .tinder-side{
+    order:2;
+    flex:1 1 0;
+    min-width:0;
+  }
+  .hints-3col{grid-template-columns:1fr}
+}
   .tinder-scene .tinder-side:first-child{order:2; grid-column:1}
   .tinder-scene .tinder-center{order:1; grid-column:1 / span 2; justify-self:center}
   .tinder-scene .tinder-side:last-child{order:3; grid-column:2}
-  .y2-layout{grid-template-columns:1fr}
-  .y2-cover-col{flex-direction:row;gap:10px}
   .hints-3col{grid-template-columns:1fr}
 }
            
@@ -1234,7 +1250,6 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
 
   /* ── Tinder (X) — karta wyśrodkowana ── */
   .tinder-scene {
-    grid-template-columns: 1fr 140px 1fr;
     gap: 8px;
   }
   .tinder-card-x {
@@ -1242,14 +1257,27 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
   }
 
   /* ── Y2 — nie ucieka w prawo ── */
+/* ── Y2 — okładki w rzędzie, treść pod nimi ── */
   .y2-layout {
-    grid-template-columns: 180px 1fr 180px;
-    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     max-width: 100%;
     padding: 0;
+    justify-content: center;
+  }
+  .y2-cover-col {
+    order: 1;
+    flex: 0 1 calc(50% - 6px);
+    max-width: 160px;
+  }
+  .y2-center {
+    order: 2;
+    width: 100%;
+    gap: 6px;
+    min-width: 0;
   }
 
-/* 1. Ustawienie kontenera - usuwamy sztywne 300px na rzecz bardziej elastycznego podejścia */
 .y2-cover-col .cover-visual {
     width: 100%;
     aspect-ratio: 2 / 3;
@@ -1262,19 +1290,14 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
     justify-content: center;
 }
 
-/* 2. Ustawienie obrazka - to klucz do wypełnienia ramki */
 .cover-visual img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Zdjęcie wypełni kontener, przycinając nadmiar */
+    object-fit: cover;
     display: block;
 }
   .y2-title {
     font-size: 1rem;
-  }
-  .y2-center {
-    gap: 6px;
-    min-width: 0;
   }
   .hints-3col {
     grid-template-columns: 1fr;
@@ -1299,12 +1322,10 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
 
 /* ── Bardzo wąskie (< 380px) ── */
 @media (max-width: 380px) {
-  .tinder-scene {
-    grid-template-columns: 1fr 120px 1fr;
-  }
   .tinder-card-x { width: 120px; }
-  .y2-layout {
-    grid-template-columns: 80px 1fr 80px;
+  .y2-cover-col {
+    flex: 0 1 calc(50% - 6px);
+    max-width: 130px;
   }
   .pf-page-title { font-size: 1.5rem; }
 }
@@ -1964,8 +1985,39 @@ function updateUpperbar(){
 
   document.body.classList.toggle('has-upperbar', !onStart);
   document.body.classList.toggle('has-upperbar-secondary', isMap);
+
+  requestAnimationFrame(scaleUpperbar);
 }
 
+/* ── Skalowanie paska górnego, żeby wszystko mieściło się w jednym rzędzie ── */
+function scaleUpperbar(){
+  const bar = document.getElementById('upperbar');
+  if(!bar || !bar.classList.contains('visible')) return;
+
+  const left = document.querySelector('#upperbar .bar-left');
+  const right = document.querySelector('#upperbar .bar-right');
+  if(!left || !right) return;
+
+  // reset do pełnej skali przed pomiarem
+  bar.style.setProperty('--bar-scale', '1');
+
+  // poczekaj jedną ramkę żeby layout się przeliczył po resetcie
+  requestAnimationFrame(()=>{
+    const available = bar.clientWidth - 24; // odejmujemy padding boczny
+    let scale = 1;
+    const fits = () => (left.scrollWidth + right.scrollWidth) <= available;
+
+    // zmniejszamy skalę krok po kroku aż się zmieści, z dolnym limitem 0.55
+    let guard = 0;
+    while(!fits() && scale > 0.55 && guard < 40){
+      scale -= 0.03;
+      bar.style.setProperty('--bar-scale', scale.toFixed(2));
+      guard++;
+    }
+  });
+}
+
+window.addEventListener('resize', () => requestAnimationFrame(scaleUpperbar));
 window.handleBack=function(){
   if(!screenHistory.length) return;
   const prev=screenHistory.pop();
@@ -3011,6 +3063,7 @@ window.nextTask=function(){
 window.setNextButtonVisible=function(v){
   const b=document.getElementById('nextBtn');
   if(b) b.style.display=v?'inline-block':'none';
+  requestAnimationFrame(scaleUpperbar);
 };
 
 window.openCurrentTaskProfile=function(){
