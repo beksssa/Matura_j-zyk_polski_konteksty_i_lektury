@@ -5,6 +5,7 @@ let mode = "learning";
 let view = "books";
 let activeEpochs = new Set(["młoda polska","pozytywizm","romantyzm","antyk","współczesność","renesans"]);
 let score = 0;
+let epochsBtnLastAction = "none";
 
 let quizMode = "diagnostic";
 let scoredPairs = new Set();
