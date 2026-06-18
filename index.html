@@ -91,18 +91,23 @@ input{font-family:inherit}
 /* BREADCRUMB */
 
 #bc-toggle-btn {
-  font-size: 13px;
-  color: var(--ink);
-  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid var(--ink);
   background: none;
-  border: none;
-  line-height: 1;
-  padding: 0 4px;
-  transition: opacity .15s;
+  cursor: pointer;
+  transition: transform .2s var(--ease), border-top-color .15s;
   display: none;
 }
-#bc-toggle-btn.visible { display: inline-flex; align-items: center; }
-#bc-toggle-btn:hover { opacity: .55; }
+#bc-toggle-btn.visible { display: block; }
+#bc-toggle-btn.open { transform: translateX(-50%) rotate(180deg); }
+#bc-toggle-btn:hover { border-top-color: var(--accent2); }
 
 
 #bc-back-btn {
@@ -134,29 +139,32 @@ input{font-family:inherit}
   height:var(--bar-h);
   background:var(--bg);
   border-bottom:2px solid var(--ink);
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
   gap:12px;
   padding:0 var(--bar-pad);
   transform:translateY(-100%);
   transition:transform .3s var(--ease);
 }
 #upperbar.visible{ transform:translateY(0); }
-#upperbar.has-secondary{ height:auto; flex-wrap:wrap; padding-bottom:10px; }
+#upperbar.has-secondary{ height:auto; }
 
 .bar-left,.bar-center,.bar-right{
   display:flex;align-items:center;gap:8px;
   min-width:0;
+  height:var(--bar-h);
+  flex-shrink:0;
 }
 .bar-left{ flex:0 0 auto; position:relative; }
-.bar-center{ flex:1 1 auto; justify-content:center; min-width:0; }
+.bar-center{ display:none; }
 .bar-right{ flex:0 0 auto; }
 
 .bar-secondary{
   width:100%;
   display:none;
   align-items:center;justify-content:center;gap:10px;
-  padding:0 0 10px;
+  padding:10px 0 14px;
   flex-wrap:wrap;
+  border-top:2px solid var(--ink);
 }
 .bar-secondary.visible{ display:flex; }
 
@@ -221,8 +229,9 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
 /* DROPDOWN */
 #bc-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
   background: var(--bg);
   border: 2px solid var(--ink);
   border-radius: var(--r);
@@ -233,13 +242,12 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
   display: none;
   flex-direction: column;
   opacity: 0;
-  transform: translateY(-6px);
   transition: opacity .18s var(--ease), transform .18s var(--ease);
 }
 #bc-dropdown.open {
   display: flex;
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 .bc-item {
@@ -1309,7 +1317,7 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
 <div id="upperbar">
   <div class="bar-left">
     <button class="bar-pill" id="bc-menu-btn" onclick="goToMenu()">Menu</button>
-    <button id="bc-toggle-btn" onclick="bcToggle()">∨</button>
+    <button id="bc-toggle-btn" onclick="bcToggle()"></button>
     <div id="bc-dropdown"></div>
     <button class="bar-pill" id="bc-back-btn" onclick="handleBack()">↩ Powrót</button>
   </div>
@@ -1464,7 +1472,7 @@ function bcClear() {
 function bcToggle() {
   bcOpen = !bcOpen;
   document.getElementById('bc-dropdown').classList.toggle('open', bcOpen);
-  document.getElementById('bc-toggle-btn').textContent = bcOpen ? '∧' : '∨';
+  document.getElementById('bc-toggle-btn').classList.toggle('open', bcOpen);
 }
 
 function bcClose() {
@@ -1472,7 +1480,7 @@ function bcClose() {
   const dd = document.getElementById('bc-dropdown');
   if (dd) dd.classList.remove('open');
   const tb = document.getElementById('bc-toggle-btn');
-  if (tb) tb.textContent = '∨';
+  if (tb) tb.classList.remove('open');
 }
 
 function bcRender() {
