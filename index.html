@@ -829,8 +829,8 @@ input{font-family:inherit}
 .pf-cover-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: contain;   /* skaluje zachowując proporcje, nie przycina */
-  display: block;
+  object-fit: cover; /* Teraz zdjęcie wypełni ramkę */
+  object-position: center;  display: block;
   transition: transform .25s;
 }
 .pf-cover-wrap:hover img { transform: scale(1.03); }
