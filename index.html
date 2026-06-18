@@ -1258,15 +1258,25 @@ input{font-family:inherit}
     padding: 0;
   }
 
+/* 1. Ustawienie kontenera - usuwamy sztywne 300px na rzecz bardziej elastycznego podejścia */
 .y2-cover-col .cover-visual {
-    min-height: 180px;
-    max-height: 250px;
+    width: 100%;
+    height: 120px; /* Dostosuj tę wysokość według uznania - to Twoja "zielona ramka" */
+    overflow: hidden;
+    border-radius: var(--r);
+    border: 2px solid var(--ink); /* Usuwamy czerwoną ramkę */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-  /* Zdjęcia w Y2 — object-fit: contain jak karta X */
-  .cover-visual img {
-    object-fit: contain;
-    background: #f0ede8;
-  }
+
+/* 2. Ustawienie obrazka - to klucz do wypełnienia ramki */
+.cover-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Zdjęcie wypełni kontener, przycinając nadmiar */
+    display: block;
+}
   .y2-title {
     font-size: 1rem;
   }
