@@ -1055,39 +1055,26 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  max-width: 680px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 8px 0;
-  box-sizing: border-box;
-}
-
-.tinder-scene > div:not(.tinder-side) {
-  flex: 0 0 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
 
 .tinder-center-col {
-  flex: 0 0 200px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
 }
+
 
 .tinder-choices-row {
   display: flex;
   flex-direction: row;
   gap: 16px;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
 }
 .tinder-choices-row .tinder-side {
   flex: 1;
-}  
+}
   
 }
 .tinder-side{display:flex;flex-direction:column;align-items:center;gap:8px}
@@ -2955,8 +2942,8 @@ window.renderTaskX=function(taskData,answered=false){
     <div style="text-align:center;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px">
       <span style="font-family:var(--ff-sans);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700">${taskData.promptType==='book'?'Lektura':'Motyw'}</span>${profileBtn}
     </div>
-    <div class="tinder-scene">
-      <div class="tinder-center-col">
+      <div class="tinder-scene">
+            <div class="tinder-center-col">
               <div class="tinder-card-x" id="tinderCard">
                 ${cardInner}
                 <div class="tinder-overlay-x left" id="overlayLeft">← Nie</div>
@@ -2979,6 +2966,7 @@ window.renderTaskX=function(taskData,answered=false){
                 </div>
               </div>
             </div>
+          </div>
         <div class="tinder-side-label">wybierz →</div>
         <div class="tinder-choice ${rc}" onclick="${answered?'':'handleAnswer(\'right\')'}" style="${answered?'cursor:default':''}">
           ${escapeHtml(rightLabel)}
