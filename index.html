@@ -1020,8 +1020,27 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 }
 
 /* QUIZ */
-#quiz{display:none;flex-direction:column;height:100dvh;padding:calc(var(--bar-h) + 8px) 18px 12px;overflow:hidden;  font-family:var(--ff-serif);font-size:1.1rem;font-weight:700;color:var(--ink);
-  text-align:center;margin-bottom:.8rem;
+#quiz{
+  display: none;
+  flex-direction: column;
+  height: 100dvh;
+  padding: calc(var(--bar-h) + 8px) 18px 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  background: transparent;
+}
+#quiz.active{ display: flex; }
+
+.quiz-label-standalone{
+  font-family: var(--ff-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: .8rem;
 }
 
 #quiz-content{
@@ -1031,10 +1050,12 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 0;
+  max-height: 100%;
   width: 100%;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 20px;
 }
 
 #diag-shell{position:fixed;inset:0;display:none;z-index:5;background:var(--bg)}
@@ -1055,6 +1076,13 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 8px 0;
+  box-sizing: border-box;
+}
 
 .tinder-center-col {
   flex: 0 0 auto;
@@ -2960,12 +2988,6 @@ window.renderTaskX=function(taskData,answered=false){
                 </div>
               </div>
               <div class="tinder-side">
-                <div class="tinder-side-label">wybierz →</div>
-                <div class="tinder-choice ${rc}" onclick="${answered?'':'handleAnswer(\'right\')'}" style="${answered?'cursor:default':''}">
-                  ${escapeHtml(rightLabel)}
-                </div>
-              </div>
-            </div>
           </div>
         <div class="tinder-side-label">wybierz →</div>
         <div class="tinder-choice ${rc}" onclick="${answered?'':'handleAnswer(\'right\')'}" style="${answered?'cursor:default':''}">
