@@ -1308,6 +1308,283 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
   }
   .pf-page-title { font-size: 1.5rem; }
 }
+
+/* ══════════════════════════════════════════════════════
+   SZYBKA FISZKA
+══════════════════════════════════════════════════════ */
+
+/* Zakładka po prawej stronie profilu */
+#fiszka-tab {
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  z-index: 150;
+  background: var(--accent2);
+  color: #fff;
+  border: 2px solid var(--ink);
+  border-right: none;
+  padding: 8px 16px;
+  font-family: var(--ff-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: background .15s, padding .15s;
+  white-space: nowrap;
+}
+#fiszka-tab:hover { background: var(--ink); }
+#fiszka-tab.visible { display: block; }
+
+/* Panel fiszki */
+#fiszka-panel {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(480px, 100vw);
+  height: 100dvh;
+  z-index: 160;
+  background: var(--bg);
+  border-left: 2px solid var(--ink);
+  box-shadow: -6px 0 32px rgba(10,10,10,.18);
+  flex-direction: column;
+  overflow: hidden;
+}
+#fiszka-panel.open {
+  display: flex;
+  animation: slideFromRight .32s cubic-bezier(.4,0,.2,1) both;
+}
+
+/* Nagłówek panelu */
+.fiszka-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--ink);
+  flex-shrink: 0;
+}
+.fiszka-header-title {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.fiszka-close-btn {
+  font-size: 20px;
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1;
+  opacity: .6;
+  transition: opacity .15s;
+  background: none;
+  border: none;
+  padding: 0 4px;
+}
+.fiszka-close-btn:hover { opacity: 1; }
+
+/* Treść przewijalna */
+.fiszka-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Pojedyncze zdanie z luką */
+.fiszka-sentence-row {
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  font-family: var(--ff-serif);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink-light);
+  transition: border-color .2s, background .2s;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.fiszka-sentence-row.correct {
+  border-color: #40916c;
+  background: rgba(64,145,108,.08);
+}
+.fiszka-sentence-row.wrong {
+  border-color: var(--accent);
+  background: rgba(255,99,32,.08);
+}
+
+/* Luka — drop target */
+.fiszka-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 32px;
+  border: 2px dashed var(--accent2);
+  border-radius: 6px;
+  padding: 0 10px;
+  font-family: var(--ff-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent2);
+  background: rgba(94,26,244,.05);
+  transition: background .15s, border-color .15s, transform .1s;
+  cursor: default;
+  vertical-align: middle;
+  position: relative;
+}
+.fiszka-gap.drag-over {
+  background: rgba(94,26,244,.15);
+  border-color: var(--accent2);
+  transform: scale(1.04);
+}
+.fiszka-gap.filled {
+  border-style: solid;
+  border-color: var(--ink);
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+.fiszka-gap.filled:hover {
+  background: rgba(255,99,32,.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.fiszka-gap.correct-gap {
+  border-color: #40916c;
+  background: rgba(64,145,108,.12);
+  color: #40916c;
+}
+.fiszka-gap.wrong-gap {
+  border-color: var(--accent);
+  background: rgba(255,99,32,.1);
+  color: var(--accent);
+}
+
+/* Strefa kafelków */
+.fiszka-tiles-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 4px 0;
+  min-height: 48px;
+}
+
+/* Pojedynczy kafelek */
+.fiszka-tile {
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-family: var(--ff-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--bg);
+  cursor: grab;
+  user-select: none;
+  transition: background .15s, color .15s, transform .15s, box-shadow .15s, opacity .2s;
+  white-space: nowrap;
+}
+.fiszka-tile:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.fiszka-tile.dragging {
+  opacity: .4;
+  cursor: grabbing;
+}
+.fiszka-tile.used {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Przycisk sprawdź / następne */
+.fiszka-footer {
+  padding: 14px 20px;
+  border-top: 2px solid var(--ink);
+  flex-shrink: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.fiszka-btn {
+  font-family: var(--ff-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  border: 2px solid var(--ink);
+  padding: .65rem 1.8rem;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background .18s, transform .12s;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.fiszka-btn:hover { background: var(--ink); transform: translateY(-1px); }
+.fiszka-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+.fiszka-btn.secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.fiszka-btn.secondary:hover { background: var(--ink); color: var(--bg); }
+
+/* Wynik końcowy */
+.fiszka-result {
+  text-align: center;
+  padding: 8px 0;
+}
+.fiszka-result-score {
+  font-family: var(--ff-serif);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.fiszka-result-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Separator między zdaniami a kafelkami */
+.fiszka-divider {
+  height: 2px;
+  background: var(--line2);
+  border-radius: 1px;
+  margin: 4px 0;
+}
+
+/* Podpowiedź pod luką po sprawdzeniu */
+.fiszka-correct-answer {
+  font-size: 11px;
+  color: #40916c;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
   
 </style>
 </head>
@@ -1414,6 +1691,20 @@ body.has-upperbar-secondary #app{ padding-top:calc(var(--bar-h) + 44px + 24px); 
     <div id="profile-content"></div>
   </div>
 
+
+<!-- ZAKŁADKA SZYBKA FISZKA -->
+<button id="fiszka-tab" onclick="fiszkaPanelOpen()">⚡ Szybka fiszka</button>
+
+<!-- PANEL SZYBKA FISZKA -->
+<div id="fiszka-panel">
+  <div class="fiszka-header">
+    <span class="fiszka-header-title">⚡ Szybka fiszka</span>
+    <button class="fiszka-close-btn" onclick="fiszkaPanelClose()">×</button>
+  </div>
+  <div class="fiszka-body" id="fiszka-body"></div>
+  <div class="fiszka-footer" id="fiszka-footer"></div>
+</div>
+    
   <!-- Pełnoekranowy wiersz -->
   <div id="pf-poem-fullscreen">
     <button class="pf-poem-back-btn" onclick="closePoemFullscreen()">
@@ -2149,6 +2440,8 @@ function hideProfileEl() {
   el.classList.remove('active');
   pfStopSnakes();
   closePoemFullscreen();
+  fiszkaPanelClose();
+  fiszkaTabUpdate(false);
 }
 
 // ── Węże sekwencyjne po renderze ──
@@ -2265,6 +2558,7 @@ function openBookProfile(id, animDir = 'right') {
   if (motifObjs.length) snakePairs.push({ fromId: 'pf-anchor-info', toId: 'pf-anchor-motifs-block' });
   if (charObjs.length)  snakePairs.push({ fromId: 'pf-anchor-cover', toId: 'pf-anchor-chars-block' });
   pfScheduleSnakes(snakePairs);
+  fiszkaTabUpdate(mode === 'quiz', 'book', id);
 }
 
 // ════════════════════════
@@ -2372,6 +2666,7 @@ function openMotifProfile(id, animDir = 'right') {
   if (imgSrc) snakePairs.push({ fromId: 'pf-anchor-motif-info', toId: 'pf-anchor-motif-img' });
   if (charObjs.length) snakePairs.push({ fromId: 'pf-anchor-motif-books', toId: 'pf-anchor-motif-chars' });
   pfScheduleSnakes(snakePairs);
+  fiszkaTabUpdate(mode === 'quiz', 'motif', id);
 }
 
 // ════════════════════════
@@ -2732,6 +3027,343 @@ document.addEventListener('keydown',e=>{
 dimBg('none');
 renderEpochFilter();
 updateBackBtn();
+
+/* ══════════════════════════════════════════════════════
+   SZYBKA FISZKA — ENGINE
+══════════════════════════════════════════════════════ */
+
+let fiszkaState = null;
+// fiszkaState: { profileType, profileId, pairs, answered, results }
+// pairs: [{gapLabel, sentenceHtml, correctId, placedId}]
+
+/* ── Otwórz / zamknij panel ── */
+function fiszkaPanelOpen() {
+  const panel = document.getElementById('fiszka-panel');
+  panel.classList.add('open');
+  if (!fiszkaState || fiszkaState._needsRebuild) fiszkaRender();
+}
+
+function fiszkaPanelClose() {
+  document.getElementById('fiszka-panel').classList.remove('open');
+}
+
+/* ── Pokaż/ukryj zakładkę zależnie od trybu ── */
+function fiszkaTabUpdate(show, profileType, profileId) {
+  const tab = document.getElementById('fiszka-tab');
+  if (!show) { tab.classList.remove('visible'); fiszkaState = null; return; }
+  tab.classList.add('visible');
+  // Rebuild tylko gdy zmieniamy profil
+  if (!fiszkaState || fiszkaState.profileType !== profileType || fiszkaState.profileId !== profileId) {
+    fiszkaState = { profileType, profileId, pairs: [], answered: false, results: [], _needsRebuild: true };
+    fiszkaRebuildPairs();
+  }
+}
+
+/* ── Zbuduj pary (max 3) ── */
+function fiszkaRebuildPairs() {
+  if (!fiszkaState) return;
+  const { profileType, profileId } = fiszkaState;
+  let pairs = [];
+
+  if (profileType === 'book') {
+    // Luka = nazwa motywu; zdanie = opis motywu bez pierwszych dwóch słów
+    const book = getBookById(profileId);
+    if (!book) return;
+    const motifObjs = (book.motifs || []).map(getMotifById).filter(Boolean);
+    const descs = book.motifDescriptions || {};
+    // Zbierz tylko te motywy które mają opis w tej lekturze
+    const candidates = motifObjs.filter(m => descs[m.id]);
+    const chosen = shuffle([...candidates]).slice(0, 3);
+    pairs = chosen.map(m => {
+      const raw = descs[m.id] || '';
+      // Usuń pierwsze dwa słowa (np. "Motyw buntu")
+      const withoutPrefix = raw.replace(/^(\S+\s+\S+\s+)/, '');
+      return {
+        correctId: m.id,
+        correctLabel: m.name,
+        sentence: withoutPrefix,
+        placedId: null
+      };
+    });
+  } else {
+    // profileType === 'motif'
+    // Luka = tytuł lektury; zdanie = "... [luka] motyw X pojawia się w..."
+    const motif = getMotifById(profileId);
+    if (!motif) return;
+    const bookObjs = getBooksByMotif(profileId).filter(b => {
+      const descs = b.motifDescriptions || {};
+      return !!descs[motif.id];
+    });
+    const chosen = shuffle([...bookObjs]).slice(0, 3);
+    pairs = chosen.map(b => {
+      const raw = (b.motifDescriptions || {})[motif.id] || '';
+      // Usuń pierwsze dwa słowa (nazwa motywu) — zostawiamy resztę po luce
+      const withoutPrefix = raw.replace(/^(\S+\s+\S+\s+)/, '');
+      return {
+        correctId: b.id,
+        correctLabel: b.title,
+        // Zdanie: "W lekturze [luka] motyw [nazwa] ___"
+        sentence: withoutPrefix,
+        sentencePrefix: `W lekturze\u00a0`,
+        sentenceMid: `\u00a0${motif.name.toLowerCase()}\u00a0`,
+        placedId: null
+      };
+    });
+  }
+
+  fiszkaState.pairs = pairs;
+  fiszkaState.answered = false;
+  fiszkaState.results = [];
+  fiszkaState._needsRebuild = false;
+}
+
+/* ── Renderuj panel ── */
+function fiszkaRender() {
+  const body = document.getElementById('fiszka-body');
+  const footer = document.getElementById('fiszka-footer');
+  if (!body || !footer || !fiszkaState) return;
+
+  const { pairs, answered, results, profileType } = fiszkaState;
+
+  if (!pairs.length) {
+    body.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted);font-family:var(--ff-serif);font-size:1.1rem">Za mało danych do fiszki 🙈</div>`;
+    footer.innerHTML = '';
+    return;
+  }
+
+  // ── Tytuł sekcji ──
+  const sectionLabel = profileType === 'book'
+    ? 'Przeciągnij motyw w odpowiednie miejsce'
+    : 'Przeciągnij lekturę w odpowiednie miejsce';
+
+  // ── Zdania ──
+  let sentencesHtml = pairs.map((pair, idx) => {
+    const hasAnswer = pair.placedId !== null;
+    const placedLabel = hasAnswer
+      ? (profileType === 'book' ? (getMotifById(pair.placedId)?.name || '?') : (getBookById(pair.placedId)?.title || '?'))
+      : null;
+
+    let rowClass = 'fiszka-sentence-row';
+    let gapClass = 'fiszka-gap';
+    let gapContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    let correctHint = '';
+
+    if (answered) {
+      const ok = pair.placedId === pair.correctId;
+      rowClass += ok ? ' correct' : ' wrong';
+      gapClass += ok ? ' correct-gap' : ' wrong-gap';
+      gapContent = placedLabel || '—';
+      if (!ok) {
+        correctHint = `<span class="fiszka-correct-answer">✓ ${escapeHtml(pair.correctLabel)}</span>`;
+      }
+    } else if (hasAnswer) {
+      gapClass += ' filled';
+      gapContent = placedLabel || '—';
+    }
+
+    // Buduj zdanie
+    let sentenceInner = '';
+    if (pair.sentencePrefix !== undefined) {
+      // Tryb motywu: "W lekturze [luka] motyw X pojawia się w..."
+      sentenceInner = `
+        <span>${escapeHtml(pair.sentencePrefix)}</span>
+        <span class="${gapClass}" 
+          data-gap-idx="${idx}"
+          ${!answered ? `ondragover="fiszkaDragOver(event,${idx})" ondragleave="fiszkaDragLeave(event,${idx})" ondrop="fiszkaDrop(event,${idx})" onclick="fiszkaGapClick(${idx})"` : ''}>
+          ${hasAnswer || answered ? escapeHtml(gapContent) : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}
+        </span>
+        <span>${escapeHtml(pair.sentenceMid)}</span>
+        <span style="color:var(--ink-light)">${escapeHtml(pair.sentence)}</span>
+      `;
+    } else {
+      // Tryb lektury: "[luka] pojawia się w..."
+      sentenceInner = `
+        <span class="${gapClass}"
+          data-gap-idx="${idx}"
+          ${!answered ? `ondragover="fiszkaDragOver(event,${idx})" ondragleave="fiszkaDragLeave(event,${idx})" ondrop="fiszkaDrop(event,${idx})" onclick="fiszkaGapClick(${idx})"` : ''}>
+          ${hasAnswer || answered ? escapeHtml(gapContent) : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}
+        </span>
+        <span style="color:var(--ink-light)">\u00a0${escapeHtml(pair.sentence)}</span>
+      `;
+    }
+
+    return `
+      <div class="${rowClass}">
+        <div style="width:100%">${sentenceInner}${correctHint}</div>
+      </div>`;
+  }).join('');
+
+  // ── Kafelki ──
+  const allItems = pairs.map(p => ({ id: p.correctId, label: p.correctLabel }));
+  const shuffledTiles = shuffle([...allItems]);
+  const usedIds = new Set(pairs.filter(p => p.placedId !== null).map(p => p.placedId));
+
+  let tilesHtml = '';
+  if (!answered) {
+    tilesHtml = `
+      <div class="fiszka-divider"></div>
+      <div class="fiszka-tiles-area" id="fiszka-tiles">
+        ${shuffledTiles.map(item => `
+          <div class="fiszka-tile${usedIds.has(item.id) ? ' used' : ''}"
+            draggable="true"
+            data-tile-id="${escapeHtml(item.id)}"
+            ondragstart="fiszkaDragStart(event,'${escapeHtml(item.id)}')"
+            ondragend="fiszkaDragEnd(event)"
+            onclick="fiszkaTileClick('${escapeHtml(item.id)}')">
+            ${escapeHtml(item.label)}
+          </div>`).join('')}
+      </div>`;
+  }
+
+  // ── Wynik końcowy ──
+  let resultHtml = '';
+  if (answered) {
+    const correct = results.filter(Boolean).length;
+    resultHtml = `
+      <div class="fiszka-result">
+        <div class="fiszka-result-score">${correct}/${pairs.length}</div>
+        <div class="fiszka-result-label">${correct === pairs.length ? '🎉 Perfekcyjnie!' : correct >= pairs.length / 2 ? '👍 Nieźle!' : '📚 Powtórz materiał'}</div>
+      </div>`;
+  }
+
+  body.innerHTML = `
+    <div style="font-family:var(--ff-sans);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:4px">
+      ${escapeHtml(sectionLabel)}
+    </div>
+    ${sentencesHtml}
+    ${tilesHtml}
+    ${resultHtml}`;
+
+  // ── Footer ──
+  const allFilled = pairs.every(p => p.placedId !== null);
+  if (!answered) {
+    footer.innerHTML = `
+      <button class="fiszka-btn" onclick="fiszkaCheck()" ${!allFilled ? 'disabled' : ''}>Sprawdź</button>
+      <button class="fiszka-btn secondary" onclick="fiszkaReset()">Resetuj</button>`;
+  } else {
+    footer.innerHTML = `
+      <button class="fiszka-btn" onclick="fiszkaNext()">Następne →</button>
+      <button class="fiszka-btn secondary" onclick="fiszkaPanelClose()">Zamknij</button>`;
+  }
+}
+
+/* ── Drag & Drop ── */
+let fiszkaDraggingId = null;
+let fiszkaSelectedTileId = null; // dla touch/click
+
+function fiszkaDragStart(e, tileId) {
+  fiszkaDraggingId = tileId;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function fiszkaDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  fiszkaDraggingId = null;
+}
+
+function fiszkaDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const gap = document.querySelector(`[data-gap-idx="${idx}"]`);
+  if (gap) gap.classList.add('drag-over');
+}
+
+function fiszkaDragLeave(e, idx) {
+  const gap = document.querySelector(`[data-gap-idx="${idx}"]`);
+  if (gap) gap.classList.remove('drag-over');
+}
+
+function fiszkaDrop(e, idx) {
+  e.preventDefault();
+  const gap = document.querySelector(`[data-gap-idx="${idx}"]`);
+  if (gap) gap.classList.remove('drag-over');
+  if (!fiszkaDraggingId || !fiszkaState) return;
+  fiszkaPlace(idx, fiszkaDraggingId);
+}
+
+/* ── Klik na kafelek (alternatywa dla drag) ── */
+function fiszkaTileClick(tileId) {
+  if (fiszkaState?.answered) return;
+  // Jeśli już zaznaczony — odznacz
+  if (fiszkaSelectedTileId === tileId) {
+    fiszkaSelectedTileId = null;
+    document.querySelectorAll('.fiszka-tile').forEach(t => t.style.outline = '');
+    return;
+  }
+  fiszkaSelectedTileId = tileId;
+  // Podświetl zaznaczony
+  document.querySelectorAll('.fiszka-tile').forEach(t => {
+    t.style.outline = t.dataset.tileId === tileId ? '3px solid var(--accent2)' : '';
+  });
+}
+
+/* ── Klik na lukę (wstaw zaznaczony kafelek) ── */
+function fiszkaGapClick(idx) {
+  if (fiszkaState?.answered) return;
+  const pair = fiszkaState?.pairs[idx];
+  if (!pair) return;
+
+  if (pair.placedId !== null && !fiszkaSelectedTileId) {
+    // Zwróć kafelek
+    fiszkaReturn(idx);
+    return;
+  }
+  if (fiszkaSelectedTileId) {
+    fiszkaPlace(idx, fiszkaSelectedTileId);
+    fiszkaSelectedTileId = null;
+    document.querySelectorAll('.fiszka-tile').forEach(t => t.style.outline = '');
+  }
+}
+
+/* ── Umieść kafelek w luce ── */
+function fiszkaPlace(gapIdx, tileId) {
+  if (!fiszkaState) return;
+  const pairs = fiszkaState.pairs;
+
+  // Jeśli ten sam kafelek już jest w innej luce — zabierz go stamtąd
+  pairs.forEach((p, i) => {
+    if (p.placedId === tileId && i !== gapIdx) p.placedId = null;
+  });
+
+  // Jeśli w tej luce był już inny — zwróć go (stanie się widoczny przez rerenderowanie)
+  pairs[gapIdx].placedId = tileId;
+
+  fiszkaRender();
+}
+
+/* ── Zwróć kafelek z luki ── */
+function fiszkaReturn(gapIdx) {
+  if (!fiszkaState) return;
+  fiszkaState.pairs[gapIdx].placedId = null;
+  fiszkaRender();
+}
+
+/* ── Sprawdź ── */
+function fiszkaCheck() {
+  if (!fiszkaState) return;
+  fiszkaState.answered = true;
+  fiszkaState.results = fiszkaState.pairs.map(p => p.placedId === p.correctId);
+  fiszkaRender();
+}
+
+/* ── Resetuj runę ── */
+function fiszkaReset() {
+  if (!fiszkaState) return;
+  fiszkaState.pairs.forEach(p => p.placedId = null);
+  fiszkaState.answered = false;
+  fiszkaState.results = [];
+  fiszkaRender();
+}
+
+/* ── Następna runda (nowe 3 pary) ── */
+function fiszkaNext() {
+  if (!fiszkaState) return;
+  fiszkaState._needsRebuild = true;
+  fiszkaRebuildPairs();
+  fiszkaRender();
+}
+  
 </script>
 </body>
 </html>
