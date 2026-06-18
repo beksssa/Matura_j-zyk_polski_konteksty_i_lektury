@@ -219,10 +219,10 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 @media(max-width:700px){
   :root{ --bar-h:var(--bar-h-mobile); --bar-pad:12px; }
-}
   #quiz {
-    padding: calc(var(--bar-h-mobile) + 12px) 12px 8px;
+    padding: calc(var(--bar-h-mobile) + 8px) 12px 8px;
   }
+}
 
   
   
@@ -1027,15 +1027,15 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 }
 
 #quiz-content{
-  flex:1;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  min-height:0;
-  width:100%;
-}  
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+}
 #diag-shell{position:fixed;inset:0;display:none;z-index:5;background:var(--bg)}
 #diag-shell.active{display:block}
 
@@ -1049,16 +1049,26 @@ body.has-upperbar #app{ padding-top:calc(var(--bar-h) + 24px); }
 
 /* TINDER */
 .tinder-scene{
-  display:grid;
-  grid-template-columns:1fr 200px 1fr;
-  align-items:center;
-  justify-items:center;
-  gap:16px;
-  width:100%;
-  max-width:680px;
-  margin:0 auto;
-  padding:8px 0;
-  box-sizing:border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 8px 0;
+  box-sizing: border-box;
+}
+.tinder-scene > .tinder-side {
+  flex: 1;
+}
+.tinder-scene > div:not(.tinder-side) {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 .tinder-side{display:flex;flex-direction:column;align-items:center;gap:8px}
 .tinder-side-label{font-family:var(--ff-sans);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
